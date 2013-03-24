@@ -2,9 +2,13 @@ fs     = require 'fs'
 {exec} = require 'child_process'
 path   = require 'path'
 
-currDir = path.dirname __filename
+iswin = process.platform is 'win32'
+currDir = __dirname
+if iswin and currDir.substring(0,2) is "\\\\"
+  depTarget = process.env.DEPLOYMENT_TARGET
+  currDir = depTarget
 coffee = path.join currDir,  "node_modules", "coffee-script", "bin", "coffee"
-coffee = "node #{coffee}" if process.platform is 'win32'
+coffee = "node #{coffee}" if iswin
 
 compileDirectory = (dirPath) ->
   for dirItem in fs.readdirSync(dirPath)
@@ -24,6 +28,32 @@ compileFile = (file) ->
   exec "#{coffee} --compile #{file}", (err, stdout, stderr) ->
     throw err if err
 
+createLink = (originFile, destFile) ->
+  unless fs.existsSync destFile
+    if iswin
+      fs.writeFileSync destFile, fs.readFileSync(originFile)
+    else
+      fs.symlinkSync originFile, destFile
+
+publicJSPath = (file) ->
+  path.join(currDir, 'public', 'javascripts', file)
+
+nodeModulesPath = (paths...) ->
+  returnPath = path.join(currDir, 'node_modules')
+  for singlePath in paths
+    returnPath = path.join(returnPath, singlePath)
+  returnPath
+
+createLinkToJSPath = (file) ->
+  createLink file, publicJSPath path.basename file
+
 task 'build', 'Build single application file from source files', ->
-  console.log "Current directory: #{currDir}"
+  invoke 'compile:coffee'
+  invoke 'jsdependencies'
+
+task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
+
+task 'jsdependencies', 'copies js dependencies to public/script', ->
+  createLinkToJSPath nodeModulesPath('backbone', 'backbone.js')
+  createLinkToJSPath nodeModulesPath('backbone', 'node_modules', 'underscore', 'underscore.js')

@@ -66,22 +66,25 @@ IF !ERRORLEVEL! NEQ 0 goto error
 :: 2. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd %DEPLOYMENT_TARGET%
+  echo Installing npm packages
   call npm install --production
   IF !ERRORLEVEL! NEQ 0 goto error
+  echo Npm ran sucessfully.
   popd
 )
 
 echo Compiling CoffeeScript
 
-:: 3. Compile CoffeeScript
+:: 3. Baking cake
 IF EXIST "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" (
   pushd %DEPLOYMENT_TARGET%
-  echo CoffeeScript found, compiling...
-  call node node_modules\coffee-script\bin\cake build
+  echo Cake found, baking...
+  call node "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" build
   IF !ERRORLEVEL! NEQ 0 goto error
-  echo CoffeeScript compiled!
+  echo Cake baked!
   dir 
   dir routes
+  dir public\javascripts
   popd
 )
 
