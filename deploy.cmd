@@ -17,13 +17,18 @@ IF %ERRORLEVEL% NEQ 0 (
 :: Setup
 :: -----
 
+SET NODE_VERSION=0.8.2
+SET PATH=%programfiles(x86)%\nodejs\%NODE_VERSION%\;%PATH%
+echo node version
+call node -v
 setlocal enabledelayedexpansion
 
 SET ARTIFACTS=%~dp0%artifacts
 
-IF NOT DEFINED DEPLOYMENT_SOURCE (
-  SET DEPLOYMENT_SOURCE=%~dp0%.
-)
+SET DEPLOYMENT_SOURCE=%~dp0%src
+:: IF NOT DEFINED DEPLOYMENT_SOURCE (
+::  SET DEPLOYMENT_SOURCE=%~dp0%src
+::)
 
 IF NOT DEFINED DEPLOYMENT_TARGET (
   SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot
@@ -69,10 +74,14 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 echo Compiling CoffeeScript
 
 :: 3. Compile CoffeeScript
-IF EXIST "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\coffee" (
+IF EXIST "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" (
   pushd %DEPLOYMENT_TARGET%
-  call node node_modules\coffee-script\bin\coffee -c .
+  echo CoffeeScript found, compiling...
+  call node node_modules\coffee-script\bin\cake build
   IF !ERRORLEVEL! NEQ 0 goto error
+  echo CoffeeScript compiled!
+  dir 
+  dir routes
   popd
 )
 

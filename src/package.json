@@ -1,5 +1,6 @@
 {
-  "name": "application-name",
+  "engines": {"node": "0.8.x || 0.10.x"},
+  "name": "open-store",
   "version": "0.0.1",
   "private": true,
   "scripts": {

@@ -1,9 +1,9 @@
 # For security reasons, logging, dev errors, and debugging 
 # should be disabled in production deployments:
 
-loggingEnabled: false
-debuggingEnabled: false
-devErrorsEnabled: false
+loggingEnabled: true
+debuggingEnabled: true
+devErrorsEnabled: true
 node_env: production
 
 # Other settings with their default values follow.
@@ -30,3 +30,5 @@ node_env: production
 # flushResponse: false
 # enableXFF: false
 # promoteServerVars:  
+# nodeProcessCommandLine: "c:\program files (x86)\nodejs\0.8.2\node.exe"
+# interceptor: "c:\program files\iisnode\interceptor.js"

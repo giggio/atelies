@@ -1,0 +1,29 @@
+fs     = require 'fs'
+{exec} = require 'child_process'
+path   = require 'path'
+
+currDir = path.dirname __filename
+coffee = path.join currDir,  "node_modules", "coffee-script", "bin", "coffee"
+coffee = "node #{coffee}" if process.platform is 'win32'
+
+compileDirectory = (dirPath) ->
+  for dirItem in fs.readdirSync(dirPath)
+    fullItemPath = path.join dirPath, dirItem
+    continue unless fs.existsSync fullItemPath
+    isDirectory =  fs.statSync(fullItemPath).isDirectory()
+    if isDirectory
+        compileDirectory fullItemPath
+    else
+      compileFile fullItemPath
+
+isACoffeeFile = (file) -> file.indexOf(".coffee", file.length - 7) isnt -1
+
+compileFile = (file) ->
+  return unless isACoffeeFile file
+  console.log "found file #{file}, compiling..."
+  exec "#{coffee} --compile #{file}", (err, stdout, stderr) ->
+    throw err if err
+
+task 'build', 'Build single application file from source files', ->
+  console.log "Current directory: #{currDir}"
+  compileDirectory currDir
