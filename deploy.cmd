@@ -84,7 +84,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" (
   echo Cake baked!
   dir 
   dir routes
-  dir public\javascripts
+  dir /s public\javascripts
   popd
 )
 

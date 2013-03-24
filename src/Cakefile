@@ -1,6 +1,7 @@
 fs     = require 'fs'
 {exec} = require 'child_process'
 path   = require 'path'
+http   = require 'http'
 
 iswin = process.platform is 'win32'
 currDir = __dirname
@@ -36,7 +37,7 @@ createLink = (originFile, destFile) ->
       fs.symlinkSync originFile, destFile
 
 publicJSPath = (file) ->
-  path.join(currDir, 'public', 'javascripts', file)
+  path.join(currDir, 'public', 'javascripts', 'lib', file)
 
 nodeModulesPath = (paths...) ->
   returnPath = path.join(currDir, 'node_modules')
@@ -45,7 +46,15 @@ nodeModulesPath = (paths...) ->
   returnPath
 
 createLinkToJSPath = (file) ->
+  console.log "copying file #{path.basename file}..."
   createLink file, publicJSPath path.basename file
+
+downloadFileToJS = (remoteFile, localFile) ->
+  console.log "downloading file #{localFile}..."
+  localFile = publicJSPath localFile
+  return if fs.existsSync localFile
+  file = fs.createWriteStream localFile
+  request = http.get remoteFile, (response) -> response.pipe file
 
 task 'build', 'Build single application file from source files', ->
   invoke 'compile:coffee'
@@ -57,3 +66,4 @@ task 'compile:coffee', 'compiles CoffeeScript files', ->
 task 'jsdependencies', 'copies js dependencies to public/script', ->
   createLinkToJSPath nodeModulesPath('backbone', 'backbone.js')
   createLinkToJSPath nodeModulesPath('backbone', 'node_modules', 'underscore', 'underscore.js')
+  downloadFileToJS "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", "jquery.min.js"
