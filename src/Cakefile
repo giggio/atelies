@@ -1,7 +1,8 @@
-fs     = require 'fs'
-{exec} = require 'child_process'
-path   = require 'path'
-http   = require 'http'
+fs            = require 'fs'
+{exec}        = require 'child_process'
+path          = require 'path'
+http          = require 'http'
+child_process = require 'child_process'
 
 iswin = process.platform is 'win32'
 currDir = __dirname
@@ -29,25 +30,8 @@ compileFile = (file) ->
   exec "#{coffee} --compile #{file}", (err, stdout, stderr) ->
     throw err if err
 
-createLink = (originFile, destFile) ->
-  unless fs.existsSync destFile
-    if iswin
-      fs.writeFileSync destFile, fs.readFileSync(originFile)
-    else
-      fs.symlinkSync originFile, destFile
-
 publicJSPath = (file) ->
   path.join(currDir, 'public', 'javascripts', 'lib', file)
-
-nodeModulesPath = (paths...) ->
-  returnPath = path.join(currDir, 'node_modules')
-  for singlePath in paths
-    returnPath = path.join(returnPath, singlePath)
-  returnPath
-
-createLinkToJSPath = (file) ->
-  console.log "copying file #{path.basename file}..."
-  createLink file, publicJSPath path.basename file
 
 downloadFileToJS = (remoteFile, localFile) ->
   console.log "downloading file #{localFile}..."
@@ -57,13 +41,20 @@ downloadFileToJS = (remoteFile, localFile) ->
   request = http.get remoteFile, (response) -> response.pipe file
 
 task 'build', 'Build single application file from source files', ->
+  invoke 'dependencies:npm'
   invoke 'compile:coffee'
-  invoke 'jsdependencies'
+  invoke 'dependencies:js'
+
+task 'dependencies:npm', 'Run npm', ->
+  console.log 'Installing npm packages...'
+  npmProcess = child_process.spawn 'npm', ['install'], { cwd: currDir, env: process.env }
+  npmProcess.stdout.pipe process.stdout
+  npmProcess.stderr.pipe process.stderr
 
 task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
 
-task 'jsdependencies', 'copies js dependencies to public/script', ->
-  createLinkToJSPath nodeModulesPath('backbone', 'backbone.js')
-  createLinkToJSPath nodeModulesPath('backbone', 'node_modules', 'underscore', 'underscore.js')
+task 'dependencies:js', 'copies js dependencies to public/script', ->
+  downloadFileToJS "http://raw.github.com/documentcloud/underscore/master/underscore.js", "underscore.js"
+  downloadFileToJS "http://raw.github.com/documentcloud/backbone/master/backbone.js", "backbone.js"
   downloadFileToJS "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", "jquery.min.js"
