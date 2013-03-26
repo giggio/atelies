@@ -72,11 +72,15 @@ task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
 
 task 'dependencies:js', 'copies js dependencies to public/script', ->
-  downloadFileToJS      "http://raw.github.com/documentcloud/underscore/master/underscore.js"
-  downloadFileToJS      "http://raw.github.com/documentcloud/backbone/master/backbone.js"
   downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"
   downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css"
   downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
   downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings-white.png", path.join("img", "glyphicons-halflings-white.png")
   downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png", path.join("img", "glyphicons-halflings.png")
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js"
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"

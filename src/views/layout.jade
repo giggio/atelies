@@ -2,6 +2,10 @@ doctype 5
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap-responsive.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='javascripts/lib/require.min.js', data-main='javascripts/bootstrap.js')
   body
     block content
+<!--node version: #{process.version} -->

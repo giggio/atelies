@@ -2,3 +2,4 @@ node_modules
 azure_error
 *.js
 **/public/**/lib
+*.map
