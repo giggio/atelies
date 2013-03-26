@@ -30,13 +30,30 @@ compileFile = (file) ->
   exec "#{coffee} --compile #{file}", (err, stdout, stderr) ->
     throw err if err
 
-publicJSPath = (file) ->
-  path.join(currDir, 'public', 'javascripts', 'lib', file)
+publicJSPath     = (file) -> path.join(currDir, 'public', 'javascripts', 'lib', file)
+publicCSSPath    = (file) -> path.join(currDir, 'public', 'stylesheets', 'lib', file)
+publicImagesPath = (file) -> path.join(currDir, 'public', 'images', 'lib', file)
 
-downloadFileToJS = (remoteFile, localFile) ->
-  console.log "downloading file #{localFile}..."
-  localFile = publicJSPath localFile
+downloadFileToJS = (remoteFile, fileName) ->
+  fileName = path.basename remoteFile if fileName is undefined
+  localFile = publicJSPath fileName
+  downloadFile remoteFile, localFile
+
+downloadFileToCSS = (remoteFile, fileName) ->
+  fileName = path.basename remoteFile if fileName is undefined
+  localFile = publicCSSPath fileName
+  downloadFile remoteFile, localFile
+
+downloadFileToImages = (remoteFile, fileName) ->
+  fileName = path.basename remoteFile if fileName is undefined
+  localFile = publicImagesPath fileName
+  downloadFile remoteFile, localFile
+
+downloadFile = (remoteFile, localFile) ->
+  console.log "downloading file #{path.basename localFile}..."
   return if fs.existsSync localFile
+  directory = path.dirname localFile
+  fs.mkdirSync directory unless fs.existsSync directory
   file = fs.createWriteStream localFile
   request = http.get remoteFile, (response) -> response.pipe file
 
@@ -55,6 +72,11 @@ task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
 
 task 'dependencies:js', 'copies js dependencies to public/script', ->
-  downloadFileToJS "http://raw.github.com/documentcloud/underscore/master/underscore.js", "underscore.js"
-  downloadFileToJS "http://raw.github.com/documentcloud/backbone/master/backbone.js", "backbone.js"
-  downloadFileToJS "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", "jquery.min.js"
+  downloadFileToJS      "http://raw.github.com/documentcloud/underscore/master/underscore.js"
+  downloadFileToJS      "http://raw.github.com/documentcloud/backbone/master/backbone.js"
+  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css"
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings-white.png", path.join("img", "glyphicons-halflings-white.png")
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png", path.join("img", "glyphicons-halflings.png")
