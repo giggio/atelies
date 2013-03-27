@@ -51,8 +51,12 @@ exports.patchEventEmitterToHideMaxListenerWarning = ->
   Old = events.EventEmitter
   events.EventEmitter = ->
     this.setMaxListeners(0)
-  events.EventEmitter.prototype = Old.prototype
+  events.EventEmitter:: = Old::
 
 global.beforeAll ->
   process.addListener 'uncaughtException', (error) -> console.log "Error: #{error}"
   exports.patchEventEmitterToHideMaxListenerWarning()
+
+exports.startServer = (cb) ->
+  app = require('../../app')
+  app.start(cb)
