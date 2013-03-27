@@ -54,9 +54,25 @@ exports.patchEventEmitterToHideMaxListenerWarning = ->
   events.EventEmitter:: = Old::
 
 global.beforeAll ->
-  process.addListener 'uncaughtException', (error) -> console.log "Error: #{error}"
+  process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
   exports.patchEventEmitterToHideMaxListenerWarning()
+  exports.startServer()
+
+global.afterAll ->
+  exports._server.close()
 
 exports.startServer = (cb) ->
   app = require('../../app')
-  app.start(cb)
+  app.start (server) ->
+    exports._server = server
+    cb(server) if cb
+
+exports.whenDone = (condition, callback) ->
+  if condition()
+    callback()
+  else
+    setTimeout((-> whenDone(condition, callback)), 1000)
+
+exports.whenServerLoaded = (cb) ->
+  cb() if exports._server
+  exports.whenDone((-> exports._server isnt null), -> cb())
