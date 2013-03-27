@@ -4,8 +4,8 @@ require.config
     Underscore: 'lib/underscore-min'
     Backbone: 'lib/backbone-min'
     Handlebars: 'lib/handlebars.min'
-    TwitterBootstrap: 'lib/bootstrap.min'
     text: 'lib/text'
+    TwitterBootstrap: 'lib/bootstrap.min'
 
   shim:
     'jQueryUI':
@@ -20,10 +20,12 @@ require.config
       exports: 'Backbone'
     'TwitterBootstrap':
       deps: ['jquery']
+      exports: '$.fn.popover'
 
 require [
   'Handlebars'
   'router'
+  'TwitterBootstrap'
 ], (Handlebars, router) ->
   Handlebars.registerHelper 'formataData', (valor) ->
     return "" if not valor

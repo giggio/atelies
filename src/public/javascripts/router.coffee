@@ -11,6 +11,6 @@ define [
     initialize: ->
       Backbone.history.start()
     home: ->
-      homeView = new HomeView el:$("#app-content")
+      homeView = new HomeView el:$("#app-container")
       homeView.render()
 

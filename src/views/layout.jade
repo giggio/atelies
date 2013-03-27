@@ -7,8 +7,53 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='javascripts/lib/require.min.js', data-main='javascripts/bootstrap.js')
   body
-    section#eventosApp
-    h1.page-header Open Store
-    #app-content
-    block content
+    - var nums = [1,2,3,4,5,6,7,8,9,10]
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          //- a.brand(href='#home') Open Store
+          .nav-collapse.collapse
+            ul.nav
+              li: a(href='#') Crie sua loja
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown') Lojas
+                  b.caret
+                ul.dropdown-menu
+                  each loja in nums
+                    li: a(href='#') Loja #{loja}
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
+                  b.caret
+                ul.dropdown-menu
+                  li: a(href='#') Sobre o site
+                  li: a(href='#') Quanto custa
+                  li: a(href='#') Tecnologia
+          form.navbar-form.pull-right
+            input.span2(type='text')
+            button.btn(type="submit") Login
+          form.navbar-search.pull-right
+            input.search-query(type="text",placeholder="Busca Produtos")
+          form.navbar-search.pull-right
+            input.search-query(type="text",placeholder="Busca Lojas")
+
+    .container
+      h1.page-header Open Store
+      block content
+        
+      hr
+      footer
+        div
+          p.text-center 
+            &copy; 2013 - OpenStore
+            &nbsp;|&nbsp;
+            a Termos de uso
+            &nbsp;|&nbsp;
+            a Sobre
+            &nbsp;|&nbsp;
+            a Contato
+
 <!--node version: #{process.version} -->
