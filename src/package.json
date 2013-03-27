@@ -13,6 +13,7 @@
     "coffee-script": "*"
   },
   "devDependencies": {
-    "jasmine-node": "1.x"
+    "jasmine-node": "1.x",
+    "jsdom": "*"
   }
 }
