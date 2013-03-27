@@ -57,16 +57,44 @@ downloadFile = (remoteFile, localFile) ->
   file = fs.createWriteStream localFile
   request = http.get remoteFile, (response) -> response.pipe file
 
+whenDone = (condition, callback) ->
+  if condition()
+    callback()
+  else
+    setTimeout((-> whenDone(condition, callback)), 1000)
+
+task 'test', 'Build single application file from source files', (options) ->
+  invoke 'dependencies:npmfull'
+  invoke 'compile:coffee'
+  invoke 'dependencies:js'
+  whenDone (-> options.npmProcessInstallDone), -> invoke 'run:test'
+
 task 'build', 'Build single application file from source files', ->
   invoke 'dependencies:npm'
   invoke 'compile:coffee'
   invoke 'dependencies:js'
 
-task 'dependencies:npm', 'Run npm', ->
-  console.log 'Installing npm packages...'
-  npmProcess = child_process.spawn 'npm', ['install'], { cwd: currDir, env: process.env }
-  npmProcess.stdout.pipe process.stdout
-  npmProcess.stderr.pipe process.stderr
+task 'run:test', 'Runs the tests', (options) ->
+  console.log 'Running tests via npm...'
+  npmProcessTest = child_process.spawn 'npm', ['test'], { cwd: currDir, env: process.env }
+  npmProcessTest.stdout.pipe process.stdout
+  npmProcessTest.stderr.pipe process.stderr
+  npmProcessTest.on 'exit', => options.npmProcessTestDone = on
+
+task 'dependencies:npmfull', 'Run npm (full)', (options) ->
+  console.log 'Installing npm packages (full)...'
+  options.npmProcessInstallDone = off
+  npmProcessInstall = child_process.spawn 'npm', ['install'], { cwd: currDir, env: process.env }
+  npmProcessInstall.stdout.pipe process.stdout
+  npmProcessInstall.stderr.pipe process.stderr
+  npmProcessInstall.on 'exit', => options.npmProcessInstallDone = on
+
+task 'dependencies:npm', 'Run npm (only production)', (options) ->
+  console.log 'Installing npm packages (production)...'
+  npmProcessInstall = child_process.spawn 'npm', ['install', '--production'], { cwd: currDir, env: process.env }
+  npmProcessInstall.stdout.pipe process.stdout
+  npmProcessInstall.stderr.pipe process.stderr
+  npmProcessInstall.on 'exit', => options.npmProcessInstallDone = on
 
 task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
