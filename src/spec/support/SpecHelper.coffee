@@ -1,8 +1,8 @@
-jade    = require 'jade'
-fs      = require 'fs'
-path    = require 'path'
-jsdom   = require("jsdom").jsdom
-global  = require './global'
+jade        = require 'jade'
+fs          = require 'fs'
+path        = require 'path'
+jsdom       = require("jsdom").jsdom
+jasmineExt  = require './JasmineExtensions'
 
 exports.viewPath = (name) -> path.join(__dirname, '..', '..', 'views', "#{name}.jade")
 
@@ -53,12 +53,12 @@ exports.patchEventEmitterToHideMaxListenerWarning = ->
     this.setMaxListeners(0)
   events.EventEmitter:: = Old::
 
-global.beforeAll ->
+jasmineExt.beforeAll ->
   process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
   exports.patchEventEmitterToHideMaxListenerWarning()
   exports.startServer()
 
-global.afterAll ->
+jasmineExt.afterAll ->
   exports._server.close()
 
 exports.startServer = (cb) ->
