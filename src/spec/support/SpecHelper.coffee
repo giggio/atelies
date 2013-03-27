@@ -2,6 +2,7 @@ jade    = require 'jade'
 fs      = require 'fs'
 path    = require 'path'
 jsdom   = require("jsdom").jsdom
+global  = require './global'
 
 exports.viewPath = (name) -> path.join(__dirname, '..', '..', 'views', "#{name}.jade")
 
@@ -42,3 +43,16 @@ exports.getWindowFromView = (viewName, data, cb) ->
     exports.getWindowFor html, (err, window, $) ->
       cb(err) if err
       cb(null, window, window.$)
+
+exports.patchEventEmitterToHideMaxListenerWarning = ->
+  return if exports.eventEmitterPatched
+  exports.eventEmitterPatched = true
+  events = require('events')
+  Old = events.EventEmitter
+  events.EventEmitter = ->
+    this.setMaxListeners(0)
+  events.EventEmitter.prototype = Old.prototype
+
+global.beforeAll ->
+  process.addListener 'uncaughtException', (error) -> console.log "Error: #{error}"
+  exports.patchEventEmitterToHideMaxListenerWarning()
