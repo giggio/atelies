@@ -112,3 +112,4 @@ task 'dependencies:js', 'copies js dependencies to public/script', ->
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js"
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"
+  downloadFileToJS      "http://raw.github.com/velesin/jasmine-jquery/master/lib/jasmine-jquery.js"

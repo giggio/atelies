@@ -32,10 +32,11 @@ exports.getHtmlFromView = (viewName, data, cb) ->
 
 exports.getWindowFor = (html, cb) ->
   fs.readFile path.join(__dirname, "../../public/javascripts/lib/jquery.min.js".split('/')...), (err, jqueryFile) ->
-    cb(err, null) if err
-    jsdom.env html: html, src: [jqueryFile], done: (err, window) ->
-      cb(err) if err
-      cb(null, window, window.$)
+    fs.readFile path.join(__dirname, "../../public/javascripts/lib/jasmine-jquery.js".split('/')...), (err, jasmineJqueryFile) ->
+      cb(err, null) if err
+      jsdom.env html: html, src: [jqueryFile, jasmineJqueryFile], done: (err, window) ->
+        cb(err) if err
+        cb(null, window, window.$)
 
 exports.getWindowFromView = (viewName, data, cb) ->
   exports.getHtmlFromView viewName, data, (err, html) ->
