@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'views/homeview'
+  'views/Home'
 ],($, HomeView) ->
   class Routes
     home: ->

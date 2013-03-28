@@ -4,7 +4,7 @@ define [
   'Handlebars'
   'productsHomeData'
   'models/ProductsHome'
-  'text!views/templates/HomeTemplate.html'
+  'text!views/templates/Home.html'
 ], ($, Backbone, Handlebars, productsHomeData, ProductsHome, homeTemplate) ->
   class Home extends Backbone.View
     template: homeTemplate
