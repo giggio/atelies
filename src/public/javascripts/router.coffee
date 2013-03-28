@@ -1,16 +1,11 @@
 define [
-  'jquery'
   'Backbone'
-  'views/homeview'
+  'routes'
 ],
-($, Backbone, HomeView) ->
-  class router extends Backbone.Router
+(Backbone, routes) ->
+  class Router extends Backbone.Router
     routes:
-      '':'home'
-      'home':'home'
+      '': routes.home
+      'home': routes.home
     initialize: ->
       Backbone.history.start()
-    home: ->
-      homeView = new HomeView el:$("#app-container")
-      homeView.render()
-
