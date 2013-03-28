@@ -1,4 +1,11 @@
 extends layout
 
 block content
-  section(id="app-container") Produtos indisponíveis
+  if products.length == 0
+    section#app-container Produtos indisponíveis
+  else
+    section#app-container Há #{products.length} produtos indisponíveis
+  script
+    define('productsHomeData', function() {
+      return !{JSON.stringify(products)};
+    });
