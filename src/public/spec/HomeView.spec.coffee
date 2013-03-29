@@ -1,8 +1,12 @@
+define 'productsHomeData', ->
+    { id: 1, productName: 'prod 1', picture: 'http://a.jpg', price: 3.43, storeId: 3 }
+    { id: 2, productName: 'prod 2', picture: 'http://b.jpg', price: 7.78, storeId: 4 }
+  
 define [
   'jquery'
   'views/Home'
 ], ($, HomeView) ->
-  console.log 1
+  initBackbone() if initBackbone
   homeView = null
   el = $('<div></div>')
   describe 'HomeView', ->

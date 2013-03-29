@@ -1,7 +1,7 @@
 define [
   'jquery'
-  'Backbone'
-  'Handlebars'
+  'backbone'
+  'handlebars'
   'productsHomeData'
   'models/ProductsHome'
   'text!views/templates/Home.html'

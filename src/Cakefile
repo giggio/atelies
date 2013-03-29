@@ -133,6 +133,7 @@ task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js", options
+  downloadFileToJS      'https://github.com/requirejs/text/raw/master/text.js', options
   whenDone((->
     waiting = options.waitingDownload
     waiting == 0), ->)
