@@ -6,7 +6,6 @@ define [
   'jquery'
   'views/Home'
 ], ($, HomeView) ->
-  initBackbone() if initBackbone
   homeView = null
   el = $('<div></div>')
   describe 'HomeView', ->
