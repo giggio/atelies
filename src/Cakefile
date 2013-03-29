@@ -2,6 +2,7 @@ fs            = require 'fs'
 {exec}        = require 'child_process'
 path          = require 'path'
 http          = require 'http'
+https         = require 'https'
 child_process = require 'child_process'
 
 iswin = process.platform is 'win32'
@@ -18,7 +19,7 @@ compileDirectory = (dirPath) ->
     continue unless fs.existsSync fullItemPath
     isDirectory =  fs.statSync(fullItemPath).isDirectory()
     if isDirectory
-        compileDirectory fullItemPath
+      compileDirectory fullItemPath unless dirItem is 'node_modules'
     else
       compileFile fullItemPath
 
@@ -34,28 +35,43 @@ publicJSPath     = (file) -> path.join(currDir, 'public', 'javascripts', 'lib', 
 publicCSSPath    = (file) -> path.join(currDir, 'public', 'stylesheets', 'lib', file)
 publicImagesPath = (file) -> path.join(currDir, 'public', 'images', 'lib', file)
 
-downloadFileToJS = (remoteFile, fileName) ->
+downloadFileToJS = (remoteFile, fileName, options) ->
+  if !options and (typeof fileName is 'object')
+    options = fileName
+    fileName = undefined
   fileName = path.basename remoteFile if fileName is undefined
   localFile = publicJSPath fileName
-  downloadFile remoteFile, localFile
+  downloadFile remoteFile, localFile, options
 
-downloadFileToCSS = (remoteFile, fileName) ->
+downloadFileToCSS = (remoteFile, fileName, options) ->
+  if !options and (typeof fileName is 'object')
+    options = fileName
+    fileName = undefined
   fileName = path.basename remoteFile if fileName is undefined
   localFile = publicCSSPath fileName
-  downloadFile remoteFile, localFile
+  downloadFile remoteFile, localFile, options
 
-downloadFileToImages = (remoteFile, fileName) ->
+downloadFileToImages = (remoteFile, fileName, options) ->
+  if !options and (typeof fileName is 'object')
+    options = fileName
+    fileName = undefined
   fileName = path.basename remoteFile if fileName is undefined
   localFile = publicImagesPath fileName
-  downloadFile remoteFile, localFile
+  downloadFile remoteFile, localFile, options
 
-downloadFile = (remoteFile, localFile) ->
+downloadFile = (remoteFile, localFile, options) ->
   console.log "downloading file #{path.basename localFile}..."
-  return if fs.existsSync localFile
+  options.waitingDownload = 0 unless options.waitingDownload
+  shouldDownload = !(fs.existsSync localFile) or (options.buildForce is on)
+  return unless shouldDownload
+  options.waitingDownload++
   directory = path.dirname localFile
   fs.mkdirSync directory unless fs.existsSync directory
   file = fs.createWriteStream localFile
-  request = http.get remoteFile, (response) -> response.pipe file
+  getter = if remoteFile.substring(0,5) is 'https' then https else http
+  request = getter.get remoteFile, (response) ->
+    response.pipe file
+    options.waitingDownload--
 
 whenDone = (condition, callback) ->
   if condition()
@@ -69,10 +85,14 @@ task 'test', 'Build single application file from source files', (options) ->
   invoke 'dependencies:js'
   whenDone (-> options.npmProcessInstallDone), -> invoke 'run:test'
 
-task 'build', 'Build single application file from source files', ->
+task 'build', 'Build single application file from source files', (options) ->
   invoke 'dependencies:npm'
   invoke 'compile:coffee'
   invoke 'dependencies:js'
+
+task 'build:force', 'Build single application file from source files and download again existing dependencies', (options) ->
+  options.buildForce = on
+  invoke 'build'
 
 task 'run:test', 'Runs the tests', (options) ->
   console.log 'Running tests via npm...'
@@ -99,17 +119,20 @@ task 'dependencies:npm', 'Run npm (only production)', (options) ->
 task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
 
-task 'dependencies:js', 'copies js dependencies to public/script', ->
-  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
-  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"
-  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css"
-  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
-  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings-white.png", path.join("img", "glyphicons-halflings-white.png")
-  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png", path.join("img", "glyphicons-halflings.png")
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js"
-  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"
-  downloadFileToJS      "http://raw.github.com/velesin/jasmine-jquery/master/lib/jasmine-jquery.js"
+task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
+  downloadFileToJS      "https://raw.github.com/velesin/jasmine-jquery/master/lib/jasmine-jquery.js", options
+  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", options
+  downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js", options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js", options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js", options
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css", options
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css", options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js", options
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings-white.png", path.join("img", "glyphicons-halflings-white.png"), options
+  downloadFileToCSS     "http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png", path.join("img", "glyphicons-halflings.png"), options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js", options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js", options
+  downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js", options
+  whenDone((->
+    waiting = options.waitingDownload
+    waiting == 0), ->)
