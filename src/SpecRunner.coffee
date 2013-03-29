@@ -37,7 +37,7 @@ global.initBackbone = ->
 
 initBackbone()
 
-specs = ["../spec/HomeView.spec"]
+specs = ["spec/HomeView.spec"]
 requirejs specs, ->
   reporter = new jasmine.ConsoleReporter()
   oldReportRunnerResults = reporter.reportRunnerResults
