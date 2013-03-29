@@ -10,8 +10,14 @@ exports.start = (cb) ->
     app.use express.errorHandler()
     app.locals.pretty = on
 
+  port = process.env.PORT or
+    switch app.get 'env'
+      when 'development', 'production' then 3000
+      when 'test' then 8000
+      else 3000
+
   app.configure ->
-    app.set "port", process.env.PORT or 3000
+    app.set "port", port
     app.set "views", __dirname + "/views"
     app.set "view engine", "jade"
     app.use express.favicon()
