@@ -1,32 +1,32 @@
 require.config
   paths:
     jquery: 'lib/jquery.min'
-    Underscore: 'lib/underscore-min'
-    Backbone: 'lib/backbone-min'
-    Handlebars: 'lib/handlebars.min'
+    underscore: 'lib/underscore-min'
+    backbone: 'lib/backbone-min'
+    handlebars: 'lib/handlebars.min'
     text: 'lib/text'
-    TwitterBootstrap: 'lib/bootstrap.min'
+    twitterBootstrap: 'lib/bootstrap.min'
 
   shim:
     'jQueryUI':
       deps: ['jquery']
-    'Handlebars':
+    'handlebars':
       deps: ['jquery']
       exports: 'Handlebars'
-    'Underscore':
+    'underscore':
       exports: '_'
-    'Backbone':
-      deps: ['Underscore', 'jquery', 'Handlebars']
+    'backbone':
+      deps: ['underscore', 'jquery', 'handlebars']
       exports: 'Backbone'
-    'TwitterBootstrap':
+    'twitterBootstrap':
       deps: ['jquery']
       exports: '$.fn.popover'
 
 require [
-  'Handlebars'
-  'router'
-  'TwitterBootstrap'
-], (Handlebars, router) ->
+  'handlebars'
+  'app'
+  'twitterBootstrap'
+], (Handlebars, App) ->
   Handlebars.registerHelper 'formataData', (valor) ->
     return "" if not valor
     try
@@ -34,4 +34,4 @@ require [
       (data.getUTCMonth() + 1) + "/" + data.getUTCDate() + "/" + data.getUTCFullYear()
     catch error
       valor
-  new router()
+  new App()
