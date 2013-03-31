@@ -1,4 +1,15 @@
+path    = require 'path'
+fs      = require 'fs'
+
 process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
+
+specs = []
+basePath = path.join __dirname, 'public', 'javascripts', 'spec'
+for dirItem in fs.readdirSync basePath
+  fullItemPath = path.join basePath, dirItem
+  continue if fs.statSync(fullItemPath).isDirectory()
+  fileWithoutExt = dirItem.substring 0, dirItem.length - path.extname(dirItem).length
+  specs.push path.join "spec", fileWithoutExt
 
 # set up require.js to play nicely with the test environment
 requirejs = require("requirejs")
@@ -37,7 +48,6 @@ global.initBackbone = ->
 
 initBackbone()
 
-specs = ["spec/HomeView.spec"]
 requirejs specs, ->
   reporter = new jasmine.ConsoleReporter()
   oldReportRunnerResults = reporter.reportRunnerResults
