@@ -3,3 +3,4 @@ azure_error
 *.js
 **/public/**/lib
 *.map
+*.password
