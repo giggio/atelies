@@ -3,4 +3,4 @@
 cd $( dirname "${BASH_SOURCE[0]}" )
 
 npm install coffee-script
-cake build
+node_modules/coffee-script/bin/cake build
