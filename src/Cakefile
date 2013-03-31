@@ -1,17 +1,18 @@
 fs            = require 'fs'
-{exec}        = require 'child_process'
 path          = require 'path'
 http          = require 'http'
 https         = require 'https'
 child_process = require 'child_process'
 
+process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
+process.stdout.setMaxListeners(100)
+process.stderr.setMaxListeners(100)
 iswin = process.platform is 'win32'
 currDir = __dirname
 if iswin and currDir.substring(0,2) is "\\\\"
   depTarget = process.env.DEPLOYMENT_TARGET
   currDir = depTarget
 coffee = path.join currDir,  "node_modules", "coffee-script", "bin", "coffee"
-coffee = "node #{coffee}" if iswin
 
 compileDirectory = (dirPath) ->
   for dirItem in fs.readdirSync(dirPath)
@@ -28,8 +29,12 @@ isACoffeeFile = (file) -> file.indexOf(".coffee", file.length - 7) isnt -1
 compileFile = (file) ->
   return unless isACoffeeFile file
   console.log "found file #{file}, compiling..."
-  exec "#{coffee} --compile #{file}", (err, stdout, stderr) ->
-    throw err if err
+  coffeeProcess = child_process.spawn 'node', [coffee, '--compile', file], { cwd: currDir, env: process.env }
+  coffeeProcess.stdout.pipe process.stdout
+  coffeeProcess.stderr.pipe process.stderr
+  coffeeProcess.on 'error', (err) =>
+    console.log "Error compiling file #{file}."
+    throw err
 
 publicJSPath     = (file) -> path.join(currDir, 'public', 'javascripts', 'lib', file)
 publicCSSPath    = (file) -> path.join(currDir, 'public', 'stylesheets', 'lib', file)
@@ -69,9 +74,13 @@ downloadFile = (remoteFile, localFile, options) ->
   fs.mkdirSync directory unless fs.existsSync directory
   file = fs.createWriteStream localFile
   getter = if remoteFile.substring(0,5) is 'https' then https else http
-  request = getter.get remoteFile, (response) ->
+  request = getter.get(remoteFile, (response) ->
     response.pipe file
     options.waitingDownload--
+  ).on 'error', (err) ->
+    options.waitingDownload--
+    console.log "Error when getting #{remoteFile}:\n#{err.stack}"
+
 
 whenDone = (condition, callback) ->
   if condition()
@@ -100,6 +109,10 @@ task 'run:test', 'Runs the tests', (options) ->
   npmProcessTest.stdout.pipe process.stdout
   npmProcessTest.stderr.pipe process.stderr
   npmProcessTest.on 'exit', => options.npmProcessTestDone = on
+  npmProcessTest.on 'error', (err) =>
+    console.log "Error when running tests (npm test)"
+    options.npmProcessTestDone = on
+    throw err
 
 task 'dependencies:npmfull', 'Run npm (full)', (options) ->
   console.log 'Installing npm packages (full)...'
@@ -107,14 +120,26 @@ task 'dependencies:npmfull', 'Run npm (full)', (options) ->
   npmProcessInstall = child_process.spawn 'npm', ['install'], { cwd: currDir, env: process.env }
   npmProcessInstall.stdout.pipe process.stdout
   npmProcessInstall.stderr.pipe process.stderr
-  npmProcessInstall.on 'exit', => options.npmProcessInstallDone = on
+  npmProcessInstall.on 'exit', (code) =>
+    console.log "Completed npm installation with exit code #{code}."
+    options.npmProcessInstallDone = on
+  npmProcessInstall.on 'error', (err) =>
+    console.log "Error when running npm install (full)"
+    options.npmProcessInstallDone = on
+    throw err
 
 task 'dependencies:npm', 'Run npm (only production)', (options) ->
   console.log 'Installing npm packages (production)...'
   npmProcessInstall = child_process.spawn 'npm', ['install', '--production'], { cwd: currDir, env: process.env }
   npmProcessInstall.stdout.pipe process.stdout
   npmProcessInstall.stderr.pipe process.stderr
-  npmProcessInstall.on 'exit', => options.npmProcessInstallDone = on
+  npmProcessInstall.on 'exit', (code) =>
+    console.log "Completed npm installation with exit code #{code}."
+    options.npmProcessInstallDone = on
+  npmProcessInstall.on 'error', (err) =>
+    console.log "Error when running npm install (production)"
+    options.npmProcessInstallDone = on
+    throw err
 
 task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
@@ -133,7 +158,7 @@ task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js", options
-  downloadFileToJS      'https://github.com/requirejs/text/raw/master/text.js', options
+  downloadFileToJS      'https://raw.github.com/requirejs/text/master/text.js', options
   whenDone((->
     waiting = options.waitingDownload
     waiting == 0), ->)
