@@ -5,13 +5,16 @@ describe 'With a NodeJS instance', ->
   beforeEach ->
     zombie = new require('zombie')
     browser = new zombie.Browser()
+  afterEach (done) ->
+    browser.close()
+    done()
   describe 'headless testing', ->
     it 'answers with 200', (done) ->
       helper.whenServerLoaded ->
-        browser.visit("http://localhost:3000/")
+        browser.visit("http://localhost:8000/")
           .then ->
             expect(browser.success).toBeTruthy()
             done()
           .fail (error) ->
-            console.log error
-            done(error)
+            console.log "Error visiting. " + error.stack
+            done error

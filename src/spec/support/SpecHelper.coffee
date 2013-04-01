@@ -63,10 +63,11 @@ jasmineExt.afterAll ->
   exports._server.close()
 
 exports.startServer = (cb) ->
+  process.env.CUSTOMCONNSTR_mongo = "mongodb://localhost/openstore"
   app = require('../../app')
   app.start (server) ->
     exports._server = server
-    cb(server) if cb
+    cb server if cb
 
 exports.whenDone = (condition, callback) ->
   if condition()
@@ -75,5 +76,7 @@ exports.whenDone = (condition, callback) ->
     setTimeout((-> whenDone(condition, callback)), 1000)
 
 exports.whenServerLoaded = (cb) ->
-  cb() if exports._server
+  if exports._server
+    cb()
+    return
   exports.whenDone((-> exports._server isnt null), -> cb())
