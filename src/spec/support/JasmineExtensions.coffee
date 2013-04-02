@@ -12,8 +12,8 @@ exports._setupAfterAll = ->
     oldFinishCallback.apply @, arguments
     self.afterAllFunc() if self.afterAllFunc
 
-beforeEach =>
+beforeEach (done) =>
   return if @beforeAllCalled
   @beforeAllCalled = true
   exports._setupAfterAll()
-  @beforeAllFunc() if @beforeAllFunc
+  @beforeAllFunc done if @beforeAllFunc

@@ -54,20 +54,16 @@ exports.patchEventEmitterToHideMaxListenerWarning = ->
     this.setMaxListeners(0)
   events.EventEmitter:: = Old::
 
-jasmineExt.beforeAll ->
-  process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
-  exports.patchEventEmitterToHideMaxListenerWarning()
-  exports.startServer()
-
-jasmineExt.afterAll ->
-  exports._server.close()
+exports.localMongoDB = "mongodb://localhost/openstore"
 
 exports.startServer = (cb) ->
-  process.env.CUSTOMCONNSTR_mongo = "mongodb://localhost/openstore"
-  app = require('../../app')
-  app.start (server) ->
-    exports._server = server
-    cb server if cb
+  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB
+  exports.cleanDB (err) ->
+    cb err if err
+    app = require('../../app')
+    app.start (server) ->
+      exports._server = server
+      cb null, server if cb
 
 exports.whenDone = (condition, callback) ->
   if condition()
@@ -80,3 +76,32 @@ exports.whenServerLoaded = (cb) ->
     cb()
     return
   exports.whenDone((-> exports._server isnt null), -> cb())
+
+exports.cleanDB = (cb) ->
+  mongoose = require 'mongoose'
+  mongoose.connect process.env.CUSTOMCONNSTR_mongo
+  mongoose.connection.on 'error', (err) ->
+    console.error "connection error:#{err.stack}"
+    cb err
+  mongoose.connection.db.collections (err, cols) ->
+    for col in cols
+      unless col.collectionName.substring(0,6) is 'system'
+        console.log "dropping #{col.collectionName}"
+        col.drop()
+    mongoose.connection.close()
+    cb()
+
+
+
+jasmineExt.beforeAll (done) ->
+  process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
+  exports.patchEventEmitterToHideMaxListenerWarning()
+  exports.startServer (err, server) ->
+    done err if err
+    done()
+
+jasmineExt.afterAll ->
+  if exports._server
+    exports._server.close()
+  else
+    console.log "Server not defined on 'afterAll'"
