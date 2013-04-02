@@ -6,6 +6,8 @@ exports.start = (cb) ->
   app = express()
 
   app.configure "development", ->
+    unless process.env.CUSTOMCONNSTR_mongo
+      process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore'
     app.use express.logger "dev"
     app.use express.errorHandler()
     app.locals.pretty = on
