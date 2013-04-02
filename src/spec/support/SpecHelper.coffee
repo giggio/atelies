@@ -67,13 +67,13 @@ exports.startServer = (cb) ->
 
 exports.whenDone = (condition, callback) ->
   if condition()
-    callback()
+    process.nextTick callback
   else
-    setTimeout((-> whenDone(condition, callback)), 1000)
+    process.nextTick -> whenDone(condition, callback)
 
 exports.whenServerLoaded = (cb) ->
   if exports._server
-    cb()
+    process.nextTick cb
     return
   exports.whenDone((-> exports._server isnt null), -> cb())
 

@@ -5,4 +5,5 @@ productSchema = new mongoose.Schema
   picture:    String
   price:      Number
 
-module.exports = mongoose.model 'product', productSchema
+Product = mongoose.model 'product', productSchema
+module.exports = Product

@@ -7,12 +7,14 @@
       <th>StoreId</th>
     </tr>
   </thead>
+  <tbody>
   {{#each productsHome}}
   <tr>
-    <td>{{this.id}}</td>
+    <td id="{{this._id}}">{{this._id}}</td>
     <td>{{this.productName}}</td>
     <td>{{this.picture}}</td>
     <td>{{this.storeId}}</td>
   </tr>
   {{/each}}
+  </tbody>
 </table>
