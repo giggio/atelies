@@ -13,7 +13,12 @@ exports._setupAfterAll = ->
     self.afterAllFunc() if self.afterAllFunc
 
 beforeEach (done) =>
-  return if @beforeAllCalled
+  if @beforeAllCalled
+    done()
+    return
   @beforeAllCalled = true
   exports._setupAfterAll()
-  @beforeAllFunc done if @beforeAllFunc
+  if @beforeAllFunc
+    @beforeAllFunc done
+  else
+    done()
