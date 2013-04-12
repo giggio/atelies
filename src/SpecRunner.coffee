@@ -49,7 +49,7 @@ global.initBackbone = ->
 initBackbone()
 
 requirejs specs, ->
-  reporter = new jasmine.ConsoleReporter()
+  reporter = new jasmine.TerminalReporter(color: true)
   oldReportRunnerResults = reporter.reportRunnerResults
   assertionCount = total: 0, passed: 0, failed: 0
 
