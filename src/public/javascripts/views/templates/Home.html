@@ -4,17 +4,19 @@
       <th>Id</th>
       <th>Product Name</th>
       <th>Picture</th>
-      <th>StoreId</th>
+      <th>StoreName</th>
+      <th>StoreSlug</th>
     </tr>
   </thead>
   <tbody>
   {{#each productsHome}}
-  <tr>
-    <td id="{{this._id}}">{{this._id}}</td>
-    <td>{{this.productName}}</td>
-    <td>{{this.picture}}</td>
-    <td>{{this.storeId}}</td>
-  </tr>
+    <tr>
+      <td id="{{this._id}}">{{this._id}}</td>
+      <td>{{this.productName}}</td>
+      <td>{{this.picture}}</td>
+      <td id="{{this._id}}_storeName">{{this.storeName}}</td>
+      <td id="{{this._id}}_storeSlug">{{this.storeSlug}}</td>
+    </tr>
   {{/each}}
   </tbody>
 </table>
