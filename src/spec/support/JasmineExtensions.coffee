@@ -1,5 +1,7 @@
+@beforeAllFunc = []
+
 exports.beforeAll = (func) =>
-  @beforeAllFunc = func
+  @beforeAllFunc.push func
 
 exports.afterAll = (func) =>
   @afterAllFunc = func
@@ -13,12 +15,14 @@ exports._setupAfterAll = ->
     self.afterAllFunc() if self.afterAllFunc
 
 beforeEach (done) =>
-  if @beforeAllCalled
-    done()
-    return
+  return done() if @beforeAllCalled
   @beforeAllCalled = true
   exports._setupAfterAll()
-  if @beforeAllFunc
-    @beforeAllFunc done
-  else
-    done()
+  return done() if @beforeAllFunc.length is 0
+  i = @beforeAllFunc.length
+  for beforeFunc in @beforeAllFunc
+    beforeFunc -> i--
+  callDoneWhenIIs0 = ->
+    return done() if i is 0
+    process.nextTick callDoneWhenIIs0
+  callDoneWhenIIs0()
