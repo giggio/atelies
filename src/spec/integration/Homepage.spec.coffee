@@ -1,5 +1,5 @@
-helper    = require './support/SpecHelper'
-Product   = require '../models/product'
+helper    = require '../support/SpecHelper'
+Product   = require '../../models/product'
 zombie    = new require('zombie')
 
 describe 'Home page', ->
