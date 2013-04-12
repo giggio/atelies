@@ -1,4 +1,3 @@
-helper    = require '../support/SpecHelper'
 Product   = require '../../models/product'
 zombie    = new require('zombie')
 
@@ -12,14 +11,14 @@ describe 'Home page', ->
       return done()
     eachCalled = true
     browser = new zombie.Browser()
-    helper.cleanDB (error) ->
+    cleanDB (error) ->
       if error
         return done error
       product1 = new Product(name: 'name1', picture: 'http://aa.com/picture1.jpg', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
       product2 = new Product(name: 'name2', picture: 'http://aa.com/picture2.jpg', price: 12.2, storeName: 'store 2', storeSlug: 'store_2')
       product1.save()
       product2.save()
-      helper.whenServerLoaded ->
+      whenServerLoaded ->
         browser.visit "http://localhost:8000/", (error) ->
           if error
             console.error "Error visiting. " + error.stack

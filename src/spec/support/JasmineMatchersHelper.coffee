@@ -1,4 +1,3 @@
-JasmineExt      = require './JasmineExtensions'
 _s              = require 'underscore.string'
 
 matchersPrototype =
