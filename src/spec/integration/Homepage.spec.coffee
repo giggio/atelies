@@ -29,10 +29,10 @@ describe 'Home page', ->
   it 'answers with 200', ->
     expect(browser.success).toBeTruthy()
   it 'has two products', ->
-    expect(browser.query('table#productsHome tbody').children.length).toBe 2
+    expect(browser.query('#productsHome tbody').children.length).toBe 2
   it 'shows product 1', ->
     expect(browser.text('#' + product1.id)).toBe product1.id
   it 'shows store name for product 1', ->
-    expect(browser.text("##{product1.id}_storeName")).toBe 'store 1'
+    expect(browser.text("##{product1.id}_store")).toBe 'store 1'
   it 'shows store slug for product 1', ->
-    expect(browser.text("##{product1.id}_storeSlug")).toBe 'store_1'
+    expect(browser.query("##{product1.id}_store a").href).toEndWith 'store_1'

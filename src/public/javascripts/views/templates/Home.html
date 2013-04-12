@@ -4,8 +4,7 @@
       <th>Id</th>
       <th>Product Name</th>
       <th>Picture</th>
-      <th>StoreName</th>
-      <th>StoreSlug</th>
+      <th>Store</th>
     </tr>
   </thead>
   <tbody>
@@ -14,8 +13,7 @@
       <td id="{{this._id}}">{{this._id}}</td>
       <td>{{this.productName}}</td>
       <td>{{this.picture}}</td>
-      <td id="{{this._id}}_storeName">{{this.storeName}}</td>
-      <td id="{{this._id}}_storeSlug">{{this.storeSlug}}</td>
+      <td id="{{this._id}}_store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></td>
     </tr>
   {{/each}}
   </tbody>
