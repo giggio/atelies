@@ -14,3 +14,6 @@ exports.index = (req, res) ->
       res.render "index", products: viewModelProducts
       mongoose.connection.close()
       mongoose.disconnect()
+
+exports.store = (req, res) ->
+  res.render "store", storeSlug: req.params.storeSlug
