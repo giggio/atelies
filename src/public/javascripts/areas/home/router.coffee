@@ -1,9 +1,9 @@
 define [
   'backbone'
-  'areas/home/homeRoutes'
+  'areas/home/routes'
 ],
 (Backbone, routes) ->
-  class HomeRouter extends Backbone.Router
+  class Router extends Backbone.Router
     routes:
       '': routes.home
       'home': routes.home

@@ -1,3 +1,3 @@
-define 'app', ['areas/home/homeRouter'], (HomeRouter) ->
-  start: -> new HomeRouter()
+define 'app', ['areas/home/router'], (Router) ->
+  start: -> new Router()
 require ['bootstrap']
