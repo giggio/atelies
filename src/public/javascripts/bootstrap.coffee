@@ -34,4 +34,4 @@ require [
       (data.getUTCMonth() + 1) + "/" + data.getUTCDate() + "/" + data.getUTCFullYear()
     catch error
       valor
-  new App().start()
+  App.start()
