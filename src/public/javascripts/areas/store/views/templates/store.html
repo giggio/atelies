@@ -1,0 +1,20 @@
+{{#if store}}
+<table id="products">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Product Name</th>
+      <th>Picture</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each products}}
+    <tr>
+      <td id="{{this._id}}">{{this._id}}</td>
+      <td id="{{this._id}}_name"><a href="{{this.url}}">{{this.name}}</a></td>
+      <td><a id="{{this._id}}_picture" href="{{this.url}}"><img src="{{this.picture}}" alt="{{this.name}}" /></a></td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+{{/if}}
