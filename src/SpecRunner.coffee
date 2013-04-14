@@ -4,12 +4,25 @@ fs      = require 'fs'
 process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
 
 specs = []
-basePath = path.join __dirname, 'public', 'javascripts', 'spec'
-for dirItem in fs.readdirSync basePath
-  fullItemPath = path.join basePath, dirItem
-  continue if fs.statSync(fullItemPath).isDirectory()
-  fileWithoutExt = dirItem.substring 0, dirItem.length - path.extname(dirItem).length
-  specs.push path.join "spec", fileWithoutExt
+javascriptsPath = path.join __dirname, 'public', 'javascripts'
+specsPath = path.join javascriptsPath, 'spec'
+
+isACoffeeFile = (file) -> file.indexOf(".spec.coffee", file.length - 12) isnt -1
+
+addSpecsDirectory = (dirPath) ->
+  for dirItem in fs.readdirSync dirPath
+    fullItemPath = path.join dirPath, dirItem
+    continue unless fs.existsSync fullItemPath
+    isDirectory =  fs.statSync(fullItemPath).isDirectory()
+    if isDirectory
+      addSpecsDirectory fullItemPath
+    else
+      continue unless isACoffeeFile fullItemPath
+      relativePath = fullItemPath.substring javascriptsPath.length + 1, fullItemPath.length - 1
+      fileWithoutExt = relativePath.substring 0, relativePath.length - path.extname(relativePath).length
+      specs.push fileWithoutExt
+
+addSpecsDirectory specsPath
 
 # set up require.js to play nicely with the test environment
 requirejs = require("requirejs")

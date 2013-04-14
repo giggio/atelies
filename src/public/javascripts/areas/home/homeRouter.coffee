@@ -1,6 +1,6 @@
 define [
   'backbone'
-  'homeRoutes'
+  'areas/home/homeRoutes'
 ],
 (Backbone, routes) ->
   class HomeRouter extends Backbone.Router

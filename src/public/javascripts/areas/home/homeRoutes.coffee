@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'views/Home'
+  './views/Home'
 ],($, HomeView) ->
   home: ->
     homeView = new HomeView el:$("#app-container")

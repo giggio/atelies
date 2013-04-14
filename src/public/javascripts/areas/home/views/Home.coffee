@@ -3,8 +3,8 @@ define [
   'backbone'
   'handlebars'
   'productsHomeData'
-  'models/ProductsHome'
-  'text!views/templates/Home.html'
+  '../models/ProductsHome'
+  'text!./templates/Home.html'
 ], ($, Backbone, Handlebars, productsHomeData, ProductsHome, homeTemplate) ->
   class Home extends Backbone.View
     template: homeTemplate
