@@ -1,6 +1,6 @@
 _s = require('underscore.string')
-product1 = { _id: '1', name: 'prod 1', picture: 'http://a.jpg', price: 3.43, storeName: 'store 1', storeSlug: 'store_1' }
-product2 = { _id: '2', name: 'prod 2', picture: 'http://b.jpg', price: 7.78, storeName: 'store 2', storeSlug: 'store_2' }
+product1 = { _id: '1', name: 'prod 1', slug: 'prod_1', picture: 'http://a.jpg', price: 3.43, storeName: 'store 1', storeSlug: 'store_1' }
+product2 = { _id: '2', name: 'prod 2', slug: 'prod_2', picture: 'http://b.jpg', price: 7.78, storeName: 'store 2', storeSlug: 'store_2' }
 products = [ product1, product2 ]
 define 'productsHomeData', -> products
 define [
@@ -27,5 +27,7 @@ define [
       expect($("#2_store a", el).attr('href')).toBe product2.storeSlug
     it 'displays the product name on product 1', ->
       expect($("#1_name", el).text()).toBe product1.name
+    it 'displays the slug on product 1', ->
+      expect($("#1_name a", el).attr('href')).toBe "#{product1.storeSlug}/#{product1.slug}"
     it 'displays the picture for product 1', ->
       expect($("#1_picture", el).attr('src')).toBe product1.picture

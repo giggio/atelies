@@ -4,6 +4,7 @@ productSchema = new mongoose.Schema
   name:       String
   picture:    String
   price:      Number
+  slug:       String
   storeName:  String
   storeSlug:  String
 
