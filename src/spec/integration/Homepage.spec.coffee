@@ -35,3 +35,5 @@ describe 'Home page', ->
     expect(browser.text("##{product1.id}_store")).toBe 'store 1'
   it 'shows store slug for product 1', ->
     expect(browser.query("##{product1.id}_store a").href).toEndWith 'store_1'
+  it 'shows product name for product 1', ->
+    expect(browser.text("##{product1.id}_name")).toBe 'name1'

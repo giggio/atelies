@@ -11,7 +11,7 @@
   {{#each productsHome}}
     <tr>
       <td id="{{this._id}}">{{this._id}}</td>
-      <td>{{this.productName}}</td>
+      <td id="{{this._id}}_name">{{this.name}}</td>
       <td>{{this.picture}}</td>
       <td id="{{this._id}}_store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></td>
     </tr>
