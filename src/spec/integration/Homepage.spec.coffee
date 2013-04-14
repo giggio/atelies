@@ -33,9 +33,11 @@ describe 'Home page', ->
     expect(browser.text('#' + product1._id)).toBe product1._id.toString()
   it 'shows store name for product 1', ->
     expect(browser.text("##{product1._id}_store")).toBe 'store 1'
-  it 'shows store slug for product 1', ->
+  it 'links store to store page for product 1', ->
     expect(browser.query("##{product1._id}_store a").href).toEndWith 'store_1'
-  it 'shows slug for product 1', ->
+  it 'links product name to product page for product 1', ->
     expect(browser.query("##{product1._id}_name a").href).toEndWith 'store_1/name_1'
   it 'shows picture for product 1', ->
-    expect(browser.query("##{product1._id}_picture").src).toBe 'http://lorempixel.com/150/150/cats'
+    expect(browser.query("##{product1._id}_picture img").src).toBe 'http://lorempixel.com/150/150/cats'
+  it 'links picture to product page for product 1', ->
+    expect(browser.query("##{product1._id}_picture").href).toEndWith 'store_1/name_1'

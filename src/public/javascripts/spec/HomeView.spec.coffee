@@ -27,7 +27,9 @@ define [
       expect($("#2_store a", el).attr('href')).toBe product2.storeSlug
     it 'displays the product name on product 1', ->
       expect($("#1_name", el).text()).toBe product1.name
-    it 'displays the slug on product 1', ->
+    it 'links to the product page on the product name on product 1', ->
       expect($("#1_name a", el).attr('href')).toBe "#{product1.storeSlug}/#{product1.slug}"
     it 'displays the picture for product 1', ->
-      expect($("#1_picture", el).attr('src')).toBe product1.picture
+      expect($("#1_picture img", el).attr('src')).toBe product1.picture
+    it 'links to the product page on the picture on product 1', ->
+      expect($("#1_picture", el).attr('href')).toBe "#{product1.storeSlug}/#{product1.slug}"
