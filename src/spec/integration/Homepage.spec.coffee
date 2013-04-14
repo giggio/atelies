@@ -30,12 +30,12 @@ describe 'Home page', ->
   it 'has two products', ->
     expect(browser.query('#productsHome tbody').children.length).toBe 2
   it 'shows product 1', ->
-    expect(browser.text('#' + product1.id)).toBe product1.id
+    expect(browser.text('#' + product1._id)).toBe product1._id.toString()
   it 'shows store name for product 1', ->
-    expect(browser.text("##{product1.id}_store")).toBe 'store 1'
+    expect(browser.text("##{product1._id}_store")).toBe 'store 1'
   it 'shows store slug for product 1', ->
-    expect(browser.query("##{product1.id}_store a").href).toEndWith 'store_1'
+    expect(browser.query("##{product1._id}_store a").href).toEndWith 'store_1'
   it 'shows slug for product 1', ->
-    expect(browser.query("##{product1.id}_name a").href).toEndWith 'store_1/name_1'
+    expect(browser.query("##{product1._id}_name a").href).toEndWith 'store_1/name_1'
   it 'shows picture for product 1', ->
-    expect(browser.query("##{product1.id}_picture").src).toBe 'http://lorempixel.com/150/150/cats'
+    expect(browser.query("##{product1._id}_picture").src).toBe 'http://lorempixel.com/150/150/cats'

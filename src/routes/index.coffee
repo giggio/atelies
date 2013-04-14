@@ -1,5 +1,6 @@
 mongoose    = require 'mongoose'
 Product     = require '../models/product'
+_           = require 'underscore'
 
 exports.index = (req, res) ->
   mongoose.connect process.env.CUSTOMCONNSTR_mongo
@@ -8,7 +9,8 @@ exports.index = (req, res) ->
     throw err
   mongoose.connection.once 'open', ->
     Product.find (err, products) ->
-      console.log err.stack if err
-      res.render "index", products: products
+      console.error err.stack if err
+      viewModelProducts = _.map products, (p) -> {_id: p._id, name: p.name, picture: p.picture, price: p.price, storeName: p.storeName, storeSlug: p.storeSlug, url: p.url()}
+      res.render "index", products: viewModelProducts
       mongoose.connection.close()
       mongoose.disconnect()

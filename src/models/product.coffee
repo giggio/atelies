@@ -8,5 +8,7 @@ productSchema = new mongoose.Schema
   storeName:  String
   storeSlug:  String
 
+productSchema.methods.url = -> "#{@storeSlug}/#{@slug}"
+
 Product = mongoose.model 'product', productSchema
 module.exports = Product
