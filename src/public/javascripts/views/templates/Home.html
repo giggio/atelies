@@ -12,7 +12,7 @@
     <tr>
       <td id="{{this._id}}">{{this._id}}</td>
       <td id="{{this._id}}_name">{{this.name}}</td>
-      <td>{{this.picture}}</td>
+      <td><img id="{{this._id}}_picture" src="{{this.picture}}" alt="{{this.name}}" /></td>
       <td id="{{this._id}}_store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></td>
     </tr>
   {{/each}}

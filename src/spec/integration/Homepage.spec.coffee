@@ -14,8 +14,8 @@ describe 'Home page', ->
     cleanDB (error) ->
       if error
         return done error
-      product1 = new Product(name: 'name1', picture: 'http://aa.com/picture1.jpg', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
-      product2 = new Product(name: 'name2', picture: 'http://aa.com/picture2.jpg', price: 12.2, storeName: 'store 2', storeSlug: 'store_2')
+      product1 = new Product(name: 'name1', picture: 'http://lorempixel.com/150/150/cats', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
+      product2 = new Product(name: 'name2', picture: 'http://lorempixel.com/150/150/cats', price: 12.2, storeName: 'store 2', storeSlug: 'store_2')
       product1.save()
       product2.save()
       whenServerLoaded ->
@@ -37,3 +37,5 @@ describe 'Home page', ->
     expect(browser.query("##{product1.id}_store a").href).toEndWith 'store_1'
   it 'shows product name for product 1', ->
     expect(browser.text("##{product1.id}_name")).toBe 'name1'
+  it 'shows picture for product 1', ->
+    expect(browser.query("##{product1.id}_picture").src).toBe 'http://lorempixel.com/150/150/cats'
