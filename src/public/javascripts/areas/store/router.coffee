@@ -6,6 +6,6 @@ define [
   class Router extends Backbone.Router
     routes:
       '': routes.home
-      'home': routes.home
+      ':productSlug': routes.product
     initialize: ->
       Backbone.history.start()
