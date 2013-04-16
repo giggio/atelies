@@ -13,9 +13,7 @@ define [
     beforeEach ->
       return if beforeEachCalled
       beforeEachCalled = true
-      # TODO: try to find out a way to spy on $
-      # you have to spy on global.$, not on $. For some reason, they are not the same during ajax calls
-      spyOn(global.$, "ajax").andCallFake (opt) ->
+      spyOn($, "ajax").andCallFake (opt) ->
         opt.success [product]
       productView = new ProductView el:el
       productView.render 'product_1'

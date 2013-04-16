@@ -42,7 +42,7 @@ initDOM = ->
   # Create a DOM
   jsdom = require("jsdom")
   # create a jQuery instance
-  jQuery = require("jquery").create()
+  jQuery = require("jquery")
   global.jQuery = global.$ = jQuery
   # Create window
   window = jsdom.jsdom().createWindow("<html><body></body></html>")
