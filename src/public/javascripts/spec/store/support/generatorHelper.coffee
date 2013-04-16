@@ -19,7 +19,6 @@ define ->
         weight: 40
         hasInventory: true
         inventory: 30
-
       b: ->
         _id: '2'
         name: 'prod 2'
@@ -37,4 +36,13 @@ define ->
           depth: 70
         weight: 80
         hasInventory: false
-      
+    store:
+      a: ->
+        _id: '2'
+        name: 'store 1'
+        slug: 'store_1'
+        phoneNumber: '(11) 98745-7894'
+        city: "São Paulo"
+        state: "SP"
+        otherUrl: 'http://myotherurl.com'
+        banner: 'http://e.jpg'

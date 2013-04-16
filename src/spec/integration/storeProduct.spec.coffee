@@ -4,14 +4,14 @@ zombie    = new require 'zombie'
 
 describe 'store product page', ->
   eachCalled = false
-  product1 = browser = null
+  store = product1 = browser = null
   beforeEach (done) ->
     return done() if eachCalled
     eachCalled = true
     browser = new zombie.Browser()
     cleanDB (error) ->
       return done error if error
-      store = new Store name: 'store 1', slug: 'store_1'
+      store = generator.store.a()
       store.save()
       product1 = generator.product.a()
       product1.save()
@@ -42,3 +42,15 @@ describe 'store product page', ->
     expect(browser.text('#product #weight')).toBe product1.weight.toString()
   it 'shows the product inventory', ->
     expect(browser.text('#product #inventory')).toBe '30 itens'
+  it 'shows store name', ->
+    expect(browser.text('#storeName')).toBe store.name
+  it 'shows phone number', ->
+    expect(browser.text('#storePhoneNumber')).toBe store.phoneNumber
+  it 'shows City', ->
+    expect(browser.text('#storeCity')).toBe store.city
+  it 'shows State', ->
+    expect(browser.text('#storeState')).toBe store.state
+  it 'shows other store url', ->
+    expect(browser.text('#storeOtherUrl')).toBe store.otherUrl
+  it 'shows store banner', ->
+    expect(browser.query('#storeBanner').src).toBe store.banner

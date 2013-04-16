@@ -2,8 +2,13 @@ mongoose = require 'mongoose'
 Product  = require './product'
 
 storeSchema = new mongoose.Schema
-  name:       String
-  slug:       String
+  name:         String
+  slug:         String
+  phoneNumber:  String
+  city:         String
+  state:        String
+  otherUrl:     String
+  banner:       String
 
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb

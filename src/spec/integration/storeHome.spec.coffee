@@ -37,7 +37,7 @@ describe 'store home page', ->
       cleanDB (error) ->
         if error
           return done error
-        store = new Store name: 'store 1', slug: 'store_1'
+        store = generator.store.a()
         store.save()
         whenServerLoaded ->
           browser.visit "http://localhost:8000/store_1", (error) ->
@@ -46,8 +46,6 @@ describe 'store home page', ->
               done error
             else
               done()
-    it 'should display the store name', ->
-      expect(browser.text(".page-header")).toBe store.name
     it 'should display no products', ->
       expect(browser.query('#products tbody').children.length).toBe 0
 

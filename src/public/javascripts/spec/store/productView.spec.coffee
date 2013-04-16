@@ -1,8 +1,9 @@
-product1 = generator.product.a()
-product2 = generator.product.b()
+product1  = generator.product.a()
+product2  = generator.product.b()
+store     = generator.store.a()
 
 define 'storeData', [], ->
-  store: { _id: '2', name: 'store 1', slug: 'store_1' }
+  store: store
   products: [product1, product2]
 define [
   'jquery'
@@ -45,6 +46,19 @@ define [
         expect($('#product #weight', el).text()).toBe product1.weight.toString()
       it 'shows the inventory', ->
         expect($('#product #inventory', el).text()).toBe '30 itens'
+      describe 'Store details', ->
+        it 'shows store name', ->
+          expect($('#storeName', el).text()).toBe store.name
+        it 'shows phone number', ->
+          expect($('#storePhoneNumber', el).text()).toBe store.phoneNumber
+        it 'shows City', ->
+          expect($('#storeCity', el).text()).toBe store.city
+        it 'shows State', ->
+          expect($('#storeState', el).text()).toBe store.state
+        it 'shows other store url', ->
+          expect($('#storeOtherUrl', el).text()).toBe store.otherUrl
+        it 'shows store banner', ->
+          expect($('#storeBanner', el).attr('src')).toBe store.banner
     describe 'Without inventory', ->
       beforeEachCalled = false
       beforeEach ->

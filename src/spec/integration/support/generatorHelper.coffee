@@ -1,4 +1,5 @@
 Product   = require '../../../models/product'
+Store     = require '../../../models/store'
 exports.generator =
   product:
     a: -> new Product
@@ -48,3 +49,19 @@ exports.generator =
         depth:110
       weight: 50
       hasInventory: false
+  store:
+    a: -> new Store
+      name: 'Store 1'
+      slug: 'store_1'
+      phoneNumber: '(11) 98745-7894'
+      city: "São Paulo"
+      state: "SP"
+      otherUrl: 'http://myotherurl.com'
+      banner: 'http://lorempixel.com/800/150/cats'
+    b: -> new Store
+      name: 'Store 2'
+      slug: 'store_2'
+      phoneNumber: '(85) 7788-1111'
+      city: "Fortaleza"
+      state: "CE"
+      otherUrl: 'http://someotherurl.com'
