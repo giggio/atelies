@@ -2,7 +2,7 @@ Store     = require '../../models/store'
 Product   = require '../../models/product'
 zombie    = new require 'zombie'
 
-describe 'store product page', ->
+describe 'Store product page', ->
   describe 'regular product', ->
     eachCalled = false
     store = product1 = browser = null
@@ -68,16 +68,16 @@ describe 'store product page', ->
         return done error if error
         store = generator.store.b()
         store.save()
-        product1 = generator.product.a()
+        product1 = generator.product.c()
         product1.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+          browser.visit "http://localhost:8000/store_2#name_3", (error) ->
             if error
               console.error "Error visiting. " + error.stack
               done error
             else
               done()
     it 'does not show the store banner', ->
-      expect(browser.query('#storeBanner').src).toBe ''
+      expect(browser.query('#storeBanner')).toBe undefined
     it 'shows store name header', ->
       expect(browser.text('#storeNameHeader')).toBe store.name

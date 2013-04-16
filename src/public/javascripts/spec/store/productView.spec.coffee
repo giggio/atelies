@@ -1,10 +1,11 @@
 product1  = generator.product.a()
 product2  = generator.product.b()
-store     = generator.store.a()
+store1    = generator.store.a()
+store2    = generator.store.b()
 
 define 'storeData', [], ->
-  store: store
-  products: [product1, product2]
+  #store: store
+  #products: [product1, product2]
 define [
   'jquery'
   'areas/store/views/product'
@@ -12,7 +13,7 @@ define [
   productView = null
   el = $('<div></div>')
   describe 'ProductView', ->
-    describe 'With inventory', ->
+    describe 'Store with banner and product with inventory', ->
       beforeEachCalled = false
       beforeEach ->
         return if beforeEachCalled
@@ -20,6 +21,9 @@ define [
         spyOn($, "ajax").andCallFake (opt) ->
           opt.success [product1]
         productView = new ProductView el:el
+        productView.storeData =
+          store: store1
+          products: [product1, product2]
         productView.render 'product_1'
       it 'renders the products', ->
         expect($('#product', el)).toBeDefined()
@@ -47,20 +51,20 @@ define [
         expect($('#product #inventory', el).text()).toBe '30 itens'
       describe 'Store details', ->
         it 'shows the store name', ->
-          expect($('#storeName', el).text()).toBe store.name
+          expect($('#storeName', el).text()).toBe store1.name
         it 'shows phone number', ->
-          expect($('#storePhoneNumber', el).text()).toBe store.phoneNumber
+          expect($('#storePhoneNumber', el).text()).toBe store1.phoneNumber
         it 'shows City', ->
-          expect($('#storeCity', el).text()).toBe store.city
+          expect($('#storeCity', el).text()).toBe store1.city
         it 'shows State', ->
-          expect($('#storeState', el).text()).toBe store.state
+          expect($('#storeState', el).text()).toBe store1.state
         it 'shows other store url', ->
-          expect($('#storeOtherUrl', el).text()).toBe store.otherUrl
+          expect($('#storeOtherUrl', el).text()).toBe store1.otherUrl
         it 'does not show the store name header', ->
           expect($('#storeNameHeader', el).length).toBe 0
         it 'shows store banner', ->
-          expect($('#storeBanner', el).attr('src')).toBe store.banner
-    describe 'Without inventory', ->
+          expect($('#storeBanner', el).attr('src')).toBe store1.banner
+    describe 'Store without banner and product without inventory', ->
       beforeEachCalled = false
       beforeEach ->
         return if beforeEachCalled
@@ -68,6 +72,13 @@ define [
         spyOn($, "ajax").andCallFake (opt) ->
           opt.success [product2]
         productView = new ProductView el:el
+        productView.storeData =
+          store: store2
+          products: [product1, product2]
         productView.render 'product_2'
       it 'shows there is no inventory/made on demand', ->
         expect($('#product #inventory', el).text()).toBe 'Feito sob encomenda'
+      it 'shows store name header', ->
+        expect($('#storeNameHeader', el).text()).toBe store2.name
+      it 'does not show the store banner', ->
+        expect($('#storeBanner', el).length).toBe 0

@@ -7,16 +7,17 @@ define [
   'text!./templates/product.html'
 ], ($, Backbone, Handlebars, storeData, Products, productTemplate) ->
   class ProductView extends Backbone.View
+    storeData: storeData
     template: productTemplate
     render: (slug) ->
       @$el.empty()
-      products = new Products storeData.store.slug, slug
+      products = new Products @storeData.store.slug, slug
       products.fetch
         reset: true
         success: =>
           context = Handlebars.compile @template
           product = products.first()
-          @$el.html context product: product.attributes, store: storeData.store
+          @$el.html context product: product.attributes, store: @storeData.store
         error: (collection, response, opt) =>
           console.error 'ERROR****************'
           console.error collection
