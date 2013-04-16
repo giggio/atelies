@@ -30,3 +30,17 @@ describe 'store product page', ->
     expect(browser.query('#product #picture').src).toBe product1.picture
   it 'should show the product price', ->
     expect(browser.text('#product #price')).toBe product1.price.toString()
+  it 'should show the product tags', ->
+    expect(browser.text('#product #tags')).toBe product1.tags
+  it 'should show the product description', ->
+    expect(browser.text('#product #description')).toBe product1.description
+  it 'should show the product height', ->
+    expect(browser.text('#product #dimensions #height')).toBe product1.dimenstions.height.toString()
+  it 'should show the product width', ->
+    expect(browser.text('#product #dimensions #width')).toBe product1.dimensions.width.toString()
+  it 'should show the product depth', ->
+    expect(browser.text('#product #dimensions #depth')).toBe product1.dimensions.depth.toString()
+  it 'should show the product weight', ->
+    expect(browser.text('#product #weight')).toBe product1.weight.toString()
+  it 'should show if the product has inventory', ->
+    expect(browser.text('#product #hasInventory')).toBe product1.hasInventory
