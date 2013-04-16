@@ -25,11 +25,12 @@ exports.start = (cb) ->
     app.use express.favicon()
     app.use express.bodyParser()
     app.use express.methodOverride()
-    app.use app.router
     app.use express.static(path.join(__dirname, "public"))
+    app.use app.router
 
   app.get "/", routes.index
   app.get "/:storeSlug", routes.store
+  app.get "/:storeSlug/:productSlug", routes.product
   exports.server = http.createServer(app).listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
     cb(exports.server) if cb

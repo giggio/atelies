@@ -27,6 +27,6 @@ describe 'store product page', ->
   it 'should show the product name', ->
     expect(browser.text('#product #name')).toBe product1.name
   it 'should show the product picture', ->
-    expect(browser.query('#product #picture').href).toBe product1.picture
+    expect(browser.query('#product #picture').src).toBe product1.picture
   it 'should show the product price', ->
-    expect(browser.text('#product #price')).toBe product1.price
+    expect(browser.text('#product #price')).toBe product1.price.toString()

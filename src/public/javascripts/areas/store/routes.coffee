@@ -6,6 +6,6 @@ define [
   home: ->
     storeView = new StoreView el:$ "#app-container"
     storeView.render()
-  product: (storeSlug, productSlug) ->
+  product: (slug) ->
     productView = new ProductView el:$ '#app-container'
-    productView.render productSlug
+    productView.render slug

@@ -39,7 +39,26 @@ exports.store = (req, res) ->
           console.error err.stack
           throw err
         viewModelProducts = _.map products, (p) -> {_id: p._id, name: p.name, picture: p.picture, price: p.price, storeName: p.storeName, storeSlug: p.storeSlug, url: p.url()}
-        #res.render "store", store: {name: req.params.storeSlug, slug: req.params.storeSlug, products: [{_id: '1', name: 'prod 1', url: 'store1#prod_1', picture: 'http://lorempixel.com/50/50/cats', }]}
         res.render "store", store: store, products: viewModelProducts
         mongoose.connection.close()
         mongoose.disconnect()
+
+exports.product = (req, res) ->
+  mongoose.connect process.env.CUSTOMCONNSTR_mongo
+  mongoose.connection.on 'error', (err) ->
+    console.error "connection error:#{err.stack}"
+    throw err
+  mongoose.connection.once 'open', ->
+    Product.findOne {storeSlug: req.params.storeSlug, slug: req.params.productSlug}, (err, p) ->
+      if err
+        console.error err.stack
+        throw err
+      if p is null
+        mongoose.connection.close()
+        mongoose.disconnect()
+        return res.send 404
+
+      viewModelProduct = {_id: p._id, name: p.name, picture: p.picture, price: p.price, storeName: p.storeName, storeSlug: p.storeSlug, url: p.url()}
+      res.json viewModelProduct
+      mongoose.connection.close()
+      mongoose.disconnect()
