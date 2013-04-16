@@ -8,8 +8,7 @@ define 'storeData', [], ->
 define [
   'jquery'
   'areas/store/views/product'
-  'spec/store/support/generatorHelper'
-], ($, ProductView, generator) ->
+], ($, ProductView) ->
   productView = null
   el = $('<div></div>')
   describe 'ProductView', ->
@@ -47,7 +46,7 @@ define [
       it 'shows the inventory', ->
         expect($('#product #inventory', el).text()).toBe '30 itens'
       describe 'Store details', ->
-        it 'shows store name', ->
+        it 'shows the store name', ->
           expect($('#storeName', el).text()).toBe store.name
         it 'shows phone number', ->
           expect($('#storePhoneNumber', el).text()).toBe store.phoneNumber
@@ -57,6 +56,8 @@ define [
           expect($('#storeState', el).text()).toBe store.state
         it 'shows other store url', ->
           expect($('#storeOtherUrl', el).text()).toBe store.otherUrl
+        it 'does not show the store name header', ->
+          expect($('#storeNameHeader', el).length).toBe 0
         it 'shows store banner', ->
           expect($('#storeBanner', el).attr('src')).toBe store.banner
     describe 'Without inventory', ->

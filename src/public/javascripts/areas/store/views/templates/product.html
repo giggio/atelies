@@ -1,7 +1,11 @@
 <div class="row">
   <div class="span8">
-    <img id="storeBanner" src="{{store.banner}}"</img>
-    <h1><a href="#">{{store.name}}</a></h1>
+    {{#if store.banner}}
+    <a href="#"><img id="storeBanner" src="{{store.banner}}"</img></a>
+    {{else}}
+    <span>{{store.banner}}</span>
+    <h1 id="storeNameHeader"><a href="#">{{store.name}}</a></h1>
+    {{/if}}
     {{#if product}}
     <div id="product">
       <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
