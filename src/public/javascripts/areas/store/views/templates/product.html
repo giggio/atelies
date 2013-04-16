@@ -12,6 +12,10 @@
     <div>Profundidade: <span id="depth">{{dimensions.depth}}</span>cms</div>
   </div>
   <div>Peso: <span id="weight">{{weight}}</span>kgs</div>
+  {{#if hasInventory}}
   <div>Estoque: <span id="inventory">{{inventory}} itens</span></div>
+  {{else}}
+  <div><span id="inventory">Feito sob encomenda</span></div>
+  {{/if}}
 </div>
 {{/if}}
