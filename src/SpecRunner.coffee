@@ -60,7 +60,8 @@ global.initBackbone = ->
   require("backbone").$ = jQuery
 
 initBackbone()
-
+# set to some specific test:
+# specs = [ 'spec/store/productView.spec']
 requirejs specs, ->
   reporter = new jasmine.TerminalReporter(color: true)
   oldReportRunnerResults = reporter.reportRunnerResults
