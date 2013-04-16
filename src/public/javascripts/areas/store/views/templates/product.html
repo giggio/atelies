@@ -1,17 +1,17 @@
 {{#if this}}
 <div id="product">
   <img id="picture" src="{{picture}}" alt="{{name}}" />
-  <div id="id">{{_id}}</div>
-  <div id="name">{{name}}</div>
-  <div id="price">{{price}}</div>
-  <div id="tags">{{tags}}</div>
-  <div id="description">{{description}}</div>
+  <h2 id="name">{{name}}</h2>
+  <div>C&oacute;digo: <span id="id">{{_id}}</span></div>
+  <div>R$ <span id="price">{{price}}</span></div>
+  <div>Tags: <span id="tags">{{tags}}</span></div>
+  <div>Descri&ccedil;&atilde;o: <span id="description">{{description}}</span>
   <div id="dimensions">
-    <div id="height">{{dimensions.height}}</div>
-    <div id="width">{{dimensions.width}}</div>
-    <div id="depth">{{dimensions.depth}}</div>
+    <div>Altura: <span id="height">{{dimensions.height}}</span>cms</div>
+    <div>Largura: <span id="width">{{dimensions.width}}</span>cms</div>
+    <div>Profundidade: <span id="depth">{{dimensions.depth}}</span>cms</div>
   </div>
-  <div id="weight">{{weight}}</div>
-  <div id="inventory">{{inventory}} itens</div>
+  <div>Peso: <span id="weight">{{weight}}</span>kgs</div>
+  <div>Estoque: <span id="inventory">{{inventory}} itens</span></div>
 </div>
 {{/if}}

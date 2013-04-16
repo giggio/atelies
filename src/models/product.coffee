@@ -7,9 +7,23 @@ productSchema = new mongoose.Schema
   slug:       String
   storeName:  String
   storeSlug:  String
+  tags: [String]
+  description: String
+  dimensions:
+    height: Number
+    width: Number
+    depth: Number
+  weight: Number
+  hasInventory: Boolean
+  inventory: Number
 
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
-productSchema.methods.toSimpleProduct = -> _id: @_id, name: @name, picture: @picture, price: @price, storeName: @storeName, storeSlug: @storeSlug, url: @url()
+productSchema.methods.toSimpleProduct = ->
+  _id: @_id, name: @name, picture: @picture, price: @price,
+  storeName: @storeName, storeSlug: @storeSlug,
+  url: @url(), tags: @tags.join ', '
+  description: @description, dimensions: @dimensions, weight: @weight
+  hasInventory: @hasInventory, inventory: @inventory
 
 Product = mongoose.model 'product', productSchema
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
