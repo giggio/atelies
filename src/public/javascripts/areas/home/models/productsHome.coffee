@@ -1,6 +1,6 @@
 define [
   'backbone'
-  './ProductHome'
+  './productHome'
 ], (Backbone, ProductHome) ->
   class ProductsHome extends Backbone.Collection
     model: ProductHome

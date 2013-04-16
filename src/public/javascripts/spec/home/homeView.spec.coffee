@@ -5,7 +5,7 @@ products = [ product1, product2 ]
 define 'productsHomeData', -> products
 define [
   'jquery'
-  'areas/home/views/Home'
+  'areas/home/views/home'
 ], ($, HomeView) ->
   homeView = null
   el = $('<div></div>')

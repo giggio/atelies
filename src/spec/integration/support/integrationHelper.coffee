@@ -1,5 +1,5 @@
-jasmineExt  = require './JasmineExtensions'
-helper      = require '../../support/SpecHelper'
+jasmineExt  = require './jasmineExtensions'
+helper      = require '../../support/specHelper'
 
 for key,value of helper
   exports[key] = value

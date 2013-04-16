@@ -1,4 +1,4 @@
-require './JasmineMatchersHelper'
+require './jasmineMatchersHelper'
 
 exports.whenDone = (condition, callback) ->
   if condition()
