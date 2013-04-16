@@ -16,7 +16,7 @@ define [
         success: =>
           context = Handlebars.compile @template
           product = products.first()
-          @$el.html context product.attributes
+          @$el.html context product: product.attributes
         error: (collection, response, opt) =>
           console.error 'ERROR****************'
           console.error collection

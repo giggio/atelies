@@ -1,21 +1,29 @@
-{{#if this}}
+<h1><a href="#">{{product.storeName}}</a></h1>
+{{#if product}}
 <div id="product">
-  <img id="picture" src="{{picture}}" alt="{{name}}" />
-  <h2 id="name">{{name}}</h2>
-  <div>C&oacute;digo: <span id="id">{{_id}}</span></div>
-  <div>R$ <span id="price">{{price}}</span></div>
-  <div>Tags: <span id="tags">{{tags}}</span></div>
-  <div>Descri&ccedil;&atilde;o: <span id="description">{{description}}</span>
+  <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
+  <h2 id="name">{{product.name}}</h2>
+  <div>C&oacute;digo: <span id="id">{{product._id}}</span></div>
+  <div>R$ <span id="price">{{product.price}}</span></div>
+  <div>Tags: <span id="tags">{{product.tags}}</span></div>
+  <div>Descri&ccedil;&atilde;o: <span id="description">{{product.description}}</span>
   <div id="dimensions">
-    <div>Altura: <span id="height">{{dimensions.height}}</span>cms</div>
-    <div>Largura: <span id="width">{{dimensions.width}}</span>cms</div>
-    <div>Profundidade: <span id="depth">{{dimensions.depth}}</span>cms</div>
+    <div>Altura: <span id="height">{{product.dimensions.height}}</span>cms</div>
+    <div>Largura: <span id="width">{{product.dimensions.width}}</span>cms</div>
+    <div>Profundidade: <span id="depth">{{product.dimensions.depth}}</span>cms</div>
   </div>
-  <div>Peso: <span id="weight">{{weight}}</span>kgs</div>
-  {{#if hasInventory}}
-  <div>Estoque: <span id="inventory">{{inventory}} itens</span></div>
+  <div>Peso: <span id="weight">{{product.weight}}</span>kgs</div>
+  {{#if product.hasInventory}}
+  <div>Estoque: <span id="inventory">{{product.inventory}} itens</span></div>
   {{else}}
   <div><span id="inventory">Feito sob encomenda</span></div>
   {{/if}}
 </div>
+<input type="button" class="btn-primary" id="buy" name="buy" value="Comprar" />
+<div><a href="#">Voltar a loja</a></div>
 {{/if}}
+<div id="store">
+  <div id="storeName">
+    {{product.storeName}}
+  </div>
+</div>
