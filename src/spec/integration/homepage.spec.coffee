@@ -14,8 +14,8 @@ describe 'Home page', ->
     cleanDB (error) ->
       if error
         return done error
-      product1 = new Product(name: 'name 1', slug: 'name_1', picture: 'http://lorempixel.com/150/150/cats', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
-      product2 = new Product(name: 'name 2', slug: 'name_2', picture: 'http://lorempixel.com/150/150/cats', price: 12.2, storeName: 'store 2', storeSlug: 'store_2')
+      product1 = generator.product.b()
+      product2 = generator.product.c()
       product1.save()
       product2.save()
       whenServerLoaded ->
@@ -32,12 +32,12 @@ describe 'Home page', ->
   it 'shows product 1', ->
     expect(browser.text('#' + product1._id)).toBe product1._id.toString()
   it 'shows store name for product 1', ->
-    expect(browser.text("##{product1._id}_store")).toBe 'store 1'
+    expect(browser.text("##{product1._id}_store")).toBe product1.storeName
   it 'links store to store page for product 1', ->
-    expect(browser.query("##{product1._id}_store a").href).toEndWith 'store_1'
+    expect(browser.query("##{product1._id}_store a").href).toEndWith product1.storeSlug
   it 'links product name to product page for product 1', ->
-    expect(browser.query("##{product1._id}_name a").href).toEndWith 'store_1#name_1'
+    expect(browser.query("##{product1._id}_name a").href).toEndWith product1.url()
   it 'shows picture for product 1', ->
-    expect(browser.query("##{product1._id}_picture img").src).toBe 'http://lorempixel.com/150/150/cats'
+    expect(browser.query("##{product1._id}_picture img").src).toBe product1.picture
   it 'links picture to product page for product 1', ->
-    expect(browser.query("##{product1._id}_picture").href).toEndWith 'store_1#name_1'
+    expect(browser.query("##{product1._id}_picture").href).toEndWith product1.slug

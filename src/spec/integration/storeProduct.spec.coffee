@@ -13,22 +13,7 @@ describe 'store product page', ->
       return done error if error
       store = new Store name: 'store 1', slug: 'store_1'
       store.save()
-      product1 = new Product
-        name: 'name 1'
-        slug: 'name_1'
-        picture: 'http://lorempixel.com/300/450/cats'
-        price: 11.1
-        storeName: 'store 1'
-        storeSlug: 'store_1'
-        tags: ['abc', 'def']
-        description: "Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
-        dimensions:
-          height: 10
-          width: 20
-          depth: 30
-        weight: 40
-        hasInventory: true
-        inventory: 30
+      product1 = generator.product.a()
       product1.save()
       whenServerLoaded ->
         browser.visit "http://localhost:8000/store_1#name_1", (error) ->

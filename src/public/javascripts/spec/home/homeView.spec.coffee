@@ -1,6 +1,6 @@
 _s = require('underscore.string')
-product1 = { _id: '1', name: 'prod 1', slug: 'prod_1', picture: 'http://a.jpg', price: 3.43, storeName: 'store 1', storeSlug: 'store_1', url: 'store_1#prod_1' }
-product2 = { _id: '2', name: 'prod 2', slug: 'prod_2', picture: 'http://b.jpg', price: 7.78, storeName: 'store 2', storeSlug: 'store_2', url: 'store_2#prod_2' }
+product1 = generator.product.a()
+product2 = generator.product.b()
 products = [ product1, product2 ]
 define 'productsHomeData', -> products
 define [
