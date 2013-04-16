@@ -1,13 +1,13 @@
+mongoose      = require 'mongoose'
 exports.start = (cb) ->
-  express = require("express")
-  routes = require("./routes")
-  http = require("http")
-  path = require("path")
-  app = express()
+  express       = require "express"
+  routes        = require "./routes"
+  http          = require "http"
+  path          = require "path"
+  app           = express()
 
   app.configure "development", ->
-    unless process.env.CUSTOMCONNSTR_mongo
-      process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore'
+    process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
     app.use express.logger "dev"
     app.use express.errorHandler()
     app.locals.pretty = on
@@ -27,6 +27,11 @@ exports.start = (cb) ->
     app.use express.methodOverride()
     app.use express.static(path.join(__dirname, "public"))
     app.use app.router
+    console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
+    mongoose.connect process.env.CUSTOMCONNSTR_mongo
+    mongoose.connection.on 'error', (err) ->
+      console.error "connection error:#{err.stack}"
+      throw err
 
   app.get "/", routes.index
   app.get "/:storeSlug", routes.store
@@ -37,3 +42,5 @@ exports.start = (cb) ->
 
 exports.stop = ->
   exports.server.close()
+  mongoose.connection.close()
+  mongoose.disconnect()

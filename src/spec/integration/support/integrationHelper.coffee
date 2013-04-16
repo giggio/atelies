@@ -1,5 +1,7 @@
 jasmineExt  = require './jasmineExtensions'
 helper      = require '../../support/specHelper'
+mongoose    = require 'mongoose'
+app         = require '../../../app'
 
 for key,value of helper
   exports[key] = value
@@ -16,7 +18,6 @@ exports.patchEventEmitterToHideMaxListenerWarning = ->
 exports.localMongoDB = "mongodb://localhost/openstore"
 
 exports.startServer = (cb) ->
-  app = require '../../../app'
   app.start (server) ->
     exports._server = server
     cb null, server if cb
@@ -27,20 +28,25 @@ exports.whenServerLoaded = (cb) ->
     return
   exports.whenDone((-> exports._server isnt null), -> cb())
 
-exports.cleanDB = (cb) ->
-  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB
-  mongoose = require 'mongoose'
-  mongoose.connect process.env.CUSTOMCONNSTR_mongo
-  mongoose.connection.on 'error', (err) ->
+exports.openNewConnection = (cb) ->
+  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB unless process.env.CUSTOMCONNSTR_mongo 
+  conn = mongoose.createConnection process.env.CUSTOMCONNSTR_mongo
+  conn.on 'error', (err) ->
     console.error "connection error:#{err.stack}"
-    cb err
-  mongoose.connection.db.collections (err, cols) ->
-    for col in cols
-      unless col.collectionName.substring(0,6) is 'system'
-        console.info "dropping #{col.collectionName}" if process.env.DEBUG_JASMINE
-        col.drop()
-    mongoose.connection.close()
-    cb()
+    cb err, null
+  conn.once 'open', -> cb null, conn
+
+
+exports.cleanDB = (cb) ->
+  exports.openNewConnection (err, conn) ->
+    return cb err if err
+    conn.db.collections (err, cols) ->
+      for col in cols
+        unless col.collectionName.substring(0,6) is 'system'
+          console.info "dropping #{col.collectionName}" if process.env.DEBUG_JASMINE
+          col.drop()
+      conn.close()
+      cb()
 
 jasmineExt.beforeAll (done) ->
   process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}"
@@ -55,6 +61,6 @@ jasmineExt.beforeAll (done) ->
 
 jasmineExt.afterAll ->
   if exports._server
-    exports._server.close()
+    app.stop()
   else
     console.info "Server not defined on 'afterAll'"
