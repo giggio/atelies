@@ -18,7 +18,7 @@ describe 'Store shoppint cart page', ->
           browser.visit "http://localhost:8000/store_1#cart", (error) -> doneError error, done
     it 'should show an empty cart table', ->
       expect(browser.query('#cartItems tbody').children.length).toBe 0
-  describe 'add one item to cart', ->
+  describe 'when add one item to cart', ->
     eachCalled = false
     store = product1 = product2 = browser = null
     beforeEach (done) ->
@@ -39,3 +39,8 @@ describe 'Store shoppint cart page', ->
             browser.pressButton '#purchaseItem', done
     it 'is at the cart location', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"
+    it 'shows a cart with one item', ->
+      expect(browser.query('#cartItems tbody').children.length).toBe 1
+    it 'shows product id and name', ->
+      expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product1._id.toString()
+      expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name

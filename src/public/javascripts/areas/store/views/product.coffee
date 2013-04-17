@@ -5,13 +5,18 @@ define [
   'storeData'
   '../models/products'
   'text!./templates/product.html'
-], ($, Backbone, Handlebars, storeData, Products, productTemplate) ->
+  '../models/cart'
+], ($, Backbone, Handlebars, storeData, Products, productTemplate, Cart) ->
   class ProductView extends Backbone.View
+    initialize: ->
+      @cart = Cart.get()
     storeData: storeData
     template: productTemplate
     events: ->
       'click #purchaseItem':'purchase'
-    purchase: -> Backbone.history.navigate '#cart'
+    purchase: ->
+      @cart.addItem productId: @product.get('_id'), name: @product.get('name')
+      Backbone.history.navigate '#cart', trigger: true
     render: (slug) ->
       @$el.empty()
       products = new Products @storeData.store.slug, slug
@@ -19,8 +24,8 @@ define [
         reset: true
         success: =>
           context = Handlebars.compile @template
-          product = products.first()
-          @$el.html context product: product.attributes, store: @storeData.store
+          @product = products.first()
+          @$el.html context product: @product.attributes, store: @storeData.store
         error: (collection, response, opt) =>
           console.error 'ERROR****************'
           console.error collection
