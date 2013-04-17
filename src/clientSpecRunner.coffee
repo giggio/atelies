@@ -49,11 +49,15 @@ initDOM = ->
   global.jQuery = global.$ = jQuery
   # Create window
   window = jsdom.jsdom().createWindow("<html><body></body></html>")
+  global.window = window
   # Set up global references for DOMDocument+jQuery
   global.document = window.document
   # add addEventListener for coffeescript compatibility:
   global.addEventListener = window.addEventListener
-
+  unless window.localStorage?
+    LocalStorage = require('node-localstorage').LocalStorage
+    window.localStorage = new LocalStorage(path.join __dirname, '.localstorage-test')
+    global.localStorage = window.localStorage
 
 # Test helper: set up Backbone.js with a browser-like environment
 global.initBackbone = ->

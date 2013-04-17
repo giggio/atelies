@@ -18,7 +18,7 @@ describe 'Store shoppint cart page', ->
           browser.visit "http://localhost:8000/store_1#cart", (error) -> doneError error, done
     it 'should show an empty cart table', ->
       expect(browser.query('#cartItems tbody').children.length).toBe 0
-  xdescribe 'add one item to cart', ->
+  describe 'add one item to cart', ->
     eachCalled = false
     store = product1 = product2 = browser = null
     beforeEach (done) ->
@@ -34,4 +34,8 @@ describe 'Store shoppint cart page', ->
         product2 = generator.product.b()
         product2.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1#cart", (error) -> doneError error, done
+          browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+            return done error if error
+            browser.pressButton '#purchaseItem', done
+    it 'is at the cart location', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"

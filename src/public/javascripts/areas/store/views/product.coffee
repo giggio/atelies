@@ -9,6 +9,9 @@ define [
   class ProductView extends Backbone.View
     storeData: storeData
     template: productTemplate
+    events: ->
+      'click #purchaseItem':'purchase'
+    purchase: -> Backbone.history.navigate '#cart'
     render: (slug) ->
       @$el.empty()
       products = new Products @storeData.store.slug, slug

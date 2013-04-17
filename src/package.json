@@ -24,6 +24,7 @@
     "jquery": "~1.8.3",
     "requirejs": "~2.1.5",
     "handlebars": "~1.0.10",
-    "underscore.string": "~2.3.1"
+    "underscore.string": "~2.3.1",
+    "node-localstorage": "~0.3.3"
   }
 }
