@@ -4,8 +4,6 @@ store1    = generator.store.a()
 store2    = generator.store.b()
 
 define 'storeData', [], ->
-  #store: store
-  #products: [product1, product2]
 define [
   'jquery'
   'areas/store/views/product'

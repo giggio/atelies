@@ -64,3 +64,10 @@ jasmineExt.afterAll ->
     app.stop()
   else
     console.info "Server not defined on 'afterAll'"
+
+exports.doneError = (error, done) ->
+  if error
+    console.error "Error happened: " + error.stack
+    done error
+  else
+    done()

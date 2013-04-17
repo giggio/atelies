@@ -2,9 +2,7 @@ Product   = require '../../models/product'
 zombie    = new require('zombie')
 
 describe 'Home page', ->
-  browser = null
-  product1 = null
-  product2 = null
+  browser = product1 = product2 = null
   eachCalled = false
   beforeEach (done) ->
     if eachCalled
@@ -19,12 +17,7 @@ describe 'Home page', ->
       product1.save()
       product2.save()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/", (error) ->
-          if error
-            console.error "Error visiting. " + error.stack
-            done error
-          else
-            done()
+        browser.visit "http://localhost:8000/", (error) -> doneError error, done
   it 'answers with 200', ->
     expect(browser.success).toBeTruthy()
   it 'has two products', ->

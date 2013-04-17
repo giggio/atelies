@@ -8,6 +8,7 @@ exports.start = (cb) ->
   path          = require "path"
   app           = express()
 
+  cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
   app.configure "development", ->
     process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
     app.use express.logger "dev"
@@ -27,6 +28,8 @@ exports.start = (cb) ->
     app.use express.favicon()
     app.use express.bodyParser()
     app.use express.methodOverride()
+    app.use express.cookieParser cookieSecret
+    app.use express.session()
     app.use express.static(path.join(__dirname, "public"))
     app.use app.router
     console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
