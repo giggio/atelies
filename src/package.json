@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "test": "coffee -mc spec && node clientSpecRunner.js && jasmine-node spec"
+    "test": "coffee -c . && node clientSpecRunner.js && jasmine-node spec"
   },
   "dependencies": {
     "express": "3.1.0",
