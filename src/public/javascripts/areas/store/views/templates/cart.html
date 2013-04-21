@@ -3,13 +3,15 @@
     <tr>
       <th>C&oacute;digo</th>
       <th>Nome</th>
+      <th>Quantity</th>
     </tr>
   </thead>
   <tbody>
     {{#each cartItems}}
     <tr>
-      <td>{{productId}}</td>
+      <td>{{_id}}</td>
       <td>{{name}}</td>
+      <td>{{quantity}}</td>
     </tr>
     {{/each}}
   </tbody>

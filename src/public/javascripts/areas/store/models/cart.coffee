@@ -1,4 +1,4 @@
-define [], ->
+define ['underscore'], (_) ->
   class Cart
     @_cart: null
     @get: ->
@@ -14,7 +14,11 @@ define [], ->
     _save: ->
       localStorage.setItem 'cartItems', JSON.stringify @_items
     addItem: (item) ->
-      @_items.push item
+      if existingItem = _.findWhere @_items, { _id: item._id }
+        existingItem.quantity++
+      else
+        item.quantity = 1
+        @_items.push item
       @_save()
     clear: ->
       @_items = []

@@ -32,7 +32,7 @@ define [
         beforeEachCalled = true
         cart = Cart.get()
         cart.clear()
-        cart.addItem productId: '1', name: 'produto 1'
+        cart.addItem _id: '1', name: 'produto 1'
         cartView = new CartView el:el
         cartView.storeData =
           store: store1

@@ -15,7 +15,7 @@ define [
     events: ->
       'click #purchaseItem':'purchase'
     purchase: ->
-      @cart.addItem productId: @product.get('_id'), name: @product.get('name')
+      @cart.addItem _id: @product.get('_id'), name: @product.get('name')
       Backbone.history.navigate '#cart', trigger: true
     render: (slug) ->
       @$el.empty()
