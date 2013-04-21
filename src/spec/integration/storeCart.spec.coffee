@@ -4,9 +4,7 @@ zombie    = new require 'zombie'
 
 describe 'Store shopping cart page', ->
   store = product1 = product2 = browser = null
-  beforeEach (done) =>
-    return done() if @eachCalled
-    @eachCalled = true
+  beforeAll (done) =>
     cleanDB (error) ->
       return done error if error
       store = generator.store.a()
@@ -17,20 +15,16 @@ describe 'Store shopping cart page', ->
       product2.save()
       done()
   describe 'show empty cart', ->
-    beforeEach (done) =>
-      return done() if @eachCalled
+    beforeAll (done) =>
       browser = new zombie.Browser()
-      @eachCalled = true
       whenServerLoaded ->
         browser.visit "http://localhost:8000/store_1#cart", (error) -> doneError error, done
     it 'should show an empty cart table', ->
       expect(browser.query('#cartItems tbody').children.length).toBe 0
   describe 'when add one item to cart', ->
     store = product1 = product2 = browser = null
-    beforeEach (done) =>
-      return done() if @eachCalled
+    beforeAll (done) =>
       browser = new zombie.Browser()
-      @eachCalled = true
       whenServerLoaded ->
         browser.visit "http://localhost:8000/store_1#name_1", (error) ->
           return done error if error
@@ -47,10 +41,8 @@ describe 'Store shopping cart page', ->
       expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
   describe 'when add two items to cart', ->
     store = product1 = product2 = browser = null
-    beforeEach (done) =>
-      return done() if @eachCalled
+    beforeAll (done) =>
       browser = new zombie.Browser()
-      @eachCalled = true
       whenServerLoaded ->
         browser.visit "http://localhost:8000/store_1#name_1", (error) ->
           return done error if error

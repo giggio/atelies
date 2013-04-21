@@ -1,4 +1,4 @@
-jasmineExt  = require './jasmineExtensions'
+jasmineExt  = require './jasmineHelper'
 helper      = require '../../support/specHelper'
 mongoose    = require 'mongoose'
 app         = require '../../../app'
@@ -29,7 +29,7 @@ exports.whenServerLoaded = (cb) ->
   exports.whenDone((-> exports._server isnt null), -> cb())
 
 exports.openNewConnection = (cb) ->
-  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB unless process.env.CUSTOMCONNSTR_mongo 
+  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB unless process.env.CUSTOMCONNSTR_mongo
   conn = mongoose.createConnection process.env.CUSTOMCONNSTR_mongo
   conn.on 'error', (err) ->
     console.error "connection error:#{err.stack}"
@@ -48,7 +48,7 @@ exports.cleanDB = (cb) ->
       conn.close()
       cb()
 
-jasmineExt.beforeAll (done) ->
+jasmineExt.beforeAllSpecs (done) ->
   process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}"
   exports.patchEventEmitterToHideMaxListenerWarning()
   exports.cleanDB (err) ->
