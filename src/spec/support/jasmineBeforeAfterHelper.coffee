@@ -23,6 +23,7 @@ exports._setupAfterAll = ->
   self = @
   runner.finishCallback = ->
     oldFinishCallback.apply @, arguments
+    return unless self.afterAllFuncs?
     for afterAllFunc in self.afterAllFuncs
       afterAllFunc()
 

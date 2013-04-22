@@ -1,10 +1,6 @@
-jasmineExt  = require './jasmineHelper'
-helper      = require '../../support/specHelper'
+#helper      = require './specHelper'
 mongoose    = require 'mongoose'
 app         = require '../../../app'
-
-for key,value of helper
-  exports[key] = value
 
 exports.patchEventEmitterToHideMaxListenerWarning = ->
   return if exports.eventEmitterPatched
@@ -48,7 +44,7 @@ exports.cleanDB = (cb) ->
       conn.close()
       cb()
 
-jasmineExt.beforeAllSpecs (done) ->
+beforeAllSpecs (done) ->
   process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}"
   exports.patchEventEmitterToHideMaxListenerWarning()
   exports.cleanDB (err) ->
@@ -59,7 +55,7 @@ jasmineExt.beforeAllSpecs (done) ->
       done err if err
       done()
 
-jasmineExt.afterAll ->
+afterAll ->
   if exports._server
     app.stop()
   else

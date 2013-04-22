@@ -2,10 +2,6 @@ jade        = require 'jade'
 fs          = require 'fs'
 path        = require 'path'
 jsdom       = require("jsdom").jsdom
-helper      = require '../../support/specHelper'
-
-for key,value of helper
-  exports[key] = value
 
 exports.viewPath = (name) -> path.join(__dirname, '..', '..', '..', 'views', "#{name}.jade")
 
