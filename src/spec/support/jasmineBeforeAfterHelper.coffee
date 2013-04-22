@@ -54,7 +54,11 @@ beforeEach (done) ->
       suite.beforeAllCalled = true
       i = suite.beforeAllFuncs.length
       for beforeFunc in suite.beforeAllFuncs
-        beforeFunc -> i--
+        if beforeFunc.length is 0
+          beforeFunc()
+          i--
+        else
+          beforeFunc -> i--
       continueWhenIIs0 = ->
         return continueSuiteCalls() if i is 0
         process.nextTick continueWhenIIs0
