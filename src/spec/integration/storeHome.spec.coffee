@@ -6,11 +6,7 @@ describe 'store home page', ->
   browser = null
   store = null
   describe 'when store doesnt exist', (done) ->
-    eachCalled = false
-    beforeEach (done) ->
-      if eachCalled
-        return done()
-      eachCalled = true
+    beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
         if error
@@ -28,11 +24,7 @@ describe 'store home page', ->
       expect(browser.statusCode).toBe 404
     
   describe 'when store exists and has no products', (done) ->
-    eachCalled = false
-    beforeEach (done) ->
-      if eachCalled
-        return done()
-      eachCalled = true
+    beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
         if error
@@ -50,11 +42,7 @@ describe 'store home page', ->
       expect(browser.query('#products tbody').children.length).toBe 0
 
   describe 'when store exists and has products', (done) ->
-    eachCalled = false
-    beforeEach (done) ->
-      if eachCalled
-        return done()
-      eachCalled = true
+    beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
         if error

@@ -4,11 +4,8 @@ zombie    = new require 'zombie'
 
 describe 'Store product page', ->
   describe 'regular product', ->
-    eachCalled = false
     store = product1 = browser = null
-    beforeEach (done) ->
-      return done() if eachCalled
-      eachCalled = true
+    beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
         return done error if error
@@ -58,11 +55,8 @@ describe 'Store product page', ->
     it 'shows store banner', ->
       expect(browser.query('#storeBanner').src).toBe store.banner
   describe 'store without banner', ->
-    eachCalled = false
     store = product1 = browser = null
-    beforeEach (done) ->
-      return done() if eachCalled
-      eachCalled = true
+    beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
         return done error if error

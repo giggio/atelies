@@ -3,11 +3,7 @@ zombie    = new require('zombie')
 
 describe 'Home page', ->
   browser = product1 = product2 = null
-  eachCalled = false
-  beforeEach (done) ->
-    if eachCalled
-      return done()
-    eachCalled = true
+  beforeAll (done) ->
     browser = new zombie.Browser()
     cleanDB (error) ->
       if error
