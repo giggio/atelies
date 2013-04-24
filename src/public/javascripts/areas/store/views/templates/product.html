@@ -7,7 +7,7 @@
     <h1 id="storeNameHeader"><a href="#">{{store.name}}</a></h1>
     {{/if}}
     {{#if product}}
-    <div id="product">
+    <div id="product{{product._id}}">
       <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
       <h2 id="name">{{product.name}}</h2>
       <div>C&oacute;digo: <span id="id">{{product._id}}</span></div>

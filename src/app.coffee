@@ -14,6 +14,12 @@ exports.start = (cb) ->
     app.use express.logger "dev"
     app.use express.errorHandler()
     app.locals.pretty = on
+  
+  app.configure "test", ->
+    process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
+    #app.use express.logger "dev"
+    app.use express.errorHandler()
+    app.locals.pretty = on
 
   port = process.env.PORT or
     switch app.get 'env'

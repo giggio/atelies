@@ -14,6 +14,7 @@ define ['underscore'], (_) ->
     _save: ->
       localStorage.setItem 'cartItems', JSON.stringify @_items
     addItem: (item) ->
+      #console.log "adding item to cart: #{JSON.stringify(item)}"
       if existingItem = _.findWhere @_items, { _id: item._id }
         existingItem.quantity++
       else

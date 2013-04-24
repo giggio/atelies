@@ -8,6 +8,7 @@ define [
     storeView = new StoreView el:$ "#app-container"
     storeView.render()
   product: (slug) ->
+    storeSlug = location.pathname.match(/^\/([^#]*)/)[1]
     productView = new ProductView el:$ '#app-container'
     productView.render slug
   cart: ->

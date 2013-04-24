@@ -19,34 +19,32 @@ define [
         spyOn($, "ajax").andCallFake (opt) ->
           opt.success [product1]
         productView = new ProductView el:el
-        productView.storeData =
-          store: store1
-          products: [product1, product2]
+        productView.store = store1
         productView.render 'product_1'
       it 'renders the products', ->
-        expect($('#product', el)).toBeDefined()
+        expect($('#product1', el)).toBeDefined()
       it 'show the name', ->
-        expect($("#product #name", el).text()).toBe product1.name
+        expect($("#product1 #name", el).text()).toBe product1.name
       it 'shows the picture', ->
-        expect($("#product #picture", el).attr('src')).toBe product1.picture
+        expect($("#product1 #picture", el).attr('src')).toBe product1.picture
       it 'shows the id', ->
-        expect($("#product #id", el).text()).toBe product1._id
+        expect($("#product1 #id", el).text()).toBe product1._id
       it 'shows the price', ->
-        expect($('#product #price', el).text()).toBe product1.price.toString()
+        expect($('#product1 #price', el).text()).toBe product1.price.toString()
       it 'shows the tags', ->
-        expect($('#product #tags', el).text()).toBe product1.tags
+        expect($('#product1 #tags', el).text()).toBe product1.tags
       it 'shows the description', ->
-        expect($('#product #description', el).text()).toBe product1.description
+        expect($('#product1 #description', el).text()).toBe product1.description
       it 'shows the height', ->
-        expect($('#product #dimensions #height', el).text()).toBe product1.dimensions.height.toString()
+        expect($('#product1 #dimensions #height', el).text()).toBe product1.dimensions.height.toString()
       it 'shows the width', ->
-        expect($('#product #dimensions #width', el).text()).toBe product1.dimensions.width.toString()
+        expect($('#product1 #dimensions #width', el).text()).toBe product1.dimensions.width.toString()
       it 'shows the depth', ->
-        expect($('#product #dimensions #depth', el).text()).toBe product1.dimensions.depth.toString()
+        expect($('#product1 #dimensions #depth', el).text()).toBe product1.dimensions.depth.toString()
       it 'shows the weight', ->
-        expect($('#product #weight', el).text()).toBe product1.weight.toString()
+        expect($('#product1 #weight', el).text()).toBe product1.weight.toString()
       it 'shows the inventory', ->
-        expect($('#product #inventory', el).text()).toBe '30 itens'
+        expect($('#product1 #inventory', el).text()).toBe '30 itens'
       describe 'Store details', ->
         it 'shows the store name', ->
           expect($('#storeName', el).text()).toBe store1.name
@@ -70,12 +68,10 @@ define [
         spyOn($, "ajax").andCallFake (opt) ->
           opt.success [product2]
         productView = new ProductView el:el
-        productView.storeData =
-          store: store2
-          products: [product1, product2]
+        productView.store = store2
         productView.render 'product_2'
       it 'shows there is no inventory/made on demand', ->
-        expect($('#product #inventory', el).text()).toBe 'Feito sob encomenda'
+        expect($('#product2 #inventory', el).text()).toBe 'Feito sob encomenda'
       it 'shows store name header', ->
         expect($('#storeNameHeader', el).text()).toBe store2.name
       it 'does not show the store banner', ->
