@@ -74,6 +74,8 @@ requirejs helpers, ->
 
   # set to some specific test:
   # specs = [ 'spec/store/productView.spec']
+  if process.argv.length > 2
+    specs = [ process.argv[2]]
   requirejs specs, ->
     reporter = new jasmine.TerminalReporter(color: true)
     oldReportRunnerResults = reporter.reportRunnerResults
