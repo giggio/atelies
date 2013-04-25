@@ -30,7 +30,7 @@ define [
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
-        cart = Cart.get()
+        cart = Cart.get(store1.slug)
         cart.clear()
         cart.addItem _id: '1', name: 'produto 1'
         cartView = new CartView el:el

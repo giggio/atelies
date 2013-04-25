@@ -14,7 +14,7 @@ define [
         events["click #product#{@product.get('_id')} > #purchaseItem"] = 'purchase'
         events
     purchase: ->
-      @cart = Cart.get()
+      @cart = Cart.get(@store.slug)
       @cart.addItem _id: @product.get('_id'), name: @product.get('name')
       Backbone.history.navigate '#cart', trigger: true
     renderWithStore: (store, slug) ->

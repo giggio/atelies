@@ -12,4 +12,4 @@ define [
     template: cartTemplate
     render: ->
       context = Handlebars.compile @template
-      @$el.html context cartItems: Cart.get().items()
+      @$el.html context cartItems: Cart.get(@storeData.store.slug).items()

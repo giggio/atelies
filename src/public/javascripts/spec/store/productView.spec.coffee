@@ -7,7 +7,10 @@ define 'storeData', [], ->
 define [
   'jquery'
   'areas/store/views/product'
-], ($, ProductView) ->
+  'backbone'
+  'areas/store/models/cart'
+  'underscore'
+], ($, ProductView, Backbone, Cart, _) ->
   productView = null
   el = $('<div></div>')
   describe 'ProductView', ->
@@ -76,3 +79,22 @@ define [
         expect($('#storeNameHeader', el).text()).toBe store2.name
       it 'does not show the store banner', ->
         expect($('#storeBanner', el).length).toBe 0
+    describe 'Purchasing an item', ->
+      spy = null
+      beforeEachCalled = false
+      beforeEach ->
+        return if beforeEachCalled
+        beforeEachCalled = true
+        Cart.get().clear()
+        spyOn($, "ajax").andCallFake (opt) ->
+          opt.success [product2]
+        spy = spyOn Backbone.history, "navigate"
+        productView = new ProductView el:el
+        productView.store = store2
+        productView.render 'product_2'
+        productView.purchase()
+      it 'adds an item to the cart', ->
+        expect(_.findWhere(Cart.get(store2.slug).items(), _id: product2._id).id).not.toBeNull()
+      it 'navigated', ->
+        expect(spy).toHaveBeenCalledWith '#cart', trigger:true
+
