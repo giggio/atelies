@@ -2,6 +2,8 @@ define [
   'areas/store/models/cart'
 ], (Cart) ->
   describe 'Cart', ->
+    beforeEach ->
+      Cart.get().clear()
     afterEach ->
       Cart.get().clear()
     it 'delivers a list of carts when get is run without args', ->
