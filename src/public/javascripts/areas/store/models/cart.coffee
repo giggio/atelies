@@ -1,18 +1,24 @@
 define ['underscore'], (_) ->
   class Cart
-    @_cart: null
-    @get: ->
-      unless @_cart?
-        @_cart = new Cart()
-      @_cart
-    constructor: ->
-      throw 'Cart is a singleton.' if Cart._cart?
-      previousSessionItems = localStorage.getItem 'cartItems'
-      if previousSessionItems?
-        @_items = JSON.parse previousSessionItems
+    @_carts: null
+    @get: (storeSlug) ->
+      unless @_carts?
+        @_carts = []
+        @_carts.clear = -> cart.clear() for cart in @
+      switch storeSlug
+        when '' then throw 'Cart needs a string'
+        when undefined then return @_carts
+      cart = _.findWhere @_carts, storeSlug: storeSlug
+      unless cart?
+        cart = new Cart storeSlug
+        @_carts.push cart
+      cart
+    constructor: (@storeSlug) ->
+      previousSessionItems = localStorage.getItem "cartItems#{storeSlug}"
+      if previousSessionItems? then @_items = JSON.parse previousSessionItems
     _items: []
     _save: ->
-      localStorage.setItem 'cartItems', JSON.stringify @_items
+      localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) ->
       #console.log "adding item to cart: #{JSON.stringify(item)}"
       if existingItem = _.findWhere @_items, { _id: item._id }
