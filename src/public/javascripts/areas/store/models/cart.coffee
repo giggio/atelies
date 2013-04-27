@@ -29,5 +29,5 @@ define ['underscore'], (_) ->
       @_save()
     clear: ->
       @_items = []
-      localStorage.removeItem 'cartItems'
+      localStorage.removeItem "cartItems#{@storeSlug}"
     items: -> @_items

@@ -71,7 +71,6 @@ describe 'Store shopping cart page', ->
             browser.evaluate "requirejs.undef('storeData');"
             browser.visit "http://localhost:8000/store_2#name_3", (error) ->
               return done error if error
-              #browser.pressButton "#product#{product3._id} > #purchaseItem", (error) ->
               browser.evaluate "window.$('#product#{product3._id} > #purchaseItem').trigger('click');"
               done()
     #TODO
