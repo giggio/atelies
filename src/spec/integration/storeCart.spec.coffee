@@ -61,35 +61,31 @@ describe 'Store shopping cart page', ->
   
   describe 'when working with a cart with products from different stores', ->
     beforeAll (done) =>
-      browser = new zombie.Browser()
+      browser = newBrowser()
       whenServerLoaded ->
         browser.on 'error', done
         browser.visit "http://localhost:8000/store_1#name_1", (error) ->
           return done error if error
-          browser.pressButton "#product#{product1._id} > #purchaseItem", (error) ->
-            return done error if error
-            browser.evaluate "requirejs.undef('storeData');"
+          browser.pressButtonWait "#product#{product1._id} > #purchaseItem", ->
+            browser = newBrowser browser
             browser.visit "http://localhost:8000/store_2#name_3", (error) ->
               return done error if error
-              browser.evaluate "window.$('#product#{product3._id} > #purchaseItem').trigger('click');"
-              done()
-    #TODO
-    xit 'on the 1st store it shows only the first store products', (done) ->
-      browser.evaluate "requirejs.undef('storeData');"
+              browser.pressButtonWait "#product#{product3._id} > #purchaseItem", done
+    it 'on the 1st store it shows only the first store products', (done) ->
+      browser = newBrowser browser
       browser.visit "http://localhost:8000/store_1#cart", (error) ->
         return done error if error
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr').length").toBe 1
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:first-child').html()").toBe product1._id.toString()
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:nth-child(2)').html()").toBe product1.name
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:nth-child(3)').html()").toBe '1'
+        expect(browser.query('#cartItems > tbody').children.length).toBe 1
+        expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product1._id.toString()
+        expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name
+        expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
         done()
-    #TODO
-    xit 'on the 2st store it shows only the second store products', (done) ->
-      browser.evaluate "requirejs.undef('storeData');"
+    it 'on the 2st store it shows only the second store products', (done) ->
+      browser = newBrowser browser
       browser.visit "http://localhost:8000/store_2#cart", (error) ->
         return done error if error
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr').length").toBe 1
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:first-child').html()").toBe product3._id.toString()
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:nth-child(2)').html()").toBe product3.name
-        expect(browser.evaluate "window.$('#cartItems > tbody > tr > td:nth-child(3)').html()").toBe '1'
+        expect(browser.query('#cartItems > tbody').children.length).toBe 1
+        expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product3._id.toString()
+        expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product3.name
+        expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
         done()

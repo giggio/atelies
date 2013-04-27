@@ -14,7 +14,11 @@ exports.store = (req, res) ->
     dealWith err
     return res.renderWithCode 404, 'store', store: null, products: [] if store is null
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-    res.render "store", store: store, products: viewModelProducts
+    #console.log JSON.stringify store
+    #console.log JSON.stringify viewModelProducts
+    res.render "store", store: store, products: viewModelProducts, (err, html) ->
+      #console.log html
+      res.send html
 
 exports.product = (req, res) ->
   #console.log "********request received for store slug: #{req.params.storeSlug} and productSlug #{req.params.productSlug}"

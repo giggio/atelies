@@ -14,13 +14,14 @@ define ['underscore'], (_) ->
         @_carts.push cart
       cart
     constructor: (@storeSlug) ->
-      previousSessionItems = localStorage.getItem "cartItems#{storeSlug}"
+      @_items = []
+      previousSessionItems = localStorage.getItem "cartItems#{@storeSlug}"
       if previousSessionItems? then @_items = JSON.parse previousSessionItems
     _items: []
     _save: ->
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) ->
-      #console.log "adding item to cart: #{JSON.stringify(item)}"
+      #console.log "adding item: #{JSON.stringify(item)} to cart #{JSON.stringify(@)} items:#{JSON.stringify(@_items)}"
       if existingItem = _.findWhere @_items, { _id: item._id }
         existingItem.quantity++
       else
