@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#coffee -c clientSpecRunner.coffee
+node clientSpecRunner.js
