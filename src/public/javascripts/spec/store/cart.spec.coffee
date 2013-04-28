@@ -62,7 +62,7 @@ define [
       cart.addItem item
       cart.addItem item
       expect(cart.items()[0].quantity).toBe 2
-    it 'when two differente products are added it shows correct quantity', ->
+    it 'when two different products are added it shows correct quantity', ->
       cart = Cart.get('store_1')
       item = _id: 1
       cart.addItem item
@@ -72,3 +72,15 @@ define [
       expect(items.length).toBe 2
       expect(items[0].quantity).toBe 1
       expect(items[1].quantity).toBe 1
+    it 'when removing an item from cart it is removed and does not come back', ->
+      cart = Cart.get('store_5')
+      item = _id: 1
+      cart.addItem item
+      item2 = _id: 2
+      cart.addItem item2
+      cart.removeById 1
+      items = cart.items()
+      expect(items.length).toBe 1
+      expect(items[0].quantity).toBe 1
+      expect(items[0]._id).toBe 2
+      expect(Cart.get('store_5').items().length).toBe 1

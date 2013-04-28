@@ -18,9 +18,9 @@ define ['underscore'], (_) ->
       previousSessionItems = localStorage.getItem "cartItems#{@storeSlug}"
       if previousSessionItems? then @_items = JSON.parse previousSessionItems
     _items: []
-    _save: ->
+    _save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
-    addItem: (item) ->
+    addItem: (item) =>
       #console.log "adding item: #{JSON.stringify(item)} to cart #{JSON.stringify(@)} items:#{JSON.stringify(@_items)}"
       if existingItem = _.findWhere @_items, { _id: item._id }
         existingItem.quantity++
@@ -28,7 +28,10 @@ define ['underscore'], (_) ->
         item.quantity = 1
         @_items.push item
       @_save()
-    clear: ->
+    clear: =>
       @_items = []
       localStorage.removeItem "cartItems#{@storeSlug}"
     items: -> @_items
+    removeById: (id) =>
+      @_items = _.reject @_items, (item) -> item._id is id
+      @_save()
