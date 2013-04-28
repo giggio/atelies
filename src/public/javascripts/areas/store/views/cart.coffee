@@ -24,8 +24,11 @@ define [
         cartItemView.render()
         $('#cartItems > tbody', @$el).append cartItemView.$el
         cartItemView.removed @remove
+        cartItemView.changed @change
     remove: (item) =>
       @removeById item._id
     removeById: (id) =>
       @cart.removeById id
       @render()
+    change: =>
+      @cart.save()

@@ -7,6 +7,7 @@ define [
   class CartItemView extends Backbone.View
     events:
       "click .remove":'remove'
+      "blur .quantity":'updateQuantity'
     template: cartItemTemplate
     render: ->
       context = Handlebars.compile @template
@@ -14,3 +15,9 @@ define [
     remove: -> removed @model for removed in @removedCallbacks
     removed: (cb) -> @removedCallbacks.push cb
     removedCallbacks: []
+    change: => callChanged @model for callChanged in @changedCallbacks
+    changed: (cb) => @changedCallbacks.push cb
+    changedCallbacks: []
+    updateQuantity: =>
+      @model.quantity = parseInt @$('.quantity').val()
+      @change()

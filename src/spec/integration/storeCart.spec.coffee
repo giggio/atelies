@@ -41,7 +41,7 @@ describe 'Store shopping cart page', ->
     it 'shows product name', ->
       expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name
     it 'shows quantity of one', ->
-      expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
+      expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
   describe 'when add two items to cart', ->
     beforeAll (done) =>
       browser = new zombie.Browser()
@@ -57,7 +57,7 @@ describe 'Store shopping cart page', ->
     it 'shows a cart with one item', ->
       expect(browser.query('#cartItems tbody').children.length).toBe 1
     it 'shows quantity of two', ->
-      expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '2'
+      expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '2'
   
   describe 'when working with a cart with products from different stores', ->
     beforeAll (done) =>
@@ -78,7 +78,7 @@ describe 'Store shopping cart page', ->
         expect(browser.query('#cartItems > tbody').children.length).toBe 1
         expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product1._id.toString()
         expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name
-        expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
+        expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
         done()
     it 'on the 2st store it shows only the second store products', (done) ->
       browser = newBrowser browser
@@ -87,5 +87,5 @@ describe 'Store shopping cart page', ->
         expect(browser.query('#cartItems > tbody').children.length).toBe 1
         expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product3._id.toString()
         expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product3.name
-        expect(browser.text('#cartItems > tbody > tr > td:nth-child(3)')).toBe '1'
+        expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
         done()
