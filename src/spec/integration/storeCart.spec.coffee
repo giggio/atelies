@@ -20,72 +20,72 @@ describe 'Store shopping cart page', ->
       done()
   describe 'show empty cart', ->
     beforeAll (done) =>
-      browser = new zombie.Browser()
+      browser = newBrowser()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/store_1#cart", (error) -> doneError error, done
+        browser.storeCartPage.visit "store_1", (error) -> doneError error, done
     it 'should show an empty cart table', ->
-      expect(browser.query('#cartItems tbody').children.length).toBe 0
+      expect(browser.storeCartPage.itemsQuantity()).toBe 0
   describe 'when add one item to cart', ->
     beforeAll (done) =>
-      browser = new zombie.Browser()
+      browser = newBrowser()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
           return done error if error
-          browser.pressButton '#purchaseItem', done
+          browser.storeProductPage.purchaseItem done
     it 'is at the cart location', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"
     it 'shows a cart with one item', ->
-      expect(browser.query('#cartItems tbody').children.length).toBe 1
+      expect(browser.storeCartPage.itemsQuantity()).toBe 1
     it 'shows product id', ->
-      expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product1._id.toString()
+      expect(browser.storeCartPage.id()).toBe product1._id.toString()
     it 'shows product name', ->
-      expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name
+      expect(browser.storeCartPage.name()).toBe product1.name
     it 'shows quantity of one', ->
-      expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
+      expect(browser.storeCartPage.quantity()).toBe 1
   describe 'when add two items to cart', ->
     beforeAll (done) =>
-      browser = new zombie.Browser()
+      browser = newBrowser()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
           return done error if error
-          browser.pressButton '#purchaseItem', done
-          browser.visit "http://localhost:8000/store_1#name_1", (error) ->
-            return done error if error
-            browser.pressButton '#purchaseItem', done
+          browser.storeProductPage.purchaseItem ->
+            browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
+              return done error if error
+              browser.storeProductPage.purchaseItem done
     it 'is at the cart location', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"
     it 'shows a cart with one item', ->
-      expect(browser.query('#cartItems tbody').children.length).toBe 1
+      expect(browser.storeCartPage.itemsQuantity()).toBe 1
     it 'shows quantity of two', ->
-      expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '2'
+      expect(browser.storeCartPage.quantity()).toBe 2
   
   describe 'when working with a cart with products from different stores', ->
     beforeAll (done) =>
       browser = newBrowser()
       whenServerLoaded ->
         browser.on 'error', done
-        browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
           return done error if error
-          browser.pressButtonWait "#product#{product1._id} > #purchaseItem", ->
+          browser.storeProductPage.purchaseItem ->
             browser = newBrowser browser
-            browser.visit "http://localhost:8000/store_2#name_3", (error) ->
+            browser.storeProductPage.visit 'store_2', 'name_3', (error) ->
               return done error if error
-              browser.pressButtonWait "#product#{product3._id} > #purchaseItem", done
+              browser.storeProductPage.purchaseItem done
     it 'on the 1st store it shows only the first store products', (done) ->
       browser = newBrowser browser
-      browser.visit "http://localhost:8000/store_1#cart", (error) ->
+      browser.storeCartPage.visit "store_1", (error) ->
         return done error if error
-        expect(browser.query('#cartItems > tbody').children.length).toBe 1
-        expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product1._id.toString()
-        expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product1.name
-        expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
+        expect(browser.storeCartPage.itemsQuantity()).toBe 1
+        expect(browser.storeCartPage.id()).toBe product1._id.toString()
+        expect(browser.storeCartPage.name()).toBe product1.name
+        expect(browser.storeCartPage.quantity()).toBe 1
         done()
     it 'on the 2st store it shows only the second store products', (done) ->
       browser = newBrowser browser
-      browser.visit "http://localhost:8000/store_2#cart", (error) ->
+      browser.storeCartPage.visit "store_2", (error) ->
         return done error if error
-        expect(browser.query('#cartItems > tbody').children.length).toBe 1
-        expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product3._id.toString()
-        expect(browser.text('#cartItems > tbody > tr > td:nth-child(2)')).toBe product3.name
-        expect(browser.query('#cartItems > tbody > tr > td:nth-child(3) .quantity').value).toBe '1'
+        expect(browser.storeCartPage.itemsQuantity()).toBe 1
+        expect(browser.storeCartPage.id()).toBe product3._id.toString()
+        expect(browser.storeCartPage.name()).toBe product3.name
+        expect(browser.storeCartPage.quantity()).toBe 1
         done()

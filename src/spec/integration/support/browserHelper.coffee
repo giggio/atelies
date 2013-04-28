@@ -1,4 +1,6 @@
-zombie      = new require 'zombie'
+zombie              = new require 'zombie'
+StoreCartPage       = require './storeCartPage'
+StoreProductPage    = require './storeProductPage'
 
 exports.selectorLoaded = (w) ->
   console.log "waiting #{@selectorSearched}"
@@ -18,4 +20,6 @@ exports.newBrowser = (browser) ->
   browser.selectorSearched = exports.selectorSearched
   browser.waitSelector = exports.waitSelector
   browser.pressButtonWait = exports.pressButtonWait
+  browser.storeCartPage = new StoreCartPage browser
+  browser.storeProductPage = new StoreProductPage browser
   browser

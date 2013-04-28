@@ -18,36 +18,36 @@ describe 'Store shopping cart page', ->
     beforeAll (done) =>
       browser = newBrowser()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
           return done error if error
-          browser.pressButtonWait '#purchaseItem', ->
+          browser.storeProductPage.purchaseItem ->
             return done error if error
-            browser.visit "http://localhost:8000/store_1#name_2", (error) ->
+            browser.storeProductPage.visit 'store_1', 'name_2', (error) ->
               return done error if error
-              browser.pressButtonWait '#purchaseItem', (error) ->
+              browser.storeProductPage.purchaseItem ->
                 return done error if error
-                browser.pressButtonWait "#product#{product1._id} .remove", done
+                browser.storeCartPage.removeItem product1, done
     it 'is at the cart location', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"
     it 'shows a cart with one item', ->
-      expect(browser.query('#cartItems tbody').children.length).toBe 1
-    it 'shows quantity of two', ->
-      expect(browser.text('#cartItems > tbody > tr > td:first-child')).toBe product2._id.toString()
+      expect(browser.storeCartPage.itemsQuantity()).toBe 1
+    it 'shows item id', ->
+      expect(browser.storeCartPage.id()).toBe product2._id.toString()
   describe 'can set quantity', ->
     beforeAll (done) =>
       browser = newBrowser()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/store_1#name_1", (error) ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
           return done error if error
-          browser.pressButtonWait '#purchaseItem', ->
+          browser.storeProductPage.purchaseItem ->
             return done error if error
-            browser.fill("#product#{product1._id} .quantity", '3').pressButton ".updateQuantity", (error) ->
+            browser.storeCartPage.updateQuantity(product1, 3), (error) ->
               return done error if error
               browser = newBrowser browser
-              browser.visit "http://localhost:8000/store_1#cart", done
+              browser.storeCartPage.visit 'store_1', done
     it 'is at the cart location', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/store_1#cart"
     it 'shows a cart with one item', ->
-      expect(browser.query('#cartItems tbody').children.length).toBe 1
+      expect(browser.storeCartPage.itemsQuantity()).toBe 1
     it 'shows quantity of two', ->
-      expect(browser.query("#product#{product1._id} .quantity").value).toBe '3'
+      expect(browser.storeCartPage.quantity()).toBe 3
