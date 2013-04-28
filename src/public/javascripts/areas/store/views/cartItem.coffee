@@ -5,8 +5,10 @@ define [
   'text!./templates/cartItem.html'
 ], ($, Backbone, Handlebars, cartItemTemplate) ->
   class CartItemView extends Backbone.View
-    events:
-      'click .remove':'remove'
+    events: ->
+      events = {}
+      events["click #product#{@model._id} .remove"]='remove'
+      events
     template: cartItemTemplate
     render: ->
       context = Handlebars.compile @template
