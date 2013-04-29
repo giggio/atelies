@@ -159,6 +159,8 @@ task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js", options
   downloadFileToJS      'https://raw.github.com/requirejs/text/master/text.js', options
+  downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', options
+  downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js', options
   whenDone((->
     waiting = options.waitingDownload
     waiting == 0), ->)

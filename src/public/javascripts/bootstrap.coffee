@@ -6,6 +6,7 @@ require.config
     handlebars: 'lib/handlebars.min'
     text: 'lib/text'
     twitterBootstrap: 'lib/bootstrap.min'
+    jqueryVal: 'lib/jquery.validate.min'
 
   shim:
     'jQueryUI':
@@ -21,7 +22,9 @@ require.config
     'twitterBootstrap':
       deps: ['jquery']
       exports: '$.fn.popover'
-
+    'jqueryVal':
+      deps: ['jquery']
+      exports: '$.validator'
 require [
   'handlebars'
   'app'

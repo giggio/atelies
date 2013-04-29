@@ -41,7 +41,7 @@ describe 'Store shopping cart page', ->
           return done error if error
           browser.storeProductPage.purchaseItem ->
             return done error if error
-            browser.storeCartPage.updateQuantity(product1, 3), (error) ->
+            browser.storeCartPage.updateQuantity product1, 3, (error) ->
               return done error if error
               browser = newBrowser browser
               browser.storeCartPage.visit 'store_1', done
@@ -51,3 +51,20 @@ describe 'Store shopping cart page', ->
       expect(browser.storeCartPage.itemsQuantity()).toBe 1
     it 'shows quantity of two', ->
       expect(browser.storeCartPage.quantity()).toBe 3
+  describe 'when setting quantity to incorrect value a validation error appears', ->
+    beforeAll (done) =>
+      browser = newBrowser()
+      whenServerLoaded ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
+          return done error if error
+          browser.storeProductPage.purchaseItem ->
+            return done error if error
+            browser.storeCartPage.updateQuantity product1, 'abc', done
+    it 'shows error message', ->
+      expect(browser.text("label[for='quantity#{product1._id}']")).toBe "Apenas números permitidos."
+    it 'shows original quantity', (done) ->
+      browser = newBrowser browser
+      browser.storeCartPage.visit 'store_1', (error) ->
+        return done error if error
+        expect(browser.storeCartPage.quantity()).toBe 1
+        done()

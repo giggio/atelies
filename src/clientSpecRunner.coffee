@@ -34,6 +34,11 @@ requirejs.config
   nodeRequire: require
   paths:
     text: 'lib/text'
+    jqueryVal: 'lib/jquery.validate.min'
+  shim:
+    'jqueryVal':
+      deps: ['jquery']
+      exports: '$.validator'
 
 # map jasmine methods to global namespace
 jasmine = require("jasmine-node")

@@ -3,6 +3,7 @@ define [
   'backbone'
   'handlebars'
   'text!./templates/cartItem.html'
+  'jqueryVal'
 ], ($, Backbone, Handlebars, cartItemTemplate) ->
   class CartItemView extends Backbone.View
     events:
@@ -12,6 +13,7 @@ define [
     render: ->
       context = Handlebars.compile @template
       @setElement $ context @model
+      @setFormsInValidationFields @$ '.quantity'
     remove: -> removed @model for removed in @removedCallbacks
     removed: (cb) -> @removedCallbacks.push cb
     removedCallbacks: []
@@ -19,5 +21,10 @@ define [
     changed: (cb) => @changedCallbacks.push cb
     changedCallbacks: []
     updateQuantity: =>
-      @model.quantity = parseInt @$('.quantity').val()
+      quantity = @$('.quantity')
+      quantity.validate()
+      return unless quantity.valid()
+      @model.quantity = parseInt quantity.val()
       @change()
+    setFormsInValidationFields: (selector) ->
+      @$('.quantityHolder').append $("<form style='margin: 0;'>").append(selector)
