@@ -45,6 +45,7 @@ exports.start = (cb) ->
       throw err
 
   app.get "/", routes.index
+  app.get "/admin", routes.admin
   app.get "/:storeSlug", routes.store
   app.get "/:storeSlug/:productSlug", routes.product
   exports.server = http.createServer(app).listen app.get("port"), ->

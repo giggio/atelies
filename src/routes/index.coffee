@@ -2,6 +2,9 @@ Product     = require '../models/product'
 Store       = require '../models/store'
 _           = require 'underscore'
 
+exports.admin = (req, res) ->
+  res.render 'admin'
+
 exports.index = (req, res) ->
   Product.find (err, products) ->
     dealWith err
