@@ -18,7 +18,8 @@ define [
       @cart = Cart.get(@storeData.store.slug)
     render: =>
       context = Handlebars.compile @template
-      @$el.html context cartItems: Cart.get(@storeData.store.slug).items(), store: @storeData.store
+      cartItems = Cart.get(@storeData.store.slug).items()
+      @$el.html context cartItems: cartItems, store: @storeData.store, hasItems: cartItems.length isnt 0
       @renderCartItems()
     renderCartItems: =>
       for item in @cart.items()

@@ -20,10 +20,8 @@ define [
           store: store1
           products: [product1, product2]
         cartView.render()
-      it 'shows the cart items table', ->
-        expect($('#cartItems', el).length).toBe 1
-      it 'shows an empty cart items table', ->
-        expect($("#cartItems > tbody > tr", el).length).toBe 0
+      it 'does not show the cart items table', ->
+        expect($("#cartItems", el).length).toBe 0
     describe 'One item cart', ->
       beforeEachCalled = false
       beforeEach ->

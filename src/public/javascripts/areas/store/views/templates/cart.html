@@ -1,6 +1,7 @@
 <div>
   <h2>Carrinho da loja {{store.name}}</h2>
 </div>
+{{#if hasItems}}
 <table id="cartItems">
   <thead>
     <tr>
@@ -13,5 +14,6 @@
   <tbody>
   </tbody>
 </table>
+{{/if}}
 <button class="updateQuantity btn-primary">Atualizar quantidade</button>
 <button id="clearCart" class="btn-danger">Limpar carrinho</button>

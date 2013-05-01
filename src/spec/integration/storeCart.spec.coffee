@@ -23,8 +23,8 @@ describe 'Store shopping cart page', ->
       browser = newBrowser()
       whenServerLoaded ->
         browser.storeCartPage.visit "store_1", (error) -> doneError error, done
-    it 'should show an empty cart table', ->
-      expect(browser.storeCartPage.itemsQuantity()).toBe 0
+    it 'does not show the cart items table', ->
+      expect(browser.query('#cartItems')).toBeUndefined()
   describe 'when add one item to cart', ->
     beforeAll (done) =>
       browser = newBrowser()
