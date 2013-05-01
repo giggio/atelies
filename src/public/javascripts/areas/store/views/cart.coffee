@@ -9,6 +9,8 @@ define [
   './cartItem'
 ], ($, Backbone, Handlebars, storeData, Products, Cart, cartTemplate, CartItemView) ->
   class CartView extends Backbone.View
+    events:
+      'click #clearCart':'clear'
     storeData: storeData
     template: cartTemplate
     initialize: (opt) =>
@@ -32,3 +34,6 @@ define [
       @render()
     change: =>
       @cart.save()
+    clear: =>
+      @cart.clear()
+      @render()

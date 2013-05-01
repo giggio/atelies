@@ -68,3 +68,14 @@ describe 'Store shopping cart page', ->
         return done error if error
         expect(browser.storeCartPage.quantity()).toBe 1
         done()
+  describe 'clearing cart', ->
+    beforeAll (done) =>
+      browser = newBrowser()
+      whenServerLoaded ->
+        browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
+          return done error if error
+          browser.storeProductPage.purchaseItem ->
+            return done error if error
+            browser.storeCartPage.clearCart done
+    it 'shows an empty cart', ->
+      expect(browser.storeCartPage.itemsQuantity()).toBe 0

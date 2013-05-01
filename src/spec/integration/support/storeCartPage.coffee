@@ -8,3 +8,4 @@ module.exports = class StoreCartPage
   visit: (storeSlug, cb) => @browser.visit "http://localhost:8000/#{storeSlug}#cart", cb
   removeItem: (product, cb) => @browser.pressButtonWait "#product#{product._id} .remove", cb
   updateQuantity: (product, quantity, cb) => @browser.fill("#product#{product._id} .quantity", quantity.toString()).pressButton ".updateQuantity", cb
+  clearCart: (cb) => @browser.pressButtonWait "#clearCart", cb

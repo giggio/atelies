@@ -62,3 +62,19 @@ define [
         expect($("#cartItems > tbody > tr > td:first-child", el).html()).toBe '1'
       it 'shows the first item name', ->
         expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).toBe 'produto 1'
+    describe 'Clearing cart', ->
+      beforeEachCalled = false
+      beforeEach ->
+        return if beforeEachCalled
+        beforeEachCalled = true
+        cart = Cart.get(store1.slug)
+        cart.clear()
+        cart.addItem _id: '1', name: 'produto 1'
+        cart.addItem _id: '2', name: 'produto 2'
+        cartView = new CartView el:el, storeData:
+          store: store1
+          products: [product1, product2]
+        cartView.render()
+        $('#clearCart', el).trigger 'click'
+      it 'shows a cart items table with one item', ->
+        expect($("#cartItems > tbody > tr", el).length).toBe 0
