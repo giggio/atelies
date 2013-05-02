@@ -7,8 +7,7 @@ exports.admin = (req, res) ->
   res.render 'admin'
 
 exports.adminStore = (req, res) ->
-  store = new Store name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner
-  store.set 'slug', slug store.name.toLowerCase(), "_"
+  store = Store.create name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner
   store.save (err) ->
     if err?
       res.json 400, err

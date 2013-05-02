@@ -8,3 +8,6 @@ describe 'Store', ->
       expect(val.errors.city.type).toBe 'required'
       expect(val.errors.state.type).toBe 'required'
       done()
+  it 'sets the correct slug when name is set', ->
+    store = Store.create name:"Minha loja"
+    expect(store.slug).toBe 'minha_loja'
