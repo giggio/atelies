@@ -6,6 +6,7 @@ define [
   '../models/store'
   '../models/stores'
   './manageStore'
+  'jqueryVal'
 ], ($, Backbone, Handlebars, createStoreTemplate, Store, Stores, ManageStoreView) ->
   class CreateStoreView extends Backbone.View
     events:
@@ -16,6 +17,9 @@ define [
       context = Handlebars.compile @template
       @$el.html context()
     _createStore: =>
+      form = @$('#createStoreForm')
+      form.validate()
+      return unless form.valid()
       attrs = @_fromFields ['name', 'phoneNumber', 'city', 'state', 'otherUrl', 'banner']
       store = new Store attrs
       stores = new Stores()

@@ -15,6 +15,7 @@ define [
         spyOn($, "ajax").andCallFake (opt) ->
           storePassedIn = JSON.parse opt.data
           opt.success store
+        validSpy = spyOn($.fn, "valid").andReturn true
         goToStoreManagePageSpy = spyOn(createStoreView, '_goToStoreManagePage')
         createStoreView.render()
         createStoreView.$("#name").val store.name
@@ -34,3 +35,21 @@ define [
         expect(storePassedIn.state).toBe store.state
         expect(storePassedIn.otherUrl).toBe store.otherUrl
         expect(storePassedIn.banner).toBe store.banner
+
+    describe 'invalid Store does not get created', ->
+      ajaxSpy = goToStoreManagePageSpy = null
+      store = generator.store.a()
+      beforeEachCalled = false
+      beforeEach ->
+        return if beforeEachCalled
+        beforeEachCalled = true
+        createStoreView = new CreateStoreView el:el
+        ajaxSpy = spyOn($, "ajax")
+        validSpy = spyOn($.fn, "valid").andReturn false
+        goToStoreManagePageSpy = spyOn(createStoreView, '_goToStoreManagePage')
+        createStoreView.render()
+        $('#createStore', el).trigger 'click'
+      it 'does not navigate to store manage page', ->
+        expect(goToStoreManagePageSpy).not.toHaveBeenCalled()
+      it 'does not call ajax backend', ->
+        expect(ajaxSpy).not.toHaveBeenCalled()

@@ -4,7 +4,6 @@ StoreProductPage        = require './storeProductPage'
 AdminCreateStorePage    = require './adminCreateStorePage'
 
 exports.selectorLoaded = (w) ->
-  console.log "waiting #{@selectorSearched}"
   w.document.querySelector @selectorSearched
 
 exports.waitSelector = (selector, cb) ->

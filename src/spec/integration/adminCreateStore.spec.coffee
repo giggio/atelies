@@ -30,7 +30,7 @@ describe 'Admin home page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
     it 'shows store created message', ->
       expect(browser.text('#message')).toBe "Loja criada com sucesso"
-  xdescribe 'Not creating a store (missing or wrong info)', ->
+  describe 'Not creating a store (missing or wrong info)', ->
     browser = null
     exampleStore = generator.store.empty()
     beforeAll (done) ->
@@ -40,6 +40,8 @@ describe 'Admin home page', ->
         whenServerLoaded ->
           browser.adminCreateStorePage.visit (error) ->
             return done error if error
+            exampleStore.banner = "abc"
+            exampleStore.otherUrl = "def"
             browser.adminCreateStorePage.setFieldsAs exampleStore
             browser.adminCreateStorePage.clickCreateStoreButton done
     it 'did not create a store with missing info', (done) ->
@@ -50,4 +52,9 @@ describe 'Admin home page', ->
     it 'is at the store create page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/admin#createStore"
     it 'does not show store created message', ->
-      expect(browser.query('#message').length).toBe 0
+      expect(browser.query('#message')).toBeUndefined()
+    it 'shows validation messages', ->
+      expect(browser.text("label[for='name']")).toBe "Informe o nome da loja."
+      expect(browser.text("label[for='city']")).toBe "Informe a cidade."
+      expect(browser.text("label[for='banner']")).toBe "Informe um link válido para o banner, começando com http ou https."
+      expect(browser.text("label[for='otherUrl']")).toBe "Informe um link válido para o outro site, começando com http ou https."

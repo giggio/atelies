@@ -1,8 +1,8 @@
 <h2>Crie sua loja:</h2>
-<form>
-  <div><div>Nome:</div><div><input type="text" id="name" value="" class="span6" /></div></div>
-  <div><div>Telefone:</div><div><input type="text" id="phoneNumber" value="" placeholder="(11) 1234-4567 - ramal xyz"/></div></div>
-  <div><div>Cidade:</div><div><input type="text" id="city" value="" class="span4" /></div></div>
+<form id="createStoreForm">
+  <div><div>Nome:</div><div><input type="text" id="name" name="name" class="span6 required" title="Informe o nome da loja." /></div></div>
+  <div><div>Telefone:</div><div><input type="text" id="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz"/></div></div>
+  <div><div>Cidade:</div><div><input type="text" id="city" name="city" class="span4 required" title="Informe a cidade." /></div></div>
   <div><div>Estado:</div><div>
   <select id="state" class="span1">
     <option>AC</option> 
@@ -34,7 +34,7 @@
     <option>TO</option>
   </select>
   </div></div>
-  <div><div>Outro site:</div><div><input type="text" id="otherUrl" value="" class="span6" placeholder="Digite outro endereço na internet, começando com http://..." /></div></div>
-  <div><div>Imagem do banner:</div><div><input type="text" id="banner" value="" class="span6" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..."/></div></div>
+  <div><div>Outro site:</div><div><input type="text" id="otherUrl" name="otherUrl" class="span6 url" placeholder="Digite outro endereço na internet, começando com http://..." title="Informe um link válido para o outro site, começando com http ou https." /></div></div>
+  <div><div>Imagem do banner:</div><div><input type="text" id="banner" name="banner" class="span6 url" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." title="Informe um link válido para o banner, começando com http ou https."/></div></div>
   <input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
 </form>
