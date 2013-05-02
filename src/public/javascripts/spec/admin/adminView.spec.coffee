@@ -18,7 +18,7 @@ define [
         createStoreView = new AdminView el:el, stores: [store1, store2]
         createStoreView.render()
       it 'shows create store link', ->
-        expect($("#createStore", el).text()).toBe "Crie uma nova loja"
+        expect($("#createStore", el).val()).toBe "Crie uma nova loja"
       it 'shows the stores being managed', ->
         expect($("#stores > tbody > tr", el).length).toBe 2
         expect($("#stores > tbody > tr:first-child > td:first-child", el).text()).toBe store1.name

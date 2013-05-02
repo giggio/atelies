@@ -2,7 +2,7 @@ $ = require 'jquery'
 module.exports = class AdminHomePage
   constructor: (@browser) ->
   visit: (cb) => @browser.visit "http://localhost:8000/admin", cb
-  createStoreLinkText: => @browser.text("#createStore")
+  createStoreText: => @browser.query("#createStore").value
   rows: => @browser.query('#stores tbody')?.children
   storesQuantity: =>
     rows = @rows()

@@ -14,7 +14,7 @@ describe 'Admin home page', ->
       whenServerLoaded ->
         page.visit done
   it 'allows to create a new store', ->
-    expect(page.createStoreLinkText()).toBe 'Crie uma nova loja'
+    expect(page.createStoreText()).toBe 'Crie uma nova loja'
   it 'shows existing stores to manage', ->
     expect(page.storesQuantity()).toBe 2
   it 'links to store manage pages', ->
