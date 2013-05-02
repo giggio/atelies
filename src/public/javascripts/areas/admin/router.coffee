@@ -7,5 +7,6 @@ define [
     routes:
       '': routes.admin
       'createStore': routes.createStore
+      'manageStore/:storeSlug': routes.manageStore
     initialize: ->
       Backbone.history.start()

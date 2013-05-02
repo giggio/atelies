@@ -28,5 +28,5 @@ describe 'Admin home page', ->
         done()
     it 'is at the admin store page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
-    xit 'mostra mensagem de loja criada com sucesso', ->
-      expect(browser.text('#message')).toBe "Loja criado com sucesso"
+    it 'mostra mensagem de loja criada com sucesso', ->
+      expect(browser.text('#message')).toBe "Loja criada com sucesso"
