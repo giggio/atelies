@@ -14,8 +14,7 @@
     "jade": "*",
     "coffee-script": "*",
     "mongoose": "~3.6.2",
-    "underscore": "~1.4.4",
-    "slug": "~0.2.2"
+    "underscore": "~1.4.4"
   },
   "devDependencies": {
     "jasmine-node": "1.x",

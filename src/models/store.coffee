@@ -1,6 +1,6 @@
 mongoose = require 'mongoose'
 Product  = require './product'
-slug     = require 'slug'
+slug     = require '../helpers/slug'
 
 storeSchema = new mongoose.Schema
   name:         type: String, required: true

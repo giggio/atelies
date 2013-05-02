@@ -1,7 +1,6 @@
 Product     = require '../models/product'
 Store       = require '../models/store'
 _           = require 'underscore'
-slug        = require 'slug'
 
 exports.admin = (req, res) ->
   Store.find (err, stores) ->
