@@ -14,7 +14,8 @@
     "jade": "*",
     "coffee-script": "*",
     "mongoose": "~3.6.2",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "everyauth": "git://github.com/bnoguchi/everyauth.git#express3"
   },
   "devDependencies": {
     "jasmine-node": "1.x",
