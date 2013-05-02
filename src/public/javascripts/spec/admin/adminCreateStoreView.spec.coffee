@@ -14,7 +14,7 @@ define [
         createStoreView = new CreateStoreView el:el
         spyOn($, "ajax").andCallFake (opt) ->
           storePassedIn = JSON.parse opt.data
-          opt.success [store]
+          opt.success store
         goToStoreManagePageSpy = spyOn(createStoreView, '_goToStoreManagePage')
         createStoreView.render()
         createStoreView.$("#name").val store.name
@@ -26,6 +26,7 @@ define [
         $('#createStore', el).trigger 'click'
       it 'navigates to store manage page', ->
         expect(goToStoreManagePageSpy).toHaveBeenCalled()
+        expect(goToStoreManagePageSpy.mostRecentCall.args[0].get('slug')).toBe store.slug
       it 'saves the correct data', ->
         expect(storePassedIn.name).toBe store.name
         expect(storePassedIn.phoneNumber).toBe store.phoneNumber
