@@ -5,7 +5,7 @@ module.exports = class AdminCreateStorePage
     @browser.fill "#name", store.name
     @browser.fill "#phoneNumber", store.phoneNumber
     @browser.fill "#city", store.city
-    @browser.fill "#state", store.state
+    @browser.select "#state", store.state if store.state isnt ''
     @browser.fill "#otherUrl", store.otherUrl
     @browser.fill "#banner", store.banner
   clickCreateStoreButton: (cb) => @browser.pressButtonWait "#createStore", cb

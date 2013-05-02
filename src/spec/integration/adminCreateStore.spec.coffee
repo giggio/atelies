@@ -28,5 +28,26 @@ describe 'Admin home page', ->
         done()
     it 'is at the admin store page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
-    it 'mostra mensagem de loja criada com sucesso', ->
+    it 'shows store created message', ->
       expect(browser.text('#message')).toBe "Loja criada com sucesso"
+  xdescribe 'Not creating a store (missing or wrong info)', ->
+    browser = null
+    exampleStore = generator.store.empty()
+    beforeAll (done) ->
+      browser = newBrowser()
+      cleanDB (error) ->
+        return done error if error
+        whenServerLoaded ->
+          browser.adminCreateStorePage.visit (error) ->
+            return done error if error
+            browser.adminCreateStorePage.setFieldsAs exampleStore
+            browser.adminCreateStorePage.clickCreateStoreButton done
+    it 'did not create a store with missing info', (done) ->
+      Store.find (error, stores) ->
+        return done error if error
+        expect(stores.length).toBe 0
+        done()
+    it 'is at the store create page', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/admin#createStore"
+    it 'does not show store created message', ->
+      expect(browser.query('#message').length).toBe 0

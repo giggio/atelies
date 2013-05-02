@@ -65,3 +65,10 @@ exports.generator =
       city: "Fortaleza"
       state: "CE"
       otherUrl: 'http://someotherurl.com'
+    empty: -> new Store
+      name: ''
+      slug: ''
+      phoneNumber: ''
+      city: ""
+      state: ""
+      otherUrl: ''

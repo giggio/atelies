@@ -27,8 +27,7 @@ describe 'store home page', ->
     beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
-        if error
-          return done error
+        return done error if error
         store = generator.store.a()
         store.save()
         whenServerLoaded ->
@@ -45,12 +44,11 @@ describe 'store home page', ->
     beforeAll (done) ->
       browser = new zombie.Browser()
       cleanDB (error) ->
-        if error
-          return done error
-        store = new Store name: 'store 1', slug: 'store_1'
+        return done error if error
+        store = generator.store.a()
         store.save()
-        product1 = new Product(name: 'name 1', slug: 'name_1', picture: 'http://lorempixel.com/150/150/cats', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
-        product2 = new Product(name: 'name 2', slug: 'name_2', picture: 'http://lorempixel.com/150/150/cats', price: 12.2, storeName: 'store 1', storeSlug: 'store_1')
+        product1 = generator.product.a()
+        product2 = generator.product.b()
         product1.save()
         product2.save()
         whenServerLoaded ->

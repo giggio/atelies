@@ -1,10 +1,40 @@
 <h2>Crie sua loja:</h2>
 <form>
-  <div><div>Nome:</div><div><input type="text" id="name" value="" /></div></div>
-  <div><div>Telefone:</div><div><input type="text" id="phoneNumber" value="" /></div></div>
-  <div><div>Cidade:</div><div><input type="text" id="city" value="" /></div></div>
-  <div><div>Estado:</div><div><input type="text" id="state" value="" /></div></div>
-  <div><div>Outro site:</div><div><input type="text" id="otherUrl" value="" /></div></div>
-  <div><div>Imagem do banner:</div><div><input type="text" id="banner" value="" /></div></div>
-  <input id="createStore" type="button" class="btn-primary" value="Criar"/>
+  <div><div>Nome:</div><div><input type="text" id="name" value="" class="span6" /></div></div>
+  <div><div>Telefone:</div><div><input type="text" id="phoneNumber" value="" placeholder="(11) 1234-4567 - ramal xyz"/></div></div>
+  <div><div>Cidade:</div><div><input type="text" id="city" value="" class="span4" /></div></div>
+  <div><div>Estado:</div><div>
+  <select id="state" class="span1">
+    <option>AC</option> 
+    <option>AL</option>
+    <option>AP</option>
+    <option>AM</option>
+    <option>BA</option>
+    <option>CE</option>
+    <option>DF</option>
+    <option>ES</option>
+    <option>GO</option>
+    <option>MA</option>
+    <option>MT</option>
+    <option>MS</option>
+    <option>MG</option>
+    <option>PR</option>
+    <option>PB</option>
+    <option>PA</option>
+    <option>PE</option>
+    <option>PI</option>
+    <option>RJ</option>
+    <option>RN</option>
+    <option>RS</option>
+    <option>RO</option>
+    <option>RR</option>
+    <option>SC</option>
+    <option>SE</option>
+    <option>SP</option>
+    <option>TO</option>
+  </select>
+  </div></div>
+  <div><div>Outro site:</div><div><input type="text" id="otherUrl" value="" class="span6" placeholder="Digite outro endereço na internet, começando com http://..." /></div></div>
+  <div><div>Imagem do banner:</div><div><input type="text" id="banner" value="" class="span6" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..."/></div></div>
+  <input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
 </form>

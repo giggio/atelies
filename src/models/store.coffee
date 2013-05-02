@@ -2,11 +2,11 @@ mongoose = require 'mongoose'
 Product  = require './product'
 
 storeSchema = new mongoose.Schema
-  name:         String
+  name:         type: String, required: true
   slug:         String
   phoneNumber:  String
-  city:         String
-  state:        String
+  city:         type: String, required: true
+  state:        type: String, required: true
   otherUrl:     String
   banner:       String
 
