@@ -6,7 +6,7 @@ define [
   '../models/store'
   'text!./templates/store.html'
 ], ($, Backbone, Handlebars, storeData, Store, storeTemplate) ->
-  class Home extends Backbone.View
+  class StoreView extends Backbone.View
     template: storeTemplate
     render: ->
       @$el.empty()

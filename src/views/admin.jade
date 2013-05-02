@@ -38,5 +38,10 @@ block content
           input.search-query(type="text",placeholder="Busca Lojas")
 
   .container
-    h1.page-header Open Store
     section#app-container Carregando...
+    script
+      define('adminStoresData', function() {
+        return {
+        stores:!{JSON.stringify(stores)}
+        };
+      });

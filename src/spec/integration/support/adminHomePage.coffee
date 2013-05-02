@@ -1,4 +1,5 @@
-module.exports = class AdminCreateStorePage
+$ = require 'jquery'
+module.exports = class AdminHomePage
   constructor: (@browser) ->
   visit: (cb) => @browser.visit "http://localhost:8000/admin", cb
   createStoreLinkText: => @browser.text("#createStore")
@@ -10,5 +11,5 @@ module.exports = class AdminCreateStorePage
     rows = @rows()
     stores = []
     for row in rows
-      store.push url: row
+      stores.push url: $('a', row).attr 'href'
     stores

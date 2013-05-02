@@ -4,7 +4,8 @@ _           = require 'underscore'
 slug        = require 'slug'
 
 exports.admin = (req, res) ->
-  res.render 'admin'
+  Store.find (err, stores) ->
+    res.render 'admin', stores: stores
 
 exports.adminStore = (req, res) ->
   store = Store.create name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner

@@ -2,12 +2,13 @@ define [
   'jquery'
   'backbone'
   'handlebars'
+  'adminStoresData'
   'text!./templates/admin.html'
-], ($, Backbone, Handlebars, adminTemplate) ->
+], ($, Backbone, Handlebars, adminStoresData, adminTemplate) ->
   class AdminView extends Backbone.View
     template: adminTemplate
     initialize: (opt) =>
-      @stores = opt.stores if opt?.stores?
+      @stores = if opt?.stores? then opt.stores else adminStoresData?.stores
     render: ->
       @$el.empty()
       context = Handlebars.compile @template

@@ -1,3 +1,7 @@
+store1 = generator.store.a()
+store2 = generator.store.b()
+stores = [store1, store2]
+define 'adminStoresData', -> stores
 define [
   'jquery'
   'areas/admin/views/admin'

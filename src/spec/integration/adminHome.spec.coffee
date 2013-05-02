@@ -1,8 +1,7 @@
 zombie    = new require 'zombie'
 
-xdescribe 'Admin home page', ->
-  browser = null
-  page = null
+describe 'Admin home page', ->
+  browser = page = store1 = store2 = null
   beforeAll (done) ->
     browser = newBrowser()
     page = browser.adminHomePage
@@ -19,5 +18,6 @@ xdescribe 'Admin home page', ->
   it 'shows existing stores to manage', ->
     expect(page.storesQuantity()).toBe 2
   it 'links to store manage pages', ->
-    expect(page.stores[0].url).toBe "http://localhost:3000/admin#manageStore/#{store1.slug}"
-    expect(page.stores[1].url).toBe "http://localhost:3000/admin#manageStore/#{store2.slug}"
+    stores = page.stores()
+    expect(stores[0].url).toBe "#manageStore/#{store1.slug}"
+    expect(stores[1].url).toBe "#manageStore/#{store2.slug}"
