@@ -1,9 +1,16 @@
 Product     = require '../models/product'
 Store       = require '../models/store'
 _           = require 'underscore'
+slug        = require 'slug'
 
 exports.admin = (req, res) ->
   res.render 'admin'
+
+exports.adminStore = (req, res) ->
+  store = new Store name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner
+  store.set 'slug', slug store.name.toLowerCase(), "_"
+  store.save (err) ->
+    res.json store
 
 exports.index = (req, res) ->
   Product.find (err, products) ->
