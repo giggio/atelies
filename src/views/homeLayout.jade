@@ -1,63 +1,11 @@
 extends layout
 
 append content
-  - var nums = [1,2,3,4,5,6,7,8,9,10]
   .navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
-        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        .nav-collapse.collapse
-          ul.nav
-            li: a(href='#') Crie sua loja
-            if (everyauth.loggedIn && user.isSeller)
-              li: a#admin(href='admin') Administração
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown') Lojas
-                b.caret
-              ul.dropdown-menu
-                each loja in nums
-                  li: a(href='#') Loja #{loja}
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
-                b.caret
-              ul.dropdown-menu
-                li: a(href='#') Sobre o site
-                li: a(href='#') Quanto custa
-                li: a(href='#') Tecnologia
+        include includes/commonHeader
         .nav
-          ul.nav
-            li: form.navbar-search
-              input.search-query(type="text",placeholder="Busca Produtos")
-            li: form.navbar-search
-              input.search-query(type="text",placeholder="Busca Lojas")
+          include includes/searches
         .nav.pull-right
-          ul.nav
-            if (!everyauth.loggedIn)
-              li: a#loginPop.pop(href="#") Entrar
-            else
-              li: a#greeting= user.name
-              li: a#logout(href="/logout") Sair
-  #loginPop-head.hide Login Title
-  #loginPop-content.hide
-    form#popupLoginForm(action='/login', method='post')
-      div
-        div E-mail:
-        input(type='text', name=everyauth.password.loginFormFieldName, value='', class="required email", title="Informe seu email.")
-      div
-        div Senha:
-        input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
-      div
-        input(type='submit', class='btn-primary', value='Entrar')
-  :coffeescript
-    $ ->
-      $('.pop').popover
-        html: true,
-        title: -> $("##{@id}-head").html()
-        content: -> $("##{@id}-content").html()
-        placement: 'bottom'
-        trigger: 'click'
-        template: '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
-      $('.pop').click (e) -> e.preventDefault()
+          include includes/userInfo

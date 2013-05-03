@@ -1,42 +1,17 @@
 extends layout
 
-block head
+append head
   script(src='javascripts/lib/require.min.js', data-main='javascripts/adminBootstrap.js')
 
-block content
-  - var nums = [1,2,3,4,5,6,7,8,9,10]
+append content
   .navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
-        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        .nav-collapse.collapse
-          ul.nav
-            li: a(href='#') Crie sua loja
-            li: a(href='admin') Administração
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown') Lojas
-                b.caret
-              ul.dropdown-menu
-                each loja in nums
-                  li: a(href='#') Loja #{loja}
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
-                b.caret
-              ul.dropdown-menu
-                li: a(href='#') Sobre o site
-                li: a(href='#') Quanto custa
-                li: a(href='#') Tecnologia
-        form.navbar-form.pull-right
-          input.span2(type='text')
-          button.btn(type="submit") Login
-        form.navbar-search.pull-right
-          input.search-query(type="text",placeholder="Busca Produtos")
-        form.navbar-search.pull-right
-          input.search-query(type="text",placeholder="Busca Lojas")
-
+        include includes/commonHeader
+        .nav
+          include includes/searches
+        .nav.pull-right
+          include includes/userInfo
   .container
     section#app-container Carregando...
     script
