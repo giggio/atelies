@@ -9,4 +9,5 @@ module.exports = class AdminCreateStorePage
   emailRequired: => @browser.text "label[for=email]"
   passwordRequired: => @browser.text "label[for=password]"
   loginLinkExists: => @browser.query("#loginPop")?
+  adminLinkExists: => @browser.query("#admin")?
   logoutLinkExists: => @browser.query("#logout")?

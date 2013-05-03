@@ -29,6 +29,8 @@ describe 'Login', ->
       expect(page.errors()).toBe 'Login falhou'
     it 'is at the login page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/login"
+    it 'does not show admin link', ->
+      expect(page.adminLinkExists()).toBeFalsy()
 
   describe 'Must supply name and password or form is not submitted', ->
     beforeAll (done) ->
@@ -43,7 +45,7 @@ describe 'Login', ->
       expect(page.emailRequired()).toBe "Informe seu email."
       expect(page.passwordRequired()).toBe "Informe sua senha."
 
-  describe 'Can login successfully', ->
+  describe 'Can login successfully with regular user', ->
     beforeAll (done) ->
       page.visit (error) ->
         return done error if error
@@ -57,3 +59,5 @@ describe 'Login', ->
       expect(page.loginLinkExists()).toBeFalsy()
     it 'shows logout link', ->
       expect(page.logoutLinkExists()).toBeTruthy()
+    it 'does not show admin link', ->
+      expect(page.adminLinkExists()).toBeFalsy()

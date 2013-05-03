@@ -1,13 +1,13 @@
 require './globals'
 require './expressExtensions'
 mongoose        = require 'mongoose'
+everyauth           = require 'everyauth'
 exports.start = (cb) ->
   express             = require "express"
   routes              = require "./routes"
   http                = require "http"
   path                = require "path"
   app                 = express()
-  everyauth           = require 'everyauth'
   everyauthConfig     = require './helpers/everyauthConfig'
 
   cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
@@ -31,24 +31,28 @@ exports.start = (cb) ->
       when 'test' then 8000
       else 3000
 
+  app.use express.favicon()
+  app.use express.bodyParser()
+  app.use express.methodOverride()
+  app.use express.cookieParser cookieSecret
+  app.use express.session()
+  app.use express.static(path.join(__dirname, "public"))
+  everyauthConfig.configure()
+  app.use(everyauthConfig.preEveryAuthMiddlewareHack())
+  app.use everyauth.middleware app
+  app.use(everyauthConfig.postEveryAuthMiddlewareHack())
+  #app.use app.router
+  console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
+  mongoose.connect process.env.CUSTOMCONNSTR_mongo
+  mongoose.connection.on 'error', (err) ->
+    console.error "connection error:#{err.stack}"
+    throw err
+  #app.dynamicHelpers currentUser: (req, res) -> req.user
+
   app.configure ->
     app.set "port", port
     app.set "views", __dirname + "/views"
     app.set "view engine", "jade"
-    app.use express.favicon()
-    app.use express.bodyParser()
-    app.use express.methodOverride()
-    app.use express.cookieParser cookieSecret
-    app.use express.session()
-    everyauthConfig.configure()
-    app.use everyauth.middleware app
-    app.use express.static(path.join(__dirname, "public"))
-    app.use app.router
-    console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
-    mongoose.connect process.env.CUSTOMCONNSTR_mongo
-    mongoose.connection.on 'error', (err) ->
-      console.error "connection error:#{err.stack}"
-      throw err
 
   app.get "/", routes.index
   app.get "/admin", routes.admin
@@ -63,3 +67,4 @@ exports.stop = ->
   exports.server.close()
   mongoose.connection.close()
   mongoose.disconnect()
+

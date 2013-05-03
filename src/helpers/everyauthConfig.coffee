@@ -42,5 +42,28 @@ exports.configure = ->
       name: req.body.name
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
-    User.findById userId, cb
+    User.findById userId, (error, user) ->
+      #console.log "found user: #{user}"
+      cb error, user
   everyauth.everymodule.userPkey '_id'
+
+exports.preEveryAuthMiddlewareHack = ->
+  (req, res, next) ->
+    sess = req.session
+    auth = sess.auth
+    ea =
+      loggedIn: auth?.loggedIn
+    ea[k] = val for own k, val of auth
+    if everyauth.enabled.password
+      ea.password = ea.password || {}
+      ea.password.loginFormFieldName = everyauth.password.loginFormFieldName()
+      ea.password.passwordFormFieldName = everyauth.password.passwordFormFieldName()
+    res.locals.everyauth = ea
+    do next
+
+exports.postEveryAuthMiddlewareHack = ->
+  userAlias = everyauth.expressHelperUserAlias || "user"
+  (req, res, next) ->
+    res.locals.everyauth.user = req.user
+    res.locals[userAlias] = req.user
+    do next
