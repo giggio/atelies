@@ -27,7 +27,7 @@ define [
       store.save store.attributes, success: (model) => @_goToStoreManagePage model, error: (model, xhr, opt) -> console.log 'error';throw 'error when saving'
     _goToStoreManagePage: (store) =>
       ManageStoreView.justCreated = true
-      Backbone.history.navigate "manageStore/#{store.get('slug')}", true
+      Backbone.history.navigate "manageStore/#{store.get('slug')}", trigger: true
     _fromFields: (names) ->
       attrs = {}
       for name in names

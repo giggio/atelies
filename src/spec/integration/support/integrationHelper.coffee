@@ -20,7 +20,7 @@ exports.startServer = (cb) ->
 
 exports.whenServerLoaded = (cb) ->
   if exports._server
-    process.nextTick cb
+    setImmediate cb
     return
   exports.whenDone((-> exports._server isnt null), -> cb())
 

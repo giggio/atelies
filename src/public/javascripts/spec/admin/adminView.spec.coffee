@@ -1,7 +1,3 @@
-store1 = generator.store.a()
-store2 = generator.store.b()
-stores = [store1, store2]
-define 'adminStoresData', -> stores
 define [
   'jquery'
   'areas/admin/views/admin'
@@ -15,6 +11,9 @@ define [
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
+        store1 = generator.store.a()
+        store2 = generator.store.b()
+        stores = [store1, store2]
         createStoreView = new AdminView el:el, stores: [store1, store2]
         createStoreView.render()
       it 'shows create store link', ->

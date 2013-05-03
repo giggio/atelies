@@ -1,13 +1,11 @@
 extends homeLayout
 
 append head
+  script
+    var homeProductsBootstrapModel = !{JSON.stringify(products)};
   script(src='javascripts/lib/require.min.js', data-main='javascripts/homeBootstrap.js')
 
 append content
   .container
     h1.page-header Open Store
     section#app-container Carregando...
-    script
-      define('productsHomeData', function() {
-        return !{JSON.stringify(products)};
-      });

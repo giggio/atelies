@@ -1,11 +1,12 @@
-module.exports = class AdminCreateStorePage
+Page = require './pages/page'
+module.exports = class AdminCreateStorePage extends Page
   constructor: (@browser) ->
-  visit: (cb) => @browser.visit "http://localhost:8000/admin#createStore", cb
-  setFieldsAs: (store, cb) =>
+  visit: (options, cb) => super "admin#createStore", options, cb
+  setFieldsAs: (store) =>
     @browser.fill "#name", store.name
     @browser.fill "#phoneNumber", store.phoneNumber
     @browser.fill "#city", store.city
     @browser.select "#state", store.state if store.state isnt ''
     @browser.fill "#otherUrl", store.otherUrl
     @browser.fill "#banner", store.banner
-  clickCreateStoreButton: (cb) => @browser.pressButtonWait "#createStore", cb
+  clickCreateStoreButton: (cb) => @browser.pressButton "#createStore", cb

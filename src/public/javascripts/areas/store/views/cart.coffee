@@ -2,19 +2,20 @@ define [
   'jquery'
   'backbone'
   'handlebars'
-  'storeData'
   '../models/products'
   '../models/cart'
   'text!./templates/cart.html'
   './cartItem'
-], ($, Backbone, Handlebars, storeData, Products, Cart, cartTemplate, CartItemView) ->
+], ($, Backbone, Handlebars, Products, Cart, cartTemplate, CartItemView) ->
   class CartView extends Backbone.View
     events:
       'click #clearCart':'clear'
-    storeData: storeData
     template: cartTemplate
     initialize: (opt) =>
-      @storeData = opt.storeData if opt.storeData?
+      if storeBootstrapModel?
+        @storeData = storeBootstrapModel
+      else if opt?.storeData?
+        @storeData = opt.storeData
       @cart = Cart.get(@storeData.store.slug)
     render: =>
       context = Handlebars.compile @template

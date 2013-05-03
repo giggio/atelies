@@ -6,9 +6,9 @@ for key,value of jasmineBeforeAfterHelper
 
 exports.whenDone = (condition, callback) ->
   if condition()
-    process.nextTick callback
+    setImmediate callback
   else
-    process.nextTick -> whenDone(condition, callback)
+    setImmediate -> whenDone(condition, callback)
 
 exports.waitSeconds = (seconds, callback) ->
   future = new Date()

@@ -20,12 +20,14 @@
   "devDependencies": {
     "jasmine-node": "1.x",
     "jsdom": "*",
-    "zombie": "*",
+    "zombie": "2.x",
     "backbone": "~1.0.0",
     "jquery": "~1.8.3",
     "requirejs": "~2.1.5",
     "handlebars": "~1.0.10",
     "underscore.string": "~2.3.1",
-    "node-localstorage": "~0.3.3"
+    "node-localstorage": "~0.3.3",
+    "htmlparser2": "~3.0.5",
+    "html5": "~0.3.12"
   }
 }

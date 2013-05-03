@@ -43,11 +43,12 @@ beforeEach (done) ->
   #'this' here means the test, the 'it'
   suites = that.getSuites.apply @
   suites = suites.reverse()
-
+  it = @
   callSuite = (suite, remainingSuites...) ->
     continueSuiteCalls = ->
       if remainingSuites.length is 0
-        process.nextTick done
+        #console.log "*******calling done on beforeEach/all for #{it.description}"
+        setImmediate done
       else
         callSuite remainingSuites...
     if suite.beforeAllFuncs? and not suite.beforeAllCalled
@@ -61,7 +62,7 @@ beforeEach (done) ->
           beforeFunc -> i--
       continueWhenIIs0 = ->
         return continueSuiteCalls() if i is 0
-        process.nextTick continueWhenIIs0
+        setImmediate continueWhenIIs0
       continueWhenIIs0()
     else
       continueSuiteCalls()

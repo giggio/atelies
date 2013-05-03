@@ -1,5 +1,3 @@
-zombie    = new require 'zombie'
-
 describe 'Login', ->
   userA = userB = userSellerC = browser = page = null
   beforeAll (done) ->
@@ -14,6 +12,7 @@ describe 'Login', ->
       userSellerC = generator.user.c()
       userSellerC.save()
       whenServerLoaded done
+  afterAll -> browser.destroy()
 
   describe 'Login in with unknown user fails', ->
     beforeAll (done) ->

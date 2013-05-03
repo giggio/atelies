@@ -1,9 +1,14 @@
 extends layout
 
-block head
+append head
+  script
+    var storeBootstrapModel = {
+      store:!{JSON.stringify(store)},
+      products:!{JSON.stringify(products)}
+    }
   script(src='javascripts/lib/require.min.js', data-main='javascripts/storeBootstrap.js')
 
-block content
+append content
   .navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
@@ -24,10 +29,3 @@ block content
     else
       h1.page-header Loja n&atilde;o existe
       section#app-container
-    script
-      define('storeData', function() {
-        return {
-        store:!{JSON.stringify(store)},
-        products:!{JSON.stringify(products)}
-        };
-      });

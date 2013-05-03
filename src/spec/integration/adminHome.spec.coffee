@@ -1,5 +1,3 @@
-zombie    = new require 'zombie'
-
 describe 'Admin home page', ->
   browser = page = store1 = store2 = null
   beforeAll (done) ->
@@ -13,6 +11,7 @@ describe 'Admin home page', ->
       store2.save()
       whenServerLoaded ->
         page.visit done
+  afterAll -> browser.destroy()
   it 'allows to create a new store', ->
     expect(page.createStoreText()).toBe 'Crie uma nova loja'
   it 'shows existing stores to manage', ->

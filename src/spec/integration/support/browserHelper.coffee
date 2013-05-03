@@ -1,10 +1,13 @@
-zombie                  = new require 'zombie'
+Browser                 = require 'zombie'
 StoreCartPage           = require './storeCartPage'
 StoreProductPage        = require './storeProductPage'
 AdminCreateStorePage    = require './adminCreateStorePage'
 AdminHomePage           = require './adminHomePage'
 LoginPage               = require './loginPage'
 RegisterPage            = require './registerPage'
+
+#Browser.default.htmlParser = require("html5")
+#Browser.maxRedirects = 20
 
 exports.selectorLoaded = (w) ->
   w.document.querySelector @selectorSearched
@@ -17,9 +20,12 @@ exports.pressButtonWait = (selector, cb) ->
   @waitSelector selector, => @pressButton selector, cb
 
 exports.newBrowser = (browser) ->
-  storage = browser?.saveStorage()
-  browser = new zombie.Browser()
+  if browser?
+    storage = browser.saveStorage()
+    browser.destroy()
+  browser = new Browser maxWait: 20
   browser.loadStorage storage if storage?
+  browser.selectorLoaded = exports.selectorLoaded
   browser.selectorSearched = exports.selectorSearched
   browser.waitSelector = exports.waitSelector
   browser.pressButtonWait = exports.pressButtonWait

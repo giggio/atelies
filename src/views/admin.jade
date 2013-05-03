@@ -1,6 +1,10 @@
 extends layout
 
 append head
+  script
+    var adminStoresBootstrapModel = {
+      stores:!{JSON.stringify(stores)}
+    }
   script(src='javascripts/lib/require.min.js', data-main='javascripts/adminBootstrap.js')
 
 append content
@@ -14,9 +18,3 @@ append content
           include includes/userInfo
   .container
     section#app-container Carregando...
-    script
-      define('adminStoresData', function() {
-        return {
-        stores:!{JSON.stringify(stores)}
-        };
-      });

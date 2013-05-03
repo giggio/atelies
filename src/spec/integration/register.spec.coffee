@@ -1,5 +1,3 @@
-zombie    = new require 'zombie'
-
 describe 'Login', ->
   userA = browser = page = null
   beforeAll (done) ->
@@ -10,6 +8,7 @@ describe 'Login', ->
       userA = generator.user.a()
       userA.save()
       whenServerLoaded done
+  afterAll -> browser.destroy()
 
   describe 'Must supply name, email and password or form is not submitted', ->
     beforeAll (done) ->
@@ -46,6 +45,7 @@ describe 'Login', ->
   
   describe "Can't register successfully with existing email information", ->
     beforeAll (done) ->
+      browser.destroy()
       browser = newBrowser()
       page = browser.registerPage
       page.visit (error) ->

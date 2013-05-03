@@ -1,13 +1,13 @@
 Store     = require '../../models/store'
 Product   = require '../../models/product'
-zombie    = new require 'zombie'
 
 describe 'store home page', ->
   browser = null
   store = null
+  afterAll -> browser.destroy() if browser?
   describe 'when store doesnt exist', (done) ->
     beforeAll (done) ->
-      browser = new zombie.Browser()
+      browser = newBrowser browser
       cleanDB (error) ->
         if error
           return done error
@@ -25,24 +25,19 @@ describe 'store home page', ->
     
   describe 'when store exists and has no products', (done) ->
     beforeAll (done) ->
-      browser = new zombie.Browser()
+      browser = newBrowser browser
       cleanDB (error) ->
         return done error if error
         store = generator.store.a()
         store.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1", (error) ->
-            if error
-              console.error "Error visiting. " + error.stack
-              done error
-            else
-              done()
+          browser.visit "http://localhost:8000/store_1", done
     it 'should display no products', ->
       expect(browser.query('#products tbody').children.length).toBe 0
 
   describe 'when store exists and has products', (done) ->
     beforeAll (done) ->
-      browser = new zombie.Browser()
+      browser = newBrowser browser
       cleanDB (error) ->
         return done error if error
         store = generator.store.a()
@@ -52,11 +47,6 @@ describe 'store home page', ->
         product1.save()
         product2.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1", (error) ->
-            if error
-              console.error "Error visiting. " + error.stack
-              done error
-            else
-              done()
+          browser.visit "http://localhost:8000/store_1", done
     it 'should display the products', ->
       expect(browser.query('#products tbody').children.length).toBe 2
