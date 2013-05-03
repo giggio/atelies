@@ -42,7 +42,7 @@ describe 'Login', ->
     it 'is at the login page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/login"
     it 'Required messages are shown', ->
-      expect(page.emailRequired()).toBe "Informe seu email."
+      expect(page.emailRequired()).toBe "Informe seu e-mail."
       expect(page.passwordRequired()).toBe "Informe sua senha."
 
   describe 'Can login successfully with regular user', ->
