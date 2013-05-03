@@ -1,0 +1,23 @@
+extends homeLayout
+block head
+block subContent
+  .container
+    h2 Cadastro
+    - if ('undefined' !== typeof errors && errors.length)
+      ul#errors
+        - each error in errors
+          li.error= error
+    form#registerForm(action='/register', method='post')
+      #email
+        label(for=everyauth.password.loginFormFieldName) Email:
+        input(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
+      #name
+        label(for=everyauth.password.loginFormFieldName) Nome:
+        input(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
+      #password
+        label(for=everyauth.password.passwordFormFieldName) Senha:
+        input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+      #submit
+        input(type='submit',class='btn-primary', value='Cadastre-se')
+  :coffeescript
+    $ -> $('#registerForm').validate()

@@ -1,12 +1,14 @@
-mongoose      = require 'mongoose'
 require './globals'
 require './expressExtensions'
+mongoose        = require 'mongoose'
 exports.start = (cb) ->
-  express       = require "express"
-  routes        = require "./routes"
-  http          = require "http"
-  path          = require "path"
-  app           = express()
+  express             = require "express"
+  routes              = require "./routes"
+  http                = require "http"
+  path                = require "path"
+  app                 = express()
+  everyauth           = require 'everyauth'
+  everyauthConfig     = require './helpers/everyauthConfig'
 
   cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
   app.configure "development", ->
@@ -14,12 +16,14 @@ exports.start = (cb) ->
     app.use express.logger "dev"
     app.use express.errorHandler()
     app.locals.pretty = on
+    everyauth.debug = on
   
   app.configure "test", ->
     process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
     #app.use express.logger "dev"
     app.use express.errorHandler()
     app.locals.pretty = on
+    #everyauth.debug = on
 
   port = process.env.PORT or
     switch app.get 'env'
@@ -36,6 +40,8 @@ exports.start = (cb) ->
     app.use express.methodOverride()
     app.use express.cookieParser cookieSecret
     app.use express.session()
+    everyauthConfig.configure()
+    app.use everyauth.middleware app
     app.use express.static(path.join(__dirname, "public"))
     app.use app.router
     console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'

@@ -3,6 +3,7 @@ StoreCartPage           = require './storeCartPage'
 StoreProductPage        = require './storeProductPage'
 AdminCreateStorePage    = require './adminCreateStorePage'
 AdminHomePage           = require './adminHomePage'
+LoginPage               = require './loginPage'
 
 exports.selectorLoaded = (w) ->
   w.document.querySelector @selectorSearched
@@ -25,4 +26,6 @@ exports.newBrowser = (browser) ->
   browser.storeProductPage = new StoreProductPage browser
   browser.adminCreateStorePage = new AdminCreateStorePage browser
   browser.adminHomePage = new AdminHomePage browser
+  browser.loginPage = new LoginPage browser
+  browser.showHtml = -> console.log browser.evaluate "$('html').html()"
   browser

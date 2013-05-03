@@ -1,0 +1,21 @@
+extends homeLayout
+append head
+  script(src='/javascripts/lib/jquery.validate.min.js')
+append content
+  .container
+    h2 Login
+    - if ('undefined' !== typeof errors && errors.length)
+      ul#errors
+        - each error in errors
+          li.error= error
+    form#loginForm(action='/login', method='post')
+      div
+        label(for=everyauth.password.loginFormFieldName) E-mail:
+        input#email(type='text', name=everyauth.password.loginFormFieldName, value=email, class="required email", title="Informe seu email.")
+      div
+        label(for=everyauth.password.passwordFormFieldName) Senha:
+        input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+      div
+        input#login(type='submit', class='btn-primary', value='Entrar')
+  :coffeescript
+    $ -> $('#loginForm').validate()

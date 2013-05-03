@@ -1,0 +1,8 @@
+module.exports = class AdminCreateStorePage
+  constructor: (@browser) ->
+  visit: (cb) => @browser.visit "http://localhost:8000/login", cb
+  setFieldsAs: (values, cb) =>
+    @browser.fill "#email", values.email
+    @browser.fill "#password", values.password
+  clickLoginButton: (cb) => @browser.pressButtonWait "#login", cb
+  errors: => @browser.text('#errors > li')
