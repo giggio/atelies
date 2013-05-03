@@ -1,19 +1,51 @@
 zombie    = new require 'zombie'
 
 describe 'Login', ->
+  userA = userB = userSellerC = browser = page = null
+  beforeAll (done) ->
+    browser = newBrowser()
+    page = browser.loginPage
+    cleanDB (error) ->
+      return done error if error
+      userA = generator.user.a()
+      userA.save()
+      userB = generator.user.b()
+      userB.save()
+      userSellerC = generator.user.c()
+      userSellerC.save()
+      whenServerLoaded done
+
   describe 'Login in with unknown user fails', ->
-    browser = page = null
     beforeAll (done) ->
-      browser = newBrowser()
-      page = browser.loginPage
-      cleanDB (error) ->
+      page.visit (error) ->
         return done error if error
-        whenServerLoaded ->
-          page.visit (error) ->
-            return done error if error
-            page.setFieldsAs email:"a@a.com", password:"abc"
-            page.clickLoginButton done
+        page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+        page.clickLoginButton done
     it 'shows the login failed message', ->
       expect(page.errors()).toBe 'Login falhou'
     it 'is at the login page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/login"
+
+  describe 'Must supply name and password or form is not submitted', ->
+    beforeAll (done) ->
+      page.visit (error) ->
+        return done error if error
+        page.clickLoginButton done
+    it 'does not show the login failed message', ->
+      expect(page.errors()).toBe ''
+    it 'is at the login page', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/login"
+    it 'Required messages are shown', ->
+      expect(page.emailRequired()).toBe "Informe seu email."
+      expect(page.passwordRequired()).toBe "Informe sua senha."
+
+  describe 'Can login successfully', ->
+    beforeAll (done) ->
+      page.visit (error) ->
+        return done error if error
+        page.setFieldsAs userA
+        page.clickLoginButton done
+    it 'does not show the login failed message', ->
+      expect(page.errors()).toBe ''
+    it 'is at the home page', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/"

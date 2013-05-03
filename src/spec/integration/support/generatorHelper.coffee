@@ -1,5 +1,7 @@
 Product   = require '../../../models/product'
 Store     = require '../../../models/store'
+User      = require '../../../models/user'
+
 exports.generator =
   product:
     a: -> new Product
@@ -72,3 +74,17 @@ exports.generator =
       city: ""
       state: ""
       otherUrl: ''
+  user:
+    a: -> new User
+      email: 'a@a.com'
+      password: 'abc'
+      name: 'Some Guy'
+    b: -> new User
+      email: 'b@a.com'
+      password: 'def'
+      name: 'Other Person'
+    c: -> new User
+      email: 'c@a.com'
+      password: 'ghi'
+      name: 'Another Seller'
+      isSeller: true

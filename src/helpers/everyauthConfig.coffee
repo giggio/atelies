@@ -42,6 +42,5 @@ exports.configure = ->
       name: req.body.name
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
-    console.log "findUserById:#{userId}"
     User.findById userId, cb
   everyauth.everymodule.userPkey '_id'

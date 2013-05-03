@@ -10,10 +10,10 @@ append content
           li.error= error
     form#loginForm(action='/login', method='post')
       div
-        label(for=everyauth.password.loginFormFieldName) E-mail:
+        div E-mail:
         input#email(type='text', name=everyauth.password.loginFormFieldName, value=email, class="required email", title="Informe seu email.")
       div
-        label(for=everyauth.password.passwordFormFieldName) Senha:
+        div Senha:
         input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
       div
         input#login(type='submit', class='btn-primary', value='Entrar')
