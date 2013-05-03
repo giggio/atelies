@@ -41,3 +41,22 @@ describe 'Login', ->
       expect(page.logoutLinkExists()).toBeTruthy()
     it 'does not show admin link', ->
       expect(page.adminLinkExists()).toBeFalsy()
+  
+  describe "Can't register successfully with existing email information", ->
+    beforeAll (done) ->
+      browser = newBrowser()
+      page = browser.registerPage
+      page.visit (error) ->
+        return done error if error
+        page.setFieldsAs name: "Some Person", email: userA.email, password: "abc123"
+        page.clickRegisterButton done
+    it 'shows the register failed message', ->
+      expect(page.errors()).toBe 'E-mail já cadastrado.'
+    it 'is at the register page', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/register"
+    it 'does shows login link', ->
+      expect(page.loginLinkExists()).toBeTruthy()
+    it 'does not show logout link', ->
+      expect(page.logoutLinkExists()).toBeFalsy()
+    it 'does not show admin link', ->
+      expect(page.adminLinkExists()).toBeFalsy()

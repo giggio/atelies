@@ -1,4 +1,4 @@
-module.exports = class AdminCreateStorePage
+module.exports = class RegisterPage
   constructor: (@browser) ->
   visit: (cb) => @browser.visit "http://localhost:8000/register", cb
   setFieldsAs: (values, cb) =>

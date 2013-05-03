@@ -2,21 +2,24 @@ extends homeLayout
 append content
   .container
     h2 Cadastro
-    - if ('undefined' !== typeof errors && errors.length)
-      ul#errors
-        - each error in errors
-          li.error= error
-    form#registerForm(action='/register', method='post')
-      div
-        div Email:
-        input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
-      div
-        div Nome:
-        input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
-      div
-        div Senha:
-        input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
-      div
-        input#register(type='submit',class='btn-primary', value='Cadastre-se')
+    if (everyauth.loggedIn)
+      h3 Usuário já logado.
+    else
+      if ('undefined' !== typeof errors && errors.length)
+        ul#errors
+          - each error in errors
+            li.error= error
+      form#registerForm(action='/register', method='post')
+        div
+          div Email:
+          input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
+        div
+          div Nome:
+          input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
+        div
+          div Senha:
+          input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+        div
+          input#register(type='submit',class='btn-primary', value='Cadastre-se')
   :coffeescript
     $ -> $('#registerForm').validate()

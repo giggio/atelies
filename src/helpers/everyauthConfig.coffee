@@ -25,11 +25,11 @@ exports.configure = ->
       cb
     registerLocals: (req, res) ->
     validateRegistration: (newUserAttrs, errors) ->
-      email = newUserAttrs.login
+      email = newUserAttrs.email
       cb = @Promise()
       User.findByEmail email, (error, user) ->
         return cb([error]) if error?
-        errors.push "Email já cadastrado" if user?
+        errors.push "E-mail já cadastrado." if user?
         cb.fulfill errors
       cb
     registerUser: (newUserAttrs) ->
