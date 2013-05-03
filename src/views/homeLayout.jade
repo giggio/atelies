@@ -38,6 +38,7 @@ append content
             if (!everyauth.loggedIn)
               li: a#loginPop.pop(href="#") Entrar
             else
+              li: a#greeting= user.name
               li: a#logout(href="/logout") Sair
   #loginPop-head.hide Login Title
   #loginPop-content.hide

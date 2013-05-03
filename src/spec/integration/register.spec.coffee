@@ -41,6 +41,8 @@ describe 'Login', ->
       expect(page.logoutLinkExists()).toBeTruthy()
     it 'does not show admin link', ->
       expect(page.adminLinkExists()).toBeFalsy()
+    it 'shows user name', ->
+      expect(page.userGreeting()).toBe "Some Person"
   
   describe "Can't register successfully with existing email information", ->
     beforeAll (done) ->

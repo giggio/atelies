@@ -1,5 +1,6 @@
-module.exports = class LoginPage
-  constructor: (@browser) ->
+HomeLayout = require './homeLayout'
+
+module.exports = class LoginPage extends HomeLayout
   visit: (cb) => @browser.visit "http://localhost:8000/login", cb
   setFieldsAs: (values, cb) =>
     @browser.fill "#email", values.email
@@ -8,6 +9,3 @@ module.exports = class LoginPage
   errors: => @browser.text '#errors > li'
   emailRequired: => @browser.text "label[for=email]"
   passwordRequired: => @browser.text "label[for=password]"
-  loginLinkExists: => @browser.query("#loginPop")?
-  adminLinkExists: => @browser.query("#admin")?
-  logoutLinkExists: => @browser.query("#logout")?

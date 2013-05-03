@@ -1,5 +1,6 @@
-module.exports = class RegisterPage
-  constructor: (@browser) ->
+HomeLayout = require './homeLayout'
+
+module.exports = class RegisterPage extends HomeLayout
   visit: (cb) => @browser.visit "http://localhost:8000/register", cb
   setFieldsAs: (values, cb) =>
     @browser.fill "#email", values.email
@@ -10,6 +11,3 @@ module.exports = class RegisterPage
   emailRequired: => @browser.text "label[for=email]"
   passwordRequired: => @browser.text "label[for=password]"
   nameRequired: => @browser.text "label[for=name]"
-  loginLinkExists: => @browser.query("#loginPop")?
-  adminLinkExists: => @browser.query("#admin")?
-  logoutLinkExists: => @browser.query("#logout")?
