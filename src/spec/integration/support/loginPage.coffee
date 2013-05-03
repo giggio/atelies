@@ -8,3 +8,5 @@ module.exports = class AdminCreateStorePage
   errors: => @browser.text '#errors > li'
   emailRequired: => @browser.text "label[for=email]"
   passwordRequired: => @browser.text "label[for=password]"
+  loginLinkExists: => @browser.query("#loginPop")?
+  logoutLinkExists: => @browser.query("#logout")?

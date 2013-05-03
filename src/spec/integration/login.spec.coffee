@@ -21,6 +21,10 @@ describe 'Login', ->
         return done error if error
         page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
         page.clickLoginButton done
+    it 'shows login link', ->
+      expect(page.loginLinkExists()).toBeTruthy()
+    it 'does not show logout link', ->
+      expect(page.logoutLinkExists()).toBeFalsy()
     it 'shows the login failed message', ->
       expect(page.errors()).toBe 'Login falhou'
     it 'is at the login page', ->
@@ -49,3 +53,7 @@ describe 'Login', ->
       expect(page.errors()).toBe ''
     it 'is at the home page', ->
       expect(browser.location.toString()).toBe "http://localhost:8000/"
+    it 'does not show login link', ->
+      expect(page.loginLinkExists()).toBeFalsy()
+    it 'shows logout link', ->
+      expect(page.logoutLinkExists()).toBeTruthy()

@@ -34,7 +34,10 @@ append content
               input.search-query(type="text",placeholder="Busca Lojas")
         .nav.pull-right
           ul.nav
-            li: a#loginPop.pop(href="#") Login
+            if (!everyauth.loggedIn)
+              li: a#loginPop.pop(href="#") Entrar
+            else
+              li: a#logout(href="/logout") Sair
   #loginPop-head.hide Login Title
   #loginPop-content.hide
     form#popupLoginForm(action='/login', method='post')
