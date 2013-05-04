@@ -1,7 +1,7 @@
-Page = require './pages/page'
+Page = require './page'
+
 module.exports = class AdminCreateStorePage extends Page
-  constructor: (@browser) ->
-  visit: (options, cb) => super "admin#createStore", options, cb
+  url: "admin#createStore"
   setFieldsAs: (store) =>
     @browser.fill "#name", store.name
     @browser.fill "#phoneNumber", store.phoneNumber

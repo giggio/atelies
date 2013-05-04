@@ -12,7 +12,7 @@ describe 'store home page', ->
         if error
           return done error
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1", (error, browser, status) ->
+          browser.storeHomePage.visit "store_1", (error, browser, status) ->
             if error and status isnt 404
               console.error "Error visiting. " + error.stack
               done error
@@ -31,7 +31,7 @@ describe 'store home page', ->
         store = generator.store.a()
         store.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1", done
+          browser.storeHomePage.visit "store_1", done
     it 'should display no products', ->
       expect(browser.query('#products tbody').children.length).toBe 0
 
@@ -47,6 +47,6 @@ describe 'store home page', ->
         product1.save()
         product2.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1", done
+          browser.storeHomePage.visit "store_1", done
     it 'should display the products', ->
       expect(browser.query('#products tbody').children.length).toBe 2

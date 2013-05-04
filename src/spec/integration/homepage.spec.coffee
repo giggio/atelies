@@ -12,7 +12,7 @@ describe 'Home page', ->
       product1.save()
       product2.save()
       whenServerLoaded ->
-        browser.visit "http://localhost:8000/", (error) -> doneError error, done
+        browser.homePage.visit (error) -> doneError error, done
   afterAll ->
     browser.destroy()
   it 'answers with 200', ->

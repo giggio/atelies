@@ -15,7 +15,7 @@ describe 'Store product page', ->
         product1 = generator.product.a()
         product1.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_1#name_1", done
+          browser.storeProductPage.visit "store_1", "name_1", done
     it 'should show the product name', ->
       expect(browser.text("#product#{product1._id} #name")).toBe product1.name
     it 'should show the product picture', ->
@@ -61,7 +61,7 @@ describe 'Store product page', ->
         product1 = generator.product.c()
         product1.save()
         whenServerLoaded ->
-          browser.visit "http://localhost:8000/store_2#name_3", done
+          browser.storeProductPage.visit "store_2", "name_3", done
     it 'does not show the store banner', ->
       expect(browser.query('#storeBanner')).toBeNull()
     it 'shows store name header', ->

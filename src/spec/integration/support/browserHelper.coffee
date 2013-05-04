@@ -1,13 +1,15 @@
 Browser                 = require 'zombie'
-StoreCartPage           = require './storeCartPage'
-StoreProductPage        = require './storeProductPage'
-AdminCreateStorePage    = require './adminCreateStorePage'
-AdminHomePage           = require './adminHomePage'
-LoginPage               = require './loginPage'
-RegisterPage            = require './registerPage'
+HomePage                = require './pages/homePage'
+StoreHomePage           = require './pages/storeHomePage'
+StoreCartPage           = require './pages/storeCartPage'
+StoreProductPage        = require './pages/storeProductPage'
+AdminCreateStorePage    = require './pages/adminCreateStorePage'
+AdminHomePage           = require './pages/adminHomePage'
+LoginPage               = require './pages/loginPage'
+RegisterPage            = require './pages/registerPage'
 
-#Browser.default.htmlParser = require("html5")
-#Browser.maxRedirects = 20
+#parser = require("html5")
+#parser = require("htmlparser2")
 
 exports.selectorLoaded = (w) ->
   w.document.querySelector @selectorSearched
@@ -23,12 +25,14 @@ exports.newBrowser = (browser) ->
   if browser?
     storage = browser.saveStorage()
     browser.destroy()
-  browser = new Browser maxWait: 20
+  browser = new Browser maxWait: 20, site: "http://localhost:8000/"#, htmlParser: parser
   browser.loadStorage storage if storage?
   browser.selectorLoaded = exports.selectorLoaded
   browser.selectorSearched = exports.selectorSearched
   browser.waitSelector = exports.waitSelector
   browser.pressButtonWait = exports.pressButtonWait
+  browser.homePage = new HomePage browser
+  browser.storeHomePage = new StoreHomePage browser
   browser.storeCartPage = new StoreCartPage browser
   browser.storeProductPage = new StoreProductPage browser
   browser.adminCreateStorePage = new AdminCreateStorePage browser
