@@ -1,4 +1,4 @@
-extends layout
+extends homeLayout
 
 append head
   script
@@ -9,20 +9,6 @@ append head
   script(src='javascripts/lib/require.min.js', data-main='javascripts/storeBootstrap.js')
 
 append content
-  .navbar.navbar-inverse.navbar-fixed-top
-    .navbar-inner
-      .container
-        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        .nav-collapse.collapse
-        form.navbar-form.pull-right
-          input.span2(type='text')
-          button.btn(type="submit") Login
-        form.navbar-search.pull-right
-          input.search-query(type="text",placeholder="Busca Produtos")
-
   .container
     if store != null
       section#app-container Carregando...

@@ -1,3 +1,5 @@
+User     = require '../../models/user'
+
 describe 'Login', ->
   userA = browser = page = null
   beforeAll (done) ->
@@ -28,7 +30,7 @@ describe 'Login', ->
     beforeAll (done) ->
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123"
+        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).toBe ''
@@ -42,11 +44,35 @@ describe 'Login', ->
       expect(page.adminLinkExists()).toBeFalsy()
     it 'shows user name', ->
       expect(page.userGreeting()).toBe "Some Person"
+    it 'is saved on database', (done) ->
+      User.findByEmail "some@email.com", (error, user) ->
+        return done error if error
+        expect(user).not.toBeNull()
+        expect(user.name).toBe "Some Person"
+        expect(user.password).toBe "abc123"
+        expect(user.isSeller).toBeFalsy()
+        done()
+  
+  describe 'Can register as seller successfully with correct information', ->
+    beforeAll (done) ->
+      browser = newBrowser browser
+      page = browser.registerPage
+      page.visit (error) ->
+        return done error if error
+        page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "abc123", isSeller: true
+        page.clickRegisterButton done
+    it 'is a seller', (done) ->
+      User.findByEmail "someother@email.com", (error, user) ->
+        return done error if error
+        expect(user).not.toBeNull()
+        expect(user.isSeller).toBeTruthy()
+        done()
+    it 'shows the admin link', ->
+      expect(page.adminLinkExists()).toBeTruthy()
   
   describe "Can't register successfully with existing email information", ->
     beforeAll (done) ->
-      browser.destroy()
-      browser = newBrowser()
+      browser = newBrowser browser
       page = browser.registerPage
       page.visit (error) ->
         return done error if error

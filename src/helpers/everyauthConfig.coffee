@@ -40,6 +40,7 @@ exports.configure = ->
       cb
     extractExtraRegistrationParams: (req) ->
       name: req.body.name
+      isSeller: req.body.isSeller?
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
     User.findById userId, (error, user) ->

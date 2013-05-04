@@ -17,6 +17,10 @@ append content
           div Nome:
           input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
         div
+          div: label
+            input#isSeller(type='checkbox', name="isSeller", value=userParams["isSeller"], checked)
+            | registrar-se como vendedor
+        div
           div Senha:
           input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
         div
