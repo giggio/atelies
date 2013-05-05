@@ -12,6 +12,7 @@ describe 'Admin home page', ->
       userSeller = generator.user.c()
       userSeller.save()
       whenServerLoaded done
+
   describe 'accessing with a logged in and seller user', ->
     browser = page = null
     beforeAll (done) ->
@@ -30,6 +31,19 @@ describe 'Admin home page', ->
       stores = page.stores()
       expect(stores[0].url).toBe "#manageStore/#{store1.slug}"
       expect(stores[1].url).toBe "#manageStore/#{store2.slug}"
+
+  describe 'accessing with a logged in but not a seller user', ->
+    browser = page = null
+    beforeAll (done) ->
+      browser = newBrowser()
+      page = browser.adminHomePage
+      loginPage = browser.loginPage
+      loginPage.visit ->
+        loginPage.loginWith userNonSeller, ->
+          page.visit done
+    afterAll -> browser.destroy()
+    it 'redirects user to login', ->
+      expect(browser.location.toString()).toBe "http://localhost:8000/notseller"
 
   describe 'accessing with an anonymous user', ->
     browser = page = null

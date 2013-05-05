@@ -4,10 +4,14 @@ _           = require 'underscore'
 everyauth   = require 'everyauth'
 
 exports.admin = (req, res) ->
-  if not req.loggedIn or not req?.user?.isSeller
+  unless req.loggedIn
     return res.redirect 'login'
+  unless req.user.isSeller
+    return res.redirect 'notseller'
   Store.find (err, stores) ->
     res.render 'admin', stores: stores
+
+exports.notSeller = (req, res) -> res.render 'notseller'
 
 exports.adminStore = (req, res) ->
   store = Store.create name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner

@@ -10,12 +10,12 @@ describe 'AdminRoute', ->
     routes.admin req, res
     expect(res.render).toHaveBeenCalledWith 'admin', stores: stores
     done()
-  it 'denies access if the user is a seller', ->
+  it 'denies access if the user isnt a seller and shows a message page', ->
     stores = []
     res = createSpyObj 'res', ['redirect']
     req = user: {isSeller:false}, loggedIn: true
     routes.admin req, res
-    expect(res.redirect).toHaveBeenCalledWith 'login'
+    expect(res.redirect).toHaveBeenCalledWith 'notseller'
   it 'denies access if not signed in', ->
     stores = []
     res = createSpyObj 'res', ['redirect']
