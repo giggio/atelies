@@ -9,6 +9,7 @@ exports.start = (cb) ->
   path                = require "path"
   app                 = express()
   everyauthConfig     = require './helpers/everyauthConfig'
+  router              = require './routes/router'
 
   cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
   app.configure "development", ->
@@ -54,11 +55,8 @@ exports.start = (cb) ->
     app.set "views", __dirname + "/views"
     app.set "view engine", "jade"
 
-  app.get "/", routes.index
-  app.get "/admin", routes.admin
-  app.post "/admin/store", routes.adminStore
-  app.get "/:storeSlug", routes.store
-  app.get "/:storeSlug/:productSlug", routes.product
+  router.route app
+
   exports.server = http.createServer(app).listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
     cb(exports.server) if cb
