@@ -1,8 +1,11 @@
 Product     = require '../models/product'
 Store       = require '../models/store'
 _           = require 'underscore'
+everyauth   = require 'everyauth'
 
 exports.admin = (req, res) ->
+  if not everyauth.loggedIn or not req?.user?.isSeller
+    return res.redirect 'login'
   Store.find (err, stores) ->
     res.render 'admin', stores: stores
 
