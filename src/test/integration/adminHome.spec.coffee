@@ -1,6 +1,8 @@
+require './support/_specHelper'
+
 describe 'Admin home page', ->
   userSeller = userNonSeller = store1 = store2 = null
-  beforeAll (done) ->
+  before (done) ->
     cleanDB (error) ->
       return done error if error
       store1 = generator.store.a()
@@ -15,42 +17,40 @@ describe 'Admin home page', ->
 
   describe 'accessing with a logged in and seller user', ->
     browser = page = null
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser()
       page = browser.adminHomePage
-      loginPage = browser.loginPage
-      loginPage.visit ->
-        loginPage.loginWith userSeller, ->
-          page.visit done
-    afterAll -> browser.destroy()
+      browser.loginPage.navigateAndLoginWith userSeller, ->
+        page.visit done
+    after -> browser.destroy()
     it 'allows to create a new store', ->
-      expect(page.createStoreText()).toBe 'Crie uma nova loja'
+      expect(page.createStoreText()).to.equal 'Crie uma nova loja'
     it 'shows existing stores to manage', ->
-      expect(page.storesQuantity()).toBe 2
+      expect(page.storesQuantity()).to.equal 2
     it 'links to store manage pages', ->
       stores = page.stores()
-      expect(stores[0].url).toBe "#manageStore/#{store1.slug}"
-      expect(stores[1].url).toBe "#manageStore/#{store2.slug}"
+      expect(stores[0].url).to.equal "#manageStore/#{store1.slug}"
+      expect(stores[1].url).to.equal "#manageStore/#{store2.slug}"
 
   describe 'accessing with a logged in but not a seller user', ->
     browser = page = null
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser()
       page = browser.adminHomePage
       loginPage = browser.loginPage
       loginPage.visit ->
         loginPage.loginWith userNonSeller, ->
           page.visit done
-    afterAll -> browser.destroy()
+    after -> browser.destroy()
     it 'redirects user to login', ->
-      expect(browser.location.toString()).toBe "http://localhost:8000/notseller"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/notseller"
 
   describe 'accessing with an anonymous user', ->
     browser = page = null
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser()
       page = browser.adminHomePage
       page.visit done
-    afterAll -> browser.destroy()
+    after -> browser.destroy()
     it 'redirects user to login', ->
-      expect(browser.location.toString()).toBe "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/login"

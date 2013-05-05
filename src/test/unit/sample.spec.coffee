@@ -1,4 +1,4 @@
 describe 'something', ->
   it 'should pass', (done) ->
-    expect(true).toBeTruthy()
+    expect(true).to.be.true
     done()

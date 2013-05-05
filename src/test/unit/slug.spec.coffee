@@ -2,21 +2,21 @@ slug = require '../../helpers/slug'
 
 describe 'slug', ->
 	it 'should replace whitespaces with replacement', ->
-		expect(slug('foo bar baz')).toBe 'foo-bar-baz'
-		expect(slug('foo bar baz', '_')).toBe 'foo_bar_baz'
+		expect(slug('foo bar baz')).to.equal 'foo-bar-baz'
+		expect(slug('foo bar baz', '_')).to.equal 'foo_bar_baz'
 	
 	it 'should remove trailing space if any', ->
-		expect(slug(' foo bar baz ')).toBe 'foo-bar-baz'
+		expect(slug(' foo bar baz ')).to.equal 'foo-bar-baz'
 		
 	it 'should remove not allowed chars', ->
-		expect(slug('foo, bar baz')).toBe 'foo-bar-baz'
-		expect(slug('foo- bar baz')).toBe 'foo-bar-baz'
-		expect(slug('foo] bar baz')).toBe 'foo-bar-baz'
+		expect(slug('foo, bar baz')).to.equal 'foo-bar-baz'
+		expect(slug('foo- bar baz')).to.equal 'foo-bar-baz'
+		expect(slug('foo] bar baz')).to.equal 'foo-bar-baz'
 		
 	it 'should leave allowed chars', ->
 		allowed = ['*', '+', '~', '.', '(', ')', '\'', '"', '!', ':', '@']
 		for a in allowed
-			expect(slug("foo #{a} bar baz")).toBe "foo-#{a}-bar-baz"
+			expect(slug("foo #{a} bar baz")).to.equal "foo-#{a}-bar-baz"
 	
 	it 'should replace latin chars', ->
 		char_map = {
@@ -32,7 +32,7 @@ describe 'slug', ->
 		    'ý': 'y', 'þ': 'th', 'ÿ': 'y', 'ẞ': 'SS'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 	
 	it 'should replace greek chars', ->
 		char_map = {
@@ -48,7 +48,7 @@ describe 'slug', ->
 		    'Ϋ':'Y'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 			
 	it 'should replace turkish chars', ->
 		char_map = {
@@ -56,7 +56,7 @@ describe 'slug', ->
 		    'ö':'o', 'Ö':'O', 'ğ':'g', 'Ğ':'G'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 	
 	it 'should replace cyrillic chars', ->
 		char_map = {
@@ -74,7 +74,7 @@ describe 'slug', ->
 		for char, replacement of char_map
 			expected = "foo-#{replacement}-bar-baz"
 			expected = "foo-bar-baz" if not replacement
-			expect(slug("foo #{char} bar baz")).toBe expected
+			expect(slug("foo #{char} bar baz")).to.equal expected
 			
 	it 'should replace czech chars', ->
 		char_map = {
@@ -83,7 +83,7 @@ describe 'slug', ->
 		    'Ů':'U', 'Ž':'Z'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 			
 	it 'should replace polish chars', ->
 		char_map = {
@@ -92,7 +92,7 @@ describe 'slug', ->
 		    'Ź':'Z', 'Ż':'Z'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 			
 	it 'should replace latvian chars', ->
 		char_map = {
@@ -101,7 +101,7 @@ describe 'slug', ->
 		    'Ķ':'k', 'Ļ':'L', 'Ņ':'N', 'Š':'S', 'Ū':'u', 'Ž':'Z'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 			
 	it 'should replace currencies', ->
 		char_map = {
@@ -115,7 +115,7 @@ describe 'slug', ->
 		}
 		for char, replacement of char_map
 			replacement = replacement.replace ' ', '-'
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"
 			
 	it 'should replace symbols', ->
 		char_map = {
@@ -126,4 +126,4 @@ describe 'slug', ->
 		    '<': 'less', '>': 'greater'
 		}
 		for char, replacement of char_map
-			expect(slug("foo #{char} bar baz")).toBe "foo-#{replacement}-bar-baz"
+			expect(slug("foo #{char} bar baz")).to.equal "foo-#{replacement}-bar-baz"

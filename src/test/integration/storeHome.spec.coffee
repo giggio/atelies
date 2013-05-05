@@ -1,12 +1,13 @@
+require './support/_specHelper'
 Store     = require '../../models/store'
 Product   = require '../../models/product'
 
 describe 'store home page', ->
   browser = null
   store = null
-  afterAll -> browser.destroy() if browser?
+  after -> browser.destroy() if browser?
   describe 'when store doesnt exist', (done) ->
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
         if error
@@ -19,12 +20,12 @@ describe 'store home page', ->
             else
               done()
     it 'should display not found', ->
-      expect(browser.text(".page-header")).toBe 'Loja não existe'
+      expect(browser.text(".page-header")).to.equal 'Loja não existe'
     it 'should return a not found status code', ->
-      expect(browser.statusCode).toBe 404
+      expect(browser.statusCode).to.equal 404
     
   describe 'when store exists and has no products', (done) ->
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
         return done error if error
@@ -33,10 +34,10 @@ describe 'store home page', ->
         whenServerLoaded ->
           browser.storeHomePage.visit "store_1", done
     it 'should display no products', ->
-      expect(browser.query('#products tbody').children.length).toBe 0
+      expect(browser.query('#products tbody').children.length).to.equal 0
 
   describe 'when store exists and has products', (done) ->
-    beforeAll (done) ->
+    before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
         return done error if error
@@ -49,4 +50,4 @@ describe 'store home page', ->
         whenServerLoaded ->
           browser.storeHomePage.visit "store_1", done
     it 'should display the products', ->
-      expect(browser.query('#products tbody').children.length).toBe 2
+      expect(browser.query('#products tbody').children.length).to.equal 2

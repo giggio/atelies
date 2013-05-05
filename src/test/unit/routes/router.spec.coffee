@@ -3,6 +3,6 @@ routes = require '../../../routes/index'
 
 describe 'Router', ->
   it 'should route admin', ->
-    app = createSpyObj 'app', ['get', 'post']
+    app = get: sinon.spy(), post: sinon.spy()
     router.route app
-    expect(app.get).toHaveBeenCalledWith '/admin', routes.admin
+    app.get.should.have.been.calledWith '/admin', routes.admin

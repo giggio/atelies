@@ -1,6 +1,8 @@
+require './support/_specHelper'
+
 describe 'Login', ->
   userA = userB = userSellerC = browser = page = null
-  beforeAll (done) ->
+  before (done) ->
     browser = newBrowser()
     page = browser.loginPage
     cleanDB (error) ->
@@ -12,53 +14,53 @@ describe 'Login', ->
       userSellerC = generator.user.c()
       userSellerC.save()
       whenServerLoaded done
-  afterAll -> browser.destroy()
+  after -> browser.destroy()
 
   describe 'Login in with unknown user fails', ->
-    beforeAll (done) ->
+    before (done) ->
       page.visit (error) ->
         return done error if error
         page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
         page.clickLoginButton done
     it 'shows login link', ->
-      expect(page.loginLinkExists()).toBeTruthy()
+      expect(page.loginLinkExists()).to.be.true
     it 'does not show logout link', ->
-      expect(page.logoutLinkExists()).toBeFalsy()
+      expect(page.logoutLinkExists()).to.be.false
     it 'shows the login failed message', ->
-      expect(page.errors()).toBe 'Login falhou'
+      expect(page.errors()).to.equal 'Login falhou'
     it 'is at the login page', ->
-      expect(browser.location.toString()).toBe "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/login"
     it 'does not show admin link', ->
-      expect(page.adminLinkExists()).toBeFalsy()
+      expect(page.adminLinkExists()).to.be.false
 
   describe 'Must supply name and password or form is not submitted', ->
-    beforeAll (done) ->
+    before (done) ->
       page.visit (error) ->
         return done error if error
         page.clickLoginButton done
     it 'does not show the login failed message', ->
-      expect(page.errors()).toBe ''
+      expect(page.errors()).to.equal ''
     it 'is at the login page', ->
-      expect(browser.location.toString()).toBe "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/login"
     it 'Required messages are shown', ->
-      expect(page.emailRequired()).toBe "Informe seu e-mail."
-      expect(page.passwordRequired()).toBe "Informe sua senha."
+      expect(page.emailRequired()).to.equal "Informe seu e-mail."
+      expect(page.passwordRequired()).to.equal "Informe sua senha."
 
   describe 'Can login successfully with regular user', ->
-    beforeAll (done) ->
+    before (done) ->
       page.visit (error) ->
         return done error if error
         page.setFieldsAs userA
         page.clickLoginButton done
     it 'does not show the login failed message', ->
-      expect(page.errors()).toBe ''
+      expect(page.errors()).to.equal ''
     it 'is at the home page', ->
-      expect(browser.location.toString()).toBe "http://localhost:8000/"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/"
     it 'does not show login link', ->
-      expect(page.loginLinkExists()).toBeFalsy()
+      expect(page.loginLinkExists()).to.be.false
     it 'shows logout link', ->
-      expect(page.logoutLinkExists()).toBeTruthy()
+      expect(page.logoutLinkExists()).to.be.true
     it 'does not show admin link', ->
-      expect(page.adminLinkExists()).toBeFalsy()
+      expect(page.adminLinkExists()).to.be.false
     it 'shows user name', ->
-      expect(page.userGreeting()).toBe userA.name
+      expect(page.userGreeting()).to.equal userA.name

@@ -44,7 +44,7 @@ exports.cleanDB = (cb) ->
       conn.close()
       cb()
 
-beforeAllSpecs (done) ->
+before (done) ->
   process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}"
   exports.patchEventEmitterToHideMaxListenerWarning()
   exports.cleanDB (err) ->
@@ -55,7 +55,7 @@ beforeAllSpecs (done) ->
       done err if err
       done()
 
-afterAll ->
+after ->
   if exports._server
     app.stop()
   else

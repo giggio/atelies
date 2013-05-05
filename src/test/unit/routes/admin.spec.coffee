@@ -2,23 +2,22 @@ routes      = require '../../../routes'
 Store       = require '../../../models/store'
 
 describe 'AdminRoute', ->
-  it 'allows access and renders all the stores if signed in and seller', (done) ->
+  it 'allows access and renders all the stores if signed in and seller', ->
     stores = []
-    spyOn(Store, "find").andCallFake (cb) -> cb null, stores
+    sinon.stub(Store, "find").yields null, stores
     req = user: {isSeller:true}, loggedIn: true
-    res = createSpyObj 'res', ['render']
+    res = render: sinon.spy()
     routes.admin req, res
-    expect(res.render).toHaveBeenCalledWith 'admin', stores: stores
-    done()
+    res.render.should.have.been.calledWith 'admin', stores:stores
   it 'denies access if the user isnt a seller and shows a message page', ->
     stores = []
-    res = createSpyObj 'res', ['redirect']
+    res = redirect:sinon.spy()
     req = user: {isSeller:false}, loggedIn: true
     routes.admin req, res
-    expect(res.redirect).toHaveBeenCalledWith 'notseller'
+    res.redirect.should.have.been.calledWith 'notseller'
   it 'denies access if not signed in', ->
     stores = []
-    res = createSpyObj 'res', ['redirect']
+    res = redirect: sinon.spy()
     req = loggedIn: false
     routes.admin req, res
-    expect(res.redirect).toHaveBeenCalledWith 'login'
+    res.redirect.should.have.been.calledWith 'login'

@@ -1,11 +1,3 @@
-require './jasmineMatchersHelper'
-jasmineBeforeAfterHelper      = require './jasmineBeforeAfterHelper'
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 40000
-
-for key,value of jasmineBeforeAfterHelper
-  exports[key] = value
-
 exports.whenDone = (condition, callback) ->
   if condition()
     setImmediate callback
