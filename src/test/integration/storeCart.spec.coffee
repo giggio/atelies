@@ -4,7 +4,7 @@ Product   = require '../../models/product'
 
 describe 'Store shopping cart page', ->
   store = product1 = product2 = store2 = product3 = browser = null
-  afterEach -> browser.destroy() if browser?
+  #after -> browser.destroy() if browser?
   before (done) =>
     cleanDB (error) ->
       return done error if error
@@ -40,8 +40,9 @@ describe 'Store shopping cart page', ->
               expect(browser.storeCartPage.name()).to.equal product1.name
               expect(browser.storeCartPage.quantity()).to.equal 1
               done()
+
   describe 'when add two items to cart', ->
-    it 'adds two items to cart', (done) ->
+    before (done) ->
       browser = newBrowser()
       whenServerLoaded ->
         browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
@@ -52,12 +53,11 @@ describe 'Store shopping cart page', ->
               browser.storeProductPage.purchaseItem ->
                 #it 'is at the cart location', ->
                 expect(browser.location.toString()).to.equal "http://localhost:8000/store_1#cart"
-                browser.reload ->
-                  #it 'shows a cart with one item', ->
-                  expect(browser.storeCartPage.itemsQuantity()).to.equal 1
-                  #it 'shows quantity of two', ->
-                  expect(browser.storeCartPage.quantity()).to.equal 2
-                  done()
+                browser.reload done
+    it 'shows a cart with one item', ->
+      expect(browser.storeCartPage.itemsQuantity()).to.equal 1
+    it 'shows quantity of two', ->
+      expect(browser.storeCartPage.quantity()).to.equal 2
   
   describe 'when working with a cart with products from different stores', ->
     before (done) =>
