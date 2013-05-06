@@ -67,6 +67,13 @@ exports.generator =
       city: "Fortaleza"
       state: "CE"
       otherUrl: 'http://someotherurl.com'
+    c: -> new Store
+      name: 'Store 3'
+      slug: 'store_3'
+      phoneNumber: '(77) 9999-9999'
+      city: "Manaus"
+      state: "AM"
+      otherUrl: 'http://idontownthisstore.com'
     empty: -> new Store
       name: ''
       slug: ''
@@ -79,12 +86,17 @@ exports.generator =
       email: 'a@a.com'
       password: 'abc'
       name: 'Some Guy'
+      isSeller: false
+      stores: []
     b: -> new User
       email: 'b@a.com'
       password: 'def'
       name: 'Other Person'
+      isSeller: false
+      stores: []
     c: -> new User
       email: 'c@a.com'
       password: 'ghi'
       name: 'Another Seller'
       isSeller: true
+      stores: []

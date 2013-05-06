@@ -5,6 +5,7 @@ userSchema = new mongoose.Schema
   email:        type: String, required: true
   password:     type: String, required: true
   isSeller:     type: Boolean, default: false
+  stores:       [{type: mongoose.Schema.Types.ObjectId, ref: 'store'}]
 
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb

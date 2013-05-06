@@ -9,3 +9,4 @@ exportAll require './waitHelper'
 
 global.exportAll = exportAll
 exports.exportAll = exportAll
+global.print = console.log

@@ -9,13 +9,17 @@ describe 'Admin home page', ->
       store1.save()
       store2 = generator.store.b()
       store2.save()
+      store3 = generator.store.c()
+      store3.save()
       userNonSeller = generator.user.a()
       userNonSeller.save()
       userSeller = generator.user.c()
+      userSeller.stores.push store1
+      userSeller.stores.push store2
       userSeller.save()
       whenServerLoaded done
 
-  describe 'accessing with a logged in and seller user', ->
+  describe.only 'accessing with a logged in and seller user', ->
     browser = page = null
     before (done) ->
       browser = newBrowser()
@@ -25,7 +29,7 @@ describe 'Admin home page', ->
     after -> browser.destroy()
     it 'allows to create a new store', ->
       expect(page.createStoreText()).to.equal 'Crie uma nova loja'
-    it 'shows existing stores to manage', ->
+    it 'shows existing user stores to manage', ->
       expect(page.storesQuantity()).to.equal 2
     it 'links to store manage pages', ->
       stores = page.stores()

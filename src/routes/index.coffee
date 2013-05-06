@@ -8,8 +8,8 @@ exports.admin = (req, res) ->
     return res.redirect 'login'
   unless req.user.isSeller
     return res.redirect 'notseller'
-  Store.find (err, stores) ->
-    res.render 'admin', stores: stores
+  req.user.populate 'stores', (err, user) ->
+    res.render 'admin', stores: user.stores
 
 exports.notSeller = (req, res) -> res.render 'notseller'
 
