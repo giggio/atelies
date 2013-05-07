@@ -1,5 +1,7 @@
 require './globals'
-require './expressExtensions'
+require './helpers/expressExtensions'
+require './helpers/languageExtensions'
+
 mongoose        = require 'mongoose'
 everyauth           = require 'everyauth'
 exports.start = (cb) ->

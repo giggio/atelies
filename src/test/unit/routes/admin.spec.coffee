@@ -23,7 +23,7 @@ describe 'AdminRoute', ->
       routes.admin req, res
       res.redirect.should.have.been.calledWith 'login'
   describe 'Shows correct content', ->
-    it 'only user stores are shown', ->
+    it 'only user stories are shown', ->
       stores = [1]
       user = isSeller:true, stores: []
       user.populate = (path, cb) ->

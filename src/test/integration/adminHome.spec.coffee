@@ -19,7 +19,7 @@ describe 'Admin home page', ->
       userSeller.save()
       whenServerLoaded done
 
-  describe.only 'accessing with a logged in and seller user', ->
+  describe 'accessing with a logged in and seller user', ->
     browser = page = null
     before (done) ->
       browser = newBrowser()

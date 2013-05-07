@@ -11,6 +11,10 @@ storeSchema = new mongoose.Schema
   otherUrl:     String
   banner:       String
 
+storeSchema.path('name').set (val) ->
+  @slug = slug val.toLowerCase(), "_"
+  val
+
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
 Store.findWithProductsBySlug = (slug, cb) ->
@@ -20,9 +24,5 @@ Store.findWithProductsBySlug = (slug, cb) ->
     Product.findByStoreSlug slug, (err, products) ->
       return cb err if err
       cb null, store, products
-Store.create = (o) =>
-  store = new Store name: o.name, phoneNumber: o.phoneNumber, city: o.city, state: o.state, otherUrl: o.otherUrl, banner: o.banner
-  store.slug = slug store.name.toLowerCase(), "_"
-  store
 
 module.exports = Store

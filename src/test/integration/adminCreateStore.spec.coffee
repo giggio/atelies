@@ -1,5 +1,6 @@
 require './support/_specHelper'
 Store     = require '../../models/store'
+User      = require '../../models/user'
 
 describe 'Admin home page', ->
   exampleStore = userSeller = browser = null
@@ -33,6 +34,11 @@ describe 'Admin home page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.banner).to.equal exampleStore.banner
+        done()
+    it 'added the store to the user', (done) ->
+      User.findById userSeller.id, (err, user) ->
+        return done err if err
+        user.stores.length.should.equal 1
         done()
 
   describe 'does not create a store (missing or wrong info)', (done) ->

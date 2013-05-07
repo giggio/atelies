@@ -1,7 +1,8 @@
-Product     = require '../models/product'
-Store       = require '../models/store'
-_           = require 'underscore'
-everyauth   = require 'everyauth'
+Product         = require '../models/product'
+Store           = require '../models/store'
+_               = require 'underscore'
+everyauth       = require 'everyauth'
+AccessDenied    = require '../errors/accessDenied'
 
 exports.admin = (req, res) ->
   unless req.loggedIn
@@ -14,11 +15,21 @@ exports.admin = (req, res) ->
 exports.notSeller = (req, res) -> res.render 'notseller'
 
 exports.adminStore = (req, res) ->
-  store = Store.create name: req.body.name, phoneNumber: req.body.phoneNumber, city: req.body.city, state: req.body.state, otherUrl: req.body.otherUrl, banner: req.body.banner
+  unless req.loggedIn and req.user?.isSeller
+    throw new AccessDenied()
+  store = req.user.createStore()
+  store.name = req.body.name
+  store.phoneNumber = req.body.phoneNumber
+  store.city = req.body.city
+  store.state = req.body.state
+  store.otherUrl = req.body.otherUrl
+  store.banner = req.body.banner
   store.save (err) ->
-    if err?
-      res.json 400, err
-    else
+    return res.json 400, err if err?
+    req.user.save (err) ->
+      if err?
+        store.remove()
+        return res.json 400
       res.json 201, store
 
 exports.index = (req, res) ->
