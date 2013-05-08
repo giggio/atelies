@@ -32,3 +32,9 @@ describe 'Admin Manage Store page', ->
       products[0].picture.should.equal product1.picture
     it 'shows store name', ->
       page.storeName().should.equal store.name
+    it 'allows to create new product', ->
+      page.createProductLink().href.endsWith("#createProduct/#{store.slug}").should.be.true
+    it 'allows to edit products', ->
+      products = page.products()
+      products[0].manageLink.should.equal "#manageProduct/#{store.slug}/#{product1.slug}"
+      products[1].manageLink.should.equal "#manageProduct/#{store.slug}/#{product2.slug}"

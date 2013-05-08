@@ -13,5 +13,7 @@ module.exports = class AdminHomePage extends Page
     products = []
     for row in rows
       id = $('td:first-child', row).text()
-      products.push picture: $('img', row).attr('src'), name: $("#product#{id}_name", row).text()
+      products.push id: id, picture: $('img', row).attr('src'), name: $("#product#{id}_name", row).text(), manageLink: $("#product#{id}_name a", row).attr('href')
     products
+  createProductLink: =>
+    @browser.query('#createProduct')
