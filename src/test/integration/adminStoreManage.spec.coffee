@@ -3,7 +3,7 @@ Store     = require '../../models/store'
 Product   = require '../../models/product'
 User      = require '../../models/user'
 
-describe 'Admin Manage Store page', ->
+xdescribe 'Admin Manage Store page', ->
   page = product1 = product2 = store = userSeller = browser = null
   before (done) -> whenServerLoaded done
   after -> browser.destroy() if browser?
@@ -25,7 +25,7 @@ describe 'Admin Manage Store page', ->
         browser.loginPage.navigateAndLoginWith userSeller, ->
           page.visit store.slug, ->
             browser.reload done
-    xit 'shows store products', ->
+    it 'shows store products', ->
       products = page.products()
       products.length.should.equal 2
       products[0].name.should.equal product1.name

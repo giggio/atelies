@@ -8,7 +8,6 @@
       <th>Id</th>
       <th>Nome</th>
       <th>Foto</th>
-      <th>Loja</th>
     </tr>
   </thead>
   <tbody>
@@ -17,7 +16,6 @@
       <td id="product{{this._id}}">{{this._id}}</td>
       <td id="product{{this._id}}_name"><a href="{{this.url}}">{{this.name}}</a></td>
       <td><a id="product{{this._id}}_picture" href="{{this.url}}"><img src="{{this.picture}}" alt="{{this.name}}" /></a></td>
-      <td id="product{{this._id}}_store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></td>
     </tr>
   {{/each}}
   </tbody>
