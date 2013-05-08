@@ -12,5 +12,6 @@ module.exports = class AdminHomePage extends Page
     rows = @rows()
     products = []
     for row in rows
-      products.push picture: $('img', row).attr 'src', name: $('.productName', row).text()
+      id = $('td:first-child', row).text()
+      products.push picture: $('img', row).attr('src'), name: $("#product#{id}_name", row).text()
     products

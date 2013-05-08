@@ -25,4 +25,4 @@ define [
       it 'shows products', ->
         expect($("#products > tbody > tr", el).length).toBe products.length
       it 'should go to the products url', ->
-        expect(url).toBe "/#{store.slug}"
+        expect(url).toBe "/#{store.slug}/products"

@@ -13,9 +13,9 @@
   <tbody>
   {{#each products}}
     <tr>
-      <td id="product{{this._id}}">{{this._id}}</td>
-      <td id="product{{this._id}}_name"><a href="{{this.url}}">{{this.name}}</a></td>
-      <td><a id="product{{this._id}}_picture" href="{{this.url}}"><img src="{{this.picture}}" alt="{{this.name}}" /></a></td>
+      <td id="product{{_id}}">{{_id}}</td>
+      <td id="product{{_id}}_name"><a href="#manageProduct/{{manageUrl}}">{{name}}</a></td>
+      <td><a id="product{{_id}}_picture" href="#manageProduct/{{manageUrl}}"><img src="{{picture}}" alt="{{name}}" /></a></td>
     </tr>
   {{/each}}
   </tbody>

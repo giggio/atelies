@@ -5,4 +5,4 @@ define [
   class Products extends Backbone.Collection
     constructor: (@storeSlug) -> super()
     model: Product
-    url: -> "/#{@storeSlug}"
+    url: -> "/#{@storeSlug}/products"

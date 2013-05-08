@@ -47,6 +47,12 @@ exports.store = (req, res) ->
       #console.log html
       res.send html
 
+exports.storeProducts = (req, res) ->
+  Product.findByStoreSlug req.params.storeSlug, (err, products) ->
+    dealWith err
+    viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+    res.json viewModelProducts
+
 exports.product = (req, res) ->
   Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->
     dealWith err

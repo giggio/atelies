@@ -3,7 +3,7 @@ Store     = require '../../models/store'
 Product   = require '../../models/product'
 User      = require '../../models/user'
 
-xdescribe 'Admin Manage Store page', ->
+describe 'Admin Manage Store page', ->
   page = product1 = product2 = store = userSeller = browser = null
   before (done) -> whenServerLoaded done
   after -> browser.destroy() if browser?
