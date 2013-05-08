@@ -1,4 +1,24 @@
 {{#if justCreated}}
 <div id="message">Loja criada com sucesso</div>
 {{/if}}
-<h2>{{storeSlug}}</h2>
+<h2 id="name">{{store.name}}</h2>
+<table id="products">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Nome</th>
+      <th>Foto</th>
+      <th>Loja</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each products}}
+    <tr>
+      <td id="product{{this._id}}">{{this._id}}</td>
+      <td id="product{{this._id}}_name"><a href="{{this.url}}">{{this.name}}</a></td>
+      <td><a id="product{{this._id}}_picture" href="{{this.url}}"><img src="{{this.picture}}" alt="{{this.name}}" /></a></td>
+      <td id="product{{this._id}}_store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>

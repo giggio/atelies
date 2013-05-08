@@ -11,6 +11,7 @@ define [
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
+        global.adminStoresBootstrapModel = stores:[]
         createStoreView = new CreateStoreView el:el
         spyOn($, "ajax").andCallFake (opt) ->
           storePassedIn = JSON.parse opt.data
@@ -35,6 +36,8 @@ define [
         expect(storePassedIn.state).toBe store.state
         expect(storePassedIn.otherUrl).toBe store.otherUrl
         expect(storePassedIn.banner).toBe store.banner
+      it 'adds store to stores in the bootstrapped model', ->
+        expect(global.adminStoresBootstrapModel.stores[0]).toEqual store
 
     describe 'invalid Store does not get created', ->
       ajaxSpy = goToStoreManagePageSpy = null

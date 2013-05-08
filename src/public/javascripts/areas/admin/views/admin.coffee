@@ -9,10 +9,10 @@ define [
       'click #createStore': -> Backbone.history.navigate 'createStore', true
     template: adminTemplate
     initialize: (opt) =>
-      if adminStoresBootstrapModel?
-        @stores = adminStoresBootstrapModel.stores
-      else if opt?.stores?
+      if opt?.stores?
         @stores = opt.stores
+      else if adminStoresBootstrapModel?
+        @stores = adminStoresBootstrapModel.stores
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
