@@ -1,8 +1,11 @@
 define [
+  'jquery'
   'backbone'
   './product'
-], (Backbone, Product) ->
+], ($, Backbone, Product) ->
   class Products extends Backbone.Collection
-    constructor: (@storeSlug) -> super()
+    initialize: (models, opt) ->
+      [opt, models] = [models, opt] unless $.isArray models
+      @storeSlug = opt.storeSlug
     model: Product
     url: -> "/#{@storeSlug}/products"

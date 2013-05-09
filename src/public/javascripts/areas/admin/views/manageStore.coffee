@@ -19,7 +19,7 @@ define [
         return @$el.html context error:err if err?
         @$el.html context store:@store, products:products.toJSON(), justCreated:justCreated
     _findProducts: (store, cb) =>
-      products = new Products store.slug
+      products = new Products storeSlug: store.slug
       products.fetch
         reset: true
         success: -> cb null, products

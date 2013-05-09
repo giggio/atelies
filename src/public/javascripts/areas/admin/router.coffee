@@ -8,5 +8,6 @@ define [
       '': routes.admin
       'createStore': routes.createStore
       'manageStore/:storeSlug': routes.manageStore
+      'manageProduct/:storeSlug/:productId': routes.manageProduct
     initialize: ->
       Backbone.history.start()

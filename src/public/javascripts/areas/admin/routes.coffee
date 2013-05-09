@@ -3,7 +3,8 @@ define [
   './views/admin'
   './views/createStore'
   './views/manageStore'
-],($, AdminView, CreateStoreView, ManageStoreView) ->
+  './views/manageProduct'
+],($, AdminView, CreateStoreView, ManageStoreView, ManageProductView) ->
   admin: ->
     homeView = new AdminView el:$ "#app-container"
     homeView.render()
@@ -13,3 +14,6 @@ define [
   manageStore: (storeSlug) ->
     manageStoreView = new ManageStoreView el:$("#app-container"), storeSlug: storeSlug
     manageStoreView.render()
+  manageProduct: (storeSlug, productId) ->
+    manageProductView = new ManageProductView el:$('#app-container'), storeSlug: storeSlug, productId: productId
+    manageProductView.render()

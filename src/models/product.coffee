@@ -18,7 +18,7 @@ productSchema = new mongoose.Schema
   inventory: Number
 
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
-productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@slug}"
+productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.toSimpleProduct = ->
   _id: @_id, name: @name, picture: @picture, price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
