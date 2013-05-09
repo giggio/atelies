@@ -15,10 +15,13 @@ module.exports = class AdminHomePage extends Page
       tags: $("#tags", el).val()
       description: $("#description", el).val()
       dimensions:
-        height: $("#height", el).val()
-        width: $("#width", el).val()
-        depth: $("#depth", el).val()
-      weight: $("#weight", el).val()
+        height: parseInt $("#height", el).val()
+        width: parseInt $("#width", el).val()
+        depth: parseInt $("#depth", el).val()
+      weight: parseInt $("#weight", el).val()
       hasInventory: $("#hasInventory", el).prop('checked')
-      inventory: $("#inventory", el).val()
+      inventory: parseInt $("#inventory", el).val()
     product
+  setFieldsAs: (product) =>
+    @browser.fill "#name", product.name
+  clickUpdateProduct: (cb) => @browser.pressButton "#updateProduct", cb
