@@ -2,12 +2,12 @@ $ = require 'jquery'
 Page = require './page'
 
 module.exports = class AdminHomePage extends Page
-  visit: (storeSlug, productSlug, options, cb) -> super "admin#manageProduct/#{storeSlug}/#{productSlug}", options, cb
+  visit: (storeSlug, productId, options, cb) -> super "admin#manageProduct/#{storeSlug}/#{productId}", options, cb
   product: =>
-    el = @browser.query('#product')
-    id = $('td:first-child', row).text()
+    el = @browser.query('#editProduct')
+    id = $('#_id', el).text()
     product =
-      id: id
+      _id: id
       name: $("#name", el).val()
       price: $("#price", el).val()
       slug: $("#slug", el).text()

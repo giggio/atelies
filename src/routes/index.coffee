@@ -53,6 +53,11 @@ exports.storeProducts = (req, res) ->
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
     res.json viewModelProducts
 
+exports.storeProduct = (req, res) ->
+  Product.findById req.params.productId, (err, product) ->
+    dealWith err
+    res.json product.toSimpleProduct()
+
 exports.product = (req, res) ->
   Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->
     dealWith err

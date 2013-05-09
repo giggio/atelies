@@ -1,4 +1,5 @@
 mongoose = require 'mongoose'
+slug     = require '../helpers/slug'
 
 productSchema = new mongoose.Schema
   name:       String
@@ -17,13 +18,16 @@ productSchema = new mongoose.Schema
   hasInventory: Boolean
   inventory: Number
 
+productSchema.path('name').set (val) ->
+  @slug = slug val.toLowerCase(), "_"
+  val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.toSimpleProduct = ->
   _id: @_id, name: @name, picture: @picture, price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), tags: @tags.join ', '
-  manageUrl: @manageUrl()
+  manageUrl: @manageUrl(), slug: @slug
   description: @description, dimensions: @dimensions, weight: @weight
   hasInventory: @hasInventory, inventory: @inventory
 

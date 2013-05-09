@@ -7,4 +7,5 @@ exports.route = (app) ->
   app.get "/notseller", routes.notSeller
   app.get "/:storeSlug", routes.store
   app.get "/:storeSlug/products", routes.storeProducts
+  app.get "/:storeSlug/products/:productId", routes.storeProduct
   app.get "/:storeSlug/:productSlug", routes.product
