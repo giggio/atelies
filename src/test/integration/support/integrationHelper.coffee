@@ -1,15 +1,5 @@
-#helper      = require './specHelper'
 mongoose    = require 'mongoose'
 app         = require '../../../app'
-
-exports.patchEventEmitterToHideMaxListenerWarning = ->
-  return if exports.eventEmitterPatched
-  exports.eventEmitterPatched = true
-  events = require('events')
-  Old = events.EventEmitter
-  events.EventEmitter = ->
-    this.setMaxListeners(0)
-  events.EventEmitter:: = Old::
 
 exports.localMongoDB = "mongodb://localhost/openstore"
 
