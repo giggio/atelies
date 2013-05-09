@@ -12,4 +12,13 @@ module.exports = class AdminHomePage extends Page
       price: $("#price", el).val()
       slug: $("#slug", el).text()
       picture: $("#picture", el).val()
+      tags: $("#tags", el).val()
+      description: $("#description", el).val()
+      dimensions:
+        height: $("#height", el).val()
+        width: $("#width", el).val()
+        depth: $("#depth", el).val()
+      weight: $("#weight", el).val()
+      hasInventory: $("#hasInventory", el).prop('checked')
+      inventory: $("#inventory", el).val()
     product

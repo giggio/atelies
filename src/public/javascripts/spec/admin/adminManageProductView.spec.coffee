@@ -23,3 +23,11 @@ define [
         expect($("#price", el).val()).toBe product.price.toString()
         expect($("#slug", el).text()).toBe product.slug
         expect($("#picture", el).val()).toBe product.picture
+        expect($("#tags", el).val()).toBe product.tags
+        expect($("#description", el).val()).toBe product.description
+        expect($("#height", el).val()).toBe product.dimensions.height.toString()
+        expect($("#width", el).val()).toBe product.dimensions.width.toString()
+        expect($("#depth", el).val()).toBe product.dimensions.depth.toString()
+        expect($("#weight", el).val()).toBe product.weight.toString()
+        expect($("#hasInventory", el).prop('checked')).toBe product.hasInventory
+        expect($("#inventory", el).val()).toBe product.inventory.toString()

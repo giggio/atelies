@@ -1,8 +1,22 @@
 <h2>Editando o product {{product.name}}:</h2>
+{{#with product}}
 <div id="editProduct">
-  <div>Id: <span id="_id">{{product._id}}</span></div>
-  <div>Slug: <span id="slug">{{product.slug}}</span></div>
-  <div>Name: <input type="text" id="name" value="{{product.name}}" /></div>
-  <div>Price: <input type="text" id="price" value="{{product.price}}"/></div>
-  <div>Picture: <input type="text" id="picture" value="{{product.picture}}" /></div>
+  <div>Id: <span id="_id">{{_id}}</span></div>
+  <div>Slug: <span id="slug">{{slug}}</span></div>
+  <div>Nome: <input type="text" id="name" value="{{name}}" /></div>
+  <div>Preço: <input type="text" id="price" value="{{price}}"/></div>
+  <div>Foto: <input type="text" id="picture" value="{{picture}}" /></div>
+  <div>Tags: <input type="text" id="tags" value="{{tags}}" /></div>
+  <div>Descrição: <textarea id="description" rows="8" cols="150">{{description}}</textarea></div>
+  {{#with dimensions}}
+  <div>Dimensões:
+    <p>Altura:<input type="text" id="height" value="{{height}}" /></p>
+    <p>Largura:<input type="text" id="width" value="{{width}}" /></p>
+    <p>Profundidade:<input type="text" id="depth" value="{{depth}}" /></p>
+  </div>
+  {{/with}}
+  <div>Peso: <input type="text" id="weight" value="{{weight}}" /></div>
+  <div>Possui estoque: <input type="checkbox" id="hasInventory" {{#if hasInventory}} checked="checked" {{/if}} /></div>
+  <div>Estoque: <input type="text" id="inventory" value="{{inventory}}" /></div>
 </div>
+{{/with}}

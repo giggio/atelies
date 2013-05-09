@@ -30,3 +30,9 @@ describe 'Admin Manage Product page', ->
       product.price.should.equal product.price
       product.slug.should.equal product.slug
       product.picture.should.equal product.picture
+      product.tags.should.equal product.tags
+      product.description.should.equal product.description
+      product.dimensions.should.equal product.dimensions
+      product.weight.should.equal product.weight
+      product.hasInventory.should.equal product.hasInventory
+      product.inventory.should.equal product.inventory
