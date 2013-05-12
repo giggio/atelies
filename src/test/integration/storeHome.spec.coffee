@@ -10,11 +10,10 @@ describe 'store home page', ->
     before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
-        if error
-          return done error
+        return done error if error
         whenServerLoaded ->
-          browser.storeHomePage.visit "store_1", (error, browser, status) ->
-            if error and status isnt 404
+          browser.storeHomePage.visit "store_1", silent:on, (error) ->
+            if error and browser.statusCode isnt 404
               console.error "Error visiting. " + error.stack
               done error
             else

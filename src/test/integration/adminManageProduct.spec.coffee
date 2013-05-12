@@ -23,13 +23,9 @@ describe 'Admin Manage Product page', ->
       browser = newBrowser browser
       page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
-        page.visit store.slug, product._id.toString(), ->
-          browser.reload done
+        page.visit store.slug, product._id.toString(), done
     it 'shows product', ->
-      browser.showHtml()
       aproduct = page.product()
-      console.log aproduct
-      console.log product
       aproduct._id.should.equal product._id.toString()
       aproduct.name.should.equal product.name
       aproduct.price.should.equal product.price.toString()
@@ -52,9 +48,8 @@ describe 'Admin Manage Product page', ->
       page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, product._id.toString(), ->
-          browser.reload ->
-            page.setFieldsAs otherProduct
-            page.clickUpdateProduct done
+          page.setFieldsAs otherProduct
+          page.clickUpdateProduct done
     it 'is at the store manage page', ->
       browser.location.href.should.equal "http://localhost:8000/admin#storeManage/#{product.storeSlug}"
     it 'updated the product', (done) ->

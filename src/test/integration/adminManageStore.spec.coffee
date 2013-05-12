@@ -23,8 +23,7 @@ describe 'Admin Manage Store page', ->
         browser = newBrowser browser
         page = browser.adminManageStorePage
         browser.loginPage.navigateAndLoginWith userSeller, ->
-          page.visit store.slug, ->
-            browser.reload done
+          page.visit store.slug, done
     it 'shows store products', ->
       products = page.products()
       products.length.should.equal 2
