@@ -8,9 +8,9 @@ define [
 ], ($, Backbone, Handlebars, Products, productTemplate, Cart) ->
   class ProductView extends Backbone.View
     template: productTemplate
-    initialize: ->
-      if storeBootstrapModel?
-        @store = storeBootstrapModel.store
+    initialize: (opt) ->
+      @store = opt.store
+      @product = opt.product
     events: ->
       if @product?
         events = {}
@@ -20,19 +20,8 @@ define [
       @cart = Cart.get(@store.slug)
       @cart.addItem _id: @product.get('_id'), name: @product.get('name')
       Backbone.history.navigate '#cart', trigger: true
-    render: (slug) ->
+    render: ->
       @$el.empty()
-      products = new Products @store.slug, slug
-      products.fetch
-        reset: true
-        success: =>
-          context = Handlebars.compile @template
-          @product = products.first()
-          @delegateEvents()
-          @$el.html context product: @product.attributes, store: @store
-        error: (collection, response, opt) =>
-          console.error "Error fetching product with slug #{slug}"
-          console.error collection
-          console.error response
-          console.error opt
-          console.error opt?.xhr.error
+      context = Handlebars.compile @template
+      @delegateEvents()
+      @$el.html context product: @product.attributes, store: @store

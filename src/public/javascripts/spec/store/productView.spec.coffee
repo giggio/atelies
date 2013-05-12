@@ -1,16 +1,15 @@
-product1  = generator.product.a()
-product2  = generator.product.b()
-store1    = generator.store.a()
-store2    = generator.store.b()
-
-define 'storeData', [], ->
 define [
   'jquery'
   'areas/store/views/product'
   'backbone'
   'areas/store/models/cart'
   'underscore'
-], ($, ProductView, Backbone, Cart, _) ->
+  'areas/store/models/product'
+], ($, ProductView, Backbone, Cart, _, Product) ->
+  product1  = generator.product.a()
+  product2  = generator.product.b()
+  store1    = generator.store.a()
+  store2    = generator.store.b()
   productView = null
   el = $('<div></div>')
   describe 'ProductView', ->
@@ -19,10 +18,7 @@ define [
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
-        spyOn($, "ajax").andCallFake (opt) ->
-          opt.success [product1]
-        productView = new ProductView el:el
-        productView.store = store1
+        productView = new ProductView el:el, store: store1, product: new Product product1
         productView.render 'product_1'
       it 'renders the products', ->
         expect($('#product1', el)).toBeDefined()
@@ -68,10 +64,7 @@ define [
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
-        spyOn($, "ajax").andCallFake (opt) ->
-          opt.success [product2]
-        productView = new ProductView el:el
-        productView.store = store2
+        productView = new ProductView el:el, store: store2, product: new Product product2
         productView.render 'product_2'
       it 'shows there is no inventory/made on demand', ->
         expect($('#product2 #inventory', el).text()).toBe 'Feito sob encomenda'
@@ -86,11 +79,8 @@ define [
         return if beforeEachCalled
         beforeEachCalled = true
         Cart.get().clear()
-        spyOn($, "ajax").andCallFake (opt) ->
-          opt.success [product2]
         spy = spyOn Backbone.history, "navigate"
-        productView = new ProductView el:el
-        productView.store = store2
+        productView = new ProductView el:el, store: store2, product: new Product product2
         productView.render 'product_2'
         productView.purchase()
       it 'adds an item to the cart', ->

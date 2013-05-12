@@ -12,15 +12,12 @@ define [
       'click #clearCart':'clear'
     template: cartTemplate
     initialize: (opt) =>
-      if storeBootstrapModel?
-        @storeData = storeBootstrapModel
-      else if opt?.storeData?
-        @storeData = opt.storeData
-      @cart = Cart.get(@storeData.store.slug)
+      @store = opt.store
+      @cart = Cart.get(@store.slug)
     render: =>
       context = Handlebars.compile @template
-      cartItems = Cart.get(@storeData.store.slug).items()
-      @$el.html context cartItems: cartItems, store: @storeData.store, hasItems: cartItems.length isnt 0
+      cartItems = Cart.get(@store.slug).items()
+      @$el.html context cartItems: cartItems, store: @store, hasItems: cartItems.length isnt 0
       @renderCartItems()
     renderCartItems: =>
       for item in @cart.items()

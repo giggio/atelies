@@ -2,16 +2,14 @@ define [
   'jquery'
   'backbone'
   'handlebars'
-  '../models/store'
   'text!./templates/store.html'
-], ($, Backbone, Handlebars, Store, storeTemplate) ->
+], ($, Backbone, Handlebars, storeTemplate) ->
   class StoreView extends Backbone.View
     template: storeTemplate
+    initialize: (opt) ->
+      @store = opt.store
+      @products = opt.products
     render: ->
       @$el.empty()
-      store = null
-      if storeBootstrapModel?.store?
-        store = new Store storeBootstrapModel.store
-        store = store.toJSON()
       context = Handlebars.compile @template
-      @$el.html context {store: store, products: storeBootstrapModel.products}
+      @$el.html context store: @store, products: @products

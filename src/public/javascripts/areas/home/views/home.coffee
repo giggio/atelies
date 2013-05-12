@@ -8,10 +8,7 @@ define [
   class Home extends Backbone.View
     template: homeTemplate
     initialize: (opt) ->
-      if homeProductsBootstrapModel?
-        @products = homeProductsBootstrapModel
-      else if opt?.products?
-        @products = opt.products
+      @products = opt.products
     render: ->
       @$el.empty()
       productsHome = new ProductsHome()

@@ -11,16 +11,7 @@ define [
     @justCreated: false
     template: manageProductTemplate
     initialize: (opt) =>
-      @storeSlug = opt.storeSlug
-      @productId = opt.productId
+      @product = opt.product
     render: =>
-      if @product?
-        context = Handlebars.compile @template
-        @$el.html context product:@product.attributes
-      else
-        @_findProduct()
-    _findProduct: (cb) =>
-      @product = new Product _id: @productId
-      @products = new Products [@product], storeSlug: @storeSlug
-      @product.bind 'change', @render
-      @product.fetch()
+      context = Handlebars.compile @template
+      @$el.html context product: @product.attributes
