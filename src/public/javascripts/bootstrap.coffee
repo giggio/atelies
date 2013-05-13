@@ -7,6 +7,7 @@ require.config
     text: 'lib/text'
     twitterBootstrap: 'lib/bootstrap.min'
     jqueryVal: 'lib/jquery.validate.min'
+    backboneModelBinder: 'lib/Backbone.ModelBinder'
 
   shim:
     'jQueryUI':

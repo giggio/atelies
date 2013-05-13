@@ -2,19 +2,21 @@ define [
   'jquery'
   'areas/admin/views/manageProduct'
   'areas/admin/models/product'
-], ($, ManageProductView, ProductModel) ->
+  'areas/admin/models/products'
+], ($, ManageProductView, Product, Products) ->
   el = $('<div></div>')
   describe 'ManageProductView', ->
     describe 'Shows product', ->
-      url = product = store = manageProductView = null
+      product = store = manageProductView = null
       beforeEachCalled = false
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
         store = generator.store.a()
         product = generator.product.a()
-        productModel = new ProductModel product
-        manageProductView = new ManageProductView el:el, product:productModel
+        products = new Products [product], storeSlug: product.storeSlug
+        productModel = products.at 0
+        manageProductView = new ManageProductView el:el, product: productModel
         manageProductView.render()
       it 'shows product', ->
         expect($("#_id", el).text()).toBe product._id
@@ -24,38 +26,54 @@ define [
         expect($("#picture", el).val()).toBe product.picture
         expect($("#tags", el).val()).toBe product.tags
         expect($("#description", el).val()).toBe product.description
-        expect($("#height", el).val()).toBe product.dimensions.height.toString()
-        expect($("#width", el).val()).toBe product.dimensions.width.toString()
-        expect($("#depth", el).val()).toBe product.dimensions.depth.toString()
+        expect($("#height", el).val()).toBe product.height.toString()
+        expect($("#width", el).val()).toBe product.width.toString()
+        expect($("#depth", el).val()).toBe product.depth.toString()
         expect($("#weight", el).val()).toBe product.weight.toString()
         expect($("#hasInventory", el).prop('checked')).toBe product.hasInventory
         expect($("#inventory", el).val()).toBe product.inventory.toString()
 
-    xdescribe 'Updates product', ->
-      url = updatedProduct = product = store = manageProductView = null
+    describe 'Updates product', ->
+      productPosted = dataPosted = ajaxSpy = updatedProduct = product = store = manageProductView = null
       beforeEachCalled = false
       beforeEach ->
         return if beforeEachCalled
         beforeEachCalled = true
+        ajaxSpy = spyOn($, 'ajax').andCallFake (opt) =>
+          dataPosted = opt
+          productPosted = JSON.parse opt.data
         store = generator.store.a()
         product = generator.product.a()
         updatedProduct = generator.product.b()
-        spyOn($, "ajax").andCallFake (opt) ->
-          url  = opt.url
-          opt.success product
-        manageProductView = new ManageProductView el:el, storeSlug: store.slug, productId: product._id
+        products = new Products [product], storeSlug: product.storeSlug
+        productModel = products.at 0
+        manageProductView = new ManageProductView el:el, product: productModel
         manageProductView.render()
-        $("#name", el).val updatedProduct.name
-        $("#price", el).val updatedProduct.price
-        $("#picture", el).val updatedProduct.picture
-        $("#tags", el).val updatedProduct.tags
-        $("#description", el).val updatedProduct.description
-        $("#height", el).val updatedProduct.dimensions.height
-        $("#width", el).val updatedProduct.dimensions.width
-        $("#depth", el).val updatedProduct.dimensions.depth
-        $("#weight", el).val updatedProduct.weight
-        $("#hasInventory", el).prop 'checked', updatedProduct.hasInventory
-        $("#inventory", el).val updatedProduct.inventory
+        $("#name", el).val(updatedProduct.name).change()
+        $("#price", el).val(updatedProduct.price).change()
+        $("#picture", el).val(updatedProduct.picture).change()
+        $("#tags", el).val(updatedProduct.tags).change()
+        $("#description", el).val(updatedProduct.description).change()
+        $("#height", el).val(updatedProduct.height).change()
+        $("#width", el).val(updatedProduct.width).change()
+        $("#depth", el).val(updatedProduct.depth).change()
+        $("#weight", el).val(updatedProduct.weight).change()
+        $("#hasInventory", el).prop('checked', updatedProduct.hasInventory).change()
+        $("#inventory", el).val(updatedProduct.inventory).change()
         $('#updateProduct', el).trigger 'click'
       it 'updated product', ->
+        expect(ajaxSpy).toHaveBeenCalled()
+        expect(productPosted.name).toBe updatedProduct.name
+        expect(productPosted.price).toBe updatedProduct.price
+        expect(productPosted.picture).toBe updatedProduct.picture
+        expect(productPosted.tags).toBe updatedProduct.tags
+        expect(productPosted.description).toBe updatedProduct.description
+        expect(productPosted.height).toBe updatedProduct.height
+        expect(productPosted.width).toBe updatedProduct.width
+        expect(productPosted.depth).toBe updatedProduct.depth
+        expect(productPosted.weight).toBe updatedProduct.weight
+        expect(productPosted.hasInventory).toBe updatedProduct.hasInventory
+        expect(productPosted.inventory).toBe ''
       it 'navigated to store manage', ->
+      it 'posted to correct url', ->
+        expect(dataPosted.url).toBe "/#{product.storeSlug}/products/#{product._id}"

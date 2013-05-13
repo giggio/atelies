@@ -35,11 +35,11 @@ define [
       it 'shows the description', ->
         expect($('#product1 #description', el).text()).toBe product1.description
       it 'shows the height', ->
-        expect($('#product1 #dimensions #height', el).text()).toBe product1.dimensions.height.toString()
+        expect($('#product1 #dimensions #height', el).text()).toBe product1.height.toString()
       it 'shows the width', ->
-        expect($('#product1 #dimensions #width', el).text()).toBe product1.dimensions.width.toString()
+        expect($('#product1 #dimensions #width', el).text()).toBe product1.width.toString()
       it 'shows the depth', ->
-        expect($('#product1 #dimensions #depth', el).text()).toBe product1.dimensions.depth.toString()
+        expect($('#product1 #dimensions #depth', el).text()).toBe product1.depth.toString()
       it 'shows the weight', ->
         expect($('#product1 #weight', el).text()).toBe product1.weight.toString()
       it 'shows the inventory', ->

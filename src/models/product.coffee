@@ -28,7 +28,9 @@ productSchema.methods.toSimpleProduct = ->
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), tags: @tags.join ', '
   manageUrl: @manageUrl(), slug: @slug
-  description: @description, dimensions: @dimensions, weight: @weight
+  description: @description,
+  height: @dimensions.height, width: @dimensions.width, depth: @dimensions.depth
+  weight: @weight
   hasInventory: @hasInventory, inventory: @inventory
 
 Product = mongoose.model 'product', productSchema

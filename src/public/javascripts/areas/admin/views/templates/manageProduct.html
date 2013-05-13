@@ -1,23 +1,27 @@
-<h2>Editando o product {{product.name}}:</h2>
-{{#with product}}
-<div id="editProduct">
-  <div>Id: <span id="_id">{{_id}}</span></div>
-  <div>Slug: <span id="slug">{{slug}}</span></div>
-  <div>Nome: <input type="text" id="name" value="{{name}}" /></div>
-  <div>Preço: <input type="text" id="price" value="{{price}}"/></div>
-  <div>Foto: <input type="text" id="picture" value="{{picture}}" /></div>
-  <div>Tags: <input type="text" id="tags" value="{{tags}}" /></div>
-  <div>Descrição: <textarea id="description" rows="8" cols="150">{{description}}</textarea></div>
-  {{#with dimensions}}
-  <div>Dimensões:
-    <p>Altura:<input type="text" id="height" value="{{height}}" /></p>
-    <p>Largura:<input type="text" id="width" value="{{width}}" /></p>
-    <p>Profundidade:<input type="text" id="depth" value="{{depth}}" /></p>
+<h2>Editando o produto produto:</h2>
+<form id="editProduct">
+  <div>Id:<span id="_id" name="_id"></span></div>
+  <div>Slug:<span id="slug" name="slug"></span></div>
+  <div>Nome:
+  <input type="text" id="name" name="name" />
   </div>
-  {{/with}}
-  <div>Peso: <input type="text" id="weight" value="{{weight}}" /></div>
-  <div>Possui estoque: <input type="checkbox" id="hasInventory" {{#if hasInventory}} checked="checked" {{/if}} /></div>
-  <div>Estoque: <input type="text" id="inventory" value="{{inventory}}" /></div>
-</div>
-{{/with}}
+  <div>Preço:</div>
+  <input type="text" id="price" name="price" />
+  <div>Foto:</div>
+  <input type="text" id="picture" name="picture" />
+  <div>Tags:</div>
+  <input type="text" id="tags" name="tags" />
+  <div>Descrição:</div>
+  <textarea id="description" name="description" rows="8" cols="150"></textarea>
+  <div>Dimensões:</div>
+  <p>Altura:</p><input type="text" id="height" name="height" />
+  <p>Largura:</p><input type="text" id="width" name="width" />
+  <p>Profundidade:</p><input type="text" id="depth" name="depth" />
+  <div>Peso:</div>
+  <input type="text" id="weight" name="weight" />
+  <div>Possui estoque:</div>
+  <input type="checkbox" id="hasInventory" name="hasInventory" />
+  <div>Estoque:</div>
+  <input type="text" id="inventory" name="inventory" />
+</form>
 <input type="button" id="updateProduct" class="btn-primary" value="Atualizar" />

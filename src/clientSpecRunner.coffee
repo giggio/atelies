@@ -34,11 +34,15 @@ requirejs.config
   nodeRequire: require
   paths:
     text: 'lib/text'
+    jquery: 'lib/jquery.min'
     jqueryVal: 'lib/jquery.validate.min'
+    backboneModelBinder: 'lib/Backbone.ModelBinder'
   shim:
     'jqueryVal':
       deps: ['jquery']
       exports: '$.validator'
+    'backboneModelBinder':
+      deps: ['backbone']
 
 # map jasmine methods to global namespace
 jasmine = require("jasmine-node")
@@ -49,12 +53,18 @@ for key of jasmine
 initDOM = ->
   # Create a DOM
   jsdom = require("jsdom")
-  # create a jQuery instance
-  jQuery = require("jquery")
-  global.jQuery = global.$ = jQuery
   # Create window
-  window = jsdom.jsdom().createWindow("<html><body></body></html>")
-  global.window = window
+  global.window = window = jsdom.jsdom().createWindow("<html><body></body></html>")
+  # create a jQuery instance
+  window.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
+  window.XMLHttpRequest.prototype.withCredentials = false
+  window.location = require 'location' unless window.location
+  window.navigator = require 'navigator' unless window.navigator
+  global.location = window.location
+  global.navigator = window.navigator
+  global.XMLHttpRequest = window.XMLHttpRequest
+  global.jQuery = global.$ = jQuery = requirejs 'jquery'
+
   # Set up global references for DOMDocument+jQuery
   global.document = window.document
   # add addEventListener for coffeescript compatibility:
@@ -70,6 +80,8 @@ global.initBackbone = ->
   initDOM()
   # tell backbone to use jQuery
   require("backbone").$ = jQuery
+  global.Backbone = require("backbone")
+  global._ = require("underscore")
 
 initBackbone()
 requirejs helpers, ->
