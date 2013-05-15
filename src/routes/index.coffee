@@ -53,6 +53,15 @@ exports.storeProducts = (req, res) ->
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
     res.json viewModelProducts
 
+exports.adminProductUpdate = (req, res) ->
+  Product.findById req.params.productId, (err, product) ->
+    dealWith err
+    Store.findBySlug req.body.storeSlug, (err, store) ->
+      dealWith err
+      product.name = req.body.name
+      product.save (err) ->
+        res.send 200
+
 exports.storeProduct = (req, res) ->
   Product.findById req.params.productId, (err, product) ->
     dealWith err

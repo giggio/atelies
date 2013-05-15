@@ -8,4 +8,5 @@ exports.route = (app) ->
   app.get "/:storeSlug", routes.store
   app.get "/:storeSlug/products", routes.storeProducts
   app.get "/:storeSlug/products/:productId", routes.storeProduct
+  app.put "/admin/products/:productId", routes.adminProductUpdate
   app.get "/:storeSlug/:productSlug", routes.product
