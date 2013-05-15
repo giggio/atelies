@@ -54,10 +54,15 @@ exports.storeProducts = (req, res) ->
     res.json viewModelProducts
 
 exports.adminProductUpdate = (req, res) ->
+  unless req.loggedIn and req.user?.isSeller
+    throw new AccessDenied()
   Product.findById req.params.productId, (err, product) ->
     dealWith err
     Store.findBySlug product.storeSlug, (err, store) ->
       dealWith err
+      storeFromUser = _.find req.user.stores, (_id) -> store._id is _id
+      unless storeFromUser?
+        throw new AccessDenied()
       body = req.body
       for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
         product[attr] = body[attr]
