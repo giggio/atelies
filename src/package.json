@@ -22,7 +22,6 @@
     "jsdom": "*",
     "zombie": "2.x",
     "backbone": "~1.0.0",
-    "jquery": "~1.8.3",
     "requirejs": "~2.1.5",
     "handlebars": "~1.0.10",
     "underscore.string": "~2.3.1",
@@ -34,7 +33,5 @@
     "chai": "~1.6.0",
     "sinon-chai": "~2.4.0",
     "xmlhttprequest": "~1.5.0",
-    "location": "0.0.1",
-    "navigator": "~1.0.1"
   }
 }

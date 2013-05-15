@@ -58,8 +58,6 @@ initDOM = ->
   # create a jQuery instance
   window.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
   window.XMLHttpRequest.prototype.withCredentials = false
-  window.location = require 'location' unless window.location
-  window.navigator = require 'navigator' unless window.navigator
   global.location = window.location
   global.navigator = window.navigator
   global.XMLHttpRequest = window.XMLHttpRequest
