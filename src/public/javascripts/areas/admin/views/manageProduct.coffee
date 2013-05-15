@@ -25,6 +25,7 @@ define [
     _updateProduct: =>
       @product.save @product.attributes, success: @_productUpdated
     _productUpdated: =>
+      Backbone.history.navigate "storeManage/#{@product.get('storeSlug')}", trigger: true
     _initializeDefaultBindings: ->
       attributeBindings = {}
       elsWithAttribute = $("[name]", @el)

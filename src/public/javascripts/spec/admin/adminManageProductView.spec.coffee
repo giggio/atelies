@@ -34,7 +34,7 @@ define [
         expect($("#inventory", el).val()).toBe product.inventory.toString()
 
     describe 'Updates product', ->
-      productPosted = dataPosted = ajaxSpy = updatedProduct = product = store = manageProductView = null
+      historySpy = productPosted = dataPosted = ajaxSpy = updatedProduct = product = store = manageProductView = null
       beforeEachCalled = false
       beforeEach ->
         return if beforeEachCalled
@@ -42,6 +42,8 @@ define [
         ajaxSpy = spyOn($, 'ajax').andCallFake (opt) =>
           dataPosted = opt
           productPosted = JSON.parse opt.data
+          opt.success()
+        historySpy = spyOn(Backbone.history, "navigate")
         store = generator.store.a()
         product = generator.product.a()
         updatedProduct = generator.product.b()
@@ -75,5 +77,7 @@ define [
         expect(productPosted.hasInventory).toBe updatedProduct.hasInventory
         expect(productPosted.inventory).toBe ''
       it 'navigated to store manage', ->
+        expect(historySpy).toHaveBeenCalledWith "storeManage/#{product.storeSlug}", trigger:true
       it 'posted to correct url', ->
         expect(dataPosted.url).toBe "/#{product.storeSlug}/products/#{product._id}"
+        expect(dataPosted.type).toBe "PUT"
