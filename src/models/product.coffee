@@ -2,7 +2,7 @@ mongoose = require 'mongoose'
 slug     = require '../helpers/slug'
 
 productSchema = new mongoose.Schema
-  name:       String
+  name:       type: String, required: true
   picture:    String
   price:      Number
   slug:       String

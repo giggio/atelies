@@ -1,10 +1,10 @@
 Product     = require '../../../models/product'
 
 describe 'Product', ->
-  xit 'requires name to be present', (done) ->
-    store = new Product()
-    store.validate (val) ->
-      expect(val.errors.name.type).to.equal 'required'
+  it 'requires name to be present', (done) ->
+    product = new Product()
+    product.validate (val) ->
+      val.errors.name.type.should.equal 'required'
       done()
   it 'sets the correct slug when store is created', ->
     product = new Product name:"Meu produto"
@@ -42,3 +42,6 @@ describe 'Product', ->
     product.weight.should.equal simpleProduct.weight
     product.hasInventory.should.equal simpleProduct.hasInventory
     product.inventory.should.equal simpleProduct.inventory
+  it 'should produce the correct url', ->
+    product = new Product(name: 'name 1', slug: 'name_1', picture: 'http://lorempixel.com/150/150/cats', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
+    expect(product.url()).to.equal "#{product.storeSlug}##{product.slug}"

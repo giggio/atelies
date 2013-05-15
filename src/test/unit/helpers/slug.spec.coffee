@@ -1,4 +1,4 @@
-slug = require '../../helpers/slug'
+slug = require '../../../helpers/slug'
 
 describe 'slug', ->
 	it 'should replace whitespaces with replacement', ->
