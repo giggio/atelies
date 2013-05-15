@@ -60,16 +60,8 @@ exports.adminProductUpdate = (req, res) ->
     dealWith err
     Store.findBySlug product.storeSlug, (err, store) ->
       dealWith err
-      storeFromUser = _.find req.user.stores, (_id) -> store._id.toString() is _id.toString()
-      unless storeFromUser?
-        throw new AccessDenied()
-      body = req.body
-      for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
-        product[attr] = body[attr]
-      product.tags = body.tags.split ','
-      product.dimensions = {} unless product.dimensions?
-      for attr in ['height', 'width', 'depth']
-        product.dimensions[attr] = body[attr]
+      throw new AccessDenied() unless req.user.hasStore store
+      product.updateFromSimpleProduct req.body
       product.save (err) ->
         res.send 204
 

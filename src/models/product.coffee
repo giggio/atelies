@@ -32,6 +32,13 @@ productSchema.methods.toSimpleProduct = ->
   height: @dimensions.height, width: @dimensions.width, depth: @dimensions.depth
   weight: @weight
   hasInventory: @hasInventory, inventory: @inventory
+productSchema.methods.updateFromSimpleProduct = (simple) ->
+  for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
+    @[attr] = simple[attr]
+  @tags = simple.tags.split ','
+  @dimensions = {} unless @dimensions?
+  for attr in ['height', 'width', 'depth']
+    @dimensions[attr] = simple[attr]
 
 Product = mongoose.model 'product', productSchema
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb

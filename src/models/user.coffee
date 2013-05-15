@@ -1,4 +1,5 @@
 mongoose  = require 'mongoose'
+_         = require 'underscore'
 Store     = require './store'
 
 userSchema = new mongoose.Schema
@@ -12,6 +13,9 @@ userSchema.methods.createStore = ->
   store = new Store()
   @stores.push store
   store
+userSchema.methods.hasStore = (store) ->
+  storeFound = _.find @stores, (_id) -> store._id.toString() is _id.toString()
+  storeFound?
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb
 

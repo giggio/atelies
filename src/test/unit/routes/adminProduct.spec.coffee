@@ -10,28 +10,16 @@ describe 'AdminStoreRoute', ->
       product =
         save: sinon.stub().yields null, product
         storeSlug: 'some_store'
+        updateFromSimpleProduct: sinon.spy()
       store = _id: 9876
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
         isSeller: true
         stores: [9876]
+        hasStore: -> true
       params = productId: '1234'
-      req = loggedIn: true, user: user, params: params, body:
-        name: 'Some Product'
-        picture: 'http://a.com/a.jpg'
-        price: 3.45
-        slug: 'whatever'
-        storeName: 'Other Store'
-        storeSlug: 'other_store'
-        tags: 'abc,def'
-        description: 'some description'
-        height: 3
-        width: 4
-        depth: 5
-        weight: 6
-        hasInventory: true
-        inventory: 30
+      req = loggedIn: true, user: user, params: params, body: {}
       body = req.body
       res = send: sinon.spy()
       routes.adminProductUpdate req, res
@@ -45,17 +33,7 @@ describe 'AdminStoreRoute', ->
     it 'access allowed and return code is correct', ->
       res.send.should.have.been.calledWith 204
     it 'product is updated correctly', ->
-      product.name.should.equal req.body.name
-      product.picture.should.equal req.body.picture
-      product.price.should.equal req.body.price
-      product.tags.should.be.like req.body.tags.split ','
-      product.description.should.equal req.body.description
-      product.dimensions.height.should.equal req.body.height
-      product.dimensions.width.should.equal req.body.width
-      product.dimensions.depth.should.equal req.body.depth
-      product.weight.should.equal req.body.weight
-      product.hasInventory.should.equal req.body.hasInventory
-      product.inventory.should.equal req.body.inventory
+      product.updateFromSimpleProduct.should.have.been.calledWith req.body
     it "does not try to change the product's store", ->
       expect(product.storeName).to.be.undefined
       product.storeSlug.should.equal 'some_store'
@@ -77,6 +55,7 @@ describe 'AdminStoreRoute', ->
         user =
           isSeller: true
           stores: [6543]
+          hasStore: -> false
         params = productId: '1234'
         req = loggedIn: true, user: user, params: params, body:
           name: 'Some Product'
