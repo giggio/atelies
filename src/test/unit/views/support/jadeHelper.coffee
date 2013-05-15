@@ -15,7 +15,7 @@ exports.compileJade = (viewName, cb) ->
   jadeContent = exports.viewContent viewName, (err, jadeContent) ->
     return cb err if err
     try
-      jadeResult = jade.compile(jadeContent, {pretty: true, filename: viewPath})
+      jadeResult = jade.compile jadeContent, pretty: true, filename: viewPath
     catch err
       return cb err
     cb null, jadeResult
@@ -23,8 +23,14 @@ exports.compileJade = (viewName, cb) ->
 exports.getHtmlFromView = (viewName, data, cb) ->
   exports.compileJade viewName, (err, jadeResult) ->
     return cb err if err
+    unless data.everyauth?
+      data.everyauth =
+        loggedIn: false
+        password:
+          loginFormFieldName: 'login'
+          passwordFormFieldName: 'password'
     try
-      html = jadeResult(data)
+      html = jadeResult data
     catch err
       cb err
     cb null, html
