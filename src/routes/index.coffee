@@ -56,9 +56,15 @@ exports.storeProducts = (req, res) ->
 exports.adminProductUpdate = (req, res) ->
   Product.findById req.params.productId, (err, product) ->
     dealWith err
-    Store.findBySlug req.body.storeSlug, (err, store) ->
+    Store.findBySlug product.storeSlug, (err, store) ->
       dealWith err
-      product.name = req.body.name
+      body = req.body
+      for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
+        product[attr] = body[attr]
+      product.tags = body.tags.split ','
+      product.dimensions = {} unless product.dimensions?
+      for attr in ['height', 'width', 'depth']
+        product.dimensions[attr] = body[attr]
       product.save (err) ->
         res.send 200
 

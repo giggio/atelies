@@ -22,8 +22,8 @@ describe 'AdminStoreRoute', ->
         picture: 'http://a.com/a.jpg'
         price: 3.45
         slug: 'whatever'
-        storeName: 'Some Store'
-        storeSlug: 'some_store'
+        storeName: 'Other Store'
+        storeSlug: 'other_store'
         tags: 'abc,def'
         description: 'some description'
         height: 3
@@ -46,19 +46,21 @@ describe 'AdminStoreRoute', ->
       res.send.should.have.been.calledWith 200
     it 'product is updated correctly', ->
       product.name.should.equal req.body.name
-      #product.picture: req.body.picture
-      #product.price: req.body.price
-      #product.slug: 'some_product'
-      #product.storeName: req.body.storeName
-      #product.storeSlug: req.body.storeSlug
-      #product.tags: req.body.tags.split ','
-      #product.description: req.body.description
-      #product.dimensions.height: req.body.height
-      #product.dimensions.width: req.body.width
-      #product.dimensions.depth: req.body.depth
-      #product.weight: req.body.weight
-      #product.hasInventory: req.body.hasInventory
-      #product.inventory: req.body.inventory
+      product.picture.should.equal req.body.picture
+      product.price.should.equal req.body.price
+      product.tags.should.be.like req.body.tags.split ','
+      product.description.should.equal req.body.description
+      product.dimensions.height.should.equal req.body.height
+      product.dimensions.width.should.equal req.body.width
+      product.dimensions.depth.should.equal req.body.depth
+      product.weight.should.equal req.body.weight
+      product.hasInventory.should.equal req.body.hasInventory
+      product.inventory.should.equal req.body.inventory
+    it 'does not try to change the store', ->
+      expect(product.storeName).to.be.undefined
+      product.storeSlug.should.equal 'some_store'
+    it 'does not try to change the product slug', ->
+      expect(product.slug).to.be.undefined
     it 'product should had been saved', ->
       product.save.should.have.been.called
 
