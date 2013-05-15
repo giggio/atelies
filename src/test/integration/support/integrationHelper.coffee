@@ -36,7 +36,6 @@ exports.cleanDB = (cb) ->
 
 before (done) ->
   #process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}" #needed before with jasmine, not with mocha, lets wait and see
-  exports.patchEventEmitterToHideMaxListenerWarning()
   exports.cleanDB (err) ->
     if err
       done err
