@@ -43,7 +43,7 @@ describe 'AdminStoreRoute', ->
     it 'looked for correct store', ->
       Store.findBySlug.should.have.been.calledWith product.storeSlug
     it 'access allowed and return code is correct', ->
-      res.send.should.have.been.calledWith 200
+      res.send.should.have.been.calledWith 204
     it 'product is updated correctly', ->
       product.name.should.equal req.body.name
       product.picture.should.equal req.body.picture

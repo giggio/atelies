@@ -40,7 +40,7 @@ describe 'Admin Manage Product page', ->
       aproduct.hasInventory.should.equal product.hasInventory
       aproduct.inventory.should.equal product.inventory
 
-  xdescribe 'editing product', ->
+  describe 'editing product', ->
     otherProduct = null
     before (done) ->
       otherProduct = generator.product.b()
@@ -48,11 +48,22 @@ describe 'Admin Manage Product page', ->
       page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs otherProduct
-          page.clickUpdateProduct done
+          page.setFieldsAs otherProduct, ->
+            page.clickUpdateProduct done
     it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#storeManage/#{product.storeSlug}"
+      browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product.storeSlug}"
     it 'updated the product', (done) ->
-      storedProduct = Product.findById product._id, (err, product) ->
+      Product.findById product._id, (err, productOnDb) ->
         return done err if err
-        product.name.should.equal otherProduct.name
+        productOnDb.name.should.equal otherProduct.name
+        productOnDb.price.should.equal otherProduct.price
+        productOnDb.picture.should.equal otherProduct.picture
+        productOnDb.tags.should.be.like otherProduct.tags
+        productOnDb.description.should.equal otherProduct.description
+        productOnDb.dimensions.height.should.equal otherProduct.dimensions.height
+        productOnDb.dimensions.width.should.equal otherProduct.dimensions.width
+        productOnDb.dimensions.depth.should.equal otherProduct.dimensions.depth
+        productOnDb.weight.should.equal otherProduct.weight
+        productOnDb.hasInventory.should.equal otherProduct.hasInventory
+        productOnDb.inventory.should.equal otherProduct.inventory
+        done()

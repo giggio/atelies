@@ -6,7 +6,7 @@ exports.route = (app) ->
   app.post "/admin/store", routes.adminStore
   app.get "/notseller", routes.notSeller
   app.get "/:storeSlug", routes.store
-  app.get "/:storeSlug/products", routes.storeProducts
-  app.get "/:storeSlug/products/:productId", routes.storeProduct
-  app.put "/admin/products/:productId", routes.adminProductUpdate
+  app.get "/admin/:storeSlug/products", routes.storeProducts
+  app.get "/admin/:storeSlug/products/:productId", routes.storeProduct
+  app.put "/admin/:storeSlug/products/:productId", routes.adminProductUpdate
   app.get "/:storeSlug/:productSlug", routes.product

@@ -22,6 +22,19 @@ module.exports = class AdminHomePage extends Page
       hasInventory: $("#hasInventory", el).prop('checked')
       inventory: parseInt $("#inventory", el).val()
     product
-  setFieldsAs: (product) =>
+  setFieldsAs: (product, cb) =>
     @browser.fill "#name", product.name
+    @browser.fill "#price", product.price
+    @browser.fill "#picture", product.picture
+    @browser.fill "#tags", product.tags.join ","
+    @browser.fill "#description", product.description
+    @browser.fill "#height", product.dimensions.height
+    @browser.fill "#width", product.dimensions.width
+    @browser.fill "#depth", product.dimensions.depth
+    @browser.fill "#weight", product.weight
+    if product.hasInventory then @browser.check "#hasInventory" else @browser.uncheck '#hasInventory'
+    @browser.fill "#inventory", product.inventory
+    #@browser.fire '#name', 'change', cb #doesnt work... :(
+    @browser.evaluate "$('#editProduct #name,#price,#picture,#tags,#description,#height,#width,#depth,#weight,#hasInventory,#inventory').change()"
+    @browser.wait (e, browser) -> cb()
   clickUpdateProduct: (cb) => @browser.pressButton "#updateProduct", cb

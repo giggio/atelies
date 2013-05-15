@@ -60,7 +60,7 @@ exports.adminProductUpdate = (req, res) ->
     dealWith err
     Store.findBySlug product.storeSlug, (err, store) ->
       dealWith err
-      storeFromUser = _.find req.user.stores, (_id) -> store._id is _id
+      storeFromUser = _.find req.user.stores, (_id) -> store._id.toString() is _id.toString()
       unless storeFromUser?
         throw new AccessDenied()
       body = req.body
@@ -71,7 +71,7 @@ exports.adminProductUpdate = (req, res) ->
       for attr in ['height', 'width', 'depth']
         product.dimensions[attr] = body[attr]
       product.save (err) ->
-        res.send 200
+        res.send 204
 
 exports.storeProduct = (req, res) ->
   Product.findById req.params.productId, (err, product) ->

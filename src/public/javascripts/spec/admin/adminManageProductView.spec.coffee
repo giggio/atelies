@@ -77,7 +77,7 @@ define [
         expect(productPosted.hasInventory).toBe updatedProduct.hasInventory
         expect(productPosted.inventory).toBe ''
       it 'navigated to store manage', ->
-        expect(historySpy).toHaveBeenCalledWith "storeManage/#{product.storeSlug}", trigger:true
+        expect(historySpy).toHaveBeenCalledWith "manageStore/#{product.storeSlug}", trigger:true
       it 'posted to correct url', ->
-        expect(dataPosted.url).toBe "/#{product.storeSlug}/products/#{product._id}"
+        expect(dataPosted.url).toBe "/admin/#{product.storeSlug}/products/#{product._id}"
         expect(dataPosted.type).toBe "PUT"

@@ -8,4 +8,4 @@ define [
       [opt, models] = [models, opt] unless $.isArray models
       @storeSlug = opt.storeSlug
     model: Product
-    url: -> "/#{@storeSlug}/products"
+    url: -> "/admin/#{@storeSlug}/products"

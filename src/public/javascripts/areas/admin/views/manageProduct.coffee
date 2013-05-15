@@ -23,9 +23,9 @@ define [
       bindings.price.converter = (direction, value) -> parseFloat value
       binder.bind @product, @el, bindings
     _updateProduct: =>
-      @product.save @product.attributes, success: @_productUpdated
+      @product.save @product.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
-      Backbone.history.navigate "storeManage/#{@product.get('storeSlug')}", trigger: true
+      Backbone.history.navigate "manageStore/#{@product.get('storeSlug')}", trigger: true
     _initializeDefaultBindings: ->
       attributeBindings = {}
       elsWithAttribute = $("[name]", @el)
