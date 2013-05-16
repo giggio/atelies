@@ -11,20 +11,20 @@ define [
         [{required: true, msg: 'O preço é obrigatório.'}
          {pattern:'number', msg: 'O preço deve ser um número.'}]
       picture:
-        pattern:'url'
-        required: false
+        [{pattern:'url', msg: 'A imagem deve ser uma url.'}
+         {required: false}]
       height:
-        pattern:'digits'
-        required: false
+        [{pattern:'digits', msg: 'A altura deve ser um número.'}
+         {required: false}]
       width:
-        pattern:'digits'
-        required: false
+        [{pattern:'digits', msg: 'A largura deve ser um número.'}
+         {required: false}]
       depth:
-        pattern:'digits'
-        required: false
+        [{pattern:'digits', msg: 'A profundidade deve ser um número.'}
+         {required: false}]
       weight:
-        pattern:'digits'
-        required: false
+        [{pattern:'digits', msg: 'O peso deve ser um número.'}
+         {required: false}]
       inventory:
-        pattern:'digits'
-        required: false
+        [{pattern:'digits', msg: 'O estoque deve ser um número.'}
+        {required: false}]

@@ -38,12 +38,16 @@ requirejs.config
     jqueryVal: 'lib/jquery.validate.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder'
     backboneValidation: 'lib/backbone-validation-amd-min'
+    twitterBootstrap: 'lib/bootstrap.min'
   shim:
     'jqueryVal':
       deps: ['jquery']
       exports: '$.validator'
     'backboneModelBinder':
       deps: ['backbone']
+    'twitterBootstrap':
+      deps: ['jquery']
+      exports: '$.fn.popover'
 
 # map jasmine methods to global namespace
 jasmine = require("jasmine-node")
@@ -81,6 +85,7 @@ global.initBackbone = ->
   require("backbone").$ = jQuery
   global.Backbone = require("backbone")
   global._ = require("underscore")
+  requirejs 'twitterBootstrap'
 
 initBackbone()
 requirejs helpers, ->
