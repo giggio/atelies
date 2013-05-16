@@ -1,27 +1,72 @@
-<h2>Editando o produto produto:</h2>
+<h2>Editando o produto <span class="name" /></h2>
 <form id="editProduct">
   <div>Id:<span id="_id" name="_id"></span></div>
   <div>Slug:<span id="slug" name="slug"></span></div>
-  <div>Nome:
-  <input type="text" id="name" name="name" />
+  <div class="control-group">
+    <label class="control-label" for="name">Nome:</label>
+    <div class="controls">
+      <input type="text" id="name" name="name" data-error-style="tooltip" />
+    </div>
   </div>
-  <div>Preço:</div>
-  <input type="text" id="price" name="price" />
-  <div>Foto:</div>
-  <input type="text" id="picture" name="picture" />
-  <div>Tags:</div>
-  <input type="text" id="tags" name="tags" />
-  <div>Descrição:</div>
-  <textarea id="description" name="description" rows="8" cols="150"></textarea>
-  <div>Dimensões:</div>
-  <p>Altura:</p><input type="text" id="height" name="height" />
-  <p>Largura:</p><input type="text" id="width" name="width" />
-  <p>Profundidade:</p><input type="text" id="depth" name="depth" />
-  <div>Peso:</div>
-  <input type="text" id="weight" name="weight" />
-  <div>Possui estoque:</div>
-  <input type="checkbox" id="hasInventory" name="hasInventory" />
-  <div>Estoque:</div>
-  <input type="text" id="inventory" name="inventory" />
+  <div class="control-group">
+    <label>Preço:</label>
+    <div class="controls">
+      <input type="text" id="price" name="price" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Foto:</label>
+    <div class="controls">
+      <input type="text" id="picture" name="picture" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Tags:</label>
+    <div class="controls">
+      <input type="text" id="tags" name="tags" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Descrição:</label>
+    <div class="controls">
+      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+    </div>
+  </div>
+  <label>Dimensões:</label>
+  <div class="control-group">
+    <label>Altura:</label>
+    <div class="controls">
+      <input type="text" id="height" name="height" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Largura:</label>
+    <div class="controls">
+      <input type="text" id="width" name="width" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Profundidade:</label>
+    <div class="controls">
+      <input type="text" id="depth" name="depth" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Peso:</label>
+    <div class="controls">
+      <input type="text" id="weight" name="weight" data-error-style="tooltip" />
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" id="hasInventory" name="hasInventory" /> Possui estoque
+      </label>
+    </div>
+    <label>Estoque:</label>
+    <div class="controls">
+      <input type="text" id="inventory" name="inventory" data-error-style="tooltip" />
+    </div>
+  </div>
 </form>
 <input type="button" id="updateProduct" class="btn-primary" value="Atualizar" />

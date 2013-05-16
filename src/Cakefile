@@ -162,6 +162,7 @@ task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
   downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', options
   downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js', options
   downloadFileToJS      'https://raw.github.com/theironcook/Backbone.ModelBinder/9ffd7f83e53a04863049631833152df8647f0829/Backbone.ModelBinder.js', options
+  downloadFileToJS      'https://cdnjs.cloudflare.com/ajax/libs/backbone.validation/0.7.1/backbone-validation-amd-min.js', options
   whenDone((->
     waiting = options.waitingDownload
     waiting == 0), ->)

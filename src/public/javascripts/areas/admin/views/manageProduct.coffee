@@ -7,7 +7,8 @@ define [
   '../models/product'
   '../models/products'
   'backboneModelBinder'
-], ($, Backbone, Handlebars, _, manageProductTemplate, Product, Products, ModelBinder) ->
+  'backboneValidation'
+], ($, Backbone, Handlebars, _, manageProductTemplate, Product, Products, ModelBinder, Validation) ->
   class ManageProductView extends Backbone.View
     events: 'click #updateProduct':'_updateProduct'
     @justCreated: false
@@ -19,11 +20,18 @@ define [
       binder = new ModelBinder()
       bindings = @_initializeDefaultBindings()
       $.extend true, bindings, {}
-      bindings.weight.converter = bindings.height.converter = bindings.width.converter = bindings.depth.converter = (direction, value) -> parseInt value
-      bindings.price.converter = (direction, value) -> parseFloat value
+      bindings.weight.converter = bindings.height.converter = bindings.width.converter = bindings.depth.converter = (direction, value) ->
+        int = parseInt value
+        if _.isNaN int then value else int
+      bindings.price.converter = (direction, value) ->
+        ft = parseFloat value
+        if _.isNaN ft then value else ft
       binder.bind @product, @el, bindings
+      @model = @product
+      Validation.bind @
     _updateProduct: =>
-      @product.save @product.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
+      if @product.isValid true
+        @product.save @product.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
       Backbone.history.navigate "manageStore/#{@product.get('storeSlug')}", trigger: true
     _initializeDefaultBindings: ->

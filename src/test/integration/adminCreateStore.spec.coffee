@@ -23,6 +23,7 @@ describe 'Admin home page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
     xit 'shows store created message', -> #failing, zombie is not updating its content
       expect(browser.text('#message')).to.equal "Loja criada com sucesso"
+      #browser.evaluate("$('#message').text()").should.equal "Loja criada com sucesso"
     it 'created a new store with correct information', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error

@@ -37,6 +37,7 @@ requirejs.config
     jquery: 'lib/jquery.min'
     jqueryVal: 'lib/jquery.validate.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder'
+    backboneValidation: 'lib/backbone-validation-amd-min'
   shim:
     'jqueryVal':
       deps: ['jquery']
