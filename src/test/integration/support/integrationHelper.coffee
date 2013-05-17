@@ -29,13 +29,12 @@ exports.cleanDB = (cb) ->
     conn.db.collections (err, cols) ->
       for col in cols
         unless col.collectionName.substring(0,6) is 'system'
-          console.info "dropping #{col.collectionName}" if process.env.DEBUG_JASMINE
+          console.info "dropping #{col.collectionName}" if process.env.DEBUG
           col.drop()
       conn.close()
       cb()
 
 before (done) ->
-  #process.addListener 'uncaughtException', (error) -> console.error "Error happened:\n#{error.stack}" #needed before with jasmine, not with mocha, lets wait and see
   exports.cleanDB (err) ->
     if err
       done err

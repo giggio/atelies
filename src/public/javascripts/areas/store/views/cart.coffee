@@ -21,7 +21,7 @@ define [
       @renderCartItems()
     renderCartItems: =>
       for item in @cart.items()
-        cartItemView = new CartItemView model: item
+        cartItemView = new CartItemView cartItem: item
         cartItemView.render()
         $('#cartItems > tbody', @$el).append cartItemView.$el
         cartItemView.removed @remove

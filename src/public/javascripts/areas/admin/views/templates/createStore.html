@@ -1,40 +1,66 @@
 <h2>Crie sua loja:</h2>
-<form id="createStoreForm" action="invalid">
-  <div><div>Nome:</div><div><input type="text" id="name" name="name" class="span6 required" title="Informe o nome da loja." /></div></div>
-  <div><div>Telefone:</div><div><input type="text" id="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz"/></div></div>
-  <div><div>Cidade:</div><div><input type="text" id="city" name="city" class="span4 required" title="Informe a cidade." /></div></div>
-  <div><div>Estado:</div><div>
-  <select id="state" class="span1">
-    <option>AC</option> 
-    <option>AL</option>
-    <option>AP</option>
-    <option>AM</option>
-    <option>BA</option>
-    <option>CE</option>
-    <option>DF</option>
-    <option>ES</option>
-    <option>GO</option>
-    <option>MA</option>
-    <option>MT</option>
-    <option>MS</option>
-    <option>MG</option>
-    <option>PR</option>
-    <option>PB</option>
-    <option>PA</option>
-    <option>PE</option>
-    <option>PI</option>
-    <option>RJ</option>
-    <option>RN</option>
-    <option>RS</option>
-    <option>RO</option>
-    <option>RR</option>
-    <option>SC</option>
-    <option>SE</option>
-    <option selected>SP</option>
-    <option>TO</option>
-  </select>
-  </div></div>
-  <div><div>Outro site:</div><div><input type="text" id="otherUrl" name="otherUrl" class="span6 url" placeholder="Digite outro endereço na internet, começando com http://..." title="Informe um link válido para o outro site, começando com http ou https." /></div></div>
-  <div><div>Imagem do banner:</div><div><input type="text" id="banner" name="banner" class="span6 url" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." title="Informe um link válido para o banner, começando com http ou https."/></div></div>
-  <input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
-</form>
+<div class="control-group">
+  <label class="control-label" for="name">Nome:</label>
+  <div class="controls">
+    <input type="text" id="name" name="name" class="span6" data-error-style="tooltip" />
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="name">Telefone:</label>
+  <div class="controls">
+    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz" data-error-style="tooltip" />
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="name">Cidade:</label>
+  <div class="controls">
+    <input type="text" id="city" name="city" class="span4" data-error-style="tooltip" />
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="name">Estado:</label>
+  <div class="controls">
+    <select id="state" class="span1">
+      <option>AC</option> 
+      <option>AL</option>
+      <option>AP</option>
+      <option>AM</option>
+      <option>BA</option>
+      <option>CE</option>
+      <option>DF</option>
+      <option>ES</option>
+      <option>GO</option>
+      <option>MA</option>
+      <option>MT</option>
+      <option>MS</option>
+      <option>MG</option>
+      <option>PR</option>
+      <option>PB</option>
+      <option>PA</option>
+      <option>PE</option>
+      <option>PI</option>
+      <option>RJ</option>
+      <option>RN</option>
+      <option>RS</option>
+      <option>RO</option>
+      <option>RR</option>
+      <option>SC</option>
+      <option>SE</option>
+      <option selected>SP</option>
+      <option>TO</option>
+    </select>
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="name">Outro site:</label>
+  <div class="controls">
+    <input type="text" id="otherUrl" name="otherUrl" class="span6" data-error-style="tooltip" placeholder="Digite outro endereço na internet, começando com http://..."/>
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="name">Imagem do banner:</label>
+  <div class="controls">
+    <input type="text" id="banner" name="banner" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+  </div>
+</div>
+<input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>

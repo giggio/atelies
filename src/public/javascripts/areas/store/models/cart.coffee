@@ -14,10 +14,12 @@ define ['underscore'], (_) ->
         @_carts.push cart
       cart
     constructor: (@storeSlug) ->
+      @_load()
+    _items: []
+    _load: ->
       @_items = []
       previousSessionItems = localStorage.getItem "cartItems#{@storeSlug}"
       if previousSessionItems? then @_items = JSON.parse previousSessionItems
-    _items: []
     save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) =>

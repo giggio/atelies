@@ -1,25 +1,26 @@
 define [
   'jquery'
   'backbone'
-  'handlebars'
   'text!./templates/createStore.html'
   '../models/store'
   '../models/stores'
   './manageStore'
-  'jqueryVal'
-], ($, Backbone, Handlebars, createStoreTemplate, Store, Stores, ManageStoreView) ->
+  'backboneModelBinder'
+  'backboneValidation'
+], ($, Backbone, createStoreTemplate, Store, Stores, ManageStoreView, ModelBinder, Validation) ->
   class CreateStoreView extends Backbone.View
     events:
       'click #createStore':'_createStore'
     template: createStoreTemplate
     render: ->
-      @$el.empty()
-      context = Handlebars.compile @template
-      @$el.html context()
+      @$el.html @template
+      @model = new Store()
+      bindings = @_initializeDefaultBindings()
+      binder = new ModelBinder()
+      binder.bind @model, @el, bindings
+      Validation.bind @
     _createStore: =>
-      form = @$('#createStoreForm')
-      form.validate()
-      return unless form.valid()
+      return unless @model.isValid true
       attrs = @_fromFields ['name', 'phoneNumber', 'city', 'state', 'otherUrl', 'banner']
       store = new Store attrs
       stores = new Stores()
@@ -36,3 +37,11 @@ define [
       for name in names
         attrs[name] = @$("##{name}").val()
       attrs
+    _initializeDefaultBindings: ->
+      attributeBindings = {}
+      elsWithAttribute = $("[name]", @el)
+      for el in elsWithAttribute
+        name = $(el).attr 'name'
+        attributeBindings[name] =
+          selector: "[name='#{name}']"
+      attributeBindings

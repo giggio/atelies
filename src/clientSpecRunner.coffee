@@ -36,14 +36,10 @@ requirejs.config
   paths:
     text: 'lib/text'
     jquery: 'lib/jquery.min'
-    jqueryVal: 'lib/jquery.validate.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder'
     backboneValidation: 'lib/backbone-validation-amd-min'
     twitterBootstrap: 'lib/bootstrap.min'
   shim:
-    'jqueryVal':
-      deps: ['jquery']
-      exports: '$.validator'
     'backboneModelBinder':
       deps: ['backbone']
     'twitterBootstrap':

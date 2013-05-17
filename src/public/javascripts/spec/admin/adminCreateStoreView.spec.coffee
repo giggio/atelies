@@ -2,6 +2,7 @@ define = require('amdefine')(module, requirejs) if (typeof define isnt 'function
 define [
   'jquery'
   'areas/admin/views/createStore'
+  'backboneConfig'
 ], ($, CreateStoreView) ->
   el = $('<div></div>')
   describe 'CreateStoreView', ->
@@ -14,19 +15,17 @@ define [
         sinon.stub $, "ajax", (opt) ->
           storePassedIn = JSON.parse opt.data
           opt.success store
-        sinon.stub($.fn, "valid").returns true
         goToStoreManagePageSpy = sinon.spy createStoreView, '_goToStoreManagePage'
         createStoreView.render()
-        createStoreView.$("#name").val store.name
-        createStoreView.$("#phoneNumber").val store.phoneNumber
-        createStoreView.$("#city").val store.city
-        createStoreView.$("#state").val store.state
-        createStoreView.$("#otherUrl").val store.otherUrl
-        createStoreView.$("#banner").val store.banner
+        createStoreView.$("#name").val(store.name).change()
+        createStoreView.$("#phoneNumber").val(store.phoneNumber).change()
+        createStoreView.$("#city").val(store.city).change()
+        createStoreView.$("#state").val(store.state).change()
+        createStoreView.$("#otherUrl").val(store.otherUrl).change()
+        createStoreView.$("#banner").val(store.banner).change()
         $('#createStore', el).trigger 'click'
       after ->
         $.ajax.restore()
-        $.fn.valid.restore()
         goToStoreManagePageSpy.restore()
       it 'navigates to store manage page', ->
         expect(goToStoreManagePageSpy).to.have.beenCalled
@@ -47,15 +46,20 @@ define [
       before ->
         createStoreView = new CreateStoreView el:el
         ajaxSpy = sinon.spy $, "ajax"
-        sinon.stub($.fn, "valid").returns false
         goToStoreManagePageSpy = sinon.spy createStoreView, '_goToStoreManagePage'
         createStoreView.render()
+        createStoreView.$("#otherUrl").val('abc').change()
+        createStoreView.$("#banner").val('def').change()
         $('#createStore', el).trigger 'click'
       after ->
         ajaxSpy.restore()
-        $.fn.valid.restore()
         goToStoreManagePageSpy.restore()
       it 'does not navigate to store manage page', ->
         expect(goToStoreManagePageSpy).not.to.have.beenCalled
       it 'does not call ajax backend', ->
         expect(ajaxSpy).not.to.have.beenCalled
+      it 'shows validation message', ->
+        $("#name ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe o nome da loja.'
+        $("#city ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe a cidade.'
+        $("#otherUrl ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe um link válido para o outro site, começando com http ou https.'
+        $("#banner ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o banner, começando com http ou https."

@@ -6,7 +6,6 @@ require.config
     handlebars: 'lib/handlebars.min'
     text: 'lib/text'
     twitterBootstrap: 'lib/bootstrap.min'
-    jqueryVal: 'lib/jquery.validate.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder'
     backboneValidation: 'lib/backbone-validation-amd-min'
 
@@ -24,9 +23,6 @@ require.config
     'twitterBootstrap':
       deps: ['jquery']
       exports: '$.fn.popover'
-    'jqueryVal':
-      deps: ['jquery']
-      exports: '$.validator'
 require [
   'handlebars'
   'app'

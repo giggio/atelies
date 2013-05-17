@@ -26,9 +26,9 @@ define [
       it 'shows a cart items table with one item', ->
         expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).html()).to.equal '1'
+        expect($("#cartItems > tbody > tr > td:first-child", el).text()).to.equal '1'
       it 'shows the first item name', ->
-        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).to.equal 'produto 1'
+        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).text()).to.equal 'produto 1'
     describe 'Removing item', ->
       before ->
         cart = Cart.get(store1.slug)
@@ -41,9 +41,9 @@ define [
       it 'shows a cart items table with one item', ->
         expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).html()).to.equal '1'
+        expect($("#cartItems > tbody > tr > td:first-child", el).text()).to.equal '1'
       it 'shows the first item name', ->
-        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).to.equal 'produto 1'
+        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).text()).to.equal 'produto 1'
     describe 'Clearing cart', ->
       before ->
         cart = Cart.get(store1.slug)

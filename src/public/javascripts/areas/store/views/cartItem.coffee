@@ -1,30 +1,38 @@
 define [
   'jquery'
   'backbone'
-  'handlebars'
+  '../models/cartItem'
   'text!./templates/cartItem.html'
-  'jqueryVal'
-], ($, Backbone, Handlebars, cartItemTemplate) ->
+  'backboneModelBinder'
+  'backboneValidation'
+], ($, Backbone, CartItem, cartItemTemplate, ModelBinder, Validation) ->
   class CartItemView extends Backbone.View
+    initialize: (opt) ->
+      @model = new CartItem opt.cartItem
+      @cartItem = opt.cartItem
     events:
       "click .remove":'remove'
-      "blur .quantity":'updateQuantity'
     template: cartItemTemplate
     render: ->
-      context = Handlebars.compile @template
-      @setElement $ context @model
-      @setFormsInValidationFields @$ '.quantity'
-    remove: -> removed @model for removed in @removedCallbacks
+      @setElement @template
+      binder = new ModelBinder()
+      bindings =
+        quantity:
+          selector: "#quantity"
+          converter: (direction, value) ->
+            int = parseInt value
+            if _.isNaN int then value else int
+        _id: '._id'
+        name: '.name'
+      binder.bind @model, @el, bindings
+      Validation.bind @
+      @model.on 'change', =>
+        if @model.isValid true
+          @cartItem.quantity = @model.get 'quantity'
+          @change()
+    remove: -> removed @cartItem for removed in @removedCallbacks
     removed: (cb) -> @removedCallbacks.push cb
     removedCallbacks: []
     change: => callChanged @model for callChanged in @changedCallbacks
     changed: (cb) => @changedCallbacks.push cb
     changedCallbacks: []
-    updateQuantity: =>
-      quantity = @$('.quantity')
-      quantity.validate()
-      return unless quantity.valid()
-      @model.quantity = parseInt quantity.val()
-      @change()
-    setFormsInValidationFields: (selector) ->
-      @$('.quantityHolder').append $("<form style='margin: 0;'>").append(selector)

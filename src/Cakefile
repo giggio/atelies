@@ -145,7 +145,6 @@ task 'compile:coffee', 'compiles CoffeeScript files', ->
   compileDirectory currDir
 
 task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
-  downloadFileToJS      "https://raw.github.com/velesin/jasmine-jquery/master/lib/jasmine-jquery.js", options
   downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", options
   downloadFileToJS      "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js", options
@@ -159,8 +158,6 @@ task 'dependencies:js', 'copies js dependencies to public/script', (options) ->
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.js", options
   downloadFileToJS      "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js", options
   downloadFileToJS      'https://raw.github.com/requirejs/text/master/text.js', options
-  downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', options
-  downloadFileToJS      'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js', options
   downloadFileToJS      'https://raw.github.com/theironcook/Backbone.ModelBinder/9ffd7f83e53a04863049631833152df8647f0829/Backbone.ModelBinder.js', options
   downloadFileToJS      'https://cdnjs.cloudflare.com/ajax/libs/backbone.validation/0.7.1/backbone-validation-amd-min.js', options
   whenDone((->
