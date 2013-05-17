@@ -1,3 +1,4 @@
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
   'areas/store/views/product'
@@ -14,77 +15,68 @@ define [
   el = $('<div></div>')
   describe 'ProductView', ->
     describe 'Store with banner and product with inventory', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         productView = new ProductView el:el, store: store1, product: new Product product1
         productView.render 'product_1'
       it 'renders the products', ->
-        expect($('#product1', el)).toBeDefined()
+        expect($('#product1', el)).to.be.defined
       it 'show the name', ->
-        expect($("#product1 #name", el).text()).toBe product1.name
+        expect($("#product1 #name", el).text()).to.equal product1.name
       it 'shows the picture', ->
-        expect($("#product1 #picture", el).attr('src')).toBe product1.picture
+        expect($("#product1 #picture", el).attr('src')).to.equal product1.picture
       it 'shows the id', ->
-        expect($("#product1 #id", el).text()).toBe product1._id
+        expect($("#product1 #id", el).text()).to.equal product1._id
       it 'shows the price', ->
-        expect($('#product1 #price', el).text()).toBe product1.price.toString()
+        expect($('#product1 #price', el).text()).to.equal product1.price.toString()
       it 'shows the tags', ->
-        expect($('#product1 #tags', el).text()).toBe product1.tags
+        expect($('#product1 #tags', el).text()).to.equal product1.tags
       it 'shows the description', ->
-        expect($('#product1 #description', el).text()).toBe product1.description
+        expect($('#product1 #description', el).text()).to.equal product1.description
       it 'shows the height', ->
-        expect($('#product1 #dimensions #height', el).text()).toBe product1.height.toString()
+        expect($('#product1 #dimensions #height', el).text()).to.equal product1.height.toString()
       it 'shows the width', ->
-        expect($('#product1 #dimensions #width', el).text()).toBe product1.width.toString()
+        expect($('#product1 #dimensions #width', el).text()).to.equal product1.width.toString()
       it 'shows the depth', ->
-        expect($('#product1 #dimensions #depth', el).text()).toBe product1.depth.toString()
+        expect($('#product1 #dimensions #depth', el).text()).to.equal product1.depth.toString()
       it 'shows the weight', ->
-        expect($('#product1 #weight', el).text()).toBe product1.weight.toString()
+        expect($('#product1 #weight', el).text()).to.equal product1.weight.toString()
       it 'shows the inventory', ->
-        expect($('#product1 #inventory', el).text()).toBe '30 itens'
+        expect($('#product1 #inventory', el).text()).to.equal '30 itens'
       describe 'Store details', ->
         it 'shows the store name', ->
-          expect($('#storeName', el).text()).toBe store1.name
+          expect($('#storeName', el).text()).to.equal store1.name
         it 'shows phone number', ->
-          expect($('#storePhoneNumber', el).text()).toBe store1.phoneNumber
+          expect($('#storePhoneNumber', el).text()).to.equal store1.phoneNumber
         it 'shows City', ->
-          expect($('#storeCity', el).text()).toBe store1.city
+          expect($('#storeCity', el).text()).to.equal store1.city
         it 'shows State', ->
-          expect($('#storeState', el).text()).toBe store1.state
+          expect($('#storeState', el).text()).to.equal store1.state
         it 'shows other store url', ->
-          expect($('#storeOtherUrl', el).text()).toBe store1.otherUrl
+          expect($('#storeOtherUrl', el).text()).to.equal store1.otherUrl
         it 'does not show the store name header', ->
-          expect($('#storeNameHeader', el).length).toBe 0
+          expect($('#storeNameHeader', el).length).to.equal 0
         it 'shows store banner', ->
-          expect($('#storeBanner', el).attr('src')).toBe store1.banner
+          expect($('#storeBanner', el).attr('src')).to.equal store1.banner
     describe 'Store without banner and product without inventory', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         productView = new ProductView el:el, store: store2, product: new Product product2
         productView.render 'product_2'
       it 'shows there is no inventory/made on demand', ->
-        expect($('#product2 #inventory', el).text()).toBe 'Feito sob encomenda'
+        expect($('#product2 #inventory', el).text()).to.equal 'Feito sob encomenda'
       it 'shows store name header', ->
-        expect($('#storeNameHeader', el).text()).toBe store2.name
+        expect($('#storeNameHeader', el).text()).to.equal store2.name
       it 'does not show the store banner', ->
-        expect($('#storeBanner', el).length).toBe 0
+        expect($('#storeBanner', el).length).to.equal 0
     describe 'Purchasing an item', ->
       spy = null
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         Cart.get().clear()
-        spy = spyOn Backbone.history, "navigate"
+        spy = sinon.spy Backbone.history, "navigate"
         productView = new ProductView el:el, store: store2, product: new Product product2
         productView.render 'product_2'
         productView.purchase()
       it 'adds an item to the cart', ->
-        expect(_.findWhere(Cart.get(store2.slug).items(), _id: product2._id).id).not.toBeNull()
+        expect(_.findWhere(Cart.get(store2.slug).items(), _id: product2._id).id).not.to.be.null
       it 'navigated', ->
-        expect(spy).toHaveBeenCalledWith '#cart', trigger:true
+        expect(spy).to.have.been.calledWith '#cart', trigger:true
 

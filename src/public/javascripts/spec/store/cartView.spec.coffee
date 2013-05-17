@@ -1,3 +1,4 @@
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
   'areas/store/views/cart'
@@ -10,35 +11,26 @@ define [
   el = $('<div></div>')
   describe 'CartView', ->
     describe 'Empty cart', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         cartView = new CartView el:el, store: store1
         cartView.render()
       it 'does not show the cart items table', ->
-        expect($("#cartItems", el).length).toBe 0
+        expect($("#cartItems", el).length).to.equal 0
     describe 'One item cart', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         cart = Cart.get(store1.slug)
         cart.clear()
         cart.addItem _id: '1', name: 'produto 1'
         cartView = new CartView el:el, store: store1
         cartView.render()
       it 'shows a cart items table with one item', ->
-        expect($("#cartItems > tbody > tr", el).length).toBe 1
+        expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).html()).toBe '1'
+        expect($("#cartItems > tbody > tr > td:first-child", el).html()).to.equal '1'
       it 'shows the first item name', ->
-        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).toBe 'produto 1'
+        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).to.equal 'produto 1'
     describe 'Removing item', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         cart = Cart.get(store1.slug)
         cart.clear()
         cart.addItem _id: '1', name: 'produto 1'
@@ -47,16 +39,13 @@ define [
         cartView.render()
         cartView.removeById '2'
       it 'shows a cart items table with one item', ->
-        expect($("#cartItems > tbody > tr", el).length).toBe 1
+        expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).html()).toBe '1'
+        expect($("#cartItems > tbody > tr > td:first-child", el).html()).to.equal '1'
       it 'shows the first item name', ->
-        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).toBe 'produto 1'
+        expect($("#cartItems > tbody > tr > td:nth-child(2)", el).html()).to.equal 'produto 1'
     describe 'Clearing cart', ->
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         cart = Cart.get(store1.slug)
         cart.clear()
         cart.addItem _id: '1', name: 'produto 1'
@@ -65,4 +54,4 @@ define [
         cartView.render()
         $('#clearCart', el).trigger 'click'
       it 'shows a cart items table with one item', ->
-        expect($("#cartItems > tbody > tr", el).length).toBe 0
+        expect($("#cartItems > tbody > tr", el).length).to.equal 0

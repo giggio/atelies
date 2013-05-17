@@ -1,7 +1,8 @@
-require [
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
+define [
   'jquery'
 ], ($) ->
-  el = $('<div><span id="some"></span></div>')
+  el = $('<div><span id="some">hello world</span></div>')
   describe 'HomeView', ->
     it 'should render the products', ->
-      expect($('#some', el).length).toBe 1
+      expect($('#some', el).text()).to.equal 'hello world'

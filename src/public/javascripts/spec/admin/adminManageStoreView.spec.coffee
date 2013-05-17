@@ -1,3 +1,4 @@
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
   'areas/admin/views/manageStore'
@@ -7,10 +8,7 @@ define [
   describe 'ManageStoreView', ->
     describe 'Valid Store gets created', ->
       products = store = manageStoreView = null
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         store = generator.store.a()
         product1 = generator.product.a()
         product2 = generator.product.b()
@@ -19,6 +17,6 @@ define [
         manageStoreView = new ManageStoreView el:el, store: store, products: productsModel
         manageStoreView.render()
       it 'shows store', ->
-        expect(manageStoreView.$("#name").text()).toBe store.name
+        expect(manageStoreView.$("#name").text()).to.equal store.name
       it 'shows products', ->
-        expect($("#products > tbody > tr", el).length).toBe products.length
+        expect($("#products > tbody > tr", el).length).to.equal products.length

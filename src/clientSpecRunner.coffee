@@ -1,5 +1,6 @@
 path    = require 'path'
 fs      = require 'fs'
+Mocha   = require 'mocha'
 
 process.addListener 'uncaughtException', (error) -> console.log "Error happened:\n#{error.stack}"
 
@@ -28,7 +29,7 @@ specs = addFilesFromDir specsPath, isASpecFile
 helpers = addFilesFromDir specsPath, isAHelperFile
 
 # set up require.js to play nicely with the test environment
-requirejs = require("requirejs")
+global.requirejs = require "requirejs"
 requirejs.config
   baseUrl: "./public/javascripts"
   nodeRequire: require
@@ -49,11 +50,6 @@ requirejs.config
       deps: ['jquery']
       exports: '$.fn.popover'
 
-# map jasmine methods to global namespace
-jasmine = require("jasmine-node")
-for key of jasmine
-  global[key] = jasmine[key]  if jasmine[key] instanceof Function
-  
 # Test helper: set up a faux-DOM for running browser tests
 initDOM = ->
   # Create a DOM
@@ -88,6 +84,7 @@ global.initBackbone = ->
   requirejs 'twitterBootstrap'
 
 initBackbone()
+require './test/support/_specHelper'
 requirejs helpers, ->
   for helper in arguments
     for key of helper
@@ -97,24 +94,8 @@ requirejs helpers, ->
   # specs = [ 'spec/store/productView.spec']
   if process.argv.length > 2
     specs = [ process.argv[2]]
-  requirejs specs, ->
-    reporter = new jasmine.TerminalReporter(color: true)
-    oldReportRunnerResults = reporter.reportRunnerResults
-    assertionCount = total: 0, passed: 0, failed: 0
-
-    reporter.reportRunnerResults = (runner) ->
-      oldReportRunnerResults.apply reporter, [runner]
-      specs = runner.specs()
-      specResults = undefined
-      i = 0
-      while i < specs.length
-        specResults = specs[i].results()
-        assertionCount.total += specResults.totalCount
-        assertionCount.passed += specResults.passedCount
-        assertionCount.failed += specResults.failedCount
-        ++i
-      process.exit assertionCount.failed
-
-    jasmineEnv = jasmine.getEnv()
-    jasmineEnv.addReporter reporter
-    jasmineEnv.execute()
+  mocha = new Mocha()
+  #mocha.reporter 'spec'
+  mocha.reporter 'nyan'
+  mocha.addFile "public/javascripts/#{spec}" for spec in specs
+  mocha.run()

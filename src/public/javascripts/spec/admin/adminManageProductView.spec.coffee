@@ -1,3 +1,4 @@
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
   'areas/admin/views/manageProduct'
@@ -9,10 +10,7 @@ define [
   describe 'ManageProductView', ->
     describe 'Shows product', ->
       product = store = manageProductView = null
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
+      before ->
         store = generator.store.a()
         product = generator.product.a()
         products = new Products [product], storeSlug: product.storeSlug
@@ -20,31 +18,28 @@ define [
         manageProductView = new ManageProductView el:el, product: productModel
         manageProductView.render()
       it 'shows product', ->
-        expect($("#_id", el).text()).toBe product._id
-        expect($("#name", el).val()).toBe product.name
-        expect($("#price", el).val()).toBe product.price.toString()
-        expect($("#slug", el).text()).toBe product.slug
-        expect($("#picture", el).val()).toBe product.picture
-        expect($("#tags", el).val()).toBe product.tags
-        expect($("#description", el).val()).toBe product.description
-        expect($("#height", el).val()).toBe product.height.toString()
-        expect($("#width", el).val()).toBe product.width.toString()
-        expect($("#depth", el).val()).toBe product.depth.toString()
-        expect($("#weight", el).val()).toBe product.weight.toString()
-        expect($("#hasInventory", el).prop('checked')).toBe product.hasInventory
-        expect($("#inventory", el).val()).toBe product.inventory.toString()
+        expect($("#_id", el).text()).to.equal product._id
+        expect($("#name", el).val()).to.equal product.name
+        expect($("#price", el).val()).to.equal product.price.toString()
+        expect($("#slug", el).text()).to.equal product.slug
+        expect($("#picture", el).val()).to.equal product.picture
+        expect($("#tags", el).val()).to.equal product.tags
+        expect($("#description", el).val()).to.equal product.description
+        expect($("#height", el).val()).to.equal product.height.toString()
+        expect($("#width", el).val()).to.equal product.width.toString()
+        expect($("#depth", el).val()).to.equal product.depth.toString()
+        expect($("#weight", el).val()).to.equal product.weight.toString()
+        expect($("#hasInventory", el).prop('checked')).to.equal product.hasInventory
+        expect($("#inventory", el).val()).to.equal product.inventory.toString()
 
     describe 'Updates product', ->
       historySpy = productPosted = dataPosted = ajaxSpy = updatedProduct = product = store = manageProductView = null
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
-        ajaxSpy = spyOn($, 'ajax').andCallFake (opt) =>
+      before ->
+        ajaxSpy = sinon.stub $, 'ajax', (opt) =>
           dataPosted = opt
           productPosted = JSON.parse opt.data
           opt.success()
-        historySpy = spyOn(Backbone.history, "navigate")
+        historySpy = sinon.spy Backbone.history, "navigate"
         store = generator.store.a()
         product = generator.product.a()
         updatedProduct = generator.product.b()
@@ -64,33 +59,33 @@ define [
         $("#hasInventory", el).prop('checked', updatedProduct.hasInventory).change()
         $("#inventory", el).val(updatedProduct.inventory).change()
         $('#updateProduct', el).trigger 'click'
+      after ->
+        ajaxSpy.restore()
+        historySpy.restore()
       it 'updated product', ->
-        expect(ajaxSpy).toHaveBeenCalled()
-        expect(productPosted.name).toBe updatedProduct.name
-        expect(productPosted.price).toBe updatedProduct.price
-        expect(productPosted.picture).toBe updatedProduct.picture
-        expect(productPosted.tags).toBe updatedProduct.tags
-        expect(productPosted.description).toBe updatedProduct.description
-        expect(productPosted.height).toBe updatedProduct.height
-        expect(productPosted.width).toBe updatedProduct.width
-        expect(productPosted.depth).toBe updatedProduct.depth
-        expect(productPosted.weight).toBe updatedProduct.weight
-        expect(productPosted.hasInventory).toBe updatedProduct.hasInventory
-        expect(productPosted.inventory).toBe ''
+        expect(ajaxSpy).to.have.beenCalled
+        expect(productPosted.name).to.equal updatedProduct.name
+        expect(productPosted.price).to.equal updatedProduct.price
+        expect(productPosted.picture).to.equal updatedProduct.picture
+        expect(productPosted.tags).to.equal updatedProduct.tags
+        expect(productPosted.description).to.equal updatedProduct.description
+        expect(productPosted.height).to.equal updatedProduct.height
+        expect(productPosted.width).to.equal updatedProduct.width
+        expect(productPosted.depth).to.equal updatedProduct.depth
+        expect(productPosted.weight).to.equal updatedProduct.weight
+        expect(productPosted.hasInventory).to.equal updatedProduct.hasInventory
+        expect(productPosted.inventory).to.equal ''
       it 'navigated to store manage', ->
-        expect(historySpy).toHaveBeenCalledWith "manageStore/#{product.storeSlug}", trigger:true
+        expect(historySpy).to.have.been.calledWith "manageStore/#{product.storeSlug}", trigger:true
       it 'posted to correct url', ->
-        expect(dataPosted.url).toBe "/admin/#{product.storeSlug}/products/#{product._id}"
-        expect(dataPosted.type).toBe "PUT"
+        expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
+        expect(dataPosted.type).to.equal "PUT"
 
     describe 'Does not update product when invalid', ->
       historySpy = ajaxSpy = product = store = null
-      beforeEachCalled = false
-      beforeEach ->
-        return if beforeEachCalled
-        beforeEachCalled = true
-        ajaxSpy = spyOn($, 'ajax').andCallFake (opt) => opt.success()
-        historySpy = spyOn(Backbone.history, "navigate")
+      before ->
+        ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+        historySpy = sinon.spy Backbone.history, "navigate"
         store = generator.store.a()
         product = generator.product.a()
         products = new Products [product], storeSlug: product.storeSlug
@@ -107,16 +102,19 @@ define [
         $("#hasInventory", el).prop('checked', true).change()
         $("#inventory", el).val('j').change()
         $('#updateProduct', el).trigger 'click'
+      after ->
+        ajaxSpy.restore()
+        historySpy.restore()
       xit 'did not update product', ->
-        expect(ajaxSpy).not.toHaveBeenCalled()
+        expect(ajaxSpy).not.to.have.been.called
       xit 'did not navigate', ->
-        expect(historySpy).not.toHaveBeenCalled()
+        expect(historySpy).not.to.have.been.called
       it 'showed validation messages', ->
-        expect($("#name ~ .tooltip .tooltip-inner", el).text()).toBe 'O nome é obrigatório.'
-        expect($("#price ~ .tooltip .tooltip-inner", el).text()).toBe 'O preço deve ser um número.'
-        expect($("#picture ~ .tooltip .tooltip-inner", el).text()).toBe 'A imagem deve ser uma url.'
-        expect($("#height ~ .tooltip .tooltip-inner", el).text()).toBe 'A altura deve ser um número.'
-        expect($("#width ~ .tooltip .tooltip-inner", el).text()).toBe 'A largura deve ser um número.'
-        expect($("#depth ~ .tooltip .tooltip-inner", el).text()).toBe 'A profundidade deve ser um número.'
-        expect($("#weight ~ .tooltip .tooltip-inner", el).text()).toBe 'O peso deve ser um número.'
-        expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).toBe 'O estoque deve ser um número.'
+        expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
+        expect($("#price ~ .tooltip .tooltip-inner", el).text()).to.equal 'O preço deve ser um número.'
+        expect($("#picture ~ .tooltip .tooltip-inner", el).text()).to.equal 'A imagem deve ser uma url.'
+        expect($("#height ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
+        expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
+        expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
+        expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
+        expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
