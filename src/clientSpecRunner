@@ -1,4 +1,3 @@
 #!/bin/bash
 
-#coffee -c clientSpecRunner.coffee
-node clientSpecRunner.js
+(cd public/javascripts/; mocha test --recursive --require test/support/runnerSetup.js)

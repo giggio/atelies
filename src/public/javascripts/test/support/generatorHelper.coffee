@@ -1,3 +1,4 @@
+define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define ->
   generator:
     product:
@@ -52,3 +53,11 @@ define ->
         city: "São Xilevers"
         state: "XX"
         otherUrl: 'http://someurl.com'
+      empty: ->
+        _id: ''
+        name: ''
+        slug: ''
+        phoneNumber: ''
+        city: ""
+        state: ""
+        otherUrl: ''

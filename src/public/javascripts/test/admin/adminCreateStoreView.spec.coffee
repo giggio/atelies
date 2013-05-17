@@ -3,6 +3,7 @@ define [
   'jquery'
   'areas/admin/views/createStore'
   'backboneConfig'
+  '../support/_specHelper'
 ], ($, CreateStoreView) ->
   el = $('<div></div>')
   describe 'CreateStoreView', ->
