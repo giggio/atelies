@@ -1,4 +1,4 @@
-require.config
+requirejs.config
   paths:
     jquery: 'lib/jquery.min'
     underscore: 'lib/underscore-min'
@@ -8,10 +8,7 @@ require.config
     twitterBootstrap: 'lib/bootstrap.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder'
     backboneValidation: 'lib/backbone-validation-amd-min'
-
   shim:
-    'jQueryUI':
-      deps: ['jquery']
     'handlebars':
       deps: ['jquery']
       exports: 'Handlebars'
@@ -23,17 +20,13 @@ require.config
     'twitterBootstrap':
       deps: ['jquery']
       exports: '$.fn.popover'
-require [
-  'handlebars'
-  'app'
-  'twitterBootstrap'
-  './backboneConfig'
-], (Handlebars, App, twitterBootstrap) ->
-  Handlebars.registerHelper 'formataData', (valor) ->
-    return "" if not valor
-    try
-      data = new Date(valor)
-      (data.getUTCMonth() + 1) + "/" + data.getUTCDate() + "/" + data.getUTCFullYear()
-    catch error
-      valor
-  App.start()
+
+
+if global? #nodejs only, needs to add jquery to global scope otherwise twitter bootstrap blows up
+  window.$ = global.$ = requirejs 'jquery'
+else
+  requirejs [
+    'app'
+    './backboneConfig'
+  ], (App) ->
+    App.start()

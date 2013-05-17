@@ -2,6 +2,7 @@ define [
   'underscore'
   'backboneModelBinder'
   'backboneValidation'
+  'twitterBootstrap'
 ], (_, ModelBinder, Validation) ->
   ModelBinder.SetOptions modelSetOptions: validate: true
   Validation.configure forceUpdate: true

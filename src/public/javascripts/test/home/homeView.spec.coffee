@@ -3,6 +3,7 @@ _s = require('underscore.string')
 define [
   'jquery'
   'areas/home/views/home'
+  '../support/_specHelper'
 ], ($, HomeView) ->
   homeView = null
   el = $('<div></div>')
