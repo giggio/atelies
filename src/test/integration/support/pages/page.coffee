@@ -10,3 +10,5 @@ module.exports = class Page
       url = @url
     #console.log "opt:#{JSON.stringify options}, url:#{url}"
     @browser.visit url, options, cb
+  errorMessageFor: (field) ->
+    @browser.text("##{field} ~ .tooltip .tooltip-inner")

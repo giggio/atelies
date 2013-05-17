@@ -2,7 +2,7 @@ require './support/_specHelper'
 Store     = require '../../models/store'
 User      = require '../../models/user'
 
-describe 'Admin home page', ->
+describe 'Admin create store page', ->
   exampleStore = userSeller = browser = null
   before (done) -> whenServerLoaded done
   after -> browser.destroy() if browser?
@@ -43,6 +43,7 @@ describe 'Admin home page', ->
         done()
 
   describe 'does not create a store (missing or wrong info)', (done) ->
+    page = null
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -51,21 +52,22 @@ describe 'Admin home page', ->
         browser = newBrowser browser
         exampleStore = generator.store.empty()
         browser.loginPage.navigateAndLoginWith userSeller, ->
-          browser.adminCreateStorePage.visit (error) ->
+          page = browser.adminCreateStorePage
+          page.visit (error) ->
             return done error if error
             exampleStore.banner = "abc"
             exampleStore.otherUrl = "def"
-            browser.adminCreateStorePage.setFieldsAs exampleStore
-            browser.adminCreateStorePage.clickCreateStoreButton done
+            page.setFieldsAs exampleStore
+            page.clickCreateStoreButton done
     it 'is at the store create page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#createStore"
     xit 'does not show store created message', ->
       expect(browser.query('#message')).to.be.undefined #zombiejs has problems updating content
     it 'shows validation messages', ->
-      expect(browser.text("label[for='name']")).to.equal "Informe o nome da loja."
-      expect(browser.text("label[for='city']")).to.equal "Informe a cidade."
-      expect(browser.text("label[for='banner']")).to.equal "Informe um link válido para o banner, começando com http ou https."
-      expect(browser.text("label[for='otherUrl']")).to.equal "Informe um link válido para o outro site, começando com http ou https."
+      page.errorMessageFor('name').should.equal "Informe o nome da loja."
+      page.errorMessageFor('city').should.equal "Informe a cidade."
+      page.errorMessageFor('banner').should.equal "Informe um link válido para o banner, começando com http ou https."
+      page.errorMessageFor('otherUrl').should.equal "Informe um link válido para o outro site, começando com http ou https."
     it 'did not create a store with missing info', (done) ->
       Store.find (error, stores) ->
         return done error if error

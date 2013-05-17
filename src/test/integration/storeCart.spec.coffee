@@ -27,7 +27,7 @@ describe 'Store shopping cart page', ->
     it 'does not show the cart items table', ->
       expect(browser.query('#cartItems')).to.be.null
   describe 'when add one item to cart', ->
-    it 'when add one item to cart it is at the cart location and shows product info', (done) ->
+    it 'it is at the cart location and shows product info', (done) ->
       browser = newBrowser()
       whenServerLoaded ->
         browser.storeProductPage.visit 'store_1', 'name_1', (error) ->

@@ -9,4 +9,5 @@ module.exports = class AdminCreateStorePage extends Page
     @browser.select "#state", store.state if store.state isnt ''
     @browser.fill "#otherUrl", store.otherUrl
     @browser.fill "#banner", store.banner
+    @browser.evaluate "$('#name,#phoneNumber,#city,#state,#otherUrl,#banner').change()"
   clickCreateStoreButton: (cb) => @browser.pressButton "#createStore", cb

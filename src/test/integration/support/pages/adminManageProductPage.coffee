@@ -38,5 +38,3 @@ module.exports = class AdminHomePage extends Page
     @browser.evaluate "$('#editProduct #name,#price,#picture,#tags,#description,#height,#width,#depth,#weight,#hasInventory,#inventory').change()"
     @browser.wait (e, browser) -> cb()
   clickUpdateProduct: (cb) => @browser.pressButton "#updateProduct", cb
-  errorMessageFor: (field) ->
-    @browser.text("##{field} ~ .tooltip .tooltip-inner")
