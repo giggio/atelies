@@ -20,7 +20,7 @@ define [
       binder = new ModelBinder()
       bindings = @_initializeDefaultBindings()
       $.extend true, bindings, {}
-      bindings.weight.converter = bindings.height.converter = bindings.width.converter = bindings.depth.converter = (direction, value) ->
+      bindings.weight.converter = bindings.height.converter = bindings.width.converter = bindings.depth.converter = bindings.inventory.converter = (direction, value) ->
         int = parseInt value
         if _.isNaN int then value else int
       bindings.price.converter = (direction, value) ->
