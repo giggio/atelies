@@ -2,7 +2,13 @@ $ = require 'jquery'
 Page = require './page'
 
 module.exports = class AdminHomePage extends Page
-  visit: (storeSlug, productId, options, cb) -> super "admin#manageProduct/#{storeSlug}/#{productId}", options, cb
+  visit: (storeSlug, productId, options, cb) ->
+    if typeof productId is 'string'
+      super "admin#manageProduct/#{storeSlug}/#{productId}", options, cb
+    else
+      [options, cb] = [productId, options]
+      super "admin#createProduct/#{storeSlug}", options, cb
+       
   product: =>
     el = @browser.query('#editProduct')
     id = $('#_id', el).text()

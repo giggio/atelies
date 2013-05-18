@@ -8,7 +8,7 @@ module.exports = class Page
       [cb, options] = [options, null]
     unless url?
       url = @url
-    #console.log "opt:#{JSON.stringify options}, url:#{url}"
+    #console.log "opt:#{JSON.stringify options}, url:#{url}, cb:#{typeof cb}"
     @browser.visit url, options, cb
   errorMessageFor: (field) ->
     @browser.text("##{field} ~ .tooltip .tooltip-inner")

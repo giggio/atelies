@@ -23,6 +23,11 @@ define [
       @_findProduct storeSlug, productId, (product) ->
         manageProductView = new ManageProductView el:$('#app-container'), storeSlug: storeSlug, product: product
         manageProductView.render()
+    @createProduct: (storeSlug) =>
+      product = new Product()
+      products = new Products [product], storeSlug: storeSlug
+      manageProductView = new ManageProductView el:$('#app-container'), storeSlug: storeSlug, product: product
+      manageProductView.render()
 
     @_findProducts: (storeSlug, cb) =>
       products = new Products storeSlug: storeSlug

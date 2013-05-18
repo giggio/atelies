@@ -3,7 +3,7 @@ Store     = require '../../models/store'
 Product   = require '../../models/product'
 User      = require '../../models/user'
 
-xdescribe 'Admin Create Product page', ->
+describe 'Admin Create Product page', ->
   page = product = store = userSeller = browser = page = null
   before (done) ->
     cleanDB (error) ->
@@ -21,11 +21,11 @@ xdescribe 'Admin Create Product page', ->
   describe 'cant create invalid product', ->
     before (done) ->
       browser = newBrowser browser
-      page = browser.adminCreateProductPage
+      page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, ->
           page.setFieldsAs {name:'', price:'', picture: 'abc', height:'dd', width: 'ee', depth:'ff', weight: 'gg', inventory: 'hh'}, ->
-            page.clickCreateProduct done
+            page.clickUpdateProduct done
     it 'is at the product create page', ->
       browser.location.href.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
     it 'did not create the product', (done) ->
@@ -43,14 +43,14 @@ xdescribe 'Admin Create Product page', ->
       page.errorMessageFor('weight').should.equal 'O peso deve ser um número.'
       page.errorMessageFor('inventory').should.equal 'O estoque deve ser um número.'
 
-  describe 'create product', ->
+  xdescribe 'create product', ->
     before (done) ->
       browser = newBrowser browser
-      page = browser.adminCreateProductPage
+      page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, ->
           page.setFieldsAs product, ->
-            page.clickCreateProduct done
+            page.clickUpdateProduct done
     it 'is at the store manage page', ->
       browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product.storeSlug}"
     it 'created the product', (done) ->
