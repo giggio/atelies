@@ -43,7 +43,7 @@ describe 'Admin Create Product page', ->
       page.errorMessageFor('weight').should.equal 'O peso deve ser um número.'
       page.errorMessageFor('inventory').should.equal 'O estoque deve ser um número.'
 
-  xdescribe 'create product', ->
+  describe 'create product', ->
     before (done) ->
       browser = newBrowser browser
       page = browser.adminManageProductPage

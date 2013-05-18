@@ -26,7 +26,7 @@ productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.toSimpleProduct = ->
   _id: @_id, name: @name, picture: @picture, price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
-  url: @url(), tags: @tags.join ', '
+  url: @url(), tags: if @tags? then @tags.join ', ' else ''
   manageUrl: @manageUrl(), slug: @slug
   description: @description,
   height: @dimensions.height, width: @dimensions.width, depth: @dimensions.depth
@@ -35,7 +35,7 @@ productSchema.methods.toSimpleProduct = ->
 productSchema.methods.updateFromSimpleProduct = (simple) ->
   for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
     @[attr] = simple[attr]
-  @tags = simple.tags.split ','
+  @tags = simple.tags?.split ','
   @dimensions = {} unless @dimensions?
   for attr in ['height', 'width', 'depth']
     @dimensions[attr] = simple[attr]

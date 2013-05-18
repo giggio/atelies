@@ -65,6 +65,19 @@ exports.adminProductUpdate = (req, res) ->
       product.save (err) ->
         res.send 204
 
+exports.adminProductCreate = (req, res) ->
+  unless req.loggedIn and req.user?.isSeller
+    throw new AccessDenied()
+  Store.findBySlug req.params.storeSlug, (err, store) ->
+    dealWith err
+    throw new AccessDenied() unless req.user.hasStore store
+    product = new Product()
+    product.updateFromSimpleProduct req.body
+    product.storeName = store.name
+    product.storeSlug = store.slug
+    product.save (err) ->
+      res.send 201, product.toSimpleProduct()
+
 exports.storeProduct = (req, res) ->
   Product.findById req.params.productId, (err, product) ->
     dealWith err
