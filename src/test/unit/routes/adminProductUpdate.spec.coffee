@@ -3,7 +3,7 @@ Store           = require '../../../models/store'
 Product         = require '../../../models/product'
 AccessDenied    = require '../../../errors/accessDenied'
 
-describe 'AdminStoreRoute', ->
+describe 'AdminProductUpdateRoute', ->
   describe 'If user owns the store and product', ->
     product = store = req = res = body = user = null
     before ->
