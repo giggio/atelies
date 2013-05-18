@@ -6,7 +6,7 @@ define ['underscore'], (_) ->
         @_carts = []
         @_carts.clear = -> cart.clear() for cart in @
       switch storeSlug
-        when '' then throw 'Cart needs a string'
+        when '' then throw message:'Cart needs a string'
         when undefined then return @_carts
       cart = _.findWhere @_carts, storeSlug: storeSlug
       unless cart?

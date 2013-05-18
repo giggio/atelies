@@ -25,7 +25,7 @@ define [
       store = new Store attrs
       stores = new Stores()
       stores.add store
-      store.save store.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw 'error when saving'
+      store.save store.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw message:'error when saving'
     _storeCreated: (store) =>
       adminStoresBootstrapModel.stores.push store.attributes
       @_goToStoreManagePage store

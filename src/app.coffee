@@ -28,11 +28,10 @@ exports.start = (cb) ->
     app.locals.pretty = on
     #everyauth.debug = on
 
-  port = process.env.PORT or
-    switch app.get 'env'
-      when 'development', 'production' then 3000
-      when 'test' then 8000
-      else 3000
+  port = process.env.PORT or switch app.get 'env'
+    when 'development', 'production' then 3000
+    when 'test' then 8000
+    else 3000
 
   app.use express.favicon()
   app.use express.bodyParser()

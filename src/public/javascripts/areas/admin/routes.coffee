@@ -34,7 +34,7 @@ define [
       products.fetch
         reset: true
         success: -> cb null, products
-        error: (col, res, opt) -> cb "Error: #{opt?xhr?.error}"
+        error: (col, res, opt) -> cb "Error: #{opt?.xhr?.error}"
     @_findProduct: (storeSlug, productId, cb) =>
       product = new Product _id: productId
       products = new Products [product], storeSlug: storeSlug
