@@ -1,0 +1,28 @@
+{
+  "name": "open-store",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "~1.9.x",
+    "bootstrap": "~2.3.2",
+    "requirejs": "~2.1.6",
+    "requirejs-text": "~2.0.6",
+    "handlebars": "~1.0.0-rc.4",
+    "jquery.validation": "~1.11.1",
+    "backbone": "~1.0.0",
+    "Backbone.ModelBinder": "~1.0.2",
+    "backbone-validation": "~0.7.1",
+    "jquery.ui": "~1.10.3",
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "chai": "~1.6.0",
+    "sinon": "~1.7.1",
+    "sinon-chai": "~2.4.0"
+  }
+}
