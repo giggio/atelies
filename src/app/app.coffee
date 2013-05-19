@@ -47,20 +47,17 @@ exports.start = (cb) ->
   app.use everyauth.middleware app
   app.use(everyauthConfig.postEveryAuthMiddlewareHack())
   #app.use app.router
-  console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
   mongoose.connect process.env.CUSTOMCONNSTR_mongo
-  mongoose.connection.on 'error', (err) ->
-    console.error "connection error:#{err.stack}"
-    throw err
+  mongoose.connection.on 'error', dealWith
 
   router.route app
 
   exports.server = http.createServer(app).listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
+    console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
     cb(exports.server) if cb
 
 exports.stop = ->
   exports.server.close()
   mongoose.connection.close()
   mongoose.disconnect()
-
