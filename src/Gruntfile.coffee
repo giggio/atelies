@@ -56,7 +56,9 @@ module.exports = (grunt) ->
         options:
           script: 'server.js'
 
-    cafemocha:
+    mochacov:
+      options:
+        ignoreLeaks: true
       server_unit:
         src: 'test/unit/**/*.js'
         options:
@@ -76,12 +78,20 @@ module.exports = (grunt) ->
           require: ['public/javascripts/test/support/runnerSetup.js']
           reporter: 'spec'
           ui: 'bdd'
+      server_unit_coverage:
+        src: 'test/unit/**/*.js'
+        options:
+          require: ['test/support/_specHelper.js']
+          reporter: 'spec'
+          ui: 'bdd'
+          coverage: true
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
-  grunt.loadNpmTasks 'grunt-cafe-mocha'
+  #grunt.loadNpmTasks 'grunt-cafe-mocha'
+  grunt.loadNpmTasks 'grunt-mocha-cov'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -106,19 +116,25 @@ module.exports = (grunt) ->
     changedFiles[filepath] = action
     onChange()
 
+  #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'compileAndStartServer', 'watch:server' ]
   grunt.registerTask 'compileAndStartServer', ->
     tasks = [ 'coffee', 'coffeelint' ]
+    if grunt.config(['client', 'src']).length isnt 0
+      tasks.push 'test:client'
+      grunt.log.writeln "Running #{'client'.blue} unit tests"
     if grunt.config(['server', 'src']).length isnt 0
+      tasks.push 'test:unit'
       tasks.push 'express:dev'
       grunt.log.writeln 'Compiling and starting server'
+      grunt.log.writeln "Running #{'server'.blue} unit tests"
     else
-      grunt.log.writeln 'Compiling and NOT starting server'
+      grunt.log.writeln "Compiling and #{'NOT'.red} starting server"
     grunt.task.run tasks
   grunt.registerTask 'test', ['test:unit', 'test:integration', 'test:client' ]
   grunt.registerTask 'test:fast', ['test:unit', 'test:client' ]
-  grunt.registerTask 'test:unit', ['cafemocha:server_unit']
-  grunt.registerTask 'test:integration', ['cafemocha:server_integration']
-  grunt.registerTask 'test:client', ['cafemocha:client']
+  grunt.registerTask 'test:unit', ['mochacov:server_unit']
+  grunt.registerTask 'test:integration', ['mochacov:server_integration']
+  grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'default', ['server']
