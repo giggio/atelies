@@ -1,5 +1,5 @@
-User    = require '../../../models/user'
-Store   = require '../../../models/store'
+User    = require '../../../app/models/user'
+Store   = require '../../../app/models/store'
 
 describe 'User', ->
   it 'creates stores', ->

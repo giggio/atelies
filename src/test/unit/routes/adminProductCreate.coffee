@@ -1,7 +1,7 @@
 SandboxedModule = require 'sandboxed-module'
-Store           = require '../../../models/store'
-Product         = require '../../../models/product'
-AccessDenied    = require '../../../errors/accessDenied'
+Store           = require '../../../app/models/store'
+Product         = require '../../../app/models/product'
+AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminProductCreateRoute', ->
   describe 'If user owns the store and product', sinon.test ->
@@ -31,7 +31,7 @@ describe 'AdminProductCreateRoute', ->
         storeSlug: store.slug
       body = req.body
       res = send: sinon.spy()
-      routes = SandboxedModule.require '../../../routes',
+      routes = SandboxedModule.require '../../../app/routes',
         requires:
           '../models/product': ProductStub
           '../models/store': Store
@@ -55,7 +55,7 @@ describe 'AdminProductCreateRoute', ->
   describe 'Access is denied', ->
     routes = null
     before ->
-      routes = require '../../../routes',
+      routes = require '../../../app/routes',
     it "a seller but does not own this product's store denies access and throws", sinon.test ->
       @stub(Store, 'findBySlug').yields()
       user =

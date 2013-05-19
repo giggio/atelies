@@ -1,6 +1,6 @@
-Product   = require '../../models/product'
-Store     = require '../../models/store'
-User      = require '../../models/user'
+Product   = require '../../app/models/product'
+Store     = require '../../app/models/store'
+User      = require '../../app/models/user'
 
 exports.generator =
   product:

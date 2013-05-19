@@ -1,7 +1,7 @@
 require './support/_specHelper'
-Store     = require '../../models/store'
-Product   = require '../../models/product'
-User      = require '../../models/user'
+Store     = require '../../app/models/store'
+Product   = require '../../app/models/product'
+User      = require '../../app/models/user'
 
 describe 'Admin Manage Product page', ->
   page = product = store = userSeller = browser = page = null

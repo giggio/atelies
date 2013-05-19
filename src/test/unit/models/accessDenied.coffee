@@ -1,4 +1,4 @@
-AccessDenied    = require '../../../errors/accessDenied'
+AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AccessDenied', ->
   it 'throws', ->

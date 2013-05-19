@@ -1,10 +1,9 @@
-require './globals'
-require './helpers/expressExtensions'
-require './helpers/languageExtensions'
-
-mongoose        = require 'mongoose'
-everyauth           = require 'everyauth'
 exports.start = (cb) ->
+  require './globals'
+  require './helpers/expressExtensions'
+  require './helpers/languageExtensions'
+  mongoose            = require 'mongoose'
+  everyauth           = require 'everyauth'
   express             = require "express"
   routes              = require "./routes"
   http                = require "http"
@@ -33,13 +32,17 @@ exports.start = (cb) ->
     when 'test' then 8000
     else 3000
 
+  app.set "port", port
+  app.set "views", path.join __dirname, "views"
+  app.set "view engine", "jade"
+
   app.use express.favicon()
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
   app.use express.session()
-  app.use express.static(path.join(__dirname, "public"))
-  everyauthConfig.configure()
+  app.use express.static(path.join(__dirname, '..', "public"))
+  everyauthConfig.configure app
   app.use(everyauthConfig.preEveryAuthMiddlewareHack())
   app.use everyauth.middleware app
   app.use(everyauthConfig.postEveryAuthMiddlewareHack())
@@ -49,12 +52,6 @@ exports.start = (cb) ->
   mongoose.connection.on 'error', (err) ->
     console.error "connection error:#{err.stack}"
     throw err
-  #app.dynamicHelpers currentUser: (req, res) -> req.user
-
-  app.configure ->
-    app.set "port", port
-    app.set "views", __dirname + "/views"
-    app.set "view engine", "jade"
 
   router.route app
 

@@ -1,6 +1,6 @@
 require './support/_specHelper'
-Store     = require '../../models/store'
-Product   = require '../../models/product'
+Store     = require '../../app/models/store'
+Product   = require '../../app/models/product'
 
 describe 'Store product page', ->
   browser = null

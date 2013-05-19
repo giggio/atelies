@@ -1,5 +1,5 @@
 require './support/_specHelper'
-Product   = require '../../models/product'
+Product   = require '../../app/models/product'
 
 describe 'Home page', ->
   browser = product1 = product2 = null

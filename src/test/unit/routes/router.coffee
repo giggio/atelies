@@ -1,5 +1,5 @@
-router = require '../../../routes/router'
-routes = require '../../../routes/index'
+router = require '../../../app/routes/router'
+routes = require '../../../app/routes/index'
 
 describe 'Router', ->
   it 'should route admin', ->

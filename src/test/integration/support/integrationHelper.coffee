@@ -1,5 +1,5 @@
 mongoose    = require 'mongoose'
-app         = require '../../../app'
+app         = require '../../../app/app'
 
 exports.localMongoDB = "mongodb://localhost/openstore"
 

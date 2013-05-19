@@ -1,5 +1,5 @@
 require '../support/_specHelper'
-Product     = require '../../../models/product'
+Product     = require '../../../app/models/product'
 
 describe 'Product', ->
   it 'requires name to be present', (done) ->

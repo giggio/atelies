@@ -1,6 +1,6 @@
-routes          = require '../../../routes'
-Store           = require '../../../models/store'
-AccessDenied    = require '../../../errors/accessDenied'
+routes          = require '../../../app/routes'
+Store           = require '../../../app/models/store'
+AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminStoreRoute', ->
   describe 'Access is granted', ->

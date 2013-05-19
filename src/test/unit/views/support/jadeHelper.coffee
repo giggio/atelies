@@ -3,7 +3,7 @@ fs          = require 'fs'
 path        = require 'path'
 jsdom       = require("jsdom").jsdom
 
-exports.viewPath = (name) -> path.join(__dirname, "..", '..', '..', '..', 'views', "#{name}.jade")
+exports.viewPath = (name) -> path.join(__dirname, "..", '..', '..', '..', 'app', 'views', "#{name}.jade")
 
 exports.viewContent = (viewName, cb) ->
   viewPath = exports.viewPath viewName

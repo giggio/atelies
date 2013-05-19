@@ -1,5 +1,5 @@
 require './support/_specHelper'
-User     = require '../../models/user'
+User     = require '../../app/models/user'
 
 describe 'Login', ->
   userA = browser = page = null

@@ -1,7 +1,8 @@
+path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
 
-exports.configure = ->
+exports.configure = (app) ->
   everyauth.password.configure
     loginWith: "email"
     getLoginPath: "/login"
@@ -10,8 +11,8 @@ exports.configure = ->
     registerSuccessRedirect: "/"
     getRegisterPath: "/register"
     postRegisterPath: "/register"
-    registerView: "register.jade"
-    loginView: "login.jade"
+    registerView: path.join app.get('views'), "register.jade"
+    loginView: path.join app.get('views'), "login.jade"
     loginLocals: (req, res) ->
     authenticate: (email, password) ->
       errors = []

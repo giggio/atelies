@@ -1,7 +1,7 @@
-routes          = require '../../../routes'
-Store           = require '../../../models/store'
-Product         = require '../../../models/product'
-AccessDenied    = require '../../../errors/accessDenied'
+routes          = require '../../../app/routes'
+Store           = require '../../../app/models/store'
+Product         = require '../../../app/models/product'
+AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminProductUpdateRoute', ->
   describe 'If user owns the store and product', ->

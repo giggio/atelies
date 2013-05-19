@@ -1,6 +1,6 @@
 require './support/_specHelper'
-Store     = require '../../models/store'
-User      = require '../../models/user'
+Store     = require '../../app/models/store'
+User      = require '../../app/models/user'
 
 describe 'Admin create store page', ->
   exampleStore = userSeller = browser = null

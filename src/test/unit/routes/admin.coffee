@@ -1,5 +1,5 @@
-routes      = require '../../../routes'
-Store       = require '../../../models/store'
+routes      = require '../../../app/routes'
+Store       = require '../../../app/models/store'
 
 describe 'AdminRoute', ->
   describe 'Access is granted correctly', ->

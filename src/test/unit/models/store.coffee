@@ -1,4 +1,4 @@
-Store   = require '../../../models/store'
+Store   = require '../../../app/models/store'
 
 describe 'Store', ->
   it 'requires name, city and state to be present', (done) ->
