@@ -39,6 +39,7 @@
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-coffeelint": "0.0.6",
     "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-watch": "~0.4.3"
+    "grunt-contrib-watch": "~0.4.3",
+    "grunt-express-server": "~0.3.1"
   }
 }

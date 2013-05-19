@@ -39,15 +39,27 @@ module.exports = (grunt) ->
           level: 'ignore'
 
     watch:
-      coffee:
-        files: ['app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee']
-        tasks: ['coffee', 'coffeelint']
+      server:
+        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
+        tasks: [ 'compileAndStartServer' ]
         options:
           nospawn: true
+          livereload: true
+      coffee:
+        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
+        tasks: [ 'coffee', 'coffeelint' ]
+        options:
+          nospawn: true
+
+    express:
+      dev:
+        options:
+          script: 'server.js'
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-express-server'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -73,4 +85,13 @@ module.exports = (grunt) ->
     onChange()
 
   grunt.registerTask 'lint', [ 'coffeelint' ]
+  grunt.registerTask 'server', [ 'compileAndStartServer', 'watch:server' ]
   grunt.registerTask 'default', ['coffee', 'lint']
+  grunt.registerTask 'compileAndStartServer', ->
+    tasks = [ 'coffee', 'coffeelint' ]
+    if grunt.config(['server', 'src']).length isnt 0
+      tasks.push 'express:dev'
+      grunt.log.writeln 'Compiling and starting server'
+    else
+      grunt.log.writeln 'Compiling and NOT starting server'
+    grunt.task.run tasks
