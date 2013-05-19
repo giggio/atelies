@@ -1,34 +1,37 @@
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
+    client:
+      expand: true
+      cwd: 'public'
+      src: [ '**/*.coffee' ]
+      dest: 'public'
+      ext: '.js'
+    server:
+      expand: true
+      cwd: 'app'
+      src: [ '**/*.coffee' ]
+      dest: 'app'
+      ext: '.js'
+    tests:
+      expand: true
+      cwd: 'test'
+      src: [ '**/*.coffee' ]
+      dest: 'test'
+      ext: '.js'
+    dev: [ 'Cakefile', 'Gruntfile.coffee' ]
 
     coffee:
       client:
-        options:
-          sourceMap: true
-        expand: true
-        cwd: 'public'
-        src: [ '**/*.coffee' ]
-        dest: 'public'
-        ext: '.js'
-      server:
-        expand: true
-        cwd: 'app'
-        src: [ '**/*.coffee' ]
-        dest: 'app'
-        ext: '.js'
-      tests:
-        expand: true
-        cwd: 'test'
-        src: [ '**/*.coffee' ]
-        dest: 'test'
-        ext: '.js'
+        files: ['<%= client %>'], options: {sourceMap: true}
+      server: '<%= server %>'
+      tests: '<%= tests %>'
 
     coffeelint:
-      client: [ 'public/**/*.coffee' ]
-      server: [ 'app/**/*.coffee' ]
-      tests: [ 'test/**/*.coffee' ]
-      dev: [ 'Cakefile', 'Gruntfile.coffee' ]
+      client: '<%= client %>'
+      server: '<%= server %>'
+      tests: '<%= tests %>'
+      dev: '<%= dev %>'
       options:
         max_line_length:
           level: 'ignore'
@@ -48,10 +51,10 @@ module.exports = (grunt) ->
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
-     _.chain(files)
-      .filter((f) -> _(f).startsWith dir)
-      .map((f)->_(f).strRight "#{dir}/")
-      .value()
+    _.chain(files)
+     .filter((f) -> _(f).startsWith dir)
+     .map((f)->_(f).strRight "#{dir}/")
+     .value()
 
   changedFiles = {}
   onChange = grunt.util._.debounce ->
@@ -59,17 +62,15 @@ module.exports = (grunt) ->
     serverFiles = filterFiles files, 'app'
     clientFiles = filterFiles files, 'public'
     testFiles = filterFiles files, 'test'
-    grunt.config ['coffee', 'server', 'src'], serverFiles
-    grunt.config ['coffee', 'client', 'src'], clientFiles
-    grunt.config ['coffee', 'tests', 'src'], testFiles
-    grunt.config ['coffeelint', 'server'], serverFiles
-    grunt.config ['coffeelint', 'client'], clientFiles
-    grunt.config ['coffeelint', 'tests'], testFiles
-    grunt.config ['coffeelint', 'dev'], []
+    grunt.config ['server', 'src'], serverFiles
+    grunt.config ['client', 'src'], clientFiles
+    grunt.config ['tests', 'src'], testFiles
+    grunt.config ['dev'], []
     changedFiles = {}
   , 200
   grunt.event.on 'watch', (action, filepath) ->
     changedFiles[filepath] = action
     onChange()
 
-  grunt.registerTask 'default', ['coffeelint']
+  grunt.registerTask 'lint', [ 'coffeelint' ]
+  grunt.registerTask 'default', ['coffee', 'lint']
