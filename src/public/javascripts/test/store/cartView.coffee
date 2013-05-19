@@ -5,9 +5,9 @@ define [
   'areas/store/models/cart'
   '../support/_specHelper'
 ], ($, CartView, Cart) ->
-  product1  = generator.product.a()
-  product2  = generator.product.b()
-  store1    = generator.store.a()
+  product1  = generatorc.product.a()
+  product2  = generatorc.product.b()
+  store1    = generatorc.store.a()
   cartView = null
   el = $('<div></div>')
   describe 'CartView', ->

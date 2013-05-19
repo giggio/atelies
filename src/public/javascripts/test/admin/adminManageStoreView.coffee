@@ -9,9 +9,9 @@ define [
     describe 'Valid Store gets created', ->
       products = store = manageStoreView = null
       before ->
-        store = generator.store.a()
-        product1 = generator.product.a()
-        product2 = generator.product.b()
+        store = generatorc.store.a()
+        product1 = generatorc.product.a()
+        product2 = generatorc.product.b()
         products = [product1, product2]
         productsModel = new Products products, storeSlug: store.slug
         manageStoreView = new ManageStoreView el:el, store: store, products: productsModel

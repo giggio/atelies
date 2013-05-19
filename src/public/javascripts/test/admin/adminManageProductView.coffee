@@ -12,8 +12,8 @@ define [
     describe 'Shows product', ->
       product = store = manageProductView = null
       before ->
-        store = generator.store.a()
-        product = generator.product.a()
+        store = generatorc.store.a()
+        product = generatorc.product.a()
         products = new Products [product], storeSlug: product.storeSlug
         productModel = products.at 0
         manageProductView = new ManageProductView el:el, product: productModel
@@ -41,9 +41,9 @@ define [
           productPosted = JSON.parse opt.data
           opt.success()
         historySpy = sinon.spy Backbone.history, "navigate"
-        store = generator.store.a()
-        product = generator.product.a()
-        updatedProduct = generator.product.b()
+        store = generatorc.store.a()
+        product = generatorc.product.a()
+        updatedProduct = generatorc.product.b()
         products = new Products [product], storeSlug: product.storeSlug
         productModel = products.at 0
         manageProductView = new ManageProductView el:el, product: productModel
@@ -87,8 +87,8 @@ define [
       before ->
         ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
         historySpy = sinon.spy Backbone.history, "navigate"
-        store = generator.store.a()
-        product = generator.product.a()
+        store = generatorc.store.a()
+        product = generatorc.product.a()
         products = new Products [product], storeSlug: product.storeSlug
         productModel = products.at 0
         manageProductView = new ManageProductView el:el, product: productModel

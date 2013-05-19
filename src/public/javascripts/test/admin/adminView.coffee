@@ -6,11 +6,11 @@ define [
   el = $('<div></div>')
   describe 'AdminView', ->
     describe 'With stores', ->
-      store1 = generator.store.a()
-      store2 = generator.store.b()
+      store1 = generatorc.store.a()
+      store2 = generatorc.store.b()
       before ->
-        store1 = generator.store.a()
-        store2 = generator.store.b()
+        store1 = generatorc.store.a()
+        store2 = generatorc.store.b()
         stores = [store1, store2]
         createStoreView = new AdminView el:el, stores: [store1, store2]
         createStoreView.render()

@@ -10,8 +10,8 @@ define [
   product1 = product2 = products = null
   describe 'HomeView', ->
     before ->
-      product1 = generator.product.a()
-      product2 = generator.product.b()
+      product1 = generatorc.product.a()
+      product2 = generatorc.product.b()
       products = [ product1, product2 ]
       homeView = new HomeView el:el, products: products
       homeView.render()

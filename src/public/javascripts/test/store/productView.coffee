@@ -7,10 +7,10 @@ define [
   'underscore'
   'areas/store/models/product'
 ], ($, ProductView, Backbone, Cart, _, Product) ->
-  product1  = generator.product.a()
-  product2  = generator.product.b()
-  store1    = generator.store.a()
-  store2    = generator.store.b()
+  product1  = generatorc.product.a()
+  product2  = generatorc.product.b()
+  store1    = generatorc.store.a()
+  store2    = generatorc.store.b()
   productView = null
   el = $('<div></div>')
   describe 'ProductView', ->

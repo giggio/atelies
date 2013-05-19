@@ -1,6 +1,6 @@
 define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define ->
-  generator:
+  generatorc:
     product:
       a: ->
         _id: '1'

@@ -17,8 +17,8 @@ define [
           productPosted = JSON.parse opt.data
           opt.success(_id: '456')
         historySpy = sinon.spy Backbone.history, "navigate"
-        store = generator.store.a()
-        product = generator.product.a()
+        store = generatorc.store.a()
+        product = generatorc.product.a()
         product._id = undefined
         products = new Products [product], storeSlug: store.slug
         productModel = products.at 0
@@ -63,8 +63,8 @@ define [
       before ->
         ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
         historySpy = sinon.spy Backbone.history, "navigate"
-        store = generator.store.a()
-        product = generator.product.a()
+        store = generatorc.store.a()
+        product = generatorc.product.a()
         product._id = undefined
         products = new Products [product], storeSlug: product.storeSlug
         productModel = products.at 0

@@ -9,7 +9,7 @@ define [
   describe 'CreateStoreView', ->
     describe 'Valid Store gets created', ->
       goToStoreManagePageSpy = storePassedIn = null
-      store = generator.store.a()
+      store = generatorc.store.a()
       before ->
         global.adminStoresBootstrapModel = stores:[]
         createStoreView = new CreateStoreView el:el
@@ -43,7 +43,7 @@ define [
 
     describe 'invalid Store does not get created', ->
       ajaxSpy = goToStoreManagePageSpy = null
-      store = generator.store.a()
+      store = generatorc.store.a()
       before ->
         createStoreView = new CreateStoreView el:el
         ajaxSpy = sinon.spy $, "ajax"
