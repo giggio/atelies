@@ -56,10 +56,32 @@ module.exports = (grunt) ->
         options:
           script: 'server.js'
 
+    cafemocha:
+      server_unit:
+        src: 'test/unit/**/*.js'
+        options:
+          require: ['test/support/_specHelper.js']
+          reporter: 'spec'
+          ui: 'bdd'
+      server_integration:
+        src: 'test/integration/**/*.js'
+        options:
+          require: ['test/support/_specHelper.js']
+          reporter: 'spec'
+          ui: 'bdd'
+          timeout: 40000
+      client:
+        src: 'public/javascripts/test/**/*.js'
+        options:
+          require: ['public/javascripts/test/support/runnerSetup.js']
+          reporter: 'spec'
+          ui: 'bdd'
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
+  grunt.loadNpmTasks 'grunt-cafe-mocha'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -86,7 +108,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'compileAndStartServer', 'watch:server' ]
-  grunt.registerTask 'default', ['coffee', 'lint']
   grunt.registerTask 'compileAndStartServer', ->
     tasks = [ 'coffee', 'coffeelint' ]
     if grunt.config(['server', 'src']).length isnt 0
@@ -95,3 +116,9 @@ module.exports = (grunt) ->
     else
       grunt.log.writeln 'Compiling and NOT starting server'
     grunt.task.run tasks
+  grunt.registerTask 'test', ['test:unit', 'test:integration', 'test:client' ]
+  grunt.registerTask 'test:fast', ['test:unit', 'test:client' ]
+  grunt.registerTask 'test:unit', ['cafemocha:server_unit']
+  grunt.registerTask 'test:integration', ['cafemocha:server_integration']
+  grunt.registerTask 'test:client', ['cafemocha:client']
+  grunt.registerTask 'default', ['server']

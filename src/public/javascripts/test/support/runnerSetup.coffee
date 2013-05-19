@@ -22,7 +22,7 @@ initDOM = ->
 
 configureRequireJS = ->
   requirejs.config
-    baseUrl: "."
+    baseUrl: path.join __dirname, '..', ".."
     nodeRequire: require
   require '../../bootstrap'
 
