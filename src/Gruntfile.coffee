@@ -4,7 +4,7 @@ module.exports = (grunt) ->
     client:
       expand: true
       cwd: 'public'
-      src: [ '**/*.coffee' ]
+      src: [ '**/*.coffee', '!javascripts/lib/**/*' ]
       dest: 'public'
       ext: '.js'
     server:
