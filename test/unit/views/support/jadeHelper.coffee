@@ -36,7 +36,7 @@ exports.getHtmlFromView = (viewName, data, cb) ->
     cb null, html
 
 exports.getWindowFor = (html, cb) ->
-  fs.readFile path.join(__dirname, "../../../../public/javascripts/lib/jquery.min.js".split('/')...), (err, jqueryFile) ->
+  fs.readFile path.join(__dirname, "../../../../public/javascripts/lib/jquery/jquery.min.js".split('/')...), (err, jqueryFile) ->
     return cb err, null if err
     jsdom.env html: html, src: [jqueryFile], done: (err, window) ->
       cb null, window, window?.$
