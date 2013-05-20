@@ -28,3 +28,4 @@ configureRequireJS = ->
 
 initDOM()
 configureRequireJS()
+requirejs 'test/support/_specHelper'

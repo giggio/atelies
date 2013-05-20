@@ -3,7 +3,7 @@ requirejs.config
     jquery: 'lib/jquery/jquery.min'
     underscore: 'lib/underscore/underscore-min'
     backbone: 'lib/backbone/backbone-min'
-    handlebars: 'lib/handlebars/handlebars'
+    handlebars: 'lib/handlebars/index'
     text: 'lib/requirejs-text/text'
     twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder/Backbone.ModelBinder.min'
