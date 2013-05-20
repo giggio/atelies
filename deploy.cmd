@@ -25,9 +25,9 @@ setlocal enabledelayedexpansion
 
 SET ARTIFACTS=%~dp0%artifacts
 
-SET DEPLOYMENT_SOURCE=%~dp0%src
+SET DEPLOYMENT_SOURCE=%~dp0%
 :: IF NOT DEFINED DEPLOYMENT_SOURCE (
-::  SET DEPLOYMENT_SOURCE=%~dp0%src
+::  SET DEPLOYMENT_SOURCE=%~dp0%
 ::)
 
 IF NOT DEFINED DEPLOYMENT_TARGET (
@@ -68,25 +68,33 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd %DEPLOYMENT_TARGET%
   echo Installing npm packages
   call npm install --production
+  call npm install -g grunt-cli
+  call npm install -g bower
   IF !ERRORLEVEL! NEQ 0 goto error
-  echo Npm ran sucessfully.
+  echo Npm ran successfully.
   popd
 )
 
-echo Compiling CoffeeScript
+echo Installing Bower components
 
 :: 3. Baking cake
-IF EXIST "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" (
-  pushd %DEPLOYMENT_TARGET%
-  echo Cake found, baking...
-  call node "%DEPLOYMENT_TARGET%\node_modules\coffee-script\bin\cake" build
-  IF !ERRORLEVEL! NEQ 0 goto error
-  echo Cake baked!
-  dir 
-  dir routes
-  dir /s public\javascripts
-  popd
-)
+pushd %DEPLOYMENT_TARGET%
+call bower install
+IF !ERRORLEVEL! NEQ 0 goto error
+echo Bower ran successfully!
+dir public\javascripts\lib
+popd
+
+echo Compile everything
+
+:: 4. Compiling
+pushd %DEPLOYMENT_TARGET%
+call grunt compile
+IF !ERRORLEVEL! NEQ 0 goto error
+echo Compiled!
+dir
+dir routes
+popd
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
