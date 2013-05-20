@@ -99,6 +99,20 @@ module.exports = (grunt) ->
           ui: 'bdd'
           coverage: true
           output: 'clientcoveragereport.html'
+      travis_server_unit_coverage:
+        src: 'test/unit/**/*.js'
+        options:
+          require: ['test/support/_specHelper.js']
+          ui: 'bdd'
+          coveralls:
+            serviceName: 'travis-ci'
+      travis_client_unit_coverage:
+        src: 'public/javascripts/test/**/*.js'
+        options:
+          require: ['public/javascripts/test/support/runnerSetup.js']
+          ui: 'bdd'
+          coveralls:
+            serviceName: 'travis-ci'
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -147,6 +161,7 @@ module.exports = (grunt) ->
       grunt.log.writeln "Compiling and #{'NOT'.red} starting server"
     grunt.task.run tasks
   grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
+  grunt.registerTask 'test:travis', [ 'mochacov:travis_server_unit_coverage', 'mochacov:travis_client_unit_coverage' ]
   grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
   grunt.registerTask 'test:nocompile', [ 'test:unit', 'test:integration', 'test:client' ]
   grunt.registerTask 'test:nocompile:smoke', [ 'test:unit', 'test:client' ]
@@ -154,4 +169,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:integration', ['mochacov:server_integration']
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
+  grunt.registerTask 'travis', [ 'compile', 'test:travis' ]
   grunt.registerTask 'default', ['server']

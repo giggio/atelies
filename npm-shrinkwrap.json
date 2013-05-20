@@ -336,13 +336,13 @@
         }
       }
     },
-    "amdefine": {
-      "version": "0.0.5",
-      "from": "amdefine@"
-    },
     "backbone": {
       "version": "1.0.0",
       "from": "backbone@~1.0.0"
+    },
+    "amdefine": {
+      "version": "0.0.5",
+      "from": "amdefine@"
     },
     "chai": {
       "version": "1.6.0",
@@ -367,6 +367,10 @@
       "version": "0.3.1",
       "from": "grunt-express-server@",
       "resolved": "https://registry.npmjs.org/grunt-express-server/-/grunt-express-server-0.3.1.tgz"
+    },
+    "mocha-lcov-reporter": {
+      "version": "0.0.1",
+      "from": "mocha-lcov-reporter@"
     },
     "requirejs": {
       "version": "2.1.5",
@@ -445,26 +449,6 @@
           "version": "0.0.6",
           "from": "stack-trace@0.0.6",
           "resolved": "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.6.tgz"
-        }
-      }
-    },
-    "handlebars": {
-      "version": "1.0.10",
-      "from": "handlebars@~1.0.10",
-      "dependencies": {
-        "optimist": {
-          "version": "0.3.7",
-          "from": "optimist@~0.3",
-          "dependencies": {
-            "wordwrap": {
-              "version": "0.0.2",
-              "from": "wordwrap@~0.0.2"
-            }
-          }
-        },
-        "uglify-js": {
-          "version": "1.2.6",
-          "from": "uglify-js@~1.2"
         }
       }
     },

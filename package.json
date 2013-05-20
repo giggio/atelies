@@ -28,7 +28,6 @@
     "zombie": "2.x",
     "backbone": "~1.0.0",
     "requirejs": "~2.1.5",
-    "handlebars": "~1.0.10",
     "underscore.string": "~2.3.1",
     "node-localstorage": "~0.3.3",
     "htmlparser2": "~3.0.5",
@@ -48,6 +47,7 @@
     "grunt-contrib-watch": "~0.4.3",
     "grunt-express-server": "~0.3.1",
     "grunt-mocha-cov": "0.0.7",
-    "blanket": "~1.1.4"
+    "blanket": "~1.1.4",
+    "mocha-lcov-reporter": "0.0.1"
   }
 }
