@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'test'
-require '../../globals'
+require '../../app/globals'
 require './_addLibsHelper'
 require './matchersHelper'
 

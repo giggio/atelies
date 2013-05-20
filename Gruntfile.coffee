@@ -20,14 +20,19 @@ module.exports = (grunt) ->
       dest: 'test'
       ext: '.js'
     dev: [ 'Cakefile', 'Gruntfile.coffee' ]
+    base:
+      files:
+        'server.js':'server.coffee'
 
     coffee:
+      base: '<%= base %>'
       client:
         files: ['<%= client %>'], options: {sourceMap: true}
       server: '<%= server %>'
       tests: '<%= tests %>'
 
     coffeelint:
+      base: '<%= base %>'
       client: '<%= client %>'
       server: '<%= server %>'
       tests: '<%= tests %>'

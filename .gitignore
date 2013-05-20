@@ -1,7 +1,6 @@
 node_modules
 azure_error
 *.js
-**/public/**/lib
+public/**/lib
 *.map
 *.password
-.localstorage-test

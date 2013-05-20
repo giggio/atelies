@@ -6,8 +6,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server",
-    "test": "grunt test",
+    "start": "grunt server",
+    "test": "grunt test:smoke",
     "blanket": {
       "pattern": [
         "public",
