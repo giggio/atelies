@@ -1,13 +1,13 @@
 requirejs.config
   paths:
-    jquery: 'lib/jquery.min'
-    underscore: 'lib/underscore-min'
-    backbone: 'lib/backbone-min'
-    handlebars: 'lib/handlebars.min'
-    text: 'lib/text'
-    twitterBootstrap: 'lib/bootstrap.min'
-    backboneModelBinder: 'lib/Backbone.ModelBinder'
-    backboneValidation: 'lib/backbone-validation-amd-min'
+    jquery: 'lib/jquery/jquery.min'
+    underscore: 'lib/underscore/underscore-min'
+    backbone: 'lib/backbone/backbone-min'
+    handlebars: 'lib/handlebars/handlebars'
+    text: 'lib/requirejs-text/text'
+    twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
+    backboneModelBinder: 'lib/Backbone.ModelBinder/Backbone.ModelBinder.min'
+    backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd-min'
   shim:
     'handlebars':
       deps: ['jquery']
