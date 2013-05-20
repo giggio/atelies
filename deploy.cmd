@@ -79,7 +79,8 @@ echo Installing Bower components
 
 :: 3. Baking cake
 pushd %DEPLOYMENT_TARGET%
-call bower install
+:: bower does not yet run on windows...
+::call bower install
 IF !ERRORLEVEL! NEQ 0 goto error
 echo Bower ran successfully!
 dir public\javascripts\lib
