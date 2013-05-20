@@ -129,7 +129,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'compileAndStartServer', 'watch:server' ]
   grunt.registerTask 'compileAndStartServer', ->
-    tasks = [ 'coffee', 'coffeelint' ]
+    tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
       tasks.push 'test:client'
       grunt.log.writeln "Running #{'client'.blue} unit tests"
@@ -141,9 +141,12 @@ module.exports = (grunt) ->
     else
       grunt.log.writeln "Compiling and #{'NOT'.red} starting server"
     grunt.task.run tasks
-  grunt.registerTask 'test', ['test:unit', 'test:integration', 'test:client' ]
-  grunt.registerTask 'test:fast', ['test:unit', 'test:client' ]
+  grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
+  grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
+  grunt.registerTask 'test:nocompile', [ 'test:unit', 'test:integration', 'test:client' ]
+  grunt.registerTask 'test:nocompile:smoke', [ 'test:unit', 'test:client' ]
   grunt.registerTask 'test:unit', ['mochacov:server_unit']
   grunt.registerTask 'test:integration', ['mochacov:server_integration']
   grunt.registerTask 'test:client', ['mochacov:client']
+  grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'default', ['server']

@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "test": "coffee -c . && node clientSpecRunner.js && mocha test",
+    "test": "grunt test",
     "blanket": {
       "pattern": [
         "public",
