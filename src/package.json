@@ -9,7 +9,10 @@
     "start": "node server",
     "test": "coffee -c . && node clientSpecRunner.js && mocha test",
     "blanket": {
-      "pattern": [ "public", "app" ]
+      "pattern": [
+        "public",
+        "app"
+      ]
     }
   },
   "dependencies": {
@@ -44,6 +47,7 @@
     "grunt-contrib-coffee": "~0.7.0",
     "grunt-contrib-watch": "~0.4.3",
     "grunt-express-server": "~0.3.1",
-    "grunt-mocha-cov": "0.0.7"
+    "grunt-mocha-cov": "0.0.7",
+    "blanket": "~1.1.4"
   }
 }

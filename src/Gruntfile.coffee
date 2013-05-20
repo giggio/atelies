@@ -82,9 +82,18 @@ module.exports = (grunt) ->
         src: 'test/unit/**/*.js'
         options:
           require: ['test/support/_specHelper.js']
-          reporter: 'spec'
+          reporter: 'html-cov'
           ui: 'bdd'
           coverage: true
+          output: 'servercoveragereport.html'
+      client_unit_coverage:
+        src: 'public/javascripts/test/**/*.js'
+        options:
+          require: ['public/javascripts/test/support/runnerSetup.js']
+          reporter: 'html-cov'
+          ui: 'bdd'
+          coverage: true
+          output: 'clientcoveragereport.html'
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
