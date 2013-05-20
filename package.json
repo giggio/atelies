@@ -21,7 +21,11 @@
     "coffee-script": "*",
     "mongoose": "~3.6.2",
     "underscore": "~1.4.4",
-    "everyauth": "git://github.com/bnoguchi/everyauth.git#express3"
+    "everyauth": "git://github.com/bnoguchi/everyauth.git#express3",
+    "grunt": "~0.4.1",
+    "grunt-coffeelint": "0.0.6",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-requirejs": "~0.4.1"
   },
   "devDependencies": {
     "jsdom": "*",
@@ -40,10 +44,6 @@
     "chai-fuzzy": "~1.2.0",
     "amdefine": "0.0.5",
     "sandboxed-module": "~0.2.0",
-    "grunt": "~0.4.1",
-    "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-coffeelint": "0.0.6",
-    "grunt-contrib-coffee": "~0.7.0",
     "grunt-contrib-watch": "~0.4.3",
     "grunt-express-server": "~0.3.1",
     "grunt-mocha-cov": "0.0.7",
