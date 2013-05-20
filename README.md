@@ -2,6 +2,7 @@
 =======
 
 [![Build Status](https://travis-ci.org/giggio/open-store.png)](https://travis-ci.org/giggio/open-store)
+[![Coverage Status](https://coveralls.io/repos/giggio/open-store/badge.png)](https://coveralls.io/r/giggio/open-store)
 
 This is still a learning project. It will not be forever.
 
