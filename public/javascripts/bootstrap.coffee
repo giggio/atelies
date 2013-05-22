@@ -27,6 +27,11 @@ if global? #nodejs only, needs to add jquery to global scope otherwise twitter b
 else
   requirejs [
     'app'
+    'backbone'
     './backboneConfig'
-  ], (App) ->
+  ], (App, Backbone) ->
+    Backbone.View::close = ->
+      @remove()
+      @off()
+      @stopListening()
     App.start()
