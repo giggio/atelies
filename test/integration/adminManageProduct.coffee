@@ -4,7 +4,7 @@ Product   = require '../../app/models/product'
 User      = require '../../app/models/user'
 
 describe 'Admin Manage Product page', ->
-  page = product = store = userSeller = browser = page = null
+  page = product = product2 = store = userSeller = browser = page = null
   before (done) ->
     cleanDB (error) ->
       return done error if error
@@ -13,6 +13,8 @@ describe 'Admin Manage Product page', ->
         store.save()
         product = generator.product.a()
         product.save()
+        product2 = generator.product.d()
+        product2.save()
         userSeller = generator.user.c()
         userSeller.stores.push store
         userSeller.save()
@@ -101,4 +103,21 @@ describe 'Admin Manage Product page', ->
         productOnDb.weight.should.equal otherProduct.weight
         productOnDb.hasInventory.should.equal otherProduct.hasInventory
         productOnDb.inventory.should.equal otherProduct.inventory
+        done()
+
+  xdescribe 'deleting product', ->
+    otherProduct = null
+    before (done) ->
+      browser = newBrowser browser
+      page = browser.adminManageProductPage
+      browser.loginPage.navigateAndLoginWith userSeller, ->
+        page.visit store.slug, product2._id.toString(), ->
+          page.clickDeleteProduct ->
+            page.clickConfirmDeleteProduct done
+    it 'is at the store manage page', ->
+      browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product2.storeSlug}"
+    it 'deleted the product', (done) ->
+      Product.findById product2._id, (err, productOnDb) ->
+        return done err if err
+        productOnDb.should.be.null
         done()

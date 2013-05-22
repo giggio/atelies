@@ -65,7 +65,7 @@ define [
           ajaxSpy.restore()
           historySpy.restore()
         it 'updated product', ->
-          expect(ajaxSpy).to.have.beenCalled
+          expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal updatedProduct.name
           expect(productPosted.price).to.equal updatedProduct.price
           expect(productPosted.picture).to.equal updatedProduct.picture
@@ -153,7 +153,7 @@ define [
           ajaxSpy.restore()
           historySpy.restore()
         it 'created the product', ->
-          expect(ajaxSpy).to.have.beenCalled
+          expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal product.name
           expect(productPosted.price).to.equal product.price
           expect(productPosted.picture).to.equal product.picture
@@ -209,3 +209,73 @@ define [
           expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
           expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
           expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
+
+    describe 'Deleting a Product', ->
+      describe 'Deletes product', ->
+        historySpy = productPosted = dataPosted = ajaxSpy = product = store = manageProductView = null
+        before ->
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            dataPosted = opt
+            opt.success()
+          historySpy = sinon.spy Backbone.history, "navigate"
+          store = generatorc.store.a()
+          product = generatorc.product.a()
+          products = new Products [product], storeSlug: store.slug
+          productModel = products.at 0
+          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView.render()
+          $("#name", el).val(product.name).change()
+          $("#price", el).val(product.price).change()
+          $("#picture", el).val(product.picture).change()
+          $("#tags", el).val(product.tags).change()
+          $("#description", el).val(product.description).change()
+          $("#height", el).val(product.height).change()
+          $("#width", el).val(product.width).change()
+          $("#depth", el).val(product.depth).change()
+          $("#weight", el).val(product.weight).change()
+          $("#hasInventory", el).prop('checked', product.hasInventory).change()
+          $("#inventory", el).val(product.inventory).change()
+          $('#deleteProduct', el).trigger 'click'
+          $('#confirmDeleteProduct', el).trigger 'click'
+        after ->
+          ajaxSpy.restore()
+          historySpy.restore()
+        it 'deleted the product', ->
+          ajaxSpy.should.have.been.called
+        it 'navigated to store manage', ->
+          expect(historySpy).to.have.been.calledWith "manageStore/#{product.storeSlug}", trigger:true
+        it 'posted to correct url', ->
+          expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
+          expect(dataPosted.type).to.equal "DELETE"
+
+      describe 'does not confirm product deletion', ->
+        historySpy = productPosted = dataPosted = ajaxSpy = product = store = manageProductView = null
+        before ->
+          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          historySpy = sinon.spy Backbone.history, "navigate"
+          store = generatorc.store.a()
+          product = generatorc.product.a()
+          products = new Products [product], storeSlug: store.slug
+          productModel = products.at 0
+          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView.render()
+          $("#name", el).val(product.name).change()
+          $("#price", el).val(product.price).change()
+          $("#picture", el).val(product.picture).change()
+          $("#tags", el).val(product.tags).change()
+          $("#description", el).val(product.description).change()
+          $("#height", el).val(product.height).change()
+          $("#width", el).val(product.width).change()
+          $("#depth", el).val(product.depth).change()
+          $("#weight", el).val(product.weight).change()
+          $("#hasInventory", el).prop('checked', product.hasInventory).change()
+          $("#inventory", el).val(product.inventory).change()
+          $('#deleteProduct', el).trigger 'click'
+          $('#noConfirmDeleteProduct', el).trigger 'click'
+        after ->
+          ajaxSpy.restore()
+          historySpy.restore()
+        it 'did not delete the product', ->
+          ajaxSpy.should.not.have.been.called
+        it 'stays at the product manage page', ->
+          historySpy.should.not.have.been.called

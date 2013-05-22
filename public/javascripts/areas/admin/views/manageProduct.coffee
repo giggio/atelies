@@ -10,7 +10,9 @@ define [
   'backboneValidation'
 ], ($, Backbone, Handlebars, _, manageProductTemplate, Product, Products, ModelBinder, Validation) ->
   class ManageProductView extends Backbone.View
-    events: 'click #updateProduct':'_updateProduct'
+    events:
+      'click #updateProduct':'_updateProduct'
+      'click #confirmDeleteProduct':'_deleteProduct'
     @justCreated: false
     template: manageProductTemplate
     initialize: (opt) =>
@@ -35,7 +37,11 @@ define [
     _updateProduct: =>
       if @product.isValid true
         @product.save @product.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
+    _deleteProduct: =>
+      @product.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
+      Backbone.history.navigate "manageStore/#{@product.get('storeSlug')}", trigger: true
+    _productDeleted: =>
       Backbone.history.navigate "manageStore/#{@product.get('storeSlug')}", trigger: true
     _initializeDefaultBindings: ->
       attributeBindings = {}
