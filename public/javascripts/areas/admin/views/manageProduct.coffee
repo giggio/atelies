@@ -19,6 +19,9 @@ define [
       @$el.html @template
       binder = new ModelBinder()
       bindings = @_initializeDefaultBindings()
+      hideIfNonExistent = (direction, value) -> if value? then '' else 'hide'
+      bindings['_id'] = [bindings['_id'], {selector: '#_id_holder', elAttribute:'class', converter: hideIfNonExistent }]
+      bindings['slug'] = [bindings['slug'], {selector: '#slug_holder', elAttribute:'class', converter: hideIfNonExistent }]
       $.extend true, bindings, {}
       bindings.weight.converter = bindings.height.converter = bindings.width.converter = bindings.depth.converter = bindings.inventory.converter = (direction, value) ->
         int = parseInt value
