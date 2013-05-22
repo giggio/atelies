@@ -163,7 +163,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
   grunt.registerTask 'test:travis', [ 'mochacov:travis_server_unit_coverage', 'mochacov:travis_client_unit_coverage' ]
   grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
-  grunt.registerTask 'test:nocompile', [ 'test:unit', 'test:integration', 'test:client' ]
+  grunt.registerTask 'test:nocompile', [ 'test:unit', 'test:client', 'test:integration' ]
   grunt.registerTask 'test:nocompile:smoke', [ 'test:unit', 'test:client' ]
   grunt.registerTask 'test:unit', ['mochacov:server_unit']
   grunt.registerTask 'test:integration', ['mochacov:server_integration']
