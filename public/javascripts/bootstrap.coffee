@@ -31,7 +31,9 @@ else
     './backboneConfig'
   ], (App, Backbone) ->
     Backbone.View::close = ->
-      @remove()
-      @off()
-      @stopListening()
+      try
+        @remove()
+        @off()
+        @stopListening()
+      catch error
     App.start()

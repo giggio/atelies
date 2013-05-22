@@ -1,7 +1,9 @@
 define [
   'jquery'
+  '../../viewsManager'
   './views/home'
-],($, HomeView) ->
+],($, viewsManager, HomeView) ->
+  viewsManager.$el = $ "#app-container"
   home: ->
-    homeView = new HomeView el:$("#app-container"), products: homeProductsBootstrapModel
-    homeView.render()
+    homeView = new HomeView products: homeProductsBootstrapModel
+    viewsManager.show homeView

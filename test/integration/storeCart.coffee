@@ -50,12 +50,13 @@ describe 'Store shopping cart page', ->
           browser.storeProductPage.purchaseItem ->
             browser.storeProductPage.visit 'store_1', 'name_1', (error) ->
               return done error if error
-              browser.storeProductPage.purchaseItem ->
-                #it 'is at the cart location', ->
-                expect(browser.location.toString()).to.equal "http://localhost:8000/store_1#cart"
-                browser.reload done
-    it 'shows a cart with one item', ->
-      expect(browser.storeCartPage.itemsQuantity()).to.equal 1
+              browser.storeProductPage.purchaseItem done
+    it 'is at the cart location', ->
+      expect(browser.location.toString()).to.equal "http://localhost:8000/store_1#cart"
+    it 'shows a cart with one item', (done) ->
+      browser.reload ->
+        expect(browser.storeCartPage.itemsQuantity()).to.equal 1
+        done()
     it 'shows quantity of two', ->
       expect(browser.storeCartPage.quantity()).to.equal 2
   
