@@ -126,6 +126,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-mocha-cov'
   grunt.loadNpmTasks 'grunt-bower-task'
+  grunt.loadNpmTasks 'grunt-notify'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
