@@ -114,12 +114,18 @@ module.exports = (grunt) ->
           coveralls:
             serviceName: 'travis-ci'
 
+    bower:
+      install:
+        options:
+          target: 'public/javascripts/lib'
+          copy: false
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
-  #grunt.loadNpmTasks 'grunt-cafe-mocha'
   grunt.loadNpmTasks 'grunt-mocha-cov'
+  grunt.loadNpmTasks 'grunt-bower-task'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -146,7 +152,8 @@ module.exports = (grunt) ->
 
   #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
-  grunt.registerTask 'server', [ 'compileAndStartServer', 'watch:server' ]
+  grunt.registerTask 'server', [ 'express:dev' ]
+  grunt.registerTask 'server:watch', [ 'compileAndStartServer', 'watch:server' ]
   grunt.registerTask 'compileAndStartServer', ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
@@ -170,4 +177,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
-  grunt.registerTask 'default', ['server']
+  grunt.registerTask 'install', [ 'bower', 'compile' ]
+  grunt.registerTask 'default', ['server:watch']
