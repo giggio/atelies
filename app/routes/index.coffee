@@ -65,6 +65,17 @@ exports.adminProductUpdate = (req, res) ->
       product.save (err) ->
         res.send 204
 
+exports.adminProductDelete = (req, res) ->
+  unless req.loggedIn and req.user?.isSeller
+    throw new AccessDenied()
+  Product.findById req.params.productId, (err, product) ->
+    dealWith err
+    Store.findBySlug product.storeSlug, (err, store) ->
+      dealWith err
+      throw new AccessDenied() unless req.user.hasStore store
+      product.remove (err) ->
+        res.send 204
+
 exports.adminProductCreate = (req, res) ->
   unless req.loggedIn and req.user?.isSeller
     throw new AccessDenied()
@@ -81,7 +92,10 @@ exports.adminProductCreate = (req, res) ->
 exports.storeProduct = (req, res) ->
   Product.findById req.params.productId, (err, product) ->
     dealWith err
-    res.json product.toSimpleProduct()
+    if product?
+      res.json product.toSimpleProduct()
+    else
+      res.send 404
 
 exports.product = (req, res) ->
   Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->

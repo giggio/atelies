@@ -3,14 +3,13 @@ Store           = require '../../../app/models/store'
 Product         = require '../../../app/models/product'
 AccessDenied    = require '../../../app/errors/accessDenied'
 
-describe 'AdminProductUpdateRoute', ->
+describe 'AdminProductDeleteRoute', ->
   describe 'If user owns the store and product', ->
     product = store = req = res = body = user = null
     before ->
       product =
-        save: sinon.stub().yields null, product
+        remove: sinon.stub().yields null, product
         storeSlug: 'some_store'
-        updateFromSimpleProduct: sinon.spy()
       store = _id: 9876
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store
@@ -22,7 +21,7 @@ describe 'AdminProductUpdateRoute', ->
       req = loggedIn: true, user: user, params: params, body: {}
       body = req.body
       res = send: sinon.spy()
-      routes.adminProductUpdate req, res
+      routes.adminProductDelete req, res
     after ->
       Product.findById.restore()
       Store.findBySlug.restore()
@@ -32,15 +31,8 @@ describe 'AdminProductUpdateRoute', ->
       Store.findBySlug.should.have.been.calledWith product.storeSlug
     it 'access allowed and return code is correct', ->
       res.send.should.have.been.calledWith 204
-    it 'product is updated correctly', ->
-      product.updateFromSimpleProduct.should.have.been.calledWith req.body
-    it "does not try to change the product's store", ->
-      expect(product.storeName).to.be.undefined
-      product.storeSlug.should.equal 'some_store'
-    it "does not try to change the product's slug", ->
-      expect(product.slug).to.be.undefined
-    it 'product should had been saved', ->
-      product.save.should.have.been.called
+    it 'product should had been deleted', ->
+      product.remove.should.have.been.called
 
   describe 'Access is denied', ->
     describe "a seller but does not own this product's store", ->
@@ -65,11 +57,11 @@ describe 'AdminProductUpdateRoute', ->
         Product.findById.restore()
         Store.findBySlug.restore()
       it 'denies access and throws', ->
-        expect( -> routes.adminProductUpdate req, res).to.throw AccessDenied
+        expect( -> routes.adminProductDelete req, res).to.throw AccessDenied
     describe 'not a seller', ->
       it 'denies access if the user isnt a seller and throws', ->
         req = user: {isSeller:false}, loggedIn: true
-        expect( -> routes.adminProductUpdate req, null).to.throw AccessDenied
+        expect( -> routes.adminProductDelete req, null).to.throw AccessDenied
       it 'throws if not signed in', ->
         req = loggedIn: false
-        expect( -> routes.adminProductUpdate req, null).to.throw AccessDenied
+        expect( -> routes.adminProductDelete req, null).to.throw AccessDenied

@@ -105,7 +105,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.inventory.should.equal otherProduct.inventory
         done()
 
-  xdescribe 'deleting product', ->
+  describe 'deleting product', ->
     otherProduct = null
     before (done) ->
       browser = newBrowser browser
@@ -119,5 +119,5 @@ describe 'Admin Manage Product page', ->
     it 'deleted the product', (done) ->
       Product.findById product2._id, (err, productOnDb) ->
         return done err if err
-        productOnDb.should.be.null
+        expect(productOnDb).to.be.null
         done()
