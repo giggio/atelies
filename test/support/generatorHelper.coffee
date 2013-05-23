@@ -98,21 +98,30 @@ exports.generator =
       state: ""
       otherUrl: ''
   user:
-    a: -> new User
-      email: 'a@a.com'
-      password: 'abc'
-      name: 'Some Guy'
-      isSeller: false
-      stores: []
-    b: -> new User
-      email: 'b@a.com'
-      password: 'def'
-      name: 'Other Person'
-      isSeller: false
-      stores: []
-    c: -> new User
-      email: 'c@a.com'
-      password: 'ghi'
-      name: 'Another Seller'
-      isSeller: true
-      stores: []
+    a: ->
+      user = new User
+        email: 'a@a.com'
+        passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+        name: 'Some Guy'
+        isSeller: false
+        stores: []
+      user.password = 'abc'
+      user
+    b: ->
+      user = new User
+        email: 'b@a.com'
+        passwordHash: "$2a$10$s3I2jXWoT5d.oEFVt432T.U9fF1lk4ILFJnIzqq.JyXONDtTNZwlm" # hash for 'def'
+        name: 'Other Person'
+        isSeller: false
+        stores: []
+      user.password = 'def'
+      user
+    c: ->
+      user = new User
+        email: 'c@a.com'
+        passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
+        name: 'Another Seller'
+        isSeller: true
+        stores: []
+      user.password = 'ghi'
+      user

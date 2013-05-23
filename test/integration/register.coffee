@@ -1,7 +1,8 @@
 require './support/_specHelper'
 User     = require '../../app/models/user'
+bcrypt   = require 'bcrypt'
 
-describe 'Login', ->
+describe 'Register', ->
   userA = browser = page = null
   before (done) ->
     browser = newBrowser()
@@ -50,8 +51,8 @@ describe 'Login', ->
         return done error if error
         expect(user).not.to.be.null
         expect(user.name).to.equal "Some Person"
-        expect(user.password).to.equal "abc123"
         expect(user.isSeller).to.be.false
+        bcrypt.compareSync('abc123', user.passwordHash).should.be.true
         done()
   
   describe 'Can register as seller successfully with correct information', ->

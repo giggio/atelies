@@ -1,6 +1,7 @@
 path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
+bcrypt        = require 'bcrypt'
 
 exports.configure = (app) ->
   everyauth.password.configure
@@ -16,17 +17,22 @@ exports.configure = (app) ->
     loginLocals: (req, res) ->
     authenticate: (email, password) ->
       errors = []
-      errors.push "Missing login" unless email?
-      errors.push "Missing password" unless password?
+      errors.push "Informe o e-mail" unless email?
+      errors.push "Informe a senha" unless password?
       return errors if errors.length isnt 0
       cb = @Promise()
-      User.findByEmail email, (error, user) ->
+      User.findByEmail email.toLowerCase(), (error, user) ->
         return cb([error]) if error?
-        cb.fulfill(if user?.password is password then user else ["Login falhou"])
+        return cb.fulfill ['Login falhou'] unless user?
+        bcrypt.compare password, user.passwordHash, (error, succeeded) ->
+          if error?
+            cb.fail error
+            return cb.fulfill ['Login falhou']
+          cb.fulfill(if succeeded then user else ["Login falhou"])
       cb
     registerLocals: (req, res) ->
     validateRegistration: (newUserAttrs, errors) ->
-      email = newUserAttrs.email
+      email = newUserAttrs.email.toLowerCase()
       cb = @Promise()
       User.findByEmail email, (error, user) ->
         return cb([error]) if error?
@@ -35,7 +41,11 @@ exports.configure = (app) ->
       cb
     registerUser: (newUserAttrs) ->
       cb = @Promise()
-      email = newUserAttrs[@loginKey()]
+      newUserAttrs[@loginKey()] = newUserAttrs[@loginKey()].toLowerCase()
+      password = newUserAttrs.password
+      salt = bcrypt.genSaltSync 10
+      newUserAttrs.passwordHash = bcrypt.hashSync password, salt
+      delete newUserAttrs.password
       user = new User newUserAttrs
       user.save (error, user) -> cb.fulfill(if error? then [error] else user)
       cb

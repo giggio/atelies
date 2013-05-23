@@ -977,6 +977,18 @@
         }
       }
     },
+    "bcrypt": {
+      "version": "0.7.5",
+      "from": "bcrypt@",
+      "resolved": "https://registry.npmjs.org/bcrypt/-/bcrypt-0.7.5.tgz",
+      "dependencies": {
+        "bindings": {
+          "version": "1.0.0",
+          "from": "bindings@1.0.0",
+          "resolved": "https://registry.npmjs.org/bindings/-/bindings-1.0.0.tgz"
+        }
+      }
+    },
     "amdefine": {
       "version": "0.0.5",
       "from": "amdefine@"
@@ -1019,6 +1031,30 @@
     "xmlhttprequest": {
       "version": "1.5.0",
       "from": "xmlhttprequest@"
+    },
+    "grunt-notify": {
+      "version": "0.2.3",
+      "from": "grunt-notify@",
+      "resolved": "https://registry.npmjs.org/grunt-notify/-/grunt-notify-0.2.3.tgz",
+      "dependencies": {
+        "stack-parser": {
+          "version": "0.0.1",
+          "from": "stack-parser@~0.0.1",
+          "resolved": "https://registry.npmjs.org/stack-parser/-/stack-parser-0.0.1.tgz"
+        },
+        "which": {
+          "version": "1.0.5",
+          "from": "which@~1.0.5"
+        },
+        "semver": {
+          "version": "1.1.4",
+          "from": "semver@~1.1.4"
+        },
+        "growl": {
+          "version": "1.7.0",
+          "from": "growl@~1.7.0"
+        }
+      }
     },
     "html5": {
       "version": "0.3.12",
