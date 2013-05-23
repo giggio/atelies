@@ -1,8 +1,21 @@
 define [
   'backbone'
 ], (Backbone) ->
-  class Product extends Backbone.Model
-    idAttribute: "_id"
+  class Product extends Backbone.Open.Model
+    defaults:
+      _id:undefined
+      slug:undefined
+      name:undefined
+      description:undefined
+      tags:undefined
+      price:undefined
+      picture:undefined
+      height:undefined
+      width:undefined
+      depth:undefined
+      weight:undefined
+      inventory:undefined
+      hasInventory:true
     validation:
       name:
         required:true

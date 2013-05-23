@@ -17,7 +17,8 @@
     "Backbone.ModelBinder": "~1.0.2",
     "backbone-validation": "~0.7.1",
     "jquery.ui": "~1.10.3",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "backbone.epoxy": "https://raw.github.com/gmac/backbone.epoxy/4249aa3f361be337c3251a124c6512579f294d16/backbone.epoxy.js"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

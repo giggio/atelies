@@ -2,8 +2,11 @@ define [
   'underscore'
   'backboneModelBinder'
   'backboneValidation'
+  './openModel'
+  './openView'
   'twitterBootstrap'
-], (_, ModelBinder, Validation) ->
+  'epoxy'
+], (_, ModelBinder, Validation, OpenModel, OpenView) ->
   ModelBinder.SetOptions modelSetOptions: validate: true
   Validation.configure forceUpdate: true
   _.extend Validation.callbacks,
@@ -45,3 +48,19 @@ define [
             group.find(".controls").append("<p class=\"help-block error-message\"></p>")
           target = group.find(".help-block")
           target.text(error)
+  Backbone.Open = {}
+  Backbone.Open.Model = OpenModel
+  Backbone.Open.View = OpenView
+  Backbone.Epoxy.binding.addFilter 'integerOr', (val) ->
+    int = parseInt val
+    if _.isNaN int then val else int
+  Backbone.Epoxy.binding.addFilter 'decimalOr', (val) ->
+    int = parseFloat val
+    if _.isNaN int then val else int
+  Backbone.View::render = ->
+  Backbone.View::close = ->
+    try
+      @remove()
+      @off()
+      @stopListening()
+    catch error

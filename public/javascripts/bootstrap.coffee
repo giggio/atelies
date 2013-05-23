@@ -8,6 +8,7 @@ requirejs.config
     twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
     backboneModelBinder: 'lib/Backbone.ModelBinder/Backbone.ModelBinder.min'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd-min'
+    epoxy: 'lib/backbone.epoxy/index'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -22,18 +23,14 @@ requirejs.config
       exports: '$.fn.popover'
 
 
-if global? #nodejs only, needs to add jquery to global scope otherwise twitter bootstrap blows up
+if global? #nodejs only (tests)
+  #needs to add jquery to global scope otherwise twitter bootstrap blows up
   window.$ = global.$ = requirejs 'jquery'
+  #needs to call backbone config otherwise every test blows up
+  requirejs './backboneConfig'
 else
   requirejs [
     'app'
-    'backbone'
     './backboneConfig'
-  ], (App, Backbone) ->
-    Backbone.View::close = ->
-      try
-        @remove()
-        @off()
-        @stopListening()
-      catch error
+  ], (App) ->
     App.start()
