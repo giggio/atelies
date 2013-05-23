@@ -14,7 +14,6 @@
     "handlebars": "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js",
     "jquery.validation": "~1.11.1",
     "backbone": "~1.0.0",
-    "Backbone.ModelBinder": "~1.0.2",
     "backbone-validation": "~0.7.1",
     "jquery.ui": "~1.10.3",
     "underscore": "~1.4.4",

@@ -1,7 +1,7 @@
 define [
   'backbone'
 ], (Backbone) ->
-  class CartItem extends Backbone.Model
+  class CartItem extends Backbone.Open.Model
     idAttribute: "_id"
     validation:
       quantity:

@@ -14,7 +14,7 @@ module.exports = class StoreCartPage extends Page
     @browser.evaluate "$(\".remove\", $(\"span:contains('#{product._id}')\").parent().parent()).click()"
     @browser.wait cb
   updateQuantity: (product, quantity, cb) =>
-    @browser.evaluate "$(\"#quantity\", $(\"span:contains('#{product._id}')\").parent().parent()).val('#{quantity}').change()"
+    @browser.evaluate "$(\".quantity\", $(\"span:contains('#{product._id}')\").parent().parent()).val('#{quantity}').change()"
     @browser.evaluate "$(\".updateQuantity\", $(\"span:contains('#{product._id}')\").parent().parent()).click()"
     @browser.wait cb
   clearCart: (cb) => @browser.pressButtonWait "#clearCart", cb

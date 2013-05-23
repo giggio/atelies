@@ -12,3 +12,5 @@ module.exports = class Page
     @browser.visit url, options, cb
   errorMessageFor: (field) ->
     @browser.text("##{field} ~ .tooltip .tooltip-inner")
+  errorMessageForSelector: (selector) ->
+    @browser.text("#{selector} ~ .tooltip .tooltip-inner")

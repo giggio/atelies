@@ -1,13 +1,12 @@
 define [
+  'jquery'
   'underscore'
-  'backboneModelBinder'
   'backboneValidation'
   './openModel'
   './openView'
   'twitterBootstrap'
   'epoxy'
-], (_, ModelBinder, Validation, OpenModel, OpenView) ->
-  ModelBinder.SetOptions modelSetOptions: validate: true
+], ($, _, Validation, OpenModel, OpenView) ->
   Validation.configure forceUpdate: true
   _.extend Validation.callbacks,
     valid: (view, attr, selector) ->
@@ -51,12 +50,8 @@ define [
   Backbone.Open = {}
   Backbone.Open.Model = OpenModel
   Backbone.Open.View = OpenView
-  Backbone.Epoxy.binding.addFilter 'integerOr', (val) ->
-    int = parseInt val
-    if _.isNaN int then val else int
-  Backbone.Epoxy.binding.addFilter 'decimalOr', (val) ->
-    int = parseFloat val
-    if _.isNaN int then val else int
+  Backbone.Epoxy.binding.addFilter 'integerOr', (val) -> if $.isNumeric val then parseInt val else val
+  Backbone.Epoxy.binding.addFilter 'decimalOr', (val) -> if $.isNumeric val then parseFloat val else val
   Backbone.View::render = ->
   Backbone.View::close = ->
     try

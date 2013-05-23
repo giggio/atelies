@@ -15,7 +15,7 @@ define [
         cartItemView.changed -> changedCalled = true
         cartItemView.render()
         el.append cartItemView.$el
-        cartItemView.$('#quantity').val(3).change()
+        cartItemView.$('.quantity').val(3).change()
       it 'shows a cart items table with one item', ->
         changedCalled.should.be.true
       it 'shows the first item product id', ->
@@ -27,10 +27,10 @@ define [
         cartItemView.changed -> changedCalled = true
         cartItemView.render()
         el.append cartItemView.$el
-        cartItemView.$('#quantity').val('a').change()
+        cartItemView.$('.quantity').val('a').change()
       it 'shows a cart items table with one item', ->
         changedCalled.should.be.false
       it 'shows the first item product id', ->
         expect(cartItemView.cartItem.quantity).to.equal 2
       it 'shows validation message', ->
-        $("#quantity ~ .tooltip .tooltip-inner", el).text().should.equal 'A quantidade deve ser um número.'
+        $(".quantity ~ .tooltip .tooltip-inner", el).text().should.equal 'A quantidade deve ser um número.'

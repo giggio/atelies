@@ -68,7 +68,7 @@ describe 'Store shopping cart page (manage)', ->
             browser.reload ->
               browser.storeCartPage.updateQuantity product1, 'abc', done
     it 'shows error message', ->
-      page.errorMessageFor('quantity').should.equal "A quantidade deve ser um número."
+      page.errorMessageForSelector('.quantity').should.equal "A quantidade deve ser um número."
     xit 'shows original quantity', (done) ->
       browser.storeCartPage.visit 'store_1', (error) ->
         return done error if error

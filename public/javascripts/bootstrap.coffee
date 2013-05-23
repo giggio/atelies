@@ -6,7 +6,6 @@ requirejs.config
     handlebars: 'lib/handlebars/index'
     text: 'lib/requirejs-text/text'
     twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
-    backboneModelBinder: 'lib/Backbone.ModelBinder/Backbone.ModelBinder.min'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd-min'
     epoxy: 'lib/backbone.epoxy/index'
   shim:

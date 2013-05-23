@@ -3,33 +3,26 @@ define [
   'backbone'
   '../models/cartItem'
   'text!./templates/cartItem.html'
-  'backboneModelBinder'
   'backboneValidation'
-], ($, Backbone, CartItem, cartItemTemplate, ModelBinder, Validation) ->
-  class CartItemView extends Backbone.View
+], ($, Backbone, CartItem, cartItemTemplate, Validation) ->
+  class CartItemView extends Backbone.Open.View
     initialize: (opt) ->
       @model = new CartItem opt.cartItem
       @cartItem = opt.cartItem
-    events:
-      "click .remove":'remove'
-    template: cartItemTemplate
-    render: ->
       @setElement @template
-      binder = new ModelBinder()
-      bindings =
-        quantity:
-          selector: "#quantity"
-          converter: (direction, value) ->
-            int = parseInt value
-            if _.isNaN int then value else int
-        _id: '._id'
-        name: '.name'
-      binder.bind @model, @el, bindings
-      Validation.bind @
+      Validation.bind @, selector: 'class'
       @model.on 'change', =>
-        if @model.isValid true
+        if @model.isValid()
           @cartItem.quantity = @model.get 'quantity'
           @change()
+    events:
+      "click .remove":'remove'
+    bindings:
+      ".quantity":"value:integerOr(quantity)"
+      "._id":"html:_id"
+      ".name":"html:name"
+    template: cartItemTemplate
+    render: ->
     remove: -> removed @cartItem for removed in @removedCallbacks
     removed: (cb) -> @removedCallbacks.push cb
     removedCallbacks: []
