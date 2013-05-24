@@ -24,6 +24,9 @@ append content
           div Senha:
           input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
         div
-          input#register(type='submit',class='btn-primary', value='Cadastre-se')
+          div Confirme sua senha:
+          input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
+        div
+          input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
   :coffeescript
     $ -> $('#registerForm').validate()

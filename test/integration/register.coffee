@@ -32,7 +32,7 @@ describe 'Register', ->
     before (done) ->
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false
+        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false, passwordVerify: 'abc123'
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
@@ -61,7 +61,7 @@ describe 'Register', ->
       page = browser.registerPage
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "abc123", isSeller: true
+        page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "abc123", isSeller: true, passwordVerify: 'abc123'
         page.clickRegisterButton done
     it 'is a seller', (done) ->
       User.findByEmail "someother@email.com", (error, user) ->
@@ -78,7 +78,7 @@ describe 'Register', ->
       page = browser.registerPage
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: userA.email, password: "abc123"
+        page.setFieldsAs name: "Some Person", email: userA.email, password: "abc123", passwordVerify: 'abc123'
         page.clickRegisterButton done
     it 'shows the register failed message', ->
       expect(page.errors()).to.equal 'E-mail já cadastrado.'
