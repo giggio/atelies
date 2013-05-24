@@ -31,5 +31,6 @@ else
   requirejs [
     'app'
     './backboneConfig'
+    './loginPopover'
   ], (App) ->
     App.start()
