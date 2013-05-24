@@ -1,8 +1,12 @@
 .nav.pull-right
   ul.nav
     if (everyauth.loggedIn)
-      li: a#greeting= user.name
-      li: a#logout(href="/logout") Sair
+      li.dropdown
+        a#greeting.dropdown-toggle(href='#', data-toggle='dropdown')= user.name
+          b.caret
+        ul.dropdown-menu
+          li: a#goChangePassword(href="/account/changePassword") Troque sua senha
+          li: a#logout(href="/logout") Sair
     else
       li: a#loginPop.pop(href="#") Entrar
       li: a(href='/register') Cadastre-se

@@ -1,8 +1,36 @@
 Product         = require '../models/product'
+User            = require '../models/user'
 Store           = require '../models/store'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
+bcrypt = require 'bcrypt'
+
+exports.changePasswordShow = (req, res) ->
+  return res.redirect 'login' unless req.loggedIn
+  res.render 'changePassword'
+
+exports.changePassword = (req, res) ->
+  return res.redirect 'login' unless req.loggedIn
+  user = req.user
+  email = user.email.toLowerCase()
+  password = req.body.password
+  newPassword = req.body.newPassword
+  salt = bcrypt.genSaltSync 10
+  newPasswordHash = bcrypt.hashSync newPassword, salt
+  bcrypt.compare password, user.passwordHash, (err, succeeded) ->
+    dealWith err
+    if succeeded
+      user.passwordHash = newPasswordHash
+      user.save (error, user) ->
+        dealWith err
+        res.redirect 'account/passwordChanged'
+    else
+      res.render 'changePassword', errors: [ 'Senha inválida.' ]
+
+exports.passwordChanged = (req, res) ->
+  return res.redirect 'login' unless req.loggedIn
+  res.render 'passwordChanged'
 
 exports.admin = (req, res) ->
   unless req.loggedIn

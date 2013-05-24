@@ -2,6 +2,9 @@ routes    = require './index'
 
 exports.route = (app) ->
   app.get     "/",                                                          routes.index
+  app.get     "/account/changePassword",                                    routes.changePasswordShow
+  app.post    "/account/changePassword",                                    routes.changePassword
+  app.get     "/account/passwordChanged",                                   routes.passwordChanged
   app.get     "/notseller",                                                 routes.notSeller
   app.get     "/admin",                                                     routes.admin
   app.post    "/admin/store",                                               routes.adminStore
