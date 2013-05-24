@@ -1,6 +1,7 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
 Store     = require './store'
+bcrypt    = require 'bcrypt'
 
 userSchema = new mongoose.Schema
   name:         type: String, required: true
@@ -16,6 +17,12 @@ userSchema.methods.createStore = ->
 userSchema.methods.hasStore = (store) ->
   storeFound = _.find @stores, (_id) -> store._id.toString() is _id.toString()
   storeFound?
+userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
+  bcrypt.compare passwordToVerify, @passwordHash, cb
+userSchema.methods.setPassword = (password) ->
+  salt = bcrypt.genSaltSync 10
+  @passwordHash = bcrypt.hashSync password, salt
+  
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb
 

@@ -4,7 +4,6 @@ Store           = require '../models/store'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
-bcrypt = require 'bcrypt'
 
 exports.changePasswordShow = (req, res) ->
   return res.redirect 'login' unless req.loggedIn
@@ -14,14 +13,10 @@ exports.changePassword = (req, res) ->
   return res.redirect 'login' unless req.loggedIn
   user = req.user
   email = user.email.toLowerCase()
-  password = req.body.password
-  newPassword = req.body.newPassword
-  salt = bcrypt.genSaltSync 10
-  newPasswordHash = bcrypt.hashSync newPassword, salt
-  bcrypt.compare password, user.passwordHash, (err, succeeded) ->
+  user.verifyPassword req.body.password, (err, succeeded) ->
     dealWith err
     if succeeded
-      user.passwordHash = newPasswordHash
+      user.setPassword req.body.newPassword
       user.save (error, user) ->
         dealWith err
         res.redirect 'account/passwordChanged'

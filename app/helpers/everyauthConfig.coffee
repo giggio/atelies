@@ -1,7 +1,6 @@
 path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
-bcrypt        = require 'bcrypt'
 
 exports.configure = (app) ->
   everyauth.password.configure
@@ -24,7 +23,7 @@ exports.configure = (app) ->
       User.findByEmail email.toLowerCase(), (error, user) ->
         return cb([error]) if error?
         return cb.fulfill ['Login falhou'] unless user?
-        bcrypt.compare password, user.passwordHash, (error, succeeded) ->
+        user.verifyPassword password, (error, succeeded) ->
           if error?
             cb.fail error
             return cb.fulfill ['Login falhou']
@@ -43,10 +42,9 @@ exports.configure = (app) ->
       cb = @Promise()
       newUserAttrs[@loginKey()] = newUserAttrs[@loginKey()].toLowerCase()
       password = newUserAttrs.password
-      salt = bcrypt.genSaltSync 10
-      newUserAttrs.passwordHash = bcrypt.hashSync password, salt
       delete newUserAttrs.password
       user = new User newUserAttrs
+      user.setPassword password
       user.save (error, user) -> cb.fulfill(if error? then [error] else user)
       cb
     extractExtraRegistrationParams: (req) ->
