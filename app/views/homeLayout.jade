@@ -4,8 +4,10 @@ append content
   .navbar.navbar-inverse.navbar-fixed-top
     .navbar-inner
       .container
+        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
         include includes/commonHeader
-        .nav
-          include includes/searches
-        .nav.pull-right
-          include includes/userInfo
+        include includes/searches
+        include includes/userInfo
