@@ -32,5 +32,6 @@ else
     'app'
     './backboneConfig'
     './loginPopover'
+    './jqueryValidationExt'
   ], (App) ->
     App.start()
