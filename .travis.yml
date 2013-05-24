@@ -3,9 +3,7 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
-- npm install -g grunt-cli
-- npm install -g bower
-- bower install
+- node_modules/bower/bin/bower install
 after_success:
 - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 - git remote add heroku git@heroku.com:openstore.git
@@ -17,7 +15,7 @@ after_success:
 - yes | heroku keys:add
 - yes | git push heroku master
 - heroku keys:clear
-script: grunt travis
+script: node_modules/grunt-cli/bin/grunt travis
 env:
   global:
   - secure: ! 'gItUlkkuUKICxpIh7pSnDfPtouykOMQ7EcFflTwE14mkla+zxjuWcrd4FObt
