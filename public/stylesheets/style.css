@@ -1,4 +1,51 @@
 body {
-  padding-top: 60px;
+  padding-top: 10px;
   padding-bottom: 40px;
+  font-family: 'Ubuntu', sans-serif;
+}
+.social {
+  list-style: none;
+  width: 250px;
+  margin-top: 15px;
+}
+.social li {
+  margin-left: 10px;
+  float: right;
+}
+.navbar-search .btn {
+  margin: 0px 0px 1px 0px;
+}
+img.carousel {
+}
+.carouselHolder {
+  border: 1px solid #ccc;
+  background-color: white;
+  padding: 9px;
+  margin: 7px;
+  display: block;
+  float: left;
+}
+.carouselHolder .link {
+  max-width: 150px;
+  max-height: 150px;
+  display: block;
+  overflow: hidden;
+}
+.carouselHolder .name {
+  float:left;
+}
+.carouselHolder .store {
+  float:right;
+}
+.carouselHolder .productInfoBox {
+}
+a.prev, a.next {
+  position: relative;
+  top: -100px;
+}
+a.prev {
+  float:left;
+}
+a.next {
+  float:right;
 }

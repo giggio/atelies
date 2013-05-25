@@ -3,6 +3,7 @@
     if (everyauth.loggedIn)
       li.dropdown
         a#greeting.dropdown-toggle(href='#', data-toggle='dropdown')= user.name
+          i.icon-user.icon-white
           b.caret
         ul.dropdown-menu
           li: a#goChangePassword(href="/account/changePassword") Troque sua senha

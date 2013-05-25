@@ -8,6 +8,8 @@ requirejs.config
     twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd-min'
     epoxy: 'lib/backbone.epoxy/index'
+    caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
+    imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -20,7 +22,12 @@ requirejs.config
     'twitterBootstrap':
       deps: ['jquery']
       exports: '$.fn.popover'
-
+    'caroufredsel':
+      deps: ['jquery']
+      exports: '$.fn.carouFredSel'
+    'imagesloaded':
+      deps: ['jquery']
+      exports: '$.fn.imagesLoaded'
 
 if global? #nodejs only (tests)
   #needs to add jquery to global scope otherwise twitter bootstrap blows up

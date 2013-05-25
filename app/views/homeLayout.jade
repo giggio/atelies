@@ -1,13 +1,36 @@
 extends layout
 
-append content
-  .navbar.navbar-inverse.navbar-fixed-top
-    .navbar-inner
-      .container
-        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        include includes/commonHeader
-        include includes/searches
-        include includes/userInfo
+append layout
+  block header
+    section#main.container
+      #banner.row(style="margin-bottom: 20px")
+        .span4
+          a(href="/"): img(src="http://lorempixel.com/350/100/cats/")
+        .span6
+          h3 shopping virtual de artes e afins
+        .span2
+          ul.pull-right.social
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+      .navbar
+        .navbar-inner
+          .container
+            include includes/commonHeader
+            include includes/userInfo
+
+  block content
+
+  block footer
+    hr
+    footer
+      div
+        p.text-center 
+          &copy; 2013 - OpenStore
+          &nbsp;|&nbsp;
+          a Termos de uso
+          &nbsp;|&nbsp;
+          a Sobre
+          &nbsp;|&nbsp;
+          a Contato

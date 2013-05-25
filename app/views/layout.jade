@@ -5,22 +5,11 @@ html
     link(rel='stylesheet', href='/javascripts/lib/bootstrap/docs/assets/css/bootstrap.css')
     link(rel='stylesheet', href='/javascripts/lib/bootstrap/docs/assets/css/bootstrap-responsive.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Ubuntu')
     script(src='/javascripts/lib/jquery/jquery.min.js')
     script(src='/javascripts/lib/jquery.validation/jquery.validate.js')
+    script(src='/javascripts/lib/carouFredSel/jquery.carouFredSel-6.2.1.js')
     block head
   body
-    block content
-        
-    hr
-    footer
-      div
-        p.text-center 
-          &copy; 2013 - OpenStore
-          &nbsp;|&nbsp;
-          a Termos de uso
-          &nbsp;|&nbsp;
-          a Sobre
-          &nbsp;|&nbsp;
-          a Contato
-
+    block layout
 <!--node version: #{process.version} -->

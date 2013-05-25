@@ -1,9 +1,23 @@
 - var nums = [1,2,3,4,5,6,7,8,9,10]
+a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
+  span.icon-bar
+  span.icon-bar
+  span.icon-bar
 .nav-collapse.collapse
+  form.navbar-search.pull-left
+    input.search-query.span2(type="text",placeholder="Busca Produtos")
+    button.btn.btn-inverse(type="submit"): i.icon-search.icon-white
   ul.nav
-    li: a(href='#') Crie sua loja
     if (everyauth.loggedIn && user.isSeller)
       li: a#admin(href='admin') Administração
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown')
+        i.icon-th-list
+        |  Categorias
+        b.caret
+      ul.dropdown-menu
+        each cat in nums
+          li: a(href='#') Categoria #{cat}
     li.dropdown
       a.dropdown-toggle(href='#', data-toggle='dropdown') Lojas
         b.caret
