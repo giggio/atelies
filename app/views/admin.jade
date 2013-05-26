@@ -1,4 +1,4 @@
-extends layout
+extends homeLayout
 
 append head
   script
@@ -8,13 +8,5 @@ append head
   script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/adminBootstrap.js')
 
 append content
-  .navbar.navbar-inverse.navbar-fixed-top
-    .navbar-inner
-      .container
-        include includes/commonHeader
-        .nav
-          include includes/searches
-        .nav.pull-right
-          include includes/userInfo
   .container
     section#app-container Carregando...

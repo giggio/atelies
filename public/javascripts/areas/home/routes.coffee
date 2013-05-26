@@ -5,5 +5,5 @@ define [
 ],($, viewsManager, HomeView) ->
   viewsManager.$el = $ "#app-container"
   home: ->
-    homeView = new HomeView products: homeProductsBootstrapModel
+    homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel
     viewsManager.show homeView

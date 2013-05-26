@@ -6,7 +6,7 @@ define [
       _id:undefined
       name:undefined
       city:undefined
-      state:undefined
+      state:'SP'
       otherUrl:undefined
       banner:undefined
       phoneNumber:undefined

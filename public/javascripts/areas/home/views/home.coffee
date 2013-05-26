@@ -11,12 +11,13 @@ define [
     template: homeTemplate
     initialize: (opt) ->
       @products = opt.products
+      @stores = opt.stores
     render: ->
       @$el.empty()
       productsHome = new ProductsHome()
       productsHome.reset @products
       context = Handlebars.compile @template
-      @$el.html context productsHome: productsHome.toJSON()
+      @$el.html context productsHome: productsHome.toJSON(), stores: @stores
       $ ->
         $('#productsHome').imagesLoaded
           always: ->

@@ -59,7 +59,9 @@ exports.index = (req, res) ->
   Product.find (err, products) ->
     dealWith err
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-    res.render "index", products: viewModelProducts
+    Store.find (err, stores) ->
+      dealWith err
+      res.render "index", products: viewModelProducts, stores: stores
 
 exports.store = (req, res) ->
   Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->

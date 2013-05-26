@@ -7,13 +7,17 @@ define [
 ], ($, HomeView) ->
   homeView = null
   el = $('<div></div>')
-  product1 = product2 = products = null
+  product1 = product2 = products = store1 = store2 = store3 = stores = null
   describe 'HomeView', ->
     before ->
       product1 = generatorc.product.a()
       product2 = generatorc.product.b()
       products = [ product1, product2 ]
-      homeView = new HomeView el:el, products: products
+      store1 = generatorc.store.a()
+      store2 = generatorc.store.b()
+      store3 = generatorc.store.c()
+      stores = [store1, store2, store3]
+      homeView = new HomeView el:el, products: products, stores: stores
       homeView.render()
     it 'should render the products', ->
       expect($('#productsHome', el)).to.be.defined
@@ -35,3 +39,7 @@ define [
       expect($("#product1_picture img", el).attr('src')).to.equal product1.picture
     it 'links to the product page on the picture on product 1', ->
       expect($("#product1_picture", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
+    it 'shows stores', ->
+      $('#storesHome>.store', el).length.should.equal stores.length
+    it 'shows store name', ->
+      $('#store1 .name', el).text().should.equal store1.name

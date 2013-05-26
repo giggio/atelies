@@ -1,16 +1,23 @@
 <div id="productsHome">
 {{#each productsHome}}
-  <div id="product{{this._id}}" data-id="{{this._id}}" class="carouselHolder">
-    <a id="product{{this._id}}_picture" href="{{this.url}}" class="link">
-      <img src="{{this.picture}}" alt="{{this.name}}" class="carousel" />
+  <div id="product{{_id}}" data-id="{{_id}}" class="carouselHolder">
+    <a id="product{{_id}}_picture" href="{{url}}" class="link">
+      <img src="{{picture}}" alt="{{name}}" class="carousel" />
       <div class="productInfoBox">
-        <span id="product{{this._id}}_name" class="name">{{this.name}}</span>
-        <span id="product{{this._id}}_price" class="price">R$ {{this.price}}</span>
+        <span id="product{{_id}}_name" class="name">{{name}}</span>
+        <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
       </div>
     </a>
-    <span id="product{{this._id}}_store" class="store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></span>
+    <span id="product{{_id}}_store" class="store"><a href="{{storeSlug}}">{{storeName}}</a></span>
   </div>
 {{/each}}
 </div>
 <a class="prev" id="carouselLeft" href="#"><i class="icon-backward"></i></a>
 <a class="next" id="carouselRight" href="#"><i class="icon-forward"></i></a>
+<div id="storesHome">
+{{#each stores}}
+  <div id="store{{_id}}" data-id="{{_id}}" class="store">
+    <span class="name">{{name}}</span>
+  </div>
+{{/each}}
+</div>

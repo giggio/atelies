@@ -53,6 +53,14 @@ define ->
         city: "São Xilevers"
         state: "XX"
         otherUrl: 'http://someurl.com'
+      c: ->
+        _id: '3'
+        name: 'Store 3'
+        slug: 'store_3'
+        phoneNumber: '(66) 6666-9999'
+        city: "Las Vegas"
+        state: "NV"
+        otherUrl: 'http://other.com'
       empty: ->
         _id: ''
         name: ''
