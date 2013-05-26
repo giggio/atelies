@@ -136,6 +136,30 @@ db.stores.insert
   city: "Manaus"
   state: "AM"
   otherUrl: 'http://idontownthisstore.com'
+db.stores.insert
+  name: 'Store 4'
+  slug: 'store_4'
+  phoneNumber: '(41) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats'
+db.stores.insert
+  name: 'Store 5'
+  slug: 'store_5'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats'
+db.stores.insert
+  name: 'Store 6'
+  slug: 'store_6'
+  phoneNumber: '(61) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats'
 db.users.remove()
 db.users.insert
   email: 'a@a.com'

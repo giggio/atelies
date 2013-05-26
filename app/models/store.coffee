@@ -24,5 +24,6 @@ Store.findWithProductsBySlug = (slug, cb) ->
     Product.findByStoreSlug slug, (err, products) ->
       return cb err if err
       cb null, store, products
+Store.findForHome = (cb) -> Store.find banner: /./, cb
 
 module.exports = Store

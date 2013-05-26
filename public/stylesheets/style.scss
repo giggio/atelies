@@ -17,6 +17,19 @@ body {
 }
 img.carousel {
 }
+#storesHome{
+  .store {
+    border: 1px solid #ccc;
+    background-color: white;
+    float: left;
+    position:relative;
+    .link {
+      height: 70px;
+      display: block;
+      overflow: hidden;
+    }
+  }
+}
 .carouselHolder {
   border: 1px solid #ccc;
   background-color: white;

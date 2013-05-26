@@ -41,5 +41,5 @@ define [
       expect($("#product1_picture", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'shows stores', ->
       $('#storesHome>.store', el).length.should.equal stores.length
-    it 'shows store name', ->
-      $('#store1 .name', el).text().should.equal store1.name
+    it 'shows store banner', ->
+      $('#store1 img', el).attr('src').should.equal store1.banner

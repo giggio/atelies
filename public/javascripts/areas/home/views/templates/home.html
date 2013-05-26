@@ -1,23 +1,27 @@
-<div id="productsHome">
-{{#each productsHome}}
-  <div id="product{{_id}}" data-id="{{_id}}" class="carouselHolder">
-    <a id="product{{_id}}_picture" href="{{url}}" class="link">
-      <img src="{{picture}}" alt="{{name}}" class="carousel" />
-      <div class="productInfoBox">
-        <span id="product{{_id}}_name" class="name">{{name}}</span>
-        <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
-      </div>
-    </a>
-    <span id="product{{_id}}_store" class="store"><a href="{{storeSlug}}">{{storeName}}</a></span>
+<div class="row-fluid">
+  <div id="productsHome">
+    {{#each productsHome}}
+    <div id="product{{_id}}" data-id="{{_id}}" class="carouselHolder">
+      <a id="product{{_id}}_picture" href="{{url}}" class="link">
+        <img src="{{picture}}" alt="{{name}}" class="carousel" />
+        <div class="productInfoBox">
+          <span id="product{{_id}}_name" class="name">{{name}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
+      </a>
+      <span id="product{{_id}}_store" class="store"><a href="{{storeSlug}}">{{storeName}}</a></span>
+    </div>
+    {{/each}}
   </div>
-{{/each}}
+  <a class="prev" id="carouselLeft" href="#"><i class="icon-backward"></i></a>
+  <a class="next" id="carouselRight" href="#"><i class="icon-forward"></i></a>
 </div>
-<a class="prev" id="carouselLeft" href="#"><i class="icon-backward"></i></a>
-<a class="next" id="carouselRight" href="#"><i class="icon-forward"></i></a>
-<div id="storesHome">
-{{#each stores}}
-  <div id="store{{_id}}" data-id="{{_id}}" class="store">
-    <span class="name">{{name}}</span>
+<div class="row-fluid">
+  <div id="storesHome">
+    {{#each stores}}
+    <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
+      <a href="{{slug}}" class="link"><img src="{{banner}}" /></a>
+    </div>
+    {{/each}}
   </div>
-{{/each}}
 </div>
