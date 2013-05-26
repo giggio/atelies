@@ -18,7 +18,7 @@ define [
     it 'should render the products', ->
       expect($('#productsHome', el)).to.be.defined
     it 'should display all the products', ->
-      expect($('#productsHome>tbody>tr', el).length).to.equal products.length
+      expect($('#productsHome>.carouselHolder', el).length).to.equal products.length
     it 'should display the store name for product 1', ->
       expect($("#product1_store", el).text()).to.equal product1.storeName
     it 'link to the store on product 1', ->
@@ -30,7 +30,7 @@ define [
     it 'displays the product name on product 1', ->
       expect($("#product1_name", el).text()).to.equal product1.name
     it 'links to the product page on the product name on product 1', ->
-      expect($("#product1_name a", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
+      expect($("#product1 a", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'displays the picture for product 1', ->
       expect($("#product1_picture img", el).attr('src')).to.equal product1.picture
     it 'links to the product page on the picture on product 1', ->

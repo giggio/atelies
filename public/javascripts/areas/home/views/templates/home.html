@@ -1,11 +1,14 @@
 <div id="productsHome">
 {{#each productsHome}}
   <div id="product{{this._id}}" data-id="{{this._id}}" class="carouselHolder">
-    <a id="product{{this._id}}_picture" href="{{this.url}}" class="link"><img src="{{this.picture}}" alt="{{this.name}}" class="carousel" /></a>
-    <!--<div class="productInfoBox">-->
-      <!--<span id="product{{this._id}}_name" class="name"><a href="{{this.url}}">{{this.name}}</a></span>-->
-      <!--<span id="product{{this._id}}_store" class="store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></span>-->
-    <!--<div>-->
+    <a id="product{{this._id}}_picture" href="{{this.url}}" class="link">
+      <img src="{{this.picture}}" alt="{{this.name}}" class="carousel" />
+      <div class="productInfoBox">
+        <span id="product{{this._id}}_name" class="name">{{this.name}}</span>
+        <span id="product{{this._id}}_price" class="price">R$ {{this.price}}</span>
+      </div>
+    </a>
+    <span id="product{{this._id}}_store" class="store"><a href="{{this.storeSlug}}">{{this.storeName}}</a></span>
   </div>
 {{/each}}
 </div>

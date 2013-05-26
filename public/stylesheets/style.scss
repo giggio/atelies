@@ -22,21 +22,40 @@ img.carousel {
   background-color: white;
   padding: 9px;
   margin: 7px;
-  display: block;
   float: left;
+  position:relative;
   .link {
-    max-width: 150px;
-    max-height: 150px;
+    width: 150px;
+    height: 150px;
     display: block;
     overflow: hidden;
   }
   .name {
+    padding-left: 5px;
     float:left;
+    text-decoration:none;
+    color:white;
+  }
+  .price {
+    padding-right: 5px;
+    float:right;
+    text-decoration:none;
+    color:white;
   }
   .store {
     float:right;
   }
   .productInfoBox {
+    position: absolute;
+    top: -50+9+150px;
+    width: 150px;
+    background-color: black;
+    display: block;
+    height: 50px;
+    opacity:0.5;
+    /*filter:alpha(opacity=50);*/
+    .name {
+    }
   }
 }
 a.prev, a.next {
