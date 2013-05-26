@@ -84,3 +84,13 @@ a.next {
 .nameHeader {
   font-weight: normal;
 }
+@media (min-width: 980px){
+  #userInfo {
+    float:right;
+  }
+}
+@media (max-width: 981px) {
+  #userInfo {
+    float:left;
+  }
+}
