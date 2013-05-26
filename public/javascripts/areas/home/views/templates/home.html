@@ -1,6 +1,6 @@
-<div class="row-fluid">
+<div id="productsFeatured" class="row-fluid">
   <div id="productsHome">
-    {{#each productsHome}}
+    {{#each productsFeatured}}
     <div id="product{{_id}}" data-id="{{_id}}" class="carouselHolder">
       <a id="product{{_id}}_picture" href="{{url}}" class="link">
         <img src="{{picture}}" alt="{{name}}" class="carousel" />
@@ -16,7 +16,7 @@
   <a class="prev" id="carouselLeft" href="#"><i class="icon-backward"></i></a>
   <a class="next" id="carouselRight" href="#"><i class="icon-forward"></i></a>
 </div>
-<div class="row-fluid">
+<div id="stores" class="row-fluid">
   <div id="storesHome">
     {{#each stores}}
     <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
@@ -24,4 +24,18 @@
     </div>
     {{/each}}
   </div>
+</div>
+<div id="products" class="row-fluid">
+  {{#each products}}
+  <div data-id="{{_id}}" class="product span4">
+    <a href="{{url}}" class="link">
+      <img src="{{picture}}" alt="{{name}}" class="" />
+      <div class="productInfoBox">
+        <span class="storeName">{{storeName}}</span>
+        <span class="price">R$ {{price}}</span>
+      </div>
+    </a>
+    <span id="product{{_id}}_store" class="store"><a href="{{storeSlug}}">{{storeName}}</a></span>
+  </div>
+  {{/each}}
 </div>

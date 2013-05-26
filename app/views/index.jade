@@ -3,6 +3,7 @@ extends homeLayout
 append head
   script
     var homeProductsBootstrapModel = !{JSON.stringify(products)};
+    var homeProductsFeaturedBootstrapModel = !{JSON.stringify(productsFeatured)};
     var homeStoresBootstrapModel = !{JSON.stringify(stores)};
   script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/homeBootstrap.js')
 

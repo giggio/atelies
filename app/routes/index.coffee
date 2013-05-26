@@ -61,7 +61,7 @@ exports.index = (req, res) ->
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
     Store.findForHome (err, stores) ->
       dealWith err
-      res.render "index", products: viewModelProducts, stores: stores
+      res.render "index", productsFeatured: viewModelProducts, products: viewModelProducts, stores: stores
 
 exports.store = (req, res) ->
   Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
