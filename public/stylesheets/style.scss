@@ -24,20 +24,20 @@ img.carousel {
   margin: 7px;
   display: block;
   float: left;
-}
-.carouselHolder .link {
-  max-width: 150px;
-  max-height: 150px;
-  display: block;
-  overflow: hidden;
-}
-.carouselHolder .name {
-  float:left;
-}
-.carouselHolder .store {
-  float:right;
-}
-.carouselHolder .productInfoBox {
+  .link {
+    max-width: 150px;
+    max-height: 150px;
+    display: block;
+    overflow: hidden;
+  }
+  .name {
+    float:left;
+  }
+  .store {
+    float:right;
+  }
+  .productInfoBox {
+  }
 }
 a.prev, a.next {
   position: relative;
@@ -48,4 +48,7 @@ a.prev {
 }
 a.next {
   float:right;
+}
+.nameHeader {
+  font-weight: normal;
 }

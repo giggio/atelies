@@ -4,3 +4,4 @@ azure_error
 public/**/lib
 *.map
 *.password
+*.css
