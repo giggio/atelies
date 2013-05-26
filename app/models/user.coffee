@@ -1,7 +1,6 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
 Store     = require './store'
-bcrypt    = require 'bcrypt'
 
 userSchema = new mongoose.Schema
   name:         type: String, required: true
@@ -18,8 +17,10 @@ userSchema.methods.hasStore = (store) ->
   storeFound = _.find @stores, (_id) -> store._id.toString() is _id.toString()
   storeFound?
 userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
+  bcrypt = require 'bcrypt'
   bcrypt.compare passwordToVerify, @passwordHash, cb
 userSchema.methods.setPassword = (password) ->
+  bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10
   @passwordHash = bcrypt.hashSync password, salt
   
