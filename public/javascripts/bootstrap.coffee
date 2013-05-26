@@ -31,7 +31,7 @@ requirejs.config
 
 if global? #nodejs only (tests)
   #needs to add jquery to global scope otherwise twitter bootstrap blows up
-  window.$ = global.$ = requirejs 'jquery'
+  global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
   #needs to call backbone config otherwise every test blows up
   requirejs './backboneConfig'
 else
