@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "jsdom": "*",
-    "zombie": "2.x",
     "backbone": "~1.0.0",
     "requirejs": "~2.1.5",
     "underscore.string": "~2.3.1",
@@ -55,6 +54,7 @@
     "grunt-mocha-cov": "0.0.7",
     "blanket": "~1.1.4",
     "mocha-lcov-reporter": "0.0.1",
-    "grunt-notify": "~0.2.3"
+    "grunt-notify": "~0.2.3",
+    "zombie": "~2.0.0-alpha19"
   }
 }

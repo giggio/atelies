@@ -19,7 +19,7 @@ describe 'Admin create store page', ->
             return done error if error
             browser.adminCreateStorePage.setFieldsAs exampleStore
             browser.adminCreateStorePage.clickCreateStoreButton done
-    xit 'is at the admin store page', -> #failing, zombie is not able to see the new url
+    it 'is at the admin store page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
     xit 'shows store created message', -> #failing, zombie is not updating its content
       expect(browser.text('#message')).to.equal "Loja criada com sucesso"
