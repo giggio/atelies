@@ -24,6 +24,7 @@ define [
         createStoreView.$("#state").val(store.state).change()
         createStoreView.$("#otherUrl").val(store.otherUrl).change()
         createStoreView.$("#banner").val(store.banner).change()
+        createStoreView.$("#flyer").val(store.flyer).change()
         $('#createStore', el).trigger 'click'
       after ->
         $.ajax.restore()
@@ -38,6 +39,7 @@ define [
         expect(storePassedIn.state).to.equal store.state
         expect(storePassedIn.otherUrl).to.equal store.otherUrl
         expect(storePassedIn.banner).to.equal store.banner
+        expect(storePassedIn.flyer).to.equal store.flyer
       it 'adds store to stores in the bootstrapped model', ->
         expect(global.adminStoresBootstrapModel.stores[0]).to.be.like store
 
@@ -51,6 +53,7 @@ define [
         createStoreView.render()
         createStoreView.$("#otherUrl").val('abc').change()
         createStoreView.$("#banner").val('def').change()
+        createStoreView.$("#flyer").val('ghi').change()
         $('#createStore', el).trigger 'click'
       after ->
         ajaxSpy.restore()
@@ -64,3 +67,4 @@ define [
         $("#city ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe a cidade.'
         $("#otherUrl ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe um link válido para o outro site, começando com http ou https.'
         $("#banner ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o banner, começando com http ou https."
+        $("#flyer ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o flyer, começando com http ou https."

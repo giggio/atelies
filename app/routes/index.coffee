@@ -41,12 +41,14 @@ exports.adminStore = (req, res) ->
   unless req.loggedIn and req.user?.isSeller
     throw new AccessDenied()
   store = req.user.createStore()
-  store.name = req.body.name
-  store.phoneNumber = req.body.phoneNumber
-  store.city = req.body.city
-  store.state = req.body.state
-  store.otherUrl = req.body.otherUrl
-  store.banner = req.body.banner
+  body = req.body
+  store.name = body.name
+  store.phoneNumber = body.phoneNumber
+  store.city = body.city
+  store.state = body.state
+  store.otherUrl = body.otherUrl
+  store.banner = body.banner
+  store.flyer = body.flyer
   store.save (err) ->
     return res.json 400, err if err?
     req.user.save (err) ->

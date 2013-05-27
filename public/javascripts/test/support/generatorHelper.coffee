@@ -45,6 +45,7 @@ define ->
         state: "SP"
         otherUrl: 'http://myotherurl.com'
         banner: 'http://e.jpg'
+        flyer: 'http://lorempixel.com/350/400/nightlife/'
       b: ->
         _id: '2'
         name: 'Store 2'
@@ -53,6 +54,7 @@ define ->
         city: "São Xilevers"
         state: "XX"
         otherUrl: 'http://someurl.com'
+        flyer: 'http://lorempixel.com/350/400/nightlife/'
       c: ->
         _id: '3'
         name: 'Store 3'
@@ -61,6 +63,7 @@ define ->
         city: "Las Vegas"
         state: "NV"
         otherUrl: 'http://other.com'
+        flyer: 'http://lorempixel.com/350/400/nightlife/'
       empty: ->
         _id: ''
         name: ''

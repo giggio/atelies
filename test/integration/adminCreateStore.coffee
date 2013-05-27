@@ -21,9 +21,8 @@ describe 'Admin create store page', ->
             browser.adminCreateStorePage.clickCreateStoreButton done
     it 'is at the admin store page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
-    xit 'shows store created message', -> #failing, zombie is not updating its content
+    it 'shows store created message', ->
       expect(browser.text('#message')).to.equal "Loja criada com sucesso"
-      #browser.evaluate("$('#message').text()").should.equal "Loja criada com sucesso"
     it 'created a new store with correct information', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
@@ -35,6 +34,7 @@ describe 'Admin create store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.banner).to.equal exampleStore.banner
+        expect(store.flyer).to.equal exampleStore.flyer
         done()
     it 'added the store to the user', (done) ->
       User.findById userSeller.id, (err, user) ->
@@ -56,17 +56,19 @@ describe 'Admin create store page', ->
           page.visit (error) ->
             return done error if error
             exampleStore.banner = "abc"
+            exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore
             page.clickCreateStoreButton done
     it 'is at the store create page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#createStore"
-    xit 'does not show store created message', ->
-      expect(browser.query('#message')).to.be.undefined #zombiejs has problems updating content
+    it 'does not show store created message', ->
+      expect(browser.query('#message')).to.be.null
     it 'shows validation messages', ->
       page.errorMessageFor('name').should.equal "Informe o nome da loja."
       page.errorMessageFor('city').should.equal "Informe a cidade."
       page.errorMessageFor('banner').should.equal "Informe um link válido para o banner, começando com http ou https."
+      page.errorMessageFor('flyer').should.equal "Informe um link válido para o flyer, começando com http ou https."
       page.errorMessageFor('otherUrl').should.equal "Informe um link válido para o outro site, começando com http ou https."
     it 'did not create a store with missing info', (done) ->
       Store.find (error, stores) ->

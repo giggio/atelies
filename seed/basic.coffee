@@ -129,6 +129,7 @@ db.stores.insert
   city: "Fortaleza"
   state: "CE"
   otherUrl: 'http://someotherurl.com'
+  flyer: 'http://lorempixel.com/350/400/nightlife/'
 db.stores.insert
   name: 'Store 3'
   slug: 'store_3'
@@ -136,6 +137,7 @@ db.stores.insert
   city: "Manaus"
   state: "AM"
   otherUrl: 'http://idontownthisstore.com'
+  flyer: 'http://lorempixel.com/350/400/nightlife/'
 db.stores.insert
   name: 'Store 4'
   slug: 'store_4'
@@ -144,6 +146,7 @@ db.stores.insert
   state: "SP"
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats'
+  flyer: 'http://lorempixel.com/350/400/nightlife/'
 db.stores.insert
   name: 'Store 5'
   slug: 'store_5'
@@ -152,6 +155,7 @@ db.stores.insert
   state: "SP"
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats'
+  flyer: 'http://lorempixel.com/350/400/nightlife/'
 db.stores.insert
   name: 'Store 6'
   slug: 'store_6'

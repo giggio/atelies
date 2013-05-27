@@ -9,6 +9,7 @@ define [
       state:'SP'
       otherUrl:undefined
       banner:undefined
+      flyer:undefined
       phoneNumber:undefined
     validation:
       name:
@@ -22,4 +23,7 @@ define [
         {required: false}]
       banner:
         [{pattern:'url', msg:"Informe um link válido para o banner, começando com http ou https."}
+        {required: false}]
+      flyer:
+        [{pattern:'url', msg:"Informe um link válido para o flyer, começando com http ou https."}
         {required: false}]

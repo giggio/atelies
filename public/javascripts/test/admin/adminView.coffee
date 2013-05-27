@@ -12,8 +12,8 @@ define [
         store1 = generatorc.store.a()
         store2 = generatorc.store.b()
         stores = [store1, store2]
-        createStoreView = new AdminView el:el, stores: [store1, store2]
-        createStoreView.render()
+        adminView = new AdminView el:el, stores: stores
+        adminView.render()
       it 'shows create store link', ->
         expect($("#createStore", el).val()).to.equal "Crie uma nova loja"
       it 'shows the stores being managed', ->
@@ -24,7 +24,7 @@ define [
         expect($("#stores > tbody > tr:nth-child(2) > td:first-child > a", el).attr('href')).to.equal "#manageStore/#{store2.slug}"
     describe 'Without stores', ->
       before ->
-        createStoreView = new AdminView el:el, stores: []
-        createStoreView.render()
+        adminView = new AdminView el:el, stores: []
+        adminView.render()
       it 'does not show the stores table', ->
         expect($("#stores", el).length).to.equal 0

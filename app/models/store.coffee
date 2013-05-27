@@ -10,6 +10,7 @@ storeSchema = new mongoose.Schema
   state:        type: String, required: true
   otherUrl:     String
   banner:       String
+  flyer:        String
 
 storeSchema.path('name').set (val) ->
   @slug = slug val.toLowerCase(), "_"
@@ -24,6 +25,6 @@ Store.findWithProductsBySlug = (slug, cb) ->
     Product.findByStoreSlug slug, (err, products) ->
       return cb err if err
       cb null, store, products
-Store.findForHome = (cb) -> Store.find banner: /./, cb
+Store.findForHome = (cb) -> Store.find flyer: /./, cb
 
 module.exports = Store
