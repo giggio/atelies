@@ -5,36 +5,44 @@ define [
   'handlebars'
   '../models/productsHome'
   'text!./templates/home.html'
-  'caroufredsel'
-  'imagesloaded'
-], ($, _, Backbone, Handlebars, ProductsHome, homeTemplate) ->
-  class Home extends Backbone.View
+  './homeStores'
+  './homeProducts'
+], ($, _, Backbone, Handlebars, ProductsHome, homeTemplate, StoresView, ProductsView) ->
+  class HomeView extends Backbone.View
+    events:
+      'click #doSearch':'_doSearch'
     template: homeTemplate
     initialize: (opt) ->
       @products = opt.products
       @stores = opt.stores
-    render: ->
+      @showProductsAndStores()
+    showProductsAndStores: ->
       context = Handlebars.compile @template
-      storeGroups = _.reduce @stores, (groups, store) ->
-        if groups.length is 0 or _.last(groups).stores.length is 4 then groups.push stores:[]
-        _.last(groups).stores.push store
-        groups
-      , []
-      @$el.html context storeGroups: storeGroups, products: @products
-      $ ->
-        $('#products').imagesLoaded
-          always: ->
-            $('#carousel').carouFredSel
-              scroll:
-                items:1
-                easing:'linear'
-                duration: 1000
-              width: '100%'
-              auto:
-                pauseOnHover: true
-              prev:
-                button  : "#carouselRight"
-                key     : "right"
-              next:
-                button: "#carouselLeft"
-                key: "left"
+      @$el.html context
+      @_showStores()
+      @_showProducts()
+    searchStores: ->
+      @$('#searchStores').show('slow')
+    closeSearchStore: ->
+      @$('#searchStores').hide('fade')
+      Backbone.history.navigate ""
+    _doSearch: ->
+      searchTerm = @$('#storeSearchTerm').val()
+      return if searchTerm is ''
+      Backbone.history.navigate "searchStores/#{searchTerm}", trigger:true
+    showSearchResults: (searchTerm) ->
+      @$('#storeSearchTerm').val searchTerm
+      @$('#productsPlaceHolder').empty()
+      @_showStores searchTerm
+    _showStores: (searchTerm) ->
+      if searchTerm?
+        #TODO actually search
+        @stores.pop()
+        @stores.pop()
+        stores = @stores
+      stores = @stores
+      @storesView = new StoresView stores:stores
+      @$('#storesPlaceHolder').html @storesView.el
+    _showProducts: ->
+      @productsView = new ProductsView products:@products
+      @$('#productsPlaceHolder').html @productsView.el

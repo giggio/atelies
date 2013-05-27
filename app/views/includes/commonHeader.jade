@@ -18,12 +18,7 @@ a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
       ul.dropdown-menu
         each cat in nums
           li: a(href='#') Categoria #{cat}
-    li.dropdown
-      a.dropdown-toggle(href='#', data-toggle='dropdown') Lojas
-        b.caret
-      ul.dropdown-menu
-        each loja in nums
-          li: a(href='#') Loja #{loja}
+    li: a.searchStores(href='/#searchStores') Busca Lojas
     li.dropdown
       a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
         b.caret

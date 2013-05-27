@@ -1,0 +1,11 @@
+<div id="stores">
+  {{#each storeGroups}}
+  <div class="row-fluid storesRow">
+    {{#each stores}}
+    <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
+      <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>

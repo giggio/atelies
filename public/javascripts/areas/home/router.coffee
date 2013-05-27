@@ -1,11 +1,14 @@
 define [
   'backbone'
-  'areas/home/routes'
+  './routes'
 ],
 (Backbone, routes) ->
   class Router extends Backbone.Router
     routes:
       '': routes.home
       'home': routes.home
+      'searchStores': routes.searchStores
+      'closeSearchStore': routes.closeSearchStore
+      'searchStores/:searchTerm': routes.searchStore
     initialize: ->
       Backbone.history.start()
