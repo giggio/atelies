@@ -75,8 +75,8 @@ exports.generator =
       city: "São Paulo"
       state: "SP"
       otherUrl: 'http://myotherurl.com'
-      banner: 'http://lorempixel.com/800/150/cats'
-      flyer: 'http://lorempixel.com/350/400/nightlife/'
+      banner: 'http://lorempixel.com/800/150/cats/1'
+      flyer: 'http://lorempixel.com/350/400/nightlife/1'
     b: -> new Store
       name: 'Store 2'
       slug: 'store_2'
@@ -84,7 +84,7 @@ exports.generator =
       city: "Fortaleza"
       state: "CE"
       otherUrl: 'http://someotherurl.com'
-      flyer: 'http://lorempixel.com/350/400/nightlife/'
+      flyer: 'http://lorempixel.com/350/400/nightlife/2'
     c: -> new Store
       name: 'Store 3'
       slug: 'store_3'
@@ -92,7 +92,7 @@ exports.generator =
       city: "Manaus"
       state: "AM"
       otherUrl: 'http://idontownthisstore.com'
-      flyer: 'http://lorempixel.com/350/400/nightlife/'
+      flyer: 'http://lorempixel.com/350/400/nightlife/3'
     empty: -> new Store
       name: ''
       slug: ''

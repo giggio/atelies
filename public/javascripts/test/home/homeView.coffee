@@ -22,17 +22,11 @@ define [
     it 'should render the products', ->
       expect($('#products', el)).to.be.defined
     it 'should display all the products', ->
-      expect($('#products>.product', el).length).to.equal products.length
+      expect($('#products .product', el).length).to.equal products.length
     it 'should display the store name for product 1', ->
-      expect($("#product1_store", el).text()).to.equal product1.storeName
-    it 'link to the store on product 1', ->
-      expect($("#product1_store a", el).attr('href')).to.equal product1.storeSlug
+      expect($("#product1_storeName", el).text()).to.equal product1.storeName
     it 'should display the store name for product 2', ->
-      expect($("#product2_store", el).text()).to.equal product2.storeName
-    it 'links to the store on product 2', ->
-      expect($("#product2_store a", el).attr('href')).to.equal product2.storeSlug
-    it 'displays the product name on product 1', ->
-      expect($("#product1_name", el).text()).to.equal product1.name
+      expect($("#product2_storeName", el).text()).to.equal product2.storeName
     it 'links to the product page on the product name on product 1', ->
       expect($("#product1 a", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'displays the picture for product 1', ->
@@ -40,6 +34,6 @@ define [
     it 'links to the product page on the picture on product 1', ->
       expect($("#product1_picture", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'shows stores', ->
-      $('#storesHome>.store', el).length.should.equal stores.length
+      $('#stores .store', el).length.should.equal stores.length
     it 'shows store banner', ->
       $('#store1 img', el).attr('src').should.equal store1.flyer

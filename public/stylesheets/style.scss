@@ -1,3 +1,11 @@
+$minWidthPC: 981px;
+$maxWidthPhone: 980px;
+@mixin smallScreen {  
+  @media (max-width: 980px) { @content; }
+}
+@mixin largeScreen {  
+  @media (min-width: 981px) { @content; }
+}
 body {
   padding-top: 10px;
   padding-bottom: 40px;
@@ -16,18 +24,20 @@ body {
   margin: 0px 0px 1px 0px;
 }
 #stores {
-  .store {
-    border: 1px solid #ccc;
-    background-color: white;
-    float: left;
-    margin-left: 30px;
-    margin-bottom: 30px;
-    position:relative;
-    .link {
-      width: 350px;
-      height: 400px;
-      display: block;
-      overflow: hidden;
+  .storesRow{
+    @include largeScreen {
+      padding-bottom: 30px;
+    }
+    .store {
+      @include smallScreen {
+        text-align: center;
+      }
+      border: 1px solid #ccc;
+      background-color: white;
+      float: left;
+      position:relative;
+      .link {
+      }
     }
   }
 }
@@ -47,7 +57,7 @@ body {
       display: block;
       overflow: hidden;
     }
-    .name {
+    .storeName {
       padding-left: 5px;
       float:left;
       text-decoration:none;
@@ -58,9 +68,6 @@ body {
       float:right;
       text-decoration:none;
       color:white;
-    }
-    .store {
-      float:right;
     }
     .productInfoBox {
       position: absolute;
@@ -89,12 +96,12 @@ body {
 .nameHeader {
   font-weight: normal;
 }
-@media (min-width: 980px){
+@include largeScreen {
   #userInfo {
     float:right;
   }
 }
-@media (max-width: 981px) {
+@include smallScreen {
   #userInfo {
     float:left;
   }

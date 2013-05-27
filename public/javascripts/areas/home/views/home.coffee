@@ -1,12 +1,13 @@
 define [
   'jquery'
+  'underscore'
   'backbone'
   'handlebars'
   '../models/productsHome'
   'text!./templates/home.html'
   'caroufredsel'
   'imagesloaded'
-], ($, Backbone, Handlebars, ProductsHome, homeTemplate) ->
+], ($, _, Backbone, Handlebars, ProductsHome, homeTemplate) ->
   class Home extends Backbone.View
     template: homeTemplate
     initialize: (opt) ->
@@ -14,7 +15,12 @@ define [
       @stores = opt.stores
     render: ->
       context = Handlebars.compile @template
-      @$el.html context stores: @stores, products: @products
+      storeGroups = _.reduce @stores, (groups, store) ->
+        if groups.length is 0 or _.last(groups).stores.length is 4 then groups.push stores:[]
+        _.last(groups).stores.push store
+        groups
+      , []
+      @$el.html context storeGroups: storeGroups, products: @products
       $ ->
         $('#products').imagesLoaded
           always: ->

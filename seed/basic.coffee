@@ -4,7 +4,7 @@ db.products.remove()
 db.products.insert
   name: 'name 1'
   slug: 'name_1'
-  picture: 'http://lorempixel.com/300/450/cats'
+  picture: 'http://lorempixel.com/300/450/cats/1'
   price: 11.1
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -20,7 +20,7 @@ db.products.insert
 db.products.insert
   name: 'name 2'
   slug: 'name_2'
-  picture: 'http://lorempixel.com/150/150/cats'
+  picture: 'http://lorempixel.com/150/150/cats/2'
   price: 22.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -36,7 +36,7 @@ db.products.insert
 db.products.insert
   name: 'name 3'
   slug: 'name_3'
-  picture: 'http://lorempixel.com/150/150/cats'
+  picture: 'http://lorempixel.com/150/150/cats/3'
   price: 33.33
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -51,7 +51,7 @@ db.products.insert
 db.products.insert
   name: 'name 4'
   slug: 'name_4'
-  picture: 'http://lorempixel.com/150/200/cats'
+  picture: 'http://lorempixel.com/150/200/cats/4'
   price: 42.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -67,7 +67,7 @@ db.products.insert
 db.products.insert
   name: 'name 5'
   slug: 'name_5'
-  picture: 'http://lorempixel.com/150/200/cats'
+  picture: 'http://lorempixel.com/150/200/cats/5'
   price: 52.2
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -83,7 +83,7 @@ db.products.insert
 db.products.insert
   name: 'name 6'
   slug: 'name_6'
-  picture: 'http://lorempixel.com/150/200/cats'
+  picture: 'http://lorempixel.com/150/200/cats/6'
   price: 62.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -99,7 +99,7 @@ db.products.insert
 db.products.insert
   name: 'name 7'
   slug: 'name_7'
-  picture: 'http://lorempixel.com/150/200/cats'
+  picture: 'http://lorempixel.com/150/200/cats/7'
   price: 72.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -120,7 +120,7 @@ db.stores.insert
   city: "São Paulo"
   state: "SP"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats'
+  banner: 'http://lorempixel.com/800/150/cats/1'
 storeId = db.stores.find()[0]._id
 db.stores.insert
   name: 'Store 2'
@@ -129,7 +129,7 @@ db.stores.insert
   city: "Fortaleza"
   state: "CE"
   otherUrl: 'http://someotherurl.com'
-  flyer: 'http://lorempixel.com/350/400/nightlife/'
+  flyer: 'http://lorempixel.com/350/400/nightlife/2'
 db.stores.insert
   name: 'Store 3'
   slug: 'store_3'
@@ -137,7 +137,7 @@ db.stores.insert
   city: "Manaus"
   state: "AM"
   otherUrl: 'http://idontownthisstore.com'
-  flyer: 'http://lorempixel.com/350/400/nightlife/'
+  flyer: 'http://lorempixel.com/350/400/nightlife/3'
 db.stores.insert
   name: 'Store 4'
   slug: 'store_4'
@@ -145,8 +145,8 @@ db.stores.insert
   city: "São Paulo"
   state: "SP"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats'
-  flyer: 'http://lorempixel.com/350/400/nightlife/'
+  banner: 'http://lorempixel.com/800/150/cats/4'
+  flyer: 'http://lorempixel.com/350/400/nightlife/4'
 db.stores.insert
   name: 'Store 5'
   slug: 'store_5'
@@ -154,8 +154,8 @@ db.stores.insert
   city: "São Paulo"
   state: "SP"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats'
-  flyer: 'http://lorempixel.com/350/400/nightlife/'
+  banner: 'http://lorempixel.com/800/150/cats/5'
+  flyer: 'http://lorempixel.com/350/400/nightlife/5'
 db.stores.insert
   name: 'Store 6'
   slug: 'store_6'
@@ -163,7 +163,79 @@ db.stores.insert
   city: "São Paulo"
   state: "SP"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats'
+  banner: 'http://lorempixel.com/800/150/cats/6'
+db.stores.insert
+  name: 'Store 7'
+  slug: 'store_7'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/7'
+  flyer: 'http://lorempixel.com/350/400/nightlife/7'
+db.stores.insert
+  name: 'Store 8'
+  slug: 'store_8'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/8'
+  flyer: 'http://lorempixel.com/350/400/nightlife/8'
+db.stores.insert
+  name: 'Store 9'
+  slug: 'store_9'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/9'
+  flyer: 'http://lorempixel.com/350/400/nightlife/9'
+db.stores.insert
+  name: 'Store 10'
+  slug: 'store_10'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/10'
+  flyer: 'http://lorempixel.com/350/400/nightlife/10'
+db.stores.insert
+  name: 'Store_11'
+  slug: 'store_11'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/1'
+  flyer: 'http://lorempixel.com/350/400/nightlife/1'
+db.stores.insert
+  name: 'Store 12'
+  slug: 'store_12'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/2'
+  flyer: 'http://lorempixel.com/350/400/nightlife/2'
+db.stores.insert
+  name: 'Store 13'
+  slug: 'store_13'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/3'
+  flyer: 'http://lorempixel.com/350/400/nightlife/3'
+db.stores.insert
+  name: 'Store 14'
+  slug: 'store_14'
+  phoneNumber: '(51) 98745-7894'
+  city: "São Paulo"
+  state: "SP"
+  otherUrl: 'http://myotherurl.com'
+  banner: 'http://lorempixel.com/800/150/cats/4'
+  flyer: 'http://lorempixel.com/350/400/nightlife/4'
 db.users.remove()
 db.users.insert
   email: 'a@a.com'
