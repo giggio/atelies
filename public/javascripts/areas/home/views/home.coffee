@@ -10,12 +10,11 @@ define [
   class Home extends Backbone.View
     template: homeTemplate
     initialize: (opt) ->
-      @productsFeatured = opt.productsFeatured
       @products = opt.products
       @stores = opt.stores
     render: ->
       context = Handlebars.compile @template
-      @$el.html context productsFeatured: @productsFeatured, stores: @stores, products: @products
+      @$el.html context stores: @stores, products: @products
       $ ->
         $('#productsHome').imagesLoaded
           always: ->

@@ -22,9 +22,12 @@ img.carousel {
     border: 1px solid #ccc;
     background-color: white;
     float: left;
+    margin-left: 30px;
+    margin-bottom: 30px;
     position:relative;
     .link {
-      height: 70px;
+      width: 350px;
+      height: 400px;
       display: block;
       overflow: hidden;
     }
@@ -87,45 +90,6 @@ img.carousel {
 }
 .nameHeader {
   font-weight: normal;
-}
-#products {
-  .product {
-    border: 1px solid #ccc;
-    background-color: white;
-    padding: 9px;
-    margin: 7px;
-    float: left;
-    position:relative;
-    .link {
-      height: 200px;
-      display: block;
-      overflow: hidden;
-    }
-    .storeName {
-      padding-left: 5px;
-      float:left;
-      text-decoration:none;
-      color:white;
-    }
-    .price {
-      padding-right: 5px;
-      float:right;
-      text-decoration:none;
-      color:white;
-    }
-    .productInfoBox {
-      position: absolute;
-      top: -50+9+200px;
-      width: 100%;
-      background-color: black;
-      display: block;
-      height: 50px;
-      opacity:0.5;
-      /*filter:alpha(opacity=50);*/
-      .name {
-      }
-    }
-  }
 }
 @media (min-width: 980px){
   #userInfo {

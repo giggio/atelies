@@ -42,4 +42,4 @@ define [
     it 'shows stores', ->
       $('#storesHome>.store', el).length.should.equal stores.length
     it 'shows store banner', ->
-      $('#store1 img', el).attr('src').should.equal store1.banner
+      $('#store1 img', el).attr('src').should.equal store1.flyer
