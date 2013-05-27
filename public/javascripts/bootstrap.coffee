@@ -1,6 +1,7 @@
 requirejs.config
   paths:
     jquery: 'lib/jquery/jquery.min'
+    jqval: 'lib/jquery.validation/jquery.validate'
     underscore: 'lib/underscore/underscore-min'
     backbone: 'lib/backbone/backbone-min'
     handlebars: 'lib/handlebars/index'
@@ -28,6 +29,9 @@ requirejs.config
     'imagesloaded':
       deps: ['jquery']
       exports: '$.fn.imagesLoaded'
+    'jqval':
+      deps: ['jquery']
+      exports: '$.validator'
 
 if global? #nodejs only (tests)
   #needs to add jquery to global scope otherwise twitter bootstrap blows up

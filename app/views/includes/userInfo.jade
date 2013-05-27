@@ -11,7 +11,7 @@
     else
       li: a#loginPop.pop(href="#") Entrar
       li: a(href='/register') Cadastre-se
-  #loginPop-head.hide Login Title
+  #loginPop-head.hide Faça seu login
   #loginPop-content.hide
     form#popupLoginForm(action='/login', method='post')
       div
@@ -21,4 +21,4 @@
         div Senha:
         input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
       div
-        input(type='submit', class='btn-primary', value='Entrar')
+        input(type='submit', class='btn btn-primary', value='Entrar')

@@ -1,4 +1,6 @@
-extends baseBootstrap
+extends homeLayout
+append head
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/loginBootstrap.js')
 append content
   .container
     h2 Cadastro
@@ -9,7 +11,7 @@ append content
         ul#errors
           - each error in errors
             li.error= error
-      form#registerForm(action='/register', method='post')
+      form#registerForm.validatable(action='/register', method='post')
         div
           div Email:
           input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
@@ -28,5 +30,3 @@ append content
           input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
         div
           input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
-  :coffeescript
-    $ -> $('#registerForm').validate()
