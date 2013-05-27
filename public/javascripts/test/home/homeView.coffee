@@ -20,9 +20,9 @@ define [
       homeView = new HomeView el:el, products: products, stores: stores
       homeView.render()
     it 'should render the products', ->
-      expect($('#productsHome', el)).to.be.defined
+      expect($('#products', el)).to.be.defined
     it 'should display all the products', ->
-      expect($('#productsHome>.carouselHolder', el).length).to.equal products.length
+      expect($('#products>.product', el).length).to.equal products.length
     it 'should display the store name for product 1', ->
       expect($("#product1_store", el).text()).to.equal product1.storeName
     it 'link to the store on product 1', ->

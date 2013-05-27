@@ -16,9 +16,9 @@ define [
       context = Handlebars.compile @template
       @$el.html context stores: @stores, products: @products
       $ ->
-        $('#productsHome').imagesLoaded
+        $('#products').imagesLoaded
           always: ->
-            $('#productsHome').carouFredSel
+            $('#carousel').carouFredSel
               scroll:
                 items:1
                 easing:'linear'

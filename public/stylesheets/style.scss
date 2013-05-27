@@ -15,9 +15,7 @@ body {
 .navbar-search .btn {
   margin: 0px 0px 1px 0px;
 }
-img.carousel {
-}
-#storesHome{
+#stores {
   .store {
     border: 1px solid #ccc;
     background-color: white;
@@ -33,14 +31,16 @@ img.carousel {
     }
   }
 }
-#productsFeatured {
-  .carouselHolder {
+#products {
+  .product {
     border: 1px solid #ccc;
     background-color: white;
     padding: 9px;
     margin: 7px;
     float: left;
     position:relative;
+    .picture {
+    }
     .link {
       width: 150px;
       height: 150px;
@@ -75,8 +75,6 @@ img.carousel {
       }
     }
   }
-}
-#productsFeatured {
   a.prev, a.next {
     position: relative;
     top: -100px;
