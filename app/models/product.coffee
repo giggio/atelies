@@ -2,21 +2,21 @@ mongoose = require 'mongoose'
 slug     = require '../helpers/slug'
 
 productSchema = new mongoose.Schema
-  name:       type: String, required: true
-  picture:    String
-  price:      Number
-  slug:       String
-  storeName:  String
-  storeSlug:  String
-  tags: [String]
-  description: String
+  name:           type: String, required: true
+  picture:        String
+  price:          Number
+  slug:           String
+  storeName:      String
+  storeSlug:      String
+  tags:           [String]
+  description:    String
   dimensions:
-    height: Number
-    width: Number
-    depth: Number
-  weight: Number
-  hasInventory: Boolean
-  inventory: Number
+    height:       Number
+    width:        Number
+    depth:        Number
+  weight:         Number
+  hasInventory:   Boolean
+  inventory:      Number
 
 productSchema.path('name').set (val) ->
   @slug = slug val.toLowerCase(), "_"
