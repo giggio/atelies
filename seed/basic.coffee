@@ -1,5 +1,7 @@
-conn = new Mongo()
-db = conn.getDB("openstore")
+server2 = if server? then server else 'localhost'
+dbName2 = if dbName? then dbName else 'openstore'
+db = connect "#{server2}/#{dbName2}"
+db.auth user, password if password?
 db.products.remove()
 db.products.insert
   name: 'name 1'
@@ -112,6 +114,7 @@ db.products.insert
   weight: 120
   hasInventory: true
   inventory: 130
+db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
 db.stores.remove()
 db.stores.insert
   name: 'Store 1'
