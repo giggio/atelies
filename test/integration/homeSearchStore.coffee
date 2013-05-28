@@ -1,7 +1,7 @@
 require './support/_specHelper'
 Product   = require '../../app/models/product'
 
-xdescribe 'Home Search Store', ->
+describe 'Home Search Store', ->
   browser = store1 = store2 = store3 = product1 = product2 = null
   before (done) ->
     browser = newBrowser()
@@ -23,7 +23,8 @@ xdescribe 'Home Search Store', ->
         page.visit ->
           page.clickSearchStores ->
             page.searchStoresText 'very'
-            page.clickDoSearchStores done
+            page.clickDoSearchStores ->
+              browser.reload done
   after ->
     browser.destroy()
   it 'shows stores', ->

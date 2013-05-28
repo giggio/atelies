@@ -4,10 +4,11 @@ define [
   'backbone'
   'handlebars'
   '../models/productsHome'
+  '../models/storesSearch'
   'text!./templates/home.html'
   './homeStores'
   './homeProducts'
-], ($, _, Backbone, Handlebars, ProductsHome, homeTemplate, StoresView, ProductsView) ->
+], ($, _, Backbone, Handlebars, ProductsHome, StoresSearch, homeTemplate, StoresView, ProductsView) ->
   class HomeView extends Backbone.View
     events:
       'click #doSearch':'_doSearch'
@@ -35,12 +36,12 @@ define [
       @$('#productsPlaceHolder').empty()
       @_showStores searchTerm
     _showStores: (searchTerm) ->
-      if searchTerm?
-        #TODO actually search
-        @stores.pop()
-        @stores.pop()
-        stores = @stores
-      stores = @stores
+      return @_showStoresView @stores unless searchTerm?
+      storesSearch = new StoresSearch searchTerm:searchTerm
+      storesSearch.fetch
+        reset:true
+        success: => @_showStoresView storesSearch.toJSON()
+    _showStoresView: (stores) ->
       @storesView = new StoresView stores:stores
       @$('#storesPlaceHolder').html @storesView.el
     _showProducts: ->
