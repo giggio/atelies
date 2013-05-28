@@ -5,6 +5,7 @@ db.auth user, password if password?
 db.products.remove()
 db.products.insert
   name: 'name 1'
+  nameKeywords: ['name', '1']
   slug: 'name_1'
   picture: 'http://lorempixel.com/300/450/cats/1'
   price: 11.1
@@ -21,6 +22,7 @@ db.products.insert
   inventory: 30
 db.products.insert
   name: 'name 2'
+  nameKeywords: ['name', '2']
   slug: 'name_2'
   picture: 'http://lorempixel.com/150/150/cats/2'
   price: 22.2
@@ -37,6 +39,7 @@ db.products.insert
   inventory: 40
 db.products.insert
   name: 'name 3'
+  nameKeywords: ['name', '3']
   slug: 'name_3'
   picture: 'http://lorempixel.com/150/150/cats/3'
   price: 33.33
@@ -52,6 +55,7 @@ db.products.insert
   hasInventory: false
 db.products.insert
   name: 'name 4'
+  nameKeywords: ['name', '4']
   slug: 'name_4'
   picture: 'http://lorempixel.com/150/200/cats/4'
   price: 42.2
@@ -68,6 +72,7 @@ db.products.insert
   inventory: 130
 db.products.insert
   name: 'name 5'
+  nameKeywords: ['name', '5']
   slug: 'name_5'
   picture: 'http://lorempixel.com/150/200/cats/5'
   price: 52.2
@@ -84,6 +89,7 @@ db.products.insert
   inventory: 130
 db.products.insert
   name: 'name 6'
+  nameKeywords: ['name', '6']
   slug: 'name_6'
   picture: 'http://lorempixel.com/150/200/cats/6'
   price: 62.2
@@ -99,8 +105,9 @@ db.products.insert
   hasInventory: true
   inventory: 130
 db.products.insert
-  name: 'name 7'
-  slug: 'name_7'
+  name: 'Some Fancier Name 7'
+  nameKeywords: ['some', 'fancier', 'name', '7']
+  slug: 'some_fancier_name_7'
   picture: 'http://lorempixel.com/150/200/cats/7'
   price: 72.2
   storeName: 'store 1'
@@ -115,6 +122,7 @@ db.products.insert
   hasInventory: true
   inventory: 130
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
+db.products.ensureIndex { nameKeywords: 1 }
 db.stores.remove()
 db.stores.insert
   name: 'Store 1'

@@ -73,3 +73,18 @@ describe 'Product', ->
     product.tags = undefined
     simpleProduct = product.toSimpleProduct()
     simpleProduct.tags.should.equal ''
+  it 'adds name keywords when created', ->
+    product = new Product name:"Meu produto"
+    product.nameKeywords.should.be.like ['meu', 'produto']
+  it 'adds name keywords when name is set', ->
+    product = new Product()
+    product.name = "Meu Produto"
+    product.nameKeywords.should.be.like ['meu', 'produto']
+  it 'name keywords is empty without a name', ->
+    product = new Product()
+    product.name = ""
+    product.nameKeywords.should.be.like []
+  it 'name keywords is null without a name', ->
+    product = new Product()
+    product.name = null
+    product.nameKeywords.should.be.like []

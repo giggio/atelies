@@ -3,6 +3,7 @@ slug     = require '../helpers/slug'
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true
+  nameKeywords:   [String]
   picture:        String
   price:          Number
   slug:           String
@@ -19,6 +20,7 @@ productSchema = new mongoose.Schema
   inventory:      Number
 
 productSchema.path('name').set (val) ->
+  @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
