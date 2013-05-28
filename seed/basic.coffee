@@ -152,7 +152,16 @@ db.stores.insert
   state: "AM"
   otherUrl: 'http://idontownthisstore.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/3'
-for i in [3..14]
+db.stores.insert
+  name: 'Some Fancy Name'
+  nameKeywords: ['some', 'fancy', 'name']
+  slug: 'some_fancy_name'
+  phoneNumber: '(37) 9999-9999'
+  city: "Campo Grande"
+  state: "MS"
+  otherUrl: 'http://somestorefromms.com'
+  flyer: 'http://lorempixel.com/350/400/nightlife/4'
+for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
   db.stores.insert

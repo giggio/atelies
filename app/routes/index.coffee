@@ -129,3 +129,8 @@ exports.product = (req, res) ->
     dealWith err
     return res.send 404 if product is null
     res.json product.toSimpleProduct()
+
+exports.storesSearch = (req, res) ->
+  Store.searchByName req.params.searchTerm, (err, stores) ->
+    dealWith err
+    res.json stores

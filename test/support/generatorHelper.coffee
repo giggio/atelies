@@ -93,6 +93,14 @@ exports.generator =
       state: "AM"
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
+    c: -> new Store
+      name: 'My Very Nice Store'
+      phoneNumber: '(77) 9999-9999'
+      city: "Campo Grande"
+      state: "MS"
+      otherUrl: 'http://somestoreinms.com'
+      banner: 'http://lorempixel.com/800/150/cats/4'
+      flyer: 'http://lorempixel.com/350/400/nightlife/4'
     empty: -> new Store
       name: ''
       slug: ''

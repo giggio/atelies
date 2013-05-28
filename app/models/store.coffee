@@ -28,5 +28,9 @@ Store.findWithProductsBySlug = (slug, cb) ->
       return cb err if err
       cb null, store, products
 Store.findForHome = (cb) -> Store.find flyer: /./, cb
+Store.searchByName = (searchTerm, cb) ->
+  Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
+    return cb err if err
+    cb null, stores
 
 module.exports = Store
