@@ -1,0 +1,11 @@
+<div id="productsSearchResults">
+  {{#each productGroups}}
+  <div class="row-fluid productsRow">
+    {{#each products}}
+    <div id="product{{_id}}" data-id="{{_id}}" class="product span2">
+      <a href="{{slug}}" class="link"><img src="{{picture}}" /></a>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>

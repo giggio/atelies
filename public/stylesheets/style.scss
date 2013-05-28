@@ -41,6 +41,25 @@ body {
     }
   }
 }
+#productsSearchResults {
+  .productsRow{
+    @include largeScreen {
+      padding-bottom: 30px;
+    }
+    .product {
+      @include smallScreen {
+        text-align: center;
+      }
+      border: 1px solid #ccc;
+      background-color: white;
+      float: left;
+      position:relative;
+      .link {
+        max-height: 150px;
+      }
+    }
+  }
+}
 #products {
   .product {
     border: 1px solid #ccc;

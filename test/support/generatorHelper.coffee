@@ -67,6 +67,22 @@ exports.generator =
       weight: 120
       hasInventory: true
       inventory: 130
+    d: -> new Product
+      name: 'Some Cool Item'
+      slug: 'some_cool_item'
+      picture: 'http://lorempixel.com/150/200/cats/5'
+      price: 42.2
+      storeName: 'store 1'
+      storeSlug: 'store_1'
+      tags: ['abc', 'xyz']
+      description: "Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
+      dimensions:
+        height: 290
+        width: 200
+        depth: 210
+      weight: 220
+      hasInventory: true
+      inventory: 230
   store:
     a: -> new Store
       name: 'Store 1'

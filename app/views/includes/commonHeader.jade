@@ -5,8 +5,8 @@ a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
   span.icon-bar
 .nav-collapse.collapse
   form.navbar-search.pull-left
-    input.search-query.span2(type="text",placeholder="Busca Produtos")
-    button.btn.btn-inverse(type="submit"): i.icon-search.icon-white
+    input#productSearchTerm.search-query.span2(type="text",placeholder="Busca Produtos")
+    button#doSearchProduct.btn.btn-inverse(onclick="window.location.hash='#searchProducts/'+document.getElementById('productSearchTerm').value;return false;"): i.icon-search.icon-white
   ul.nav
     if (everyauth.loggedIn && user.isSeller)
       li: a#admin(href='admin') Administração

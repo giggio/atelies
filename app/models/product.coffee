@@ -45,5 +45,9 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
 Product = mongoose.model 'product', productSchema
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne {storeSlug: storeSlug, slug: productSlug}, cb
+Product.searchByName = (searchTerm, cb) ->
+  Product.find nameKeywords:searchTerm.toLowerCase(), (err, products) ->
+    return cb err if err
+    cb null, products
 
 module.exports = Product

@@ -134,3 +134,9 @@ exports.storesSearch = (req, res) ->
   Store.searchByName req.params.searchTerm, (err, stores) ->
     dealWith err
     res.json stores
+
+exports.productsSearch = (req, res) ->
+  Product.searchByName req.params.searchTerm, (err, products) ->
+    dealWith err
+    viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+    res.json viewModelProducts

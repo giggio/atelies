@@ -10,5 +10,6 @@ define [
       'searchStores': routes.searchStores
       'closeSearchStore': routes.closeSearchStore
       'searchStores/:searchTerm': routes.searchStore
+      'searchProducts/:searchTerm': routes.searchProducts
     initialize: ->
       Backbone.history.start()

@@ -24,7 +24,7 @@ db.products.insert
   name: 'name 2'
   nameKeywords: ['name', '2']
   slug: 'name_2'
-  picture: 'http://lorempixel.com/150/150/cats/2'
+  picture: 'http://lorempixel.com/300/450/cats/2'
   price: 22.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -41,7 +41,7 @@ db.products.insert
   name: 'name 3'
   nameKeywords: ['name', '3']
   slug: 'name_3'
-  picture: 'http://lorempixel.com/150/150/cats/3'
+  picture: 'http://lorempixel.com/300/450/cats/3'
   price: 33.33
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -57,7 +57,7 @@ db.products.insert
   name: 'name 4'
   nameKeywords: ['name', '4']
   slug: 'name_4'
-  picture: 'http://lorempixel.com/150/200/cats/4'
+  picture: 'http://lorempixel.com/300/450/cats/4'
   price: 42.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -74,7 +74,7 @@ db.products.insert
   name: 'name 5'
   nameKeywords: ['name', '5']
   slug: 'name_5'
-  picture: 'http://lorempixel.com/150/200/cats/5'
+  picture: 'http://lorempixel.com/300/450/cats/5'
   price: 52.2
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -91,7 +91,7 @@ db.products.insert
   name: 'name 6'
   nameKeywords: ['name', '6']
   slug: 'name_6'
-  picture: 'http://lorempixel.com/150/200/cats/6'
+  picture: 'http://lorempixel.com/300/450/cats/6'
   price: 62.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -108,7 +108,7 @@ db.products.insert
   name: 'Some Fancier Name 7'
   nameKeywords: ['some', 'fancier', 'name', '7']
   slug: 'some_fancier_name_7'
-  picture: 'http://lorempixel.com/150/200/cats/7'
+  picture: 'http://lorempixel.com/300/450/cats/7'
   price: 72.2
   storeName: 'store 1'
   storeSlug: 'store_1'

@@ -2,15 +2,16 @@ define [
   'jquery'
   '../../viewsManager'
   './views/home'
-],($, viewsManager, HomeView) ->
+  './models/storesSearch'
+  './models/productsSearch'
+],($, viewsManager, HomeView, StoresSearch, ProductsSearch) ->
   class Routes
     viewsManager.$el = $ "#app-container"
     @home: =>
       @homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel
       viewsManager.show @homeView
     @searchStores: =>
-      unless @homeView?
-        @home()
+      @home() unless @homeView?
       @homeView.searchStores()
     @closeSearchStore: =>
       @homeView.closeSearchStore()
@@ -18,4 +19,13 @@ define [
       unless @homeView?
         @home()
         @searchStores()
-      @homeView.showSearchResults searchTerm
+      storesSearch = new StoresSearch searchTerm:searchTerm
+      storesSearch.fetch
+        reset:true
+        success: => @homeView.showStoresSearchResults searchTerm, storesSearch.toJSON()
+    @searchProducts: (searchTerm) =>
+      @home() unless @homeView?
+      productsSearch = new ProductsSearch searchTerm:searchTerm
+      productsSearch.fetch
+        reset:true
+        success: => @homeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
