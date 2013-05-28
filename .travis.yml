@@ -11,10 +11,8 @@ after_success:
 - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
 - echo "   CheckHostIP no" >> ~/.ssh/config
 - echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
-- heroku keys:clear
 - yes | heroku keys:add
 - yes | git push heroku master
-- heroku keys:clear
 script: node_modules/grunt-cli/bin/grunt travis
 env:
   global:
