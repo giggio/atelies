@@ -50,7 +50,7 @@ exports.start = (cb) ->
   app.use(everyauthConfig.postEveryAuthMiddlewareHack())
   #app.use app.router
   #connStr = if process.env.MONGOHQ_URL? then process.env.MONGOHQ_URL else process.env.CUSTOMCONNSTR_mongo
-  connStr = if process.env.MONGOLAB_URI? then process.env.MONGOHQ_URI else process.env.CUSTOMCONNSTR_mongo
+  connStr = if process.env.MONGOLAB_URI? then process.env.MONGOLAB_URI else process.env.CUSTOMCONNSTR_mongo
   mongoose.connect connStr
   mongoose.connection.on 'error', dealWith
 
