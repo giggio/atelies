@@ -4,6 +4,7 @@ slug     = require '../helpers/slug'
 
 storeSchema = new mongoose.Schema
   name:         type: String, required: true
+  nameKeywords: [String]
   slug:         String
   phoneNumber:  String
   city:         type: String, required: true
@@ -13,6 +14,7 @@ storeSchema = new mongoose.Schema
   flyer:        String
 
 storeSchema.path('name').set (val) ->
+  @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
 

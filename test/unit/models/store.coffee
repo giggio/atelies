@@ -15,3 +15,18 @@ describe 'Store', ->
     store = new Store()
     store.name = "Minha loja"
     expect(store.slug).to.equal 'minha_loja'
+  it 'adds name keywords when created', ->
+    store = new Store name:"Minha Loja"
+    store.nameKeywords.should.be.like ['minha', 'loja']
+  it 'adds name keywords when name is set', ->
+    store = new Store()
+    store.name = "Minha Loja"
+    store.nameKeywords.should.be.like ['minha', 'loja']
+  it 'name keywords is empty without a name', ->
+    store = new Store()
+    store.name = ""
+    store.nameKeywords.should.be.like []
+  it 'name keywords is null without a name', ->
+    store = new Store()
+    store.name = null
+    store.nameKeywords.should.be.like []

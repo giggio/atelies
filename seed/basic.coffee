@@ -126,6 +126,7 @@ db.products.ensureIndex { nameKeywords: 1 }
 db.stores.remove()
 db.stores.insert
   name: 'Store 1'
+  nameKeywords: ['store', '1']
   slug: 'store_1'
   phoneNumber: '(11) 98745-7894'
   city: "São Paulo"
@@ -135,6 +136,7 @@ db.stores.insert
 storeId = db.stores.find()[0]._id
 db.stores.insert
   name: 'Store 2'
+  nameKeywords: ['store', '2']
   slug: 'store_2'
   phoneNumber: '(85) 7788-1111'
   city: "Fortaleza"
@@ -143,110 +145,26 @@ db.stores.insert
   flyer: 'http://lorempixel.com/350/400/nightlife/2'
 db.stores.insert
   name: 'Store 3'
+  nameKeywords: ['store', '3']
   slug: 'store_3'
   phoneNumber: '(77) 9999-9999'
   city: "Manaus"
   state: "AM"
   otherUrl: 'http://idontownthisstore.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/3'
-db.stores.insert
-  name: 'Store 4'
-  slug: 'store_4'
-  phoneNumber: '(41) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/4'
-  flyer: 'http://lorempixel.com/350/400/nightlife/4'
-db.stores.insert
-  name: 'Store 5'
-  slug: 'store_5'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/5'
-  flyer: 'http://lorempixel.com/350/400/nightlife/5'
-db.stores.insert
-  name: 'Store 6'
-  slug: 'store_6'
-  phoneNumber: '(61) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/6'
-db.stores.insert
-  name: 'Store 7'
-  slug: 'store_7'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/7'
-  flyer: 'http://lorempixel.com/350/400/nightlife/7'
-db.stores.insert
-  name: 'Store 8'
-  slug: 'store_8'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/8'
-  flyer: 'http://lorempixel.com/350/400/nightlife/8'
-db.stores.insert
-  name: 'Store 9'
-  slug: 'store_9'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/9'
-  flyer: 'http://lorempixel.com/350/400/nightlife/9'
-db.stores.insert
-  name: 'Store 10'
-  slug: 'store_10'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/10'
-  flyer: 'http://lorempixel.com/350/400/nightlife/10'
-db.stores.insert
-  name: 'Store_11'
-  slug: 'store_11'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/1'
-  flyer: 'http://lorempixel.com/350/400/nightlife/1'
-db.stores.insert
-  name: 'Store 12'
-  slug: 'store_12'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/2'
-  flyer: 'http://lorempixel.com/350/400/nightlife/2'
-db.stores.insert
-  name: 'Store 13'
-  slug: 'store_13'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/3'
-  flyer: 'http://lorempixel.com/350/400/nightlife/3'
-db.stores.insert
-  name: 'Store 14'
-  slug: 'store_14'
-  phoneNumber: '(51) 98745-7894'
-  city: "São Paulo"
-  state: "SP"
-  otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/4'
-  flyer: 'http://lorempixel.com/350/400/nightlife/4'
+for i in [3..14]
+  pictureId = i - Math.floor(i/10, 0) * 10
+  pictureId = 10 if i is 0
+  db.stores.insert
+    name: "Store #{i}"
+    nameKeywords: ['store', i.toString()]
+    slug: "store_#{i}"
+    phoneNumber: "(#{i}) 98745-7894"
+    city: "São Paulo"
+    state: "SP"
+    otherUrl: 'http://myotherurl.com'
+    banner: "http://lorempixel.com/800/150/cats/#{pictureId}"
+    flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
 db.users.remove()
 db.users.insert
   email: 'a@a.com'
