@@ -3,11 +3,11 @@ HomeLayout = require './homeLayout'
 module.exports = class LoginPage extends HomeLayout
   url: 'account/changePassword'
   setFieldsAs: (values) =>
-    @browser.fill "#password", values.password
-    @browser.fill "#passwordVerify", values.passwordVerify
-    @browser.fill "#newPassword", values.newPassword
-  clickChangePasswordButton: (cb) => @browser.pressButtonWait "#changePassword", cb
+    @browser.fill "#changePasswordForm #password", values.password
+    @browser.fill "#changePasswordForm #passwordVerify", values.passwordVerify
+    @browser.fill "#changePasswordForm #newPassword", values.newPassword
+  clickChangePasswordButton: (cb) => @browser.pressButtonWait "#changePasswordForm #changePassword", cb
   errors: => @browser.text '#errors > p'
-  passwordRequired: => @browser.text "label[for=password]"
-  newPasswordRequired: => @browser.text "label[for=newPassword]"
-  passwordVerifyMessage: => @browser.text "label[for=passwordVerify]"
+  passwordRequired: => @browser.text "#changePasswordForm label[for=password]"
+  newPasswordRequired: => @browser.text "#changePasswordForm label[for=newPassword]"
+  passwordVerifyMessage: => @browser.text "#changePasswordForm label[for=passwordVerify]"

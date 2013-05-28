@@ -3,14 +3,14 @@ HomeLayout = require './homeLayout'
 module.exports = class RegisterPage extends HomeLayout
   url: 'register'
   setFieldsAs: (values, cb) =>
-    @browser.fill "#email", values.email
-    @browser.fill "#password", values.password
-    @browser.fill "#passwordVerify", values.passwordVerify
-    @browser.fill "#name", values.name
-    if values.isSeller then @browser.check "#isSeller" else @browser.uncheck "#isSeller"
-  clickRegisterButton: (cb) => @browser.pressButtonWait "#register", cb
+    @browser.fill "#registerForm #email", values.email
+    @browser.fill "#registerForm #password", values.password
+    @browser.fill "#registerForm #passwordVerify", values.passwordVerify
+    @browser.fill "#registerForm #name", values.name
+    if values.isSeller then @browser.check "#registerForm #isSeller" else @browser.uncheck "#registerForm #isSeller"
+  clickRegisterButton: (cb) => @browser.pressButtonWait "#registerForm #register", cb
   errors: => @browser.text '#errors > li'
-  emailRequired: => @browser.text "label[for=email]"
-  passwordRequired: => @browser.text "label[for=password]"
-  passwordVerifyMessage: => @browser.text "label[for=passwordVerify]"
-  nameRequired: => @browser.text "label[for=name]"
+  emailRequired: => @browser.text "#registerForm label[for=email]"
+  passwordRequired: => @browser.text "#registerForm label[for=password]"
+  passwordVerifyMessage: => @browser.text "#registerForm label[for=passwordVerify]"
+  nameRequired: => @browser.text "#registerForm label[for=name]"
