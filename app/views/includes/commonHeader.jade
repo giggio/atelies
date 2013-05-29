@@ -1,4 +1,3 @@
-- var nums = [1,2,3,4,5,6,7,8,9,10]
 a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
   span.icon-bar
   span.icon-bar
@@ -16,8 +15,16 @@ a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
         |  Categorias
         b.caret
       ul.dropdown-menu
-        each cat in nums
-          li: a(href='#') Categoria #{cat}
+        li: a(href='#') Presentes
+        li: a(href='#') Festa
+        li.dropdown-submenu
+          a(href="#") Acessórios
+            ul.dropdown-menu
+              li: a(href='#') Brincos
+              li: a(href='#') Colares
+              li: a(href='#') Botas
+              li: a(href='#') Outros
+        li: a(href='#') Outros
     li: a.searchStores(href='/#searchStores') Busca Lojas
     li.dropdown
       a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre

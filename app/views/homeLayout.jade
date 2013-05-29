@@ -5,7 +5,7 @@ append layout
     section#main.container
       #site-banner.row(style="margin-bottom: 20px")
         .span4
-          a(href="/"): img(src="http://lorempixel.com/350/100/cats/")
+          a(href="/"): img(src="/images/ateliesLogo.png")
         .span6
           h3.nameHeader shopping virtual de artes e afins
         .span2
@@ -20,17 +20,41 @@ append layout
             include includes/commonHeader
             include includes/userInfo
 
-  block content
+      block content
 
-  block footer
-    hr
-    footer
-      div
-        p.text-center 
-          &copy; 2013 - OpenStore
-          &nbsp;|&nbsp;
-          a Termos de uso
-          &nbsp;|&nbsp;
-          a Sobre
-          &nbsp;|&nbsp;
-          a Contato
+      block footer
+        hr
+        footer
+          .container
+            .row
+              .span6
+                .page-header
+                  h2 Sobre o Ateliês
+                p Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa.
+                h3 Contato
+                strong Email
+                p: a(href="fulano@atelies.com.br") fulano@atelies.com.br
+              .span3
+                .page-header
+                  h2 Produtos
+                ul
+                  li: a Categorias
+                  li: a Tags
+                  li: a Busca lojas
+                  li: a Busca produtos
+              .span3
+                .page-header
+                  h2 Minha conta
+                ul
+                  li: a Carrinho
+                  li: a Troca de senha
+                  li: a Pedidos
+
+            p.text-center
+              &copy; 2013 - OpenStore
+              &nbsp;|&nbsp;
+              a Termos de uso
+              &nbsp;|&nbsp;
+              a Sobre
+              &nbsp;|&nbsp;
+              a Contato
