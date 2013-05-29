@@ -2,8 +2,9 @@ define [
   'jquery'
   'backbone'
   'handlebars'
+  './storeProducts'
   'text!./templates/store.html'
-], ($, Backbone, Handlebars, storeTemplate) ->
+], ($, Backbone, Handlebars, ProductsView, storeTemplate) ->
   class StoreView extends Backbone.View
     template: storeTemplate
     initialize: (opt) ->
@@ -12,4 +13,6 @@ define [
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
-      @$el.html context store: @store, products: @products
+      @$el.html context store: @store
+      @productsView = new ProductsView products:@products
+      @$('#productsPlaceHolder').html @productsView.el

@@ -121,6 +121,26 @@ db.products.insert
   weight: 120
   hasInventory: true
   inventory: 130
+for i in [8..25]
+  pictureId = i - Math.floor(i/10, 0) * 10
+  pictureId = 10 if i is 0
+  db.products.insert
+    name: "Name #{i}"
+    nameKeywords: ['name', i.toString()]
+    slug: "name_#{i}"
+    picture: "http://lorempixel.com/300/450/cats/#{pictureId}"
+    price: 62.2
+    storeName: 'store 1'
+    storeSlug: 'store_1'
+    tags: ['mno', 'pqr']
+    description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
+    dimensions:
+      height: 90
+      width: 100
+      depth: 110
+    weight: 120
+    hasInventory: true
+    inventory: 130
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
 db.products.ensureIndex { nameKeywords: 1 }
 db.stores.remove()

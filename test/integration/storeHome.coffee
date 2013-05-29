@@ -19,7 +19,7 @@ describe 'store home page', ->
             else
               done()
     it 'should display not found', ->
-      expect(browser.text(".page-header")).to.equal 'Loja não existe'
+      expect(browser.text("#notExistent")).to.equal 'Loja não existe'
     it 'should return a not found status code', ->
       expect(browser.statusCode).to.equal 404
     
@@ -33,7 +33,7 @@ describe 'store home page', ->
         whenServerLoaded ->
           browser.storeHomePage.visit "store_1", done
     it 'should display no products', ->
-      expect(browser.query('#products tbody').children.length).to.equal 0
+      browser.storeHomePage.products().length.should.equal 0
 
   describe 'when store exists and has products', (done) ->
     before (done) ->
@@ -49,4 +49,4 @@ describe 'store home page', ->
         whenServerLoaded ->
           browser.storeHomePage.visit "store_1", done
     it 'should display the products', ->
-      expect(browser.query('#products tbody').children.length).to.equal 2
+      browser.storeHomePage.products().length.should.equal 2
