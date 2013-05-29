@@ -3,20 +3,23 @@ append head
   script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/loginBootstrap.js')
 append content
   .container
-    h2 Login
     if (everyauth.loggedIn)
       h3 Usuário já logado.
     else
-      if ('undefined' !== typeof errors && errors.length)
-        ul#errors
-          - each error in errors
-            li.error= error
-      form#loginForm.validatable(action='/login', method='post')
-        div
-          div E-mail:
-          input#email(type='text', name=everyauth.password.loginFormFieldName, value=email, class="required email", title="Informe seu e-mail.")
-        div
-          div Senha:
-          input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
-        div
-          input#login(type='submit', class='btn btn-primary', value='Entrar')
+      form#loginForm.validatable.form-horizontal(action='/login', method='post')
+        h2 Login
+        if ('undefined' !== typeof errors && errors.length)
+          ul#errors
+            - each error in errors
+              li.error= error
+        .control-group
+          label.control-label E-mail:
+          .controls
+            input#email(type='text', name=everyauth.password.loginFormFieldName, value=email, class="required email", title="Informe seu e-mail.")
+        .control-group
+          label.control-label Senha:
+          .controls
+            input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+        .control-group
+          .controls
+            input#login(type='submit', class='btn btn-primary', value='Entrar')

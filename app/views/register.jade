@@ -11,22 +11,27 @@ append content
         ul#errors
           - each error in errors
             li.error= error
-      form#registerForm.validatable(action='/register', method='post')
-        div
-          div Email:
-          input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
-        div
-          div Nome:
-          input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
-        div
-          div: label
+      form#registerForm.validatable.form-horizontal(action='/register', method='post')
+        .control-group
+          label.control-label Email:
+          .controls
+            input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
+        .control-group
+          label.control-label Nome:
+          .controls
+            input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
+        .control-group
+          .controls
             input#isSeller(type='checkbox', name="isSeller", value=userParams["isSeller"], checked)
             | registrar-se como vendedor
-        div
-          div Senha:
-          input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
-        div
-          div Confirme sua senha:
-          input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
-        div
-          input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
+        .control-group
+          label.control-label Senha:
+          .controls
+            input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+        .control-group
+          label.control-label Confirme sua senha:
+          .controls
+            input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
+        .control-group
+          .controls
+            input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
