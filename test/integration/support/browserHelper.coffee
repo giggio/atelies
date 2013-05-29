@@ -24,6 +24,9 @@ exports.waitSelector = (selector, cb) ->
 exports.pressButtonWait = (selector, cb) ->
   @waitSelector selector, => @pressButton selector, cb
 
+exports.clickLinkWait = (selector, cb) ->
+  @waitSelector selector, => @clickLink selector, cb
+
 exports.newBrowser = (browser) ->
   if browser?
     storage = browser.saveStorage()
@@ -34,6 +37,7 @@ exports.newBrowser = (browser) ->
   browser.selectorSearched = exports.selectorSearched
   browser.waitSelector = exports.waitSelector
   browser.pressButtonWait = exports.pressButtonWait
+  browser.clickLinkWait = exports.clickLinkWait
   browser.homePage = new HomePage browser
   browser.storeHomePage = new StoreHomePage browser
   browser.storeCartPage = new StoreCartPage browser

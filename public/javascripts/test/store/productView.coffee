@@ -19,54 +19,35 @@ define [
         productView = new ProductView el:el, store: store1, product: new Product product1
         productView.render 'product_1'
       it 'renders the products', ->
-        expect($('#product1', el)).to.be.defined
+        expect($('#product', el)).to.be.defined
       it 'show the name', ->
-        expect($("#product1 #name", el).text()).to.equal product1.name
+        expect($("#product #name", el).text()).to.equal product1.name
       it 'shows the picture', ->
-        expect($("#product1 #picture", el).attr('src')).to.equal product1.picture
+        expect($("#product #picture", el).attr('src')).to.equal product1.picture
       it 'shows the id', ->
-        expect($("#product1 #id", el).text()).to.equal product1._id
+        expect($("#product", el).attr('data-id')).to.equal product1._id
       it 'shows the price', ->
-        expect($('#product1 #price', el).text()).to.equal product1.price.toString()
+        expect($('#product #price', el).text()).to.equal product1.price.toString()
       it 'shows the tags', ->
-        expect($('#product1 #tags', el).text()).to.equal product1.tags
+        $('#product .tag', el).text().should.equal product1.tags.split(', ').join ''
       it 'shows the description', ->
-        expect($('#product1 #description', el).text()).to.equal product1.description
+        expect($('#product #description', el).text()).to.equal product1.description
       it 'shows the height', ->
-        expect($('#product1 #dimensions #height', el).text()).to.equal product1.height.toString()
+        expect($('#product #dimensions #height', el).text()).to.equal product1.height.toString()
       it 'shows the width', ->
-        expect($('#product1 #dimensions #width', el).text()).to.equal product1.width.toString()
+        expect($('#product #dimensions #width', el).text()).to.equal product1.width.toString()
       it 'shows the depth', ->
-        expect($('#product1 #dimensions #depth', el).text()).to.equal product1.depth.toString()
+        expect($('#product #dimensions #depth', el).text()).to.equal product1.depth.toString()
       it 'shows the weight', ->
-        expect($('#product1 #weight', el).text()).to.equal product1.weight.toString()
+        expect($('#product #weight', el).text()).to.equal product1.weight.toString()
       it 'shows the inventory', ->
-        expect($('#product1 #inventory', el).text()).to.equal '30 itens'
-      describe 'Store details', ->
-        it 'shows the store name', ->
-          expect($('#storeName', el).text()).to.equal store1.name
-        it 'shows phone number', ->
-          expect($('#storePhoneNumber', el).text()).to.equal store1.phoneNumber
-        it 'shows City', ->
-          expect($('#storeCity', el).text()).to.equal store1.city
-        it 'shows State', ->
-          expect($('#storeState', el).text()).to.equal store1.state
-        it 'shows other store url', ->
-          expect($('#storeOtherUrl', el).text()).to.equal store1.otherUrl
-        it 'does not show the store name header', ->
-          expect($('#storeNameHeader', el).length).to.equal 0
-        it 'shows store banner', ->
-          expect($('#storeBanner', el).attr('src')).to.equal store1.banner
-    describe 'Store without banner and product without inventory', ->
+        expect($('#product #inventory', el).text()).to.equal '30 itens'
+    describe 'product without inventory', ->
       before ->
         productView = new ProductView el:el, store: store2, product: new Product product2
         productView.render 'product_2'
       it 'shows there is no inventory/made on demand', ->
-        expect($('#product2 #inventory', el).text()).to.equal 'Feito sob encomenda'
-      it 'shows store name header', ->
-        expect($('#storeNameHeader', el).text()).to.equal store2.name
-      it 'does not show the store banner', ->
-        expect($('#storeBanner', el).length).to.equal 0
+        expect($('#product #inventory', el).text()).to.equal 'Feito sob encomenda'
     describe 'Purchasing an item', ->
       spy = null
       before ->

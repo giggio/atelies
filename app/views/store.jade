@@ -1,4 +1,7 @@
-extends homeLayout
+if store
+  extends storeLayout
+else
+  extends homeLayout
 
 append head
   script
@@ -11,7 +14,7 @@ append head
 append content
   .container
     if store != null
-      section#app-container Carregando...
+      section#app-container.store Carregando...
     else
       h1#notExistent.page-header Loja n&atilde;o existe
-      section#app-container
+      section#app-container.store

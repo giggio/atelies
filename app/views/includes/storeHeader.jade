@@ -1,0 +1,34 @@
+a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
+  span.icon-bar
+  span.icon-bar
+  span.icon-bar
+.nav-collapse.collapse
+  form.navbar-search.pull-left
+    input#productSearchTerm.search-query.span2(type="text",placeholder="Busca Produtos")
+    button#doSearchProduct.btn.btn-inverse(onclick="window.location.hash='#searchProducts/'+document.getElementById('productSearchTerm').value;return false;"): i.icon-search.icon-white
+  ul.nav
+    if (everyauth.loggedIn && user.isSeller)
+      li: a#admin(href='admin') Administração
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown')
+        i.icon-th-list
+        |  Categorias
+        b.caret
+      ul.dropdown-menu
+        li: a(href='#') Presentes
+        li: a(href='#') Festa
+        li.dropdown-submenu
+          a(href="#") Acessórios
+            ul.dropdown-menu
+              li: a(href='#') Brincos
+              li: a(href='#') Colares
+              li: a(href='#') Botas
+              li: a(href='#') Outros
+        li: a(href='#') Outros
+    li.dropdown
+      a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
+        b.caret
+      ul.dropdown-menu
+        li: a(href='#') Sobre o site
+        li: a(href='#') Quanto custa
+        li: a(href='#') Tecnologia

@@ -1,39 +1,36 @@
-<div class="row">
-  <div class="span8">
-    {{#if store.banner}}
-    <a href="#"><img id="storeBanner" src="{{store.banner}}"</img></a>
-    {{else}}
-    <span>{{store.banner}}</span>
-    <h1 id="storeNameHeader"><a href="#">{{store.name}}</a></h1>
-    {{/if}}
-    {{#if product}}
-    <div id="product{{product._id}}">
-      <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
-      <h2 id="name">{{product.name}}</h2>
-      <div>C&oacute;digo: <span id="id">{{product._id}}</span></div>
-      <div>R$ <span id="price">{{product.price}}</span></div>
-      <div>Tags: <span id="tags">{{product.tags}}</span></div>
-      <div>Descri&ccedil;&atilde;o: <span id="description">{{product.description}}</span>
-        <div id="dimensions">
-          <div>Altura: <span id="height">{{product.height}}</span>cms</div>
-          <div>Largura: <span id="width">{{product.width}}</span>cms</div>
-          <div>Profundidade: <span id="depth">{{product.depth}}</span>cms</div>
-        </div>
-        <div>Peso: <span id="weight">{{product.weight}}</span>kgs</div>
-        {{#if product.hasInventory}}
-        <div>Estoque: <span id="inventory">{{product.inventory}} itens</span></div>
-        {{else}}
-        <div><span id="inventory">Feito sob encomenda</span></div>
-        {{/if}}
-      </div>
-      <input type="button" class="btn-primary" id="purchaseItem" name="purchaseItem" value="Comprar" />
-      <div><a href="#">Voltar a loja</a></div>
+<div id="productInfo">
+  <div id="product" data-id="{{product._id}}">
+    <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
+    <div class="nameHolder">
+      <h2><span id="name">{{product.name}}</span>
+      {{#each product.tags}}
+        <span class="label tag">{{this}}</span>
+      {{/each}}
+    </h2>
+    </div>
+    <h3>R$ <span id="price">{{product.price}}</span></h3>
+    <a class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem"><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</a>
+    <div id="description">{{product.description}}</div>
+    <div id="dimensions">
+      <div>Altura: <span id="height">{{product.height}}</span>cms</div>
+      <div>Largura: <span id="width">{{product.width}}</span>cms</div>
+      <div>Profundidade: <span id="depth">{{product.depth}}</span>cms</div>
+    </div>
+    <div>Peso: <span id="weight">{{product.weight}}</span>kgs</div>
+    <div id="inventoryInfo">
+      {{#if product.hasInventory}}
+      <div>Estoque: <span id="inventory">{{product.inventory}} itens</span></div>
+      {{else}}
+      <div><span id="inventory">Feito sob encomenda</span></div>
       {{/if}}
-  </div></div>
-  <div id="store" class="span4">
-    <div id="storeName">{{store.name}}</div>
-    <div><span id="storePhoneNumber">{{store.phoneNumber}}</span></div>
-    <div><span id="storeCity">{{store.city}}</span>/<span id="storeState">{{store.state}}</span></div>
-    <div><a id="storeOtherUrl" href="{{store.otherUrl}}">{{store.otherUrl}}</a></div>
+    </div>
+  </div>
+  <div id="askAQuestion">
+    <strong>Ainda em dúvida?</strong><br />
+    <a href="#">Faça uma pergunta</a>
+  </div>
+  <div class="clearfix"></div>
+  <div id="productsPlaceHolder">
+    <strong>Esse vendedor não possui outros produtos</strong>
   </div>
 </div>

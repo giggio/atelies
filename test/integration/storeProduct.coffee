@@ -6,7 +6,7 @@ describe 'Store product page', ->
   browser = null
   after -> browser.destroy() if browser?
   describe 'regular product', ->
-    store = product1 = null
+    page = store = product1 = null
     before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
@@ -16,27 +16,28 @@ describe 'Store product page', ->
         product1 = generator.product.a()
         product1.save()
         whenServerLoaded ->
-          browser.storeProductPage.visit "store_1", "name_1", done
+          page = browser.storeProductPage
+          page.visit "store_1", "name_1", done
     it 'should show the product name', ->
-      expect(browser.text("#product#{product1._id} #name")).to.equal product1.name
+      expect(browser.text("#product #name")).to.equal product1.name
     it 'should show the product picture', ->
-      expect(browser.query("#product#{product1._id} #picture").src).to.equal product1.picture
+      expect(browser.query("#product #picture").src).to.equal product1.picture
     it 'should show the product price', ->
-      expect(browser.text("#product#{product1._id} #price")).to.equal product1.price.toString()
+      expect(browser.text("#product #price")).to.equal product1.price.toString()
     it 'should show the product tags', ->
-      expect(browser.text("#product#{product1._id} #tags")).to.equal 'abc, def'
+      expect(browser.text("#product .tag")).to.equal 'abcdef'
     it 'should show the product description', ->
-      expect(browser.text("#product#{product1._id} #description")).to.equal product1.description
+      expect(browser.text("#product #description")).to.equal product1.description
     it 'should show the product height', ->
-      expect(browser.text("#product#{product1._id} #dimensions #height")).to.equal product1.dimensions.height.toString()
+      expect(browser.text("#product #dimensions #height")).to.equal product1.dimensions.height.toString()
     it 'should show the product width', ->
-      expect(browser.text("#product#{product1._id} #dimensions #width")).to.equal product1.dimensions.width.toString()
+      expect(browser.text("#product #dimensions #width")).to.equal product1.dimensions.width.toString()
     it 'should show the product depth', ->
-      expect(browser.text("#product#{product1._id} #dimensions #depth")).to.equal product1.dimensions.depth.toString()
+      expect(browser.text("#product #dimensions #depth")).to.equal product1.dimensions.depth.toString()
     it 'should show the product weight', ->
-      expect(browser.text("#product#{product1._id} #weight")).to.equal product1.weight.toString()
+      expect(browser.text("#product #weight")).to.equal product1.weight.toString()
     it 'shows the product inventory', ->
-      expect(browser.text("#product#{product1._id} #inventory")).to.equal '30 itens'
+      expect(browser.text("#product #inventory")).to.equal '30 itens'
     it 'shows the store name', ->
       expect(browser.text('#storeName')).to.equal store.name
     it 'does not show store name header', ->

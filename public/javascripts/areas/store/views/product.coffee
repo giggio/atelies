@@ -13,9 +13,7 @@ define [
       @product = opt.product
     events: ->
       if @product?
-        events = {}
-        events["click #product#{@product.get('_id')} > #purchaseItem"] = 'purchase'
-        events
+        "click #product > #purchaseItem": 'purchase'
     purchase: ->
       @cart = Cart.get(@store.slug)
       @cart.addItem _id: @product.get('_id'), name: @product.get('name')
@@ -24,4 +22,6 @@ define [
       @$el.empty()
       context = Handlebars.compile @template
       @delegateEvents()
-      @$el.html context product: @product.attributes, store: @store
+      attr = @product.attributes
+      attr.tags = attr.tags.split(', ')
+      @$el.html context product: attr, store: @store

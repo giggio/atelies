@@ -1,0 +1,70 @@
+extends layout
+
+append layout
+  block header
+    section#main.container
+      #site-banner.row(style="margin-bottom: 20px")
+        .span4
+          a(href="/#{store.slug}")
+            if store.banner
+              img#storeBanner(src="#{store.banner}")
+            else
+              h1#storeNameHeader= store.name
+        .span6
+          h3.nameHeader shopping virtual de artes e afins
+        .span2
+          ul.pull-right.social
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+      .navbar
+        .navbar-inner
+          .container
+            include includes/storeHeader
+            include includes/userInfo
+
+      block content
+
+      block footer
+        footer
+          .container
+            .row
+              .span6
+                .page-header
+                  h2 Sobre o #{store.name}
+                p Descriçao da loja
+                h3 Contato
+                section#otherInfo
+                  #store
+                    #storeName= store.name
+                    div: span#storePhoneNumber= store.phoneNumber
+                    div
+                      span#storeCity= store.city
+                      span#storeState= store.state
+                    div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
+                    div: a(href="fulano@atelies.com.br") fulano@atelies.com.br
+              .span3
+                .page-header
+                  h2 Produtos
+                ul
+                  li: a Categorias
+                  li: a Tags
+                  li: a Busca lojas
+                  li: a Busca produtos
+              .span3
+                .page-header
+                  h2 Minha conta
+                ul
+                  li: a Carrinho
+                  li: a Troca de senha
+                  li: a Pedidos
+
+            p.text-center
+              &copy; 2013 - OpenStore
+              &nbsp;|&nbsp;
+              a Termos de uso
+              &nbsp;|&nbsp;
+              a Sobre
+              &nbsp;|&nbsp;
+              a Contato
