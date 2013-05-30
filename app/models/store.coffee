@@ -3,17 +3,21 @@ Product  = require './product'
 slug     = require '../helpers/slug'
 
 storeSchema = new mongoose.Schema
-  name:         type: String, required: true
-  nameKeywords: [String]
-  slug:         String
-  email:        String
-  description:  String
-  phoneNumber:  String
-  city:         type: String, required: true
-  state:        type: String, required: true
-  otherUrl:     String
-  banner:       String
-  flyer:        String
+  name:                   type: String, required: true
+  nameKeywords:           [String]
+  slug:                   String
+  email:                  String
+  description:            String
+  homePageDescription:    String
+  homePageImage:          String
+  urlFacebook:            String
+  urlTwitter:             String
+  phoneNumber:            String
+  city:                   type: String, required: true
+  state:                  type: String, required: true
+  otherUrl:               String
+  banner:                 String
+  flyer:                  String
 
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '

@@ -1,5 +1,5 @@
-<h2>Crie sua loja:</h2>
 <div id="manageStoreBlock">
+  <h2>Crie sua loja:</h2>
   <div class="control-group">
     <label class="control-label" for="name">Nome:</label>
     <div class="controls">
@@ -16,6 +16,12 @@
     <label>Descrição:</label>
     <div class="controls">
       <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Descrição da Home Page:</label>
+    <div class="controls">
+      <textarea id="homePageDescription" name="homePageDescription" rows="8" cols="150" data-error-style="tooltip" ></textarea>
     </div>
   </div>
   <div class="control-group">
@@ -71,16 +77,34 @@
     </div>
   </div>
   <div class="control-group">
-    <label class="control-label" for="name">Imagem do banner:</label>
+    <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja):</label>
     <div class="controls">
       <input type="text" id="banner" name="banner" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
     </div>
   </div>
   <div class="control-group">
-    <label class="control-label" for="name">Imagem do flyer:</label>
+    <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page):</label>
+    <div class="controls">
+      <input type="text" id="homePageImage" name="homePageImage" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site):</label>
     <div class="controls">
       <input type="text" id="flyer" name="flyer" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
     </div>
   </div>
-  <input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
+  <div class="control-group">
+    <label class="control-label" for="name">Twitter (não coloque novamente twitter.com):</label>
+    <div class="controls">
+      http://twitter.com/<input type="text" id="urlTwitter" name="urlTwitter" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoTwitter" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="name">Facebook (não coloque novamente facebook.com):</label>
+    <div class="controls">
+      http://www.facebook.com/<input type="text" id="urlFacebook" name="urlFacebook" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoFacebook" />
+    </div>
+  </div>
+  <input id="createStore" type="button" class="btn btn-primary" value="Criar Loja"/>
 </div>

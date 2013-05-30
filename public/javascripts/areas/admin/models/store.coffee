@@ -7,6 +7,10 @@ define [
       name:undefined
       email:undefined
       description:undefined
+      homePageDescription:undefined
+      homePageImage:undefined
+      urlFacebook:undefined
+      urlTwitter:undefined
       city:undefined
       state:'SP'
       otherUrl:undefined

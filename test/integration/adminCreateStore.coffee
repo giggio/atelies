@@ -31,6 +31,10 @@ describe 'Admin create store page', ->
         expect(store.name).to.equal exampleStore.name
         expect(store.email).to.equal exampleStore.email
         expect(store.description).to.equal exampleStore.description
+        expect(store.homePageDescription).to.equal exampleStore.homePageDescription
+        expect(store.homePageImage).to.equal exampleStore.homePageImage
+        expect(store.urlFacebook).to.equal exampleStore.urlFacebook
+        expect(store.urlTwitter).to.equal exampleStore.urlTwitter
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
         expect(store.city).to.equal exampleStore.city
         expect(store.state).to.equal exampleStore.state

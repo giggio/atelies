@@ -6,6 +6,10 @@ module.exports = class AdminCreateStorePage extends Page
     @browser.fill "#manageStoreBlock #name", store.name
     @browser.fill "#manageStoreBlock #email", store.email
     @browser.fill "#manageStoreBlock #description", store.description
+    @browser.fill "#manageStoreBlock #homePageDescription", store.homePageDescription
+    @browser.fill "#manageStoreBlock #homePageImage", store.homePageImage
+    @browser.fill "#manageStoreBlock #urlFacebook", store.urlFacebook
+    @browser.fill "#manageStoreBlock #urlTwitter", store.urlTwitter
     @browser.fill "#manageStoreBlock #phoneNumber", store.phoneNumber
     @browser.fill "#manageStoreBlock #city", store.city
     @browser.select "#manageStoreBlock #state", store.state if store.state isnt ''
