@@ -68,7 +68,7 @@ exports.index = (req, res) ->
 exports.store = (req, res) ->
   Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
     dealWith err
-    return res.renderWithCode 404, 'store', store: null, products: [] if store is null
+    return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
     viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
     res.render "store", store: store, products: viewModelProducts, (err, html) ->
       #console.log html
