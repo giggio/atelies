@@ -11,7 +11,7 @@ exports.start = (cb) ->
   app                 = express()
   everyauthConfig     = require './helpers/everyauthConfig'
   router              = require './routes/router'
-  sass                = require('node-sass')
+  less                = require 'connect-less'
 
   cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
   app.configure "development", ->
@@ -42,7 +42,7 @@ exports.start = (cb) ->
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
   app.use express.session()
-  app.use sass.middleware src: path.join(__dirname, '..', 'public'), debug: true, outputStyle: 'nested'
+  app.use less src: path.join(__dirname, '..', 'public'), debug:true
   app.use express.static(path.join(__dirname, '..', "public"))
   everyauthConfig.configure app
   app.use(everyauthConfig.preEveryAuthMiddlewareHack())

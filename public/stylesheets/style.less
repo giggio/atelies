@@ -1,39 +1,45 @@
-$minWidthPC: 981px;
-$maxWidthPhone: 980px;
-$stdColor: #ffffff;
-$colorShade12: #110e0c;
-$colorShade11: #28211c;
-$colorShade10: #3f332d;
-$colorShade9: #56463d;
-$colorShade8: #6d594d;
-$colorShade7: #846b5e;
-$colorShade6: #997f6f;
-$colorShade5: #a99386;
-$colorShade4: #baa89d;
-$colorShade3: #cabcb4;
-$colorShade2: #dad1cb;
-$colorShade1: #ebe5e2;
-$colorShade0: #fbfaf9;
-$defaultFontColor: $colorShade9;
-@mixin smallScreen {  
-  @media (max-width: 980px) { @content; }
-}
-@mixin largeScreen {  
-  @media (min-width: 981px) { @content; }
-}
+@import '../javascripts/lib/bootstrap/less/bootstrap.less';
+@import '../javascripts/lib/bootstrap/less/responsive.less';
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@iconSpritePath: "../javascripts/lib/bootstrap/img/glyphicons-halflings.png";
+@iconWhiteSpritePath: "../javascripts/lib/bootstrap/img/glyphicons-halflings-white.png";
+@linkColor:lighten(@orange, 15%);
+@btnWarningBackground: lighten(@pink, 15%);
+@btnWarningBackgroundHighlight: @pink;
+@minWidthPC: 981px;
+@maxWidthPhone: 980px;
+@stdColor: #ffffff;
+@colorShade12: #110e0c;
+@colorShade11: #28211c;
+@colorShade10: #3f332d;
+@colorShade9: #56463d;
+@colorShade8: #6d594d;
+@colorShade7: #846b5e;
+@colorShade6: #997f6f;
+@colorShade5: #a99386;
+@colorShade4: #baa89d;
+@colorShade3: #cabcb4;
+@colorShade2: #dad1cb;
+@colorShade1: #ebe5e2;
+@colorShade0: #fbfaf9;
+@defaultFontColor: @colorShade9;
+@smallScreenMaxWidth: 980px;
+@largeScreenMinWidth: 981px;
+@smallScreen: ~"(max-width: @{smallScreenMaxWidth})";
+@largeScreen: ~"(min-width: @{largeScreenMinWidth})";
 body {
   font-family: 'Ubuntu', sans-serif;
   padding-top: 40px;
   padding-bottom: 40px;
   background: #1F1F1F url(../images/pattern.png) repeat top left;
-  color: $defaultFontColor;
+  color: @defaultFontColor;
 }
 .navbar-inner {
-  background-image: linear-gradient(to bottom, #ffffff, $colorShade1);
+  background-image: linear-gradient(to bottom, #ffffff, @colorShade1);
   .nav {
     li{ 
       a{
-        color: $defaultFontColor;
+        color: @defaultFontColor;
       }
     }
   }
@@ -56,11 +62,11 @@ section#main {
 }
 #stores {
   .storesRow{
-    @include largeScreen {
+    @media @largeScreen {
       padding-bottom: 30px;
     }
     .store {
-      @include smallScreen {
+      @media @smallScreen {
         text-align: center;
       }
       border: 1px solid #ccc;
@@ -74,11 +80,11 @@ section#main {
 }
 #productsSearchResults {
   .productsRow{
-    @include largeScreen {
+    @media @largeScreen {
       padding-bottom: 30px;
     }
     .product {
-      @include smallScreen {
+      @media @smallScreen {
         text-align: center;
       }
       border: 1px solid #ccc;
@@ -147,21 +153,21 @@ section#main {
   font-weight: normal;
   padding-top: 50px;
   padding-left: 30px;
-  color: $defaultFontColor;
+  color: @defaultFontColor;
 }
-@include largeScreen {
+@media @largeScreen {
   #userInfo {
     float:right;
   }
 }
-@include smallScreen {
+@media @smallScreen {
   #userInfo {
     float:left;
   }
 }
 footer {
-  background-color: $colorShade12;
-  color: $colorShade2;
+  background-color: @colorShade12;
+  color: @colorShade2;
   padding-top: 20px;
   padding-bottom: 4px;
   margin: 0 -20px 0 -20px;
@@ -173,7 +179,7 @@ footer {
       list-style: none outside none;
       padding: 10px 0;
       a{
-        color: $colorShade1;
+        color: @colorShade1;
       }
       a:hover{
         color: white;

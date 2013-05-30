@@ -31,7 +31,7 @@
     "grunt-cli": "~0.1.8",
     "grunt-bower-task": "~0.2.3",
     "bcrypt": "~0.7.5",
-    "node-sass": "~0.5.0"
+    "connect-less": "~0.3.1"
   },
   "devDependencies": {
     "jsdom": "*",
