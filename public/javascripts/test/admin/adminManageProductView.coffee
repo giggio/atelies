@@ -78,7 +78,7 @@ define [
           expect(productPosted.hasInventory).to.equal updatedProduct.hasInventory
           expect(productPosted.inventory).to.equal ''
         it 'navigated to store manage', ->
-          expect(historySpy).to.have.been.calledWith "manageStore/#{product.storeSlug}", trigger:true
+          expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
         it 'posted to correct url', ->
           expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
           expect(dataPosted.type).to.equal "PUT"
@@ -166,7 +166,7 @@ define [
           expect(productPosted.hasInventory).to.equal product.hasInventory
           expect(productPosted.inventory).to.equal product.inventory
         it 'navigated to store manage', ->
-          expect(historySpy).to.have.been.calledWith "manageStore/#{product.storeSlug}", trigger:true
+          expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
         it 'posted to correct url', ->
           expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products"
           expect(dataPosted.type).to.equal "POST"
@@ -243,7 +243,7 @@ define [
         it 'deleted the product', ->
           ajaxSpy.should.have.been.called
         it 'navigated to store manage', ->
-          expect(historySpy).to.have.been.calledWith "manageStore/#{product.storeSlug}", trigger:true
+          expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
         it 'posted to correct url', ->
           expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
           expect(dataPosted.type).to.equal "DELETE"

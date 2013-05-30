@@ -2,7 +2,7 @@ $ = require 'jquery'
 Page = require './page'
 
 module.exports = class AdminHomePage extends Page
-  visit: (storeSlug, options, cb) -> super "admin#manageStore/#{storeSlug}", options, cb
+  visit: (storeSlug, options, cb) -> super "admin#store/#{storeSlug}", options, cb
   storeName: => @browser.text("#name")
   rows: => @browser.query('#products tbody')?.children
   productsQuantity: =>

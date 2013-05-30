@@ -36,7 +36,7 @@ define [
     _deleteProduct: =>
       @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
-      Backbone.history.navigate "manageStore/#{@model.get('storeSlug')}", trigger: true
+      Backbone.history.navigate "store/#{@model.get('storeSlug')}", trigger: true
     _productDeleted: =>
       $('#confirmDeleteModal').modal 'hide'
-      Backbone.history.navigate "manageStore/#{@model.get('storeSlug')}", trigger: true
+      Backbone.history.navigate "store/#{@model.get('storeSlug')}", trigger: true

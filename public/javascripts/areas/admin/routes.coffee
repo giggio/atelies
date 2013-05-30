@@ -3,11 +3,11 @@ define [
   '../../viewsManager'
   './views/admin'
   './views/createStore'
-  './views/manageStore'
+  './views/store'
   './views/manageProduct'
   './models/products'
   './models/product'
-],($, viewsManager, AdminView, CreateStoreView, ManageStoreView, ManageProductView, Products, Product) ->
+],($, viewsManager, AdminView, CreateStoreView, StoreView, ManageProductView, Products, Product) ->
   class Routes
     viewsManager.$el = $ "#app-container"
     @admin: =>
@@ -16,11 +16,11 @@ define [
     @createStore: =>
       createStoreView = new CreateStoreView
       viewsManager.show createStoreView
-    @manageStore: (storeSlug) =>
+    @store: (storeSlug) =>
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
       @_findProducts storeSlug, (err, products) ->
-        manageStoreView = new ManageStoreView store: store, products: products
-        viewsManager.show manageStoreView
+        storeView = new StoreView store: store, products: products
+        viewsManager.show storeView
     @manageProduct: (storeSlug, productId) =>
       @_findProduct storeSlug, productId, (product) ->
         manageProductView = new ManageProductView storeSlug: storeSlug, product: product

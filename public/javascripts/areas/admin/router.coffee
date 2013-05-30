@@ -7,7 +7,7 @@ define [
     routes:
       '': routes.admin
       'createStore': routes.createStore
-      'manageStore/:storeSlug': routes.manageStore
+      'store/:storeSlug': routes.store
       'manageProduct/:storeSlug/:productId': routes.manageProduct
       'createProduct/:storeSlug': routes.createProduct
     initialize: ->

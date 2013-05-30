@@ -4,9 +4,9 @@ define [
   'text!./templates/createStore.html'
   '../models/store'
   '../models/stores'
-  './manageStore'
+  './store'
   'backboneValidation'
-], ($, Backbone, createStoreTemplate, Store, Stores, ManageStoreView, Validation) ->
+], ($, Backbone, createStoreTemplate, Store, Stores, StoreView, Validation) ->
   class CreateStoreView extends Backbone.Open.View
     events:
       'click #createStore':'_createStore'
@@ -25,5 +25,5 @@ define [
       adminStoresBootstrapModel.stores.push store.attributes
       @_goToStoreManagePage store
     _goToStoreManagePage: (store) =>
-      ManageStoreView.justCreated = true
-      Backbone.history.navigate "manageStore/#{store.get('slug')}", trigger: true
+      StoreView.justCreated = true
+      Backbone.history.navigate "store/#{store.get('slug')}", trigger: true

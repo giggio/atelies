@@ -33,8 +33,8 @@ describe 'Admin home page', ->
       expect(page.storesQuantity()).to.equal 2
     it 'links to store manage pages', ->
       stores = page.stores()
-      expect(stores[0].url).to.equal "#manageStore/#{store1.slug}"
-      expect(stores[1].url).to.equal "#manageStore/#{store2.slug}"
+      expect(stores[0].url).to.equal "#store/#{store1.slug}"
+      expect(stores[1].url).to.equal "#store/#{store2.slug}"
 
   describe 'accessing with a logged in but not a seller user', ->
     browser = page = null

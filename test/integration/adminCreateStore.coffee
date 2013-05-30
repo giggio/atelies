@@ -20,7 +20,7 @@ describe 'Admin create store page', ->
             browser.adminCreateStorePage.setFieldsAs exampleStore
             browser.adminCreateStorePage.clickCreateStoreButton done
     it 'is at the admin store page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#manageStore/#{exampleStore.slug}"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
     it 'shows store created message', ->
       expect(browser.text('#message')).to.equal "Loja criada com sucesso"
     it 'created a new store with correct information', (done) ->

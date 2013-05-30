@@ -21,7 +21,7 @@ describe 'Admin Manage Store page', ->
         userSeller.stores.push store
         userSeller.save()
         browser = newBrowser browser
-        page = browser.adminManageStorePage
+        page = browser.adminStorePage
         browser.loginPage.navigateAndLoginWith userSeller, ->
           page.visit store.slug, done
     it 'shows store products', ->

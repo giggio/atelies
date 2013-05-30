@@ -88,7 +88,7 @@ describe 'Admin Manage Product page', ->
           page.setFieldsAs otherProduct, ->
             page.clickUpdateProduct done
     it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product.storeSlug}"
+      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
     it 'updated the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
         return done err if err
@@ -115,7 +115,7 @@ describe 'Admin Manage Product page', ->
           page.clickDeleteProduct ->
             page.clickConfirmDeleteProduct done
     it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product2.storeSlug}"
+      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"
     it 'deleted the product', (done) ->
       Product.findById product2._id, (err, productOnDb) ->
         return done err if err

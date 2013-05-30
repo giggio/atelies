@@ -3,16 +3,16 @@ define [
   'backbone'
   'handlebars'
   'underscore'
-  'text!./templates/manageStore.html'
+  'text!./templates/store.html'
   '../models/products'
-], ($, Backbone, Handlebars, _, manageStoreTemplate, Products) ->
-  class ManageStoreView extends Backbone.View
+], ($, Backbone, Handlebars, _, storeTemplate, Products) ->
+  class StoreView extends Backbone.View
     @justCreated: false
-    template: manageStoreTemplate
+    template: storeTemplate
     initialize: (opt) =>
       @products = opt.products
       @store = opt.store
     render: =>
-      [justCreated, ManageStoreView.justCreated] = [ManageStoreView.justCreated, off]
+      [justCreated, StoreView.justCreated] = [StoreView.justCreated, off]
       context = Handlebars.compile @template
       @$el.html context store:@store, products:@products.toJSON(), justCreated:justCreated

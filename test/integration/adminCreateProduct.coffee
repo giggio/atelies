@@ -52,7 +52,7 @@ describe 'Admin Create Product page', ->
           page.setFieldsAs product, ->
             page.clickUpdateProduct done
     it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#manageStore/#{product.storeSlug}"
+      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
     it 'created the product', (done) ->
       Product.find (err, productsOnDb) ->
         return done err if err

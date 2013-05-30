@@ -7,7 +7,7 @@ AdminCreateStorePage    = require './pages/adminCreateStorePage'
 AdminHomePage           = require './pages/adminHomePage'
 LoginPage               = require './pages/loginPage'
 RegisterPage            = require './pages/registerPage'
-AdminManageStorePage    = require './pages/adminManageStorePage'
+AdminStorePage          = require './pages/adminStorePage'
 AdminManageProductPage  = require './pages/adminManageProductPage'
 ChangePasswordPage      = require './pages/changePasswordPage'
 
@@ -47,7 +47,7 @@ exports.newBrowser = (browser) ->
   browser.loginPage = new LoginPage browser
   browser.changePasswordPage = new ChangePasswordPage browser
   browser.registerPage = new RegisterPage browser
-  browser.adminManageStorePage = new AdminManageStorePage browser
+  browser.adminStorePage = new AdminStorePage browser
   browser.adminManageProductPage = new AdminManageProductPage browser
   browser.showHtml = -> console.log browser.evaluate "$('html').html()"
   browser
