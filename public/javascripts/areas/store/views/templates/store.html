@@ -1,1 +1,16 @@
+<div id="storeHeader">
+  <img id="homePageImage"  src="{{store.homePageImage}}" />
+  <div id="homePageDescription">{{store.homePageDescription}}</div>
+  {{#if store.urlFacebook}}
+  <a id="urlFacebook" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook"><img class="img-circle" src="http://dummyimage.com/40x/40/000/fff" /></a>
+  {{/if}}
+  {{#if store.urlTwitter}}
+  <a id="urlTwitter" href="//twitter.com/{{store.urlTwitter}}" title="{{store.name}} no Twitter"><img class="img-circle" src="http://dummyimage.com/40x/40/000/fff" /></a>
+  {{/if}}
+  {{#if store.otherUrl}}
+  <div>
+    <a id="otherUrl" href="{{store.otherUrl}}" title="Outro site de {{store.name}}">{{store.otherUrl}}</a>
+  </div>
+  {{/if}}
+</div>
 <div id="productsPlaceHolder"></div>

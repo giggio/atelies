@@ -7,7 +7,7 @@ define [
   './models/products'
   './models/store'
 ],($, viewsManager, StoreView, ProductView, CartView, Products, Store) ->
-  viewsManager.$el = $ "#app-container"
+  viewsManager.$el = $ '#app-container > .store'
   home: ->
     store = storeBootstrapModel.store
     products = storeBootstrapModel.products
