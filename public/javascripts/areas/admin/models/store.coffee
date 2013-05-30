@@ -5,6 +5,8 @@ define [
     defaults:
       _id:undefined
       name:undefined
+      email:undefined
+      description:undefined
       city:undefined
       state:'SP'
       otherUrl:undefined
@@ -15,6 +17,9 @@ define [
       name:
         required: true
         msg: 'Informe o nome da loja.'
+      email:
+        [{pattern:'email', msg:'O e-mail deve ser válido.'}
+        {required: false}]
       city:
         required: true
         msg: 'Informe a cidade.'

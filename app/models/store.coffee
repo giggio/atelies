@@ -6,6 +6,8 @@ storeSchema = new mongoose.Schema
   name:         type: String, required: true
   nameKeywords: [String]
   slug:         String
+  email:        String
+  description:  String
   phoneNumber:  String
   city:         type: String, required: true
   state:        type: String, required: true

@@ -32,8 +32,8 @@ append layout
             .row
               .span6
                 .page-header
-                  h2 Sobre o #{store.name}
-                p Descriçao da loja
+                  h2 Sobre #{store.name}
+                p= store.description
                 h3 Contato
                 section#otherInfo
                   #store
@@ -43,7 +43,7 @@ append layout
                       span#storeCity= store.city
                       span#storeState= store.state
                     div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
-                    div: a(href="fulano@atelies.com.br") fulano@atelies.com.br
+                    div: a(href="mailto:#{store.email}")= store.email
               .span3
                 .page-header
                   h2 Produtos

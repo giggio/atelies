@@ -29,6 +29,8 @@ describe 'Admin create store page', ->
         expect(store).not.to.be.null
         expect(store.slug).to.equal exampleStore.slug
         expect(store.name).to.equal exampleStore.name
+        expect(store.email).to.equal exampleStore.email
+        expect(store.description).to.equal exampleStore.description
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
         expect(store.city).to.equal exampleStore.city
         expect(store.state).to.equal exampleStore.state
@@ -56,6 +58,7 @@ describe 'Admin create store page', ->
           page.visit (error) ->
             return done error if error
             exampleStore.banner = "abc"
+            exampleStore.email = "bla"
             exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore
@@ -66,6 +69,7 @@ describe 'Admin create store page', ->
       expect(browser.query('#message')).to.be.null
     it 'shows validation messages', ->
       page.errorMessageFor('name').should.equal "Informe o nome da loja."
+      page.errorMessageFor('email').should.equal "O e-mail deve ser válido."
       page.errorMessageFor('city').should.equal "Informe a cidade."
       page.errorMessageFor('banner').should.equal "Informe um link válido para o banner, começando com http ou https."
       page.errorMessageFor('flyer').should.equal "Informe um link válido para o flyer, começando com http ou https."

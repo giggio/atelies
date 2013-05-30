@@ -1,72 +1,86 @@
 <h2>Crie sua loja:</h2>
-<div class="control-group">
-  <label class="control-label" for="name">Nome:</label>
-  <div class="controls">
-    <input type="text" id="name" name="name" class="span6" data-error-style="tooltip" />
+<div id="manageStoreBlock">
+  <div class="control-group">
+    <label class="control-label" for="name">Nome:</label>
+    <div class="controls">
+      <input type="text" id="name" name="name" class="span6" data-error-style="tooltip" />
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Telefone:</label>
-  <div class="controls">
-    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz" data-error-style="tooltip" />
+  <div class="control-group">
+    <label class="control-label" for="email">Email:</label>
+    <div class="controls">
+      <input type="text" id="email" name="email" class="span6" data-error-style="tooltip" />
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Cidade:</label>
-  <div class="controls">
-    <input type="text" id="city" name="city" class="span4" data-error-style="tooltip" />
+  <div class="control-group">
+    <label>Descrição:</label>
+    <div class="controls">
+      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Estado:</label>
-  <div class="controls">
-    <select id="state" class="span1">
-      <option>AC</option> 
-      <option>AL</option>
-      <option>AP</option>
-      <option>AM</option>
-      <option>BA</option>
-      <option>CE</option>
-      <option>DF</option>
-      <option>ES</option>
-      <option>GO</option>
-      <option>MA</option>
-      <option>MT</option>
-      <option>MS</option>
-      <option>MG</option>
-      <option>PR</option>
-      <option>PB</option>
-      <option>PA</option>
-      <option>PE</option>
-      <option>PI</option>
-      <option>RJ</option>
-      <option>RN</option>
-      <option>RS</option>
-      <option>RO</option>
-      <option>RR</option>
-      <option>SC</option>
-      <option>SE</option>
-      <option>SP</option>
-      <option>TO</option>
-    </select>
+  <div class="control-group">
+    <label class="control-label" for="name">Telefone:</label>
+    <div class="controls">
+      <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz" data-error-style="tooltip" />
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Outro site:</label>
-  <div class="controls">
-    <input type="text" id="otherUrl" name="otherUrl" class="span6" data-error-style="tooltip" placeholder="Digite outro endereço na internet, começando com http://..."/>
+  <div class="control-group">
+    <label class="control-label" for="name">Cidade:</label>
+    <div class="controls">
+      <input type="text" id="city" name="city" class="span4" data-error-style="tooltip" />
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Imagem do banner:</label>
-  <div class="controls">
-    <input type="text" id="banner" name="banner" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+  <div class="control-group">
+    <label class="control-label" for="name">Estado:</label>
+    <div class="controls">
+      <select id="state" class="span1">
+        <option>AC</option> 
+        <option>AL</option>
+        <option>AP</option>
+        <option>AM</option>
+        <option>BA</option>
+        <option>CE</option>
+        <option>DF</option>
+        <option>ES</option>
+        <option>GO</option>
+        <option>MA</option>
+        <option>MT</option>
+        <option>MS</option>
+        <option>MG</option>
+        <option>PR</option>
+        <option>PB</option>
+        <option>PA</option>
+        <option>PE</option>
+        <option>PI</option>
+        <option>RJ</option>
+        <option>RN</option>
+        <option>RS</option>
+        <option>RO</option>
+        <option>RR</option>
+        <option>SC</option>
+        <option>SE</option>
+        <option>SP</option>
+        <option>TO</option>
+      </select>
+    </div>
   </div>
-</div>
-<div class="control-group">
-  <label class="control-label" for="name">Imagem do flyer:</label>
-  <div class="controls">
-    <input type="text" id="flyer" name="flyer" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+  <div class="control-group">
+    <label class="control-label" for="name">Outro site:</label>
+    <div class="controls">
+      <input type="text" id="otherUrl" name="otherUrl" class="span6" data-error-style="tooltip" placeholder="Digite outro endereço na internet, começando com http://..."/>
+    </div>
   </div>
+  <div class="control-group">
+    <label class="control-label" for="name">Imagem do banner:</label>
+    <div class="controls">
+      <input type="text" id="banner" name="banner" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="name">Imagem do flyer:</label>
+    <div class="controls">
+      <input type="text" id="flyer" name="flyer" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+    </div>
+  </div>
+  <input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
 </div>
-<input id="createStore" type="button" class="btn-primary" value="Criar Loja"/>
