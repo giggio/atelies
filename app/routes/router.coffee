@@ -10,6 +10,7 @@ exports.route = (app) ->
   app.get     "/notseller",                                                 routes.notSeller
   app.get     "/admin",                                                     routes.admin
   app.post    "/admin/store",                                               routes.adminStore
+  app.put     "/admin/store/:storeId",                                      routes.adminStoreUpdate
   app.get     "/admin/:storeSlug/products",                                 routes.storeProducts
   app.post    "/admin/:storeSlug/products",                                 routes.adminProductCreate
   app.get     "/admin/:storeSlug/products/:productId",                      routes.storeProduct

@@ -64,8 +64,9 @@ define ->
         urlTwitter: 'twstore2'
         phoneNumber: '(45) 6666-9999'
         city: "São Xilevers"
-        state: "XX"
+        state: "AP"
         otherUrl: 'http://someurl.com'
+        banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
       c: ->
         _id: '3'
@@ -79,7 +80,7 @@ define ->
         urlTwitter: 'twstore3'
         phoneNumber: '(66) 6666-9999'
         city: "Las Vegas"
-        state: "NV"
+        state: "RJ"
         otherUrl: 'http://other.com'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
       empty: ->

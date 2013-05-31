@@ -63,6 +63,31 @@ exports.adminStore = (req, res) ->
         return res.json 400
       res.json 201, store
 
+exports.adminStoreUpdate = (req, res) ->
+  unless req.loggedIn and req.user?.isSeller
+    throw new AccessDenied()
+  Store.findById req.params.storeId, (err, store) ->
+    dealWith err
+    throw new AccessDenied() unless req.user.hasStore store
+    body = req.body
+    store.name = body.name
+    store.email = body.email
+    store.description = body.description
+    store.homePageDescription = body.homePageDescription
+    store.homePageImage = body.homePageImage
+    store.urlFacebook = body.urlFacebook
+    store.urlTwitter = body.urlTwitter
+    store.phoneNumber = body.phoneNumber
+    store.city = body.city
+    store.state = body.state
+    store.otherUrl = body.otherUrl
+    store.banner = body.banner
+    store.flyer = body.flyer
+    store.save (err) ->
+      if err?
+        return res.json 400
+      res.send 200, store
+
 exports.index = (req, res) ->
   Product.find (err, products) ->
     dealWith err

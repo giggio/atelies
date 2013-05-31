@@ -1,5 +1,9 @@
 <div id="manageStoreBlock">
+  {{#if new}}
   <h2>Crie sua loja:</h2>
+  {{else}}
+  <h2>Atualize sua loja:</h2>
+  {{/if}}
   <div class="control-group">
     <label class="control-label" for="name">Nome:</label>
     <div class="controls">
@@ -15,13 +19,13 @@
   <div class="control-group">
     <label>Descrição:</label>
     <div class="controls">
-      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
     </div>
   </div>
   <div class="control-group">
     <label>Descrição da Home Page:</label>
     <div class="controls">
-      <textarea id="homePageDescription" name="homePageDescription" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+      <textarea id="homePageDescription" name="homePageDescription" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
     </div>
   </div>
   <div class="control-group">
@@ -106,5 +110,9 @@
       http://www.facebook.com/<input type="text" id="urlFacebook" name="urlFacebook" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoFacebook" />
     </div>
   </div>
+  {{#if new}}
   <input id="updateStore" type="button" class="btn btn-primary" value="Criar Loja"/>
+  {{else}}
+  <input id="updateStore" type="button" class="btn btn-primary" value="Atualizar Loja"/>
+  {{/if}}
 </div>

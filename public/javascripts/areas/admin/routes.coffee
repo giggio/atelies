@@ -7,14 +7,23 @@ define [
   './views/manageProduct'
   './models/products'
   './models/product'
-],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, Products, Product) ->
+  './models/stores'
+  './models/store'
+],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, Products, Product, Stores, Store) ->
   class Routes
     viewsManager.$el = $ "#app-container"
     @admin: =>
       homeView = new AdminView stores: adminStoresBootstrapModel.stores
       viewsManager.show homeView
     @createStore: =>
-      manageStoreView = new ManageStoreView
+      store = new Store()
+      stores = new Stores [store]
+      manageStoreView = new ManageStoreView store:store
+      viewsManager.show manageStoreView
+    @manageStore: (storeId) =>
+      store = _.findWhere adminStoresBootstrapModel.stores, _id: storeId
+      stores = new Stores [store]
+      manageStoreView = new ManageStoreView store:stores.at 0
       viewsManager.show manageStoreView
     @store: (storeSlug) =>
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug

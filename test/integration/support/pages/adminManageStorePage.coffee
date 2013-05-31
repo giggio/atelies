@@ -1,7 +1,12 @@
 Page = require './page'
 
 module.exports = class AdminManageStorePage extends Page
-  url: "admin#createStore"
+  visit: (storeId, options, cb) ->
+    if typeof storeId is 'string'
+      super "admin#manageStore/#{storeId}", options, cb
+    else
+      [options, cb] = [storeId, options]
+      super "admin#createStore", options, cb
   setFieldsAs: (store) =>
     @browser.fill "#manageStoreBlock #name", store.name
     @browser.fill "#manageStoreBlock #email", store.email
