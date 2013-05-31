@@ -1,8 +1,14 @@
 {{#if justCreated}}
-<div id="message">Loja criada com sucesso</div>
+<div id="message" class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Loja criada com sucesso
+</div>
 {{/if}}
 {{#if justUpdated}}
-<div id="message">Loja atualizada com sucesso</div>
+<div id="message" class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Loja atualizada com sucesso
+</div>
 {{/if}}
 <h2 id="name">{{store.name}}</h2>
 <a href="#createProduct/{{store.slug}}" id="createProduct" class="btn-primary btn">Crie um novo produto</a>
