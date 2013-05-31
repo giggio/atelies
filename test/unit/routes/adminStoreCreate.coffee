@@ -2,7 +2,7 @@ routes          = require '../../../app/routes'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
 
-describe 'AdminStoreRoute', ->
+describe 'AdminStoreCreateRoute', ->
   describe 'Access is granted', ->
     store = res = body = user = null
     before ->
@@ -21,7 +21,7 @@ describe 'AdminStoreRoute', ->
         banner: 'f'
       body = req.body
       res = json: sinon.spy()
-      routes.adminStore req, res
+      routes.adminStoreCreate req, res
     it 'access allowed and return code is correct', ->
       res.json.should.have.been.calledWith 201, store
     it 'store is created correctly', ->
@@ -39,8 +39,8 @@ describe 'AdminStoreRoute', ->
   describe 'Access is denied', ->
     it 'denies access if the user isnt a seller and throws', ->
       req = user: {isSeller:false}, loggedIn: true
-      expect( -> routes.adminStore req, null).to.throw AccessDenied
+      expect( -> routes.adminStoreCreate req, null).to.throw AccessDenied
     it 'throws if not signed in', ->
       req = loggedIn: false
-      expect( -> routes.adminStore req, null).to.throw AccessDenied
+      expect( -> routes.adminStoreCreate req, null).to.throw AccessDenied
 

@@ -9,12 +9,15 @@ exports.route = (app) ->
   app.get     "/account/passwordChanged",                                   routes.passwordChanged
   app.get     "/notseller",                                                 routes.notSeller
   app.get     "/admin",                                                     routes.admin
-  app.post    "/admin/store",                                               routes.adminStore
+  #store
+  app.post    "/admin/store",                                               routes.adminStoreCreate
   app.put     "/admin/store/:storeId",                                      routes.adminStoreUpdate
+  #product
   app.get     "/admin/:storeSlug/products",                                 routes.storeProducts
   app.post    "/admin/:storeSlug/products",                                 routes.adminProductCreate
   app.get     "/admin/:storeSlug/products/:productId",                      routes.storeProduct
   app.put     "/admin/:storeSlug/products/:productId",                      routes.adminProductUpdate
   app.delete  "/admin/:storeSlug/products/:productId",                      routes.adminProductDelete
+  
   app.get     "/:storeSlug",                                                routes.store
   app.get     "/:storeSlug/:productSlug",                                   routes.product
