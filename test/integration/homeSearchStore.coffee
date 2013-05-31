@@ -14,7 +14,7 @@ describe 'Home Search Store', ->
       product2.save()
       store1 = generator.store.a()
       store2 = generator.store.b()
-      store3 = generator.store.c()
+      store3 = generator.store.d()
       store1.save()
       store2.save()
       store3.save()
