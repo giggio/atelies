@@ -1,22 +1,22 @@
 define [
   'jquery'
   'backbone'
-  'text!./templates/createStore.html'
+  'text!./templates/manageStore.html'
   '../models/store'
   '../models/stores'
   './store'
   'backboneValidation'
-], ($, Backbone, createStoreTemplate, Store, Stores, StoreView, Validation) ->
-  class CreateStoreView extends Backbone.Open.View
+], ($, Backbone, manageStoreTemplate, Store, Stores, StoreView, Validation) ->
+  class ManageStoreView extends Backbone.Open.View
     events:
-      'click #createStore':'_createStore'
-    template: createStoreTemplate
+      'click #updateStore':'_updateStore'
+    template: manageStoreTemplate
     initialize: ->
       @$el.html @template
       @model = new Store()
       @bindings = @initializeBindings()
       Validation.bind @
-    _createStore: =>
+    _updateStore: =>
       return unless @model.isValid true
       stores = new Stores()
       stores.add @model

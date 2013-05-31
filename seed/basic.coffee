@@ -175,6 +175,7 @@ db.stores.insert
   state: "CE"
   otherUrl: 'http://someotherurl.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/2'
+storeId2 = db.stores.find()[0]._id
 db.stores.insert
   name: 'Store 3'
   nameKeywords: ['store', '3']
@@ -242,5 +243,5 @@ db.users.insert
   passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
   name: 'Another Seller'
   isSeller: true
-  stores: [ storeId ]
+  stores: [ storeId, storeId2 ]
 db.users.insert

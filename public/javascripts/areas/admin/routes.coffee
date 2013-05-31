@@ -2,20 +2,20 @@ define [
   'jquery'
   '../../viewsManager'
   './views/admin'
-  './views/createStore'
+  './views/manageStore'
   './views/store'
   './views/manageProduct'
   './models/products'
   './models/product'
-],($, viewsManager, AdminView, CreateStoreView, StoreView, ManageProductView, Products, Product) ->
+],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, Products, Product) ->
   class Routes
     viewsManager.$el = $ "#app-container"
     @admin: =>
       homeView = new AdminView stores: adminStoresBootstrapModel.stores
       viewsManager.show homeView
     @createStore: =>
-      createStoreView = new CreateStoreView
-      viewsManager.show createStoreView
+      manageStoreView = new ManageStoreView
+      viewsManager.show manageStoreView
     @store: (storeSlug) =>
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
       @_findProducts storeSlug, (err, products) ->

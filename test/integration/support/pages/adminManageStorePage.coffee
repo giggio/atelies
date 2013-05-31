@@ -1,6 +1,6 @@
 Page = require './page'
 
-module.exports = class AdminCreateStorePage extends Page
+module.exports = class AdminManageStorePage extends Page
   url: "admin#createStore"
   setFieldsAs: (store) =>
     @browser.fill "#manageStoreBlock #name", store.name
@@ -17,4 +17,4 @@ module.exports = class AdminCreateStorePage extends Page
     @browser.fill "#manageStoreBlock #banner", store.banner
     @browser.fill "#manageStoreBlock #flyer", store.flyer
     @browser.evaluate "$('#manageStoreBlock #name,#email,#description,#phoneNumber,#city,#state,#otherUrl,#banner,#flyer').change()"
-  clickCreateStoreButton: (cb) => @browser.pressButton "#createStore", cb
+  clickUpdateStoreButton: (cb) => @browser.pressButton "#updateStore", cb

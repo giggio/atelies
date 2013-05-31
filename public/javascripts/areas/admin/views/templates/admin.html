@@ -5,12 +5,21 @@
   <tbody>
   {{#each stores}}
   <tr>
-    <td><a href="#store/{{slug}}">{{name}}</a></td>
+    <td>
+      <a href="#store/{{slug}}">
+        {{#if flyer}}
+        <img src="{{flyer}}" />
+        {{else}}
+        <img src="http://dummyimage.com/350x400/000/fff&text=%3F" />
+        {{/if}}
+        {{name}}
+      </a>
+    </td>
   </tr>
   {{/each}}
   </tbody>
 </table>
 {{/if}}
 <div>
-  <input type="button" id="createStore" class="btn-primary" value="Crie uma nova loja" />
+  <input type="button" id="createStore" class="btn btn-primary" value="Crie uma nova loja" />
 </div>

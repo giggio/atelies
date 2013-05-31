@@ -15,10 +15,10 @@ describe 'Admin create store page', ->
         exampleStore = generator.store.a()
         browser = newBrowser browser
         browser.loginPage.navigateAndLoginWith userSeller, ->
-          browser.adminCreateStorePage.visit (error) ->
+          browser.adminManageStorePage.visit (error) ->
             return done error if error
-            browser.adminCreateStorePage.setFieldsAs exampleStore
-            browser.adminCreateStorePage.clickCreateStoreButton done
+            browser.adminManageStorePage.setFieldsAs exampleStore
+            browser.adminManageStorePage.clickUpdateStoreButton done
     it 'is at the admin store page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
     it 'shows store created message', ->
@@ -58,7 +58,7 @@ describe 'Admin create store page', ->
         browser = newBrowser browser
         exampleStore = generator.store.empty()
         browser.loginPage.navigateAndLoginWith userSeller, ->
-          page = browser.adminCreateStorePage
+          page = browser.adminManageStorePage
           page.visit (error) ->
             return done error if error
             exampleStore.banner = "abc"
@@ -66,7 +66,7 @@ describe 'Admin create store page', ->
             exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore
-            page.clickCreateStoreButton done
+            page.clickUpdateStoreButton done
     it 'is at the store create page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#createStore"
     it 'does not show store created message', ->

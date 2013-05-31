@@ -1,31 +1,31 @@
 define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
-  'areas/admin/views/createStore'
+  'areas/admin/views/manageStore'
   'backboneConfig'
   '../support/_specHelper'
-], ($, CreateStoreView) ->
+], ($, ManageStoreView) ->
   el = $('<div></div>')
-  describe 'CreateStoreView', ->
+  describe 'ManageStoreView', ->
     describe 'Valid Store gets created', ->
       goToStoreManagePageSpy = storePassedIn = null
       store = generatorc.store.a()
       before ->
         global.adminStoresBootstrapModel = stores:[]
-        createStoreView = new CreateStoreView el:el
+        manageStoreView = new ManageStoreView el:el
         sinon.stub $, "ajax", (opt) ->
           storePassedIn = JSON.parse opt.data
           opt.success store
-        goToStoreManagePageSpy = sinon.spy createStoreView, '_goToStoreManagePage'
-        createStoreView.render()
-        createStoreView.$("#name").val(store.name).change()
-        createStoreView.$("#phoneNumber").val(store.phoneNumber).change()
-        createStoreView.$("#city").val(store.city).change()
-        createStoreView.$("#state").val(store.state).change()
-        createStoreView.$("#otherUrl").val(store.otherUrl).change()
-        createStoreView.$("#banner").val(store.banner).change()
-        createStoreView.$("#flyer").val(store.flyer).change()
-        $('#createStore', el).trigger 'click'
+        goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
+        manageStoreView.render()
+        manageStoreView.$("#name").val(store.name).change()
+        manageStoreView.$("#phoneNumber").val(store.phoneNumber).change()
+        manageStoreView.$("#city").val(store.city).change()
+        manageStoreView.$("#state").val(store.state).change()
+        manageStoreView.$("#otherUrl").val(store.otherUrl).change()
+        manageStoreView.$("#banner").val(store.banner).change()
+        manageStoreView.$("#flyer").val(store.flyer).change()
+        $('#updateStore', el).trigger 'click'
       after ->
         $.ajax.restore()
         goToStoreManagePageSpy.restore()
@@ -47,14 +47,14 @@ define [
       ajaxSpy = goToStoreManagePageSpy = null
       store = generatorc.store.a()
       before ->
-        createStoreView = new CreateStoreView el:el
+        manageStoreView = new ManageStoreView el:el
         ajaxSpy = sinon.spy $, "ajax"
-        goToStoreManagePageSpy = sinon.spy createStoreView, '_goToStoreManagePage'
-        createStoreView.render()
-        createStoreView.$("#otherUrl").val('abc').change()
-        createStoreView.$("#banner").val('def').change()
-        createStoreView.$("#flyer").val('ghi').change()
-        $('#createStore', el).trigger 'click'
+        goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
+        manageStoreView.render()
+        manageStoreView.$("#otherUrl").val('abc').change()
+        manageStoreView.$("#banner").val('def').change()
+        manageStoreView.$("#flyer").val('ghi').change()
+        $('#updateStore', el).trigger 'click'
       after ->
         ajaxSpy.restore()
         goToStoreManagePageSpy.restore()
