@@ -2,6 +2,27 @@ server2 = if server? then server else 'localhost'
 dbName2 = if dbName? then dbName else 'openstore'
 db = connect "#{server2}/#{dbName2}"
 db.auth user, password if password?
+db.users.remove()
+db.users.insert
+  email: 'a@a.com'
+  passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+  name: 'Some Guy'
+  isSeller: false
+  stores: []
+db.users.insert
+  email: 'b@a.com'
+  passwordHash: "$2a$10$s3I2jXWoT5d.oEFVt432T.U9fF1lk4ILFJnIzqq.JyXONDtTNZwlm" # hash for 'def'
+  name: 'Other Person'
+  isSeller: false
+  stores: []
+db.users.insert
+  email: 'c@a.com'
+  passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
+  name: 'Another Seller'
+  isSeller: true
+  stores: []
+userSeller = db.users.findOne email:'c@a.com'
+
 db.products.remove()
 db.products.insert
   name: 'name 1'
@@ -159,7 +180,8 @@ db.stores.insert
   state: "SP"
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats/1'
-storeId = db.stores.find()[0]._id
+storeId = db.stores.findOne(slug:'store_1')._id
+userSeller.stores.push storeId
 db.stores.insert
   name: 'Store 2'
   nameKeywords: ['store', '2']
@@ -175,7 +197,8 @@ db.stores.insert
   state: "CE"
   otherUrl: 'http://someotherurl.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/2'
-storeId2 = db.stores.find()[0]._id
+storeId2 = db.stores.findOne(slug:'store_2')._id
+userSeller.stores.push storeId2
 db.stores.insert
   name: 'Store 3'
   nameKeywords: ['store', '3']
@@ -225,23 +248,6 @@ for i in [4..15]
     otherUrl: 'http://myotherurl.com'
     banner: "http://lorempixel.com/800/150/cats/#{pictureId}"
     flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
-db.users.remove()
-db.users.insert
-  email: 'a@a.com'
-  passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
-  name: 'Some Guy'
-  isSeller: false
-  stores: []
-db.users.insert
-  email: 'b@a.com'
-  passwordHash: "$2a$10$s3I2jXWoT5d.oEFVt432T.U9fF1lk4ILFJnIzqq.JyXONDtTNZwlm" # hash for 'def'
-  name: 'Other Person'
-  isSeller: false
-  stores: []
-db.users.insert
-  email: 'c@a.com'
-  passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
-  name: 'Another Seller'
-  isSeller: true
-  stores: [ storeId, storeId2 ]
-db.users.insert
+  store = db.stores.findOne slug:"store_#{i}"
+  userSeller.stores.push store._id
+db.users.save userSeller

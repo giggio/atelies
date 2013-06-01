@@ -13,21 +13,21 @@
 <h2 id="name">{{store.name}}</h2>
 <a href="#createProduct/{{store.slug}}" id="createProduct" class="btn-primary btn">Crie um novo produto</a>
 <a href="#manageStore/{{store._id}}" id="manageStore" class="btn-primary btn">Alterar a loja</a>
-<table id="products">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Nome</th>
-      <th>Foto</th>
-    </tr>
-  </thead>
-  <tbody>
-  {{#each products}}
-    <tr>
-      <td id="product{{_id}}">{{_id}}</td>
-      <td id="product{{_id}}_name"><a href="#manageProduct/{{manageUrl}}">{{name}}</a></td>
-      <td><a id="product{{_id}}_picture" href="#manageProduct/{{manageUrl}}"><img src="{{picture}}" alt="{{name}}" /></a></td>
-    </tr>
+<div id="products">
+  {{#each productGroups}}
+  <div class="row-fluid productsRow">
+    {{#each products}}
+    <div id="product{{_id}}" data-id="{{_id}}" class="product span2">
+      <a href="#manageProduct/{{manageUrl}}" class="link">
+        {{#if picture}}
+        <img src="{{picture}}" alt="{{name}}" />
+        {{else}}
+        <img src="http://dummyimage.com/300x450/000/fff&text=%3F" alt="{{name}}"/>
+        {{/if}}
+        <span class="name">{{name}}</span>
+      </a>
+    </div>
+    {{/each}}
+  </div>
   {{/each}}
-  </tbody>
-</table>
+</div>

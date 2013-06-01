@@ -1,24 +1,42 @@
 {{#if hasStores}}
 <h3>Suas lojas:</h3>
-<table id="stores">
-  <thead></thead>
-  <tbody>
-  {{#each stores}}
-  <tr>
-    <td>
-      <a href="#store/{{slug}}">
+<div id="stores">
+  {{#each storeGroups}}
+  <div class="row-fluid storesRow">
+    {{#each stores}}
+    <div data-id="{{_id}}" class="store span3">
+      <a href="#store/{{slug}}" class="link">
         {{#if flyer}}
         <img src="{{flyer}}" />
         {{else}}
         <img src="http://dummyimage.com/350x400/000/fff&text=%3F" />
         {{/if}}
-        {{name}}
+        <span class='name'>{{name}}</span>
       </a>
-    </td>
-  </tr>
+    </div>
+    {{/each}}
+  </div>
   {{/each}}
-  </tbody>
-</table>
+</div>
+<!--<table id="stores">-->
+  <!--<thead></thead>-->
+  <!--<tbody>-->
+  <!--{{#each stores}}-->
+  <!--<tr>-->
+    <!--<td>-->
+      <!--<a href="#store/{{slug}}">-->
+        <!--{{#if flyer}}-->
+        <!--<img src="{{flyer}}" />-->
+        <!--{{else}}-->
+        <!--<img src="http://dummyimage.com/350x400/000/fff&text=%3F" />-->
+        <!--{{/if}}-->
+        <!--{{name}}-->
+      <!--</a>-->
+    <!--</td>-->
+  <!--</tr>-->
+  <!--{{/each}}-->
+  <!--</tbody>-->
+<!--</table>-->
 {{/if}}
 <div>
   <input type="button" id="createStore" class="btn btn-primary" value="Crie uma nova loja" />

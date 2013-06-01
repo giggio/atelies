@@ -19,4 +19,4 @@ define [
       it 'shows store', ->
         expect(storeView.$("#name").text()).to.equal store.name
       it 'shows products', ->
-        expect($("#products > tbody > tr", el).length).to.equal products.length
+        expect($("#products .product", el).length).to.equal products.length

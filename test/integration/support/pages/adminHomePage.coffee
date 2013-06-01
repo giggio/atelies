@@ -4,7 +4,7 @@ Page = require './page'
 module.exports = class AdminHomePage extends Page
   url: 'admin'
   createStoreText: => @browser.query("#createStore").value
-  rows: => @browser.query('#stores tbody')?.children
+  rows: => @browser.queryAll('#stores .store')
   storesQuantity: =>
     rows = @rows()
     if rows? then rows.length else 0

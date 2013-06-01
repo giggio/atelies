@@ -22,7 +22,7 @@ describe 'Admin create store page', ->
     it 'is at the admin store page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
     it 'shows store created message', ->
-      expect(browser.text('#message')).to.equal "Loja criada com sucesso"
+      browser.text('#message').endsWith("Loja criada com sucesso").should.be.true
     it 'created a new store with correct information', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
