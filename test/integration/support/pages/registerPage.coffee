@@ -1,7 +1,7 @@
 HomeLayout = require './homeLayout'
 
 module.exports = class RegisterPage extends HomeLayout
-  url: 'register'
+  url: 'account/register'
   setFieldsAs: (values, cb) =>
     @browser.fill "#registerForm #email", values.email
     @browser.fill "#registerForm #password", values.password

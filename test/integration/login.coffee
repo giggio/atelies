@@ -29,7 +29,7 @@ describe 'Login', ->
     it 'shows the login failed message', ->
       expect(page.errors()).to.equal 'Login falhou'
     it 'is at the login page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login"
     it 'does not show admin link', ->
       expect(page.adminLinkExists()).to.be.false
 
@@ -41,7 +41,7 @@ describe 'Login', ->
     it 'does not show the login failed message', ->
       expect(page.errors()).to.equal ''
     it 'is at the login page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login"
     it 'Required messages are shown', ->
       expect(page.emailRequired()).to.equal "Informe seu e-mail."
       expect(page.passwordRequired()).to.equal "Informe sua senha."

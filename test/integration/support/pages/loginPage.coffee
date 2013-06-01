@@ -1,11 +1,11 @@
 HomeLayout = require './homeLayout'
 
 module.exports = class LoginPage extends HomeLayout
-  url: 'login'
+  url: 'account/login'
   setFieldsAs: (values) =>
     @browser.fill "#loginForm #email", values.email
     @browser.fill "#loginForm #password", values.password
-  clickLoginButton: (cb) => @browser.pressButtonWait "#loginForm #login", cb
+  clickLoginButton: (cb) => @browser.pressButton "#loginForm #login", cb
   errors: => @browser.text '#errors > li'
   emailRequired: => @browser.text "#loginForm label[for=email]"
   passwordRequired: => @browser.text "#loginForm label[for=password]"

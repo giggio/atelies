@@ -6,7 +6,7 @@ append content
     if (everyauth.loggedIn)
       h3 Usuário já logado.
     else
-      form#loginForm.validatable.form-horizontal(action='/login', method='post')
+      form#loginForm.validatable.form-horizontal(action='/account/login', method='post')
         h2 Login
         if ('undefined' !== typeof errors && errors.length)
           ul#errors

@@ -22,7 +22,7 @@ describe 'Register', ->
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
     it 'is at the register page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/register"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/register"
     it 'Required messages are shown', ->
       expect(page.emailRequired()).to.equal "Informe seu e-mail."
       expect(page.passwordRequired()).to.equal "Informe sua senha."
@@ -83,7 +83,7 @@ describe 'Register', ->
     it 'shows the register failed message', ->
       expect(page.errors()).to.equal 'E-mail já cadastrado.'
     it 'is at the register page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/register"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/register"
     it 'does shows login link', ->
       expect(page.loginLinkExists()).to.be.true
     it 'does not show logout link', ->

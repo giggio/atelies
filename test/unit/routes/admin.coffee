@@ -21,7 +21,7 @@ describe 'AdminRoute', ->
       res = redirect: sinon.spy()
       req = loggedIn: false
       routes.admin req, res
-      res.redirect.should.have.been.calledWith 'login'
+      res.redirect.should.have.been.calledWith '/account/login'
   describe 'Shows correct content', ->
     it 'only user stories are shown', ->
       stores = [1]

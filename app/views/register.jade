@@ -11,7 +11,7 @@ append content
         ul#errors
           - each error in errors
             li.error= error
-      form#registerForm.validatable.form-horizontal(action='/register', method='post')
+      form#registerForm.validatable.form-horizontal(action='/account/register', method='post')
         .control-group
           label.control-label Email:
           .controls

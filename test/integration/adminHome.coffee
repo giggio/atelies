@@ -57,4 +57,4 @@ describe 'Admin home page', ->
       page.visit done
     after -> browser.destroy()
     it 'redirects user to login', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/login"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login"

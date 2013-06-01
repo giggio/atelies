@@ -15,7 +15,7 @@ class Routes
       do (fn) =>
         original = @[fn]
         @[fn] = (req, res) ->
-          return res.redirect 'login' unless req.loggedIn
+          return res.redirect '/account/login' unless req.loggedIn
           original.apply @, arguments
 
   _authSeller: ->
