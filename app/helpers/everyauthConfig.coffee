@@ -15,6 +15,17 @@ exports.configure = (app) ->
     registerView: path.join app.get('views'), "register.jade"
     loginView: path.join app.get('views'), "login.jade"
     loginLocals: (req, res) ->
+      if req.query.redirectTo?
+        redirectTo: "?redirectTo=#{req.query.redirectTo}"
+      else
+        redirectTo: ''
+    respondToLoginSucceed: (res, user, data) ->
+      return unless user?
+      if data.req.query.redirectTo?
+        @redirect res, data.req.query.redirectTo
+      else
+        @redirect res, '/'
+    performRedirect: (res, location) -> res.redirect location, 302
     authenticate: (email, password) ->
       errors = []
       errors.push "Informe o e-mail" unless email?
@@ -70,6 +81,7 @@ exports.preEveryAuthMiddlewareHack = ->
       ea.password.loginFormFieldName = everyauth.password.loginFormFieldName()
       ea.password.passwordFormFieldName = everyauth.password.passwordFormFieldName()
     res.locals.everyauth = ea
+    res.locals.req = req
     do next
 
 exports.postEveryAuthMiddlewareHack = ->

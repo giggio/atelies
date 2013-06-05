@@ -64,3 +64,21 @@ describe 'Login', ->
       expect(page.adminLinkExists()).to.be.false
     it 'shows user name', ->
       expect(page.userGreeting()).to.equal userA.name
+
+  describe 'Trying to access admin page redirects to login with redirectTo query string set', ->
+    before (done) ->
+      browser = newBrowser browser
+      browser.visit "http://localhost:8000/admin", done
+    it 'is at the login page', ->
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login?redirectTo=/admin"
+
+  xdescribe 'Login with admin user redirects to original url', -> #doesnt work on zombie...
+    before (done) ->
+      browser = newBrowser browser
+      page = browser.loginPage
+      browser.visit "http://localhost:8000/admin", (error) ->
+        return done error if error?
+        page.setFieldsAs userSellerC
+        page.clickLoginButton done
+    it 'is at the admin page', ->
+      expect(browser.location.toString()).to.equal "http://localhost:8000/admin"

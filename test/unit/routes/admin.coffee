@@ -19,9 +19,9 @@ describe 'AdminRoute', ->
     it 'denies access if not signed in', ->
       stores = []
       res = redirect: sinon.spy()
-      req = loggedIn: false
+      req = loggedIn: false, originalUrl: '/admin'
       routes.admin req, res
-      res.redirect.should.have.been.calledWith '/account/login'
+      res.redirect.should.have.been.calledWith '/account/login?redirectTo=/admin'
   describe 'Shows correct content', ->
     it 'only user stories are shown', ->
       stores = [1]
