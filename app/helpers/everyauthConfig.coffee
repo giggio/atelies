@@ -25,7 +25,7 @@ exports.configure = (app) ->
         @redirect res, data.req.query.redirectTo
       else
         @redirect res, '/'
-    performRedirect: (res, location) -> res.redirect location, 302
+    #performRedirect: (res, location) -> res.redirect location, 302
     authenticate: (email, password) ->
       errors = []
       errors.push "Informe o e-mail" unless email?
@@ -68,25 +68,3 @@ exports.configure = (app) ->
       #console.log "found user: #{user}"
       cb error, user
   everyauth.everymodule.userPkey '_id'
-
-exports.preEveryAuthMiddlewareHack = ->
-  (req, res, next) ->
-    sess = req.session
-    auth = sess.auth
-    ea =
-      loggedIn: auth?.loggedIn
-    ea[k] = val for own k, val of auth
-    if everyauth.enabled.password
-      ea.password = ea.password || {}
-      ea.password.loginFormFieldName = everyauth.password.loginFormFieldName()
-      ea.password.passwordFormFieldName = everyauth.password.passwordFormFieldName()
-    res.locals.everyauth = ea
-    res.locals.req = req
-    do next
-
-exports.postEveryAuthMiddlewareHack = ->
-  userAlias = everyauth.expressHelperUserAlias || "user"
-  (req, res, next) ->
-    res.locals.everyauth.user = req.user
-    res.locals[userAlias] = req.user
-    do next

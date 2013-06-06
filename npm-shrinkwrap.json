@@ -197,94 +197,6 @@
       "version": "1.4.4",
       "from": "underscore@~1.4.4"
     },
-    "everyauth": {
-      "version": "0.2.34",
-      "from": "everyauth@git://github.com/bnoguchi/everyauth.git#express3",
-      "resolved": "git://github.com/bnoguchi/everyauth.git#80c7ff393204d846285654cf905a61b6d10b2245",
-      "dependencies": {
-        "oauth": {
-          "version": "0.9.10",
-          "from": "https://github.com/ciaranj/node-oauth/tarball/master",
-          "resolved": "https://github.com/ciaranj/node-oauth/tarball/master"
-        },
-        "request": {
-          "version": "2.9.203",
-          "from": "request@2.9.x"
-        },
-        "connect": {
-          "version": "2.3.9",
-          "from": "connect@2.3.x",
-          "dependencies": {
-            "qs": {
-              "version": "0.4.2",
-              "from": "qs@0.4.2",
-              "resolved": "https://registry.npmjs.org/qs/-/qs-0.4.2.tgz"
-            },
-            "formidable": {
-              "version": "1.0.11",
-              "from": "formidable@1.0.11",
-              "resolved": "https://registry.npmjs.org/formidable/-/formidable-1.0.11.tgz"
-            },
-            "crc": {
-              "version": "0.2.0",
-              "from": "crc@0.2.0"
-            },
-            "cookie": {
-              "version": "0.0.4",
-              "from": "cookie@0.0.4"
-            },
-            "bytes": {
-              "version": "0.1.0",
-              "from": "bytes@0.1.0"
-            },
-            "send": {
-              "version": "0.0.3",
-              "from": "send@0.0.3",
-              "dependencies": {
-                "mime": {
-                  "version": "1.2.6",
-                  "from": "mime@1.2.6"
-                },
-                "range-parser": {
-                  "version": "0.0.4",
-                  "from": "range-parser@0.0.4"
-                }
-              }
-            },
-            "fresh": {
-              "version": "0.1.0",
-              "from": "fresh@0.1.0"
-            }
-          }
-        },
-        "openid": {
-          "version": "0.5.2",
-          "from": "openid@>=0.2.0"
-        },
-        "xml2js": {
-          "version": "0.2.6",
-          "from": "xml2js@>=0.1.7",
-          "dependencies": {
-            "sax": {
-              "version": "0.4.2",
-              "from": "sax@0.4.2"
-            }
-          }
-        },
-        "node-swt": {
-          "version": "0.1.1",
-          "from": "node-swt@>=0.1.1"
-        },
-        "node-wsfederation": {
-          "version": "0.1.1",
-          "from": "node-wsfederation@>=0.1.1"
-        },
-        "debug": {
-          "version": "0.5.0",
-          "from": "debug@0.5.0"
-        }
-      }
-    },
     "grunt": {
       "version": "0.4.1",
       "from": "grunt@",
@@ -1020,6 +932,92 @@
     "requirejs": {
       "version": "2.1.5",
       "from": "requirejs@2.1.5"
+    },
+    "everyauth": {
+      "version": "0.4.1",
+      "from": "git://github.com/giggio/everyauth.git#c4114d11bc3f3",
+      "resolved": "git://github.com/giggio/everyauth.git#c4114d11bc3f3cf1e0265672d2bf18f06d32b0dd",
+      "dependencies": {
+        "oauth": {
+          "version": "0.9.10",
+          "from": "https://github.com/ciaranj/node-oauth/tarball/master",
+          "resolved": "https://github.com/ciaranj/node-oauth/tarball/master"
+        },
+        "request": {
+          "version": "2.9.203",
+          "from": "request@2.9.x"
+        },
+        "connect": {
+          "version": "2.3.9",
+          "from": "connect@2.3.x",
+          "dependencies": {
+            "qs": {
+              "version": "0.4.2",
+              "from": "qs@0.4.2"
+            },
+            "formidable": {
+              "version": "1.0.11",
+              "from": "formidable@1.0.11"
+            },
+            "crc": {
+              "version": "0.2.0",
+              "from": "crc@0.2.0"
+            },
+            "cookie": {
+              "version": "0.0.4",
+              "from": "cookie@0.0.4"
+            },
+            "bytes": {
+              "version": "0.1.0",
+              "from": "bytes@0.1.0"
+            },
+            "send": {
+              "version": "0.0.3",
+              "from": "send@0.0.3",
+              "dependencies": {
+                "mime": {
+                  "version": "1.2.6",
+                  "from": "mime@1.2.6"
+                },
+                "range-parser": {
+                  "version": "0.0.4",
+                  "from": "range-parser@0.0.4"
+                }
+              }
+            },
+            "fresh": {
+              "version": "0.1.0",
+              "from": "fresh@0.1.0"
+            }
+          }
+        },
+        "openid": {
+          "version": "0.5.2",
+          "from": "openid@>=0.2.0"
+        },
+        "xml2js": {
+          "version": "0.2.7",
+          "from": "xml2js@>=0.1.7",
+          "dependencies": {
+            "sax": {
+              "version": "0.5.2",
+              "from": "sax@0.5.2"
+            }
+          }
+        },
+        "node-swt": {
+          "version": "0.1.1",
+          "from": "node-swt@>=0.1.1"
+        },
+        "node-wsfederation": {
+          "version": "0.1.1",
+          "from": "node-wsfederation@>=0.1.1"
+        },
+        "debug": {
+          "version": "0.5.0",
+          "from": "debug@0.5.0"
+        }
+      }
     },
     "amdefine": {
       "version": "0.0.5",

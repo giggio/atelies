@@ -21,7 +21,6 @@
     "jade": "*",
     "coffee-script": "*",
     "underscore": "~1.4.4",
-    "everyauth": "git://github.com/bnoguchi/everyauth.git#express3",
     "grunt": "~0.4.1",
     "grunt-coffeelint": "0.0.x",
     "grunt-contrib-coffee": "~0.7.x",
@@ -32,7 +31,8 @@
     "bcrypt": "~0.7.x",
     "connect-less": "~0.3.x",
     "mongoose": "~3.6.x",
-    "requirejs": "~2.1.5"
+    "requirejs": "~2.1.5",
+    "everyauth": "git://github.com/giggio/everyauth.git#c4114d11bc3f3"
   },
   "devDependencies": {
     "jsdom": "*",

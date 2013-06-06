@@ -45,11 +45,8 @@ exports.start = (cb) ->
   app.use less src: path.join(__dirname, '..', 'public'), debug:true
   app.use express.static(path.join(__dirname, '..', "public"))
   everyauthConfig.configure app
-  app.use(everyauthConfig.preEveryAuthMiddlewareHack())
-  app.use everyauth.middleware app
-  app.use(everyauthConfig.postEveryAuthMiddlewareHack())
+  app.use everyauth.middleware()
   #app.use app.router
-  #connStr = if process.env.MONGOHQ_URL? then process.env.MONGOHQ_URL else process.env.CUSTOMCONNSTR_mongo
   connStr = if process.env.MONGOLAB_URI? then process.env.MONGOLAB_URI else process.env.CUSTOMCONNSTR_mongo
   mongoose.connect connStr
   mongoose.connection.on 'error', dealWith
