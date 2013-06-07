@@ -42,7 +42,7 @@ exports.start = (cb) ->
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
   app.use express.session()
-  app.use less src: path.join(__dirname, '..', 'public'), debug:true
+  app.use less src: path.join(__dirname, '..', 'public'), debug:false
   app.use express.static(path.join(__dirname, '..', "public"))
   everyauthConfig.configure app
   app.use everyauth.middleware()
