@@ -55,6 +55,8 @@
     "blanket": "~1.1.x",
     "mocha-lcov-reporter": "0.0.x",
     "grunt-notify": "~0.2.x",
-    "zombie": "~2.0.0-alpha19"
+    "zombie": "~2.0.0-alpha19",
+    "selenium-webdriver": "~2.33.0",
+    "chromedriver": "~2.0.0"
   }
 }
