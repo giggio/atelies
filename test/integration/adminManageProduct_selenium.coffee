@@ -29,7 +29,7 @@ describe 'Admin Manage Product page', ->
     driverProcess = driver = otherProduct = null
     before (done) ->
       otherProduct = generator.product.b()
-      driverProcess = require('child_process').execFile chromedriver.path
+      chromedriver.start()
       driver = new webdriver.Builder()
         .usingServer('http://localhost:9515')
         .build()
@@ -52,7 +52,7 @@ describe 'Admin Manage Product page', ->
       driver.findElement(webdriver.By.css('#updateProduct')).click().then done, done
     after (done) ->
       driver.quit().then ->
-        driverProcess.kill()
+        chromedriver.stop()
         done()
     it 'is at the store manage page', (done) ->
       driver.getCurrentUrl().then (url) ->

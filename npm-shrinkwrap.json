@@ -1045,6 +1045,11 @@
       "version": "0.0.1",
       "from": "mocha-lcov-reporter@"
     },
+    "selenium-webdriver": {
+      "version": "2.33.0",
+      "from": "selenium-webdriver@",
+      "resolved": "https://registry.npmjs.org/selenium-webdriver/-/selenium-webdriver-2.33.0.tgz"
+    },
     "sinon-chai": {
       "version": "2.4.0",
       "from": "sinon-chai@",
@@ -1238,6 +1243,81 @@
                   "from": "is@~0.2.6"
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "chromedriver": {
+      "version": "2.0.1",
+      "from": "chromedriver@",
+      "dependencies": {
+        "adm-zip": {
+          "version": "0.2.1",
+          "from": "adm-zip@0.2.1"
+        },
+        "kew": {
+          "version": "0.1.7",
+          "from": "kew@~0.1.7"
+        },
+        "npmconf": {
+          "version": "0.0.24",
+          "from": "npmconf@0.0.24",
+          "resolved": "https://registry.npmjs.org/npmconf/-/npmconf-0.0.24.tgz",
+          "dependencies": {
+            "config-chain": {
+              "version": "1.1.7",
+              "from": "config-chain@~1.1.1",
+              "dependencies": {
+                "proto-list": {
+                  "version": "1.2.2",
+                  "from": "proto-list@~1.2.1"
+                }
+              }
+            },
+            "inherits": {
+              "version": "1.0.0",
+              "from": "inherits@~1.0.0"
+            },
+            "once": {
+              "version": "1.1.1",
+              "from": "once@~1.1.1"
+            },
+            "osenv": {
+              "version": "0.0.3",
+              "from": "osenv@0.0.3"
+            },
+            "nopt": {
+              "version": "2.1.1",
+              "from": "nopt@2",
+              "dependencies": {
+                "abbrev": {
+                  "version": "1.0.4",
+                  "from": "abbrev@1"
+                }
+              }
+            },
+            "semver": {
+              "version": "1.1.4",
+              "from": "semver@~1.1.0"
+            },
+            "ini": {
+              "version": "1.1.0",
+              "from": "ini@~1.1.0"
+            }
+          }
+        },
+        "mkdirp": {
+          "version": "0.3.5",
+          "from": "mkdirp@0.3.5"
+        },
+        "rimraf": {
+          "version": "2.0.3",
+          "from": "rimraf@~2.0.2",
+          "dependencies": {
+            "graceful-fs": {
+              "version": "1.1.14",
+              "from": "graceful-fs@~1.1"
             }
           }
         }
