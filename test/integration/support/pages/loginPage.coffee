@@ -13,4 +13,5 @@ module.exports = class LoginPage extends HomeLayout
     @setFieldsAs values
     @clickLoginButton cb
   navigateAndLoginWith: (user, cb) ->
-    @visit => @loginWith user, cb
+    @visit()
+    @waitSelector '#loginForm #email', => @loginWith user, cb

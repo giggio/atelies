@@ -40,9 +40,8 @@ module.exports = class AdminHomePage extends Page
     @browser.fill "#weight", product.weight
     if product.hasInventory then @browser.check "#hasInventory" else @browser.uncheck '#hasInventory'
     @browser.fill "#inventory", product.inventory
-    #@browser.fire '#name', 'change', cb #doesnt work... :(
     @browser.evaluate "$('#editProduct #name,#price,#picture,#tags,#description,#height,#width,#depth,#weight,#hasInventory,#inventory').change()"
-    @browser.wait (e, browser) -> cb()
+    cb()
   clickUpdateProduct: (cb) => @browser.pressButton "#updateProduct", cb
   clickDeleteProduct: (cb) => @browser.pressButton "#deleteProduct", cb
   clickConfirmDeleteProduct: (cb) => @browser.pressButton "#confirmDeleteProduct", cb

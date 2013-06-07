@@ -84,9 +84,11 @@ describe 'Admin Manage Product page', ->
       browser = newBrowser browser
       page = browser.adminManageProductPage
       browser.loginPage.navigateAndLoginWith userSeller, ->
-        page.visit store.slug, product._id.toString(), ->
+        page.visit store.slug, product._id.toString()
+        page.waitSelector '#description', ->
           page.setFieldsAs otherProduct, ->
-            page.clickUpdateProduct done
+            page.clickUpdateProduct()
+            browser.wait ((window)->window.location is "http://localhost:8000/admin#store/#{product.storeSlug}"), done
     it 'is at the store manage page', ->
       browser.location.href.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
     it 'updated the product', (done) ->

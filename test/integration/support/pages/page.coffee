@@ -14,3 +14,8 @@ module.exports = class Page
     @browser.text("##{field} ~ .tooltip .tooltip-inner")
   errorMessageForSelector: (selector) ->
     @browser.text("#{selector} ~ .tooltip .tooltip-inner")
+  selectorLoaded: (w) ->
+    w.document.querySelector @selectorSearched
+  waitSelector: (selector, cb) ->
+    @selectorSearched = selector
+    @browser.wait @selectorLoaded, cb
