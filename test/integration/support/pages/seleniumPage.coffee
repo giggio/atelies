@@ -5,11 +5,10 @@ webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text
 
 module.exports = class Page
-  constructor: (url, driver) ->
-    if url instanceof webdriver.WebDriver
-      [url, driver] = [driver, url]
+  constructor: (url, page) ->
+    [url, page] = [page, url] if url instanceof Page
+    driver = page?.driver
     @url = url if url?
-    @driver = driver if driver?
     if driver?
       @driver = driver
     else
