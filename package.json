@@ -32,7 +32,7 @@
     "connect-less": "~0.3.x",
     "mongoose": "~3.6.x",
     "requirejs": "~2.1.5",
-    "everyauth": "git://github.com/giggio/everyauth.git#c4114d11bc3f3"
+    "everyauth": "~0.4.3"
   },
   "devDependencies": {
     "jsdom": "*",
