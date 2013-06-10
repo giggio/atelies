@@ -1,47 +1,50 @@
-$ = require 'jquery'
-Page = require './page'
+$             = require 'jquery'
+Page          = require './seleniumPage'
+webdriver     = require 'selenium-webdriver'
 
-module.exports = class AdminHomePage extends Page
-  visit: (storeSlug, productId, options, cb) ->
+module.exports = class AdminManageProductPage extends Page
+  visit: (storeSlug, productId) ->
     if typeof productId is 'string'
-      super "admin#manageProduct/#{storeSlug}/#{productId}", options, cb
+      super "admin#manageProduct/#{storeSlug}/#{productId}"
     else
-      [options, cb] = [productId, options]
-      super "admin#createProduct/#{storeSlug}", options, cb
+      super "admin#createProduct/#{storeSlug}"
        
-  product: =>
-    el = @browser.query('#editProduct')
-    id = $('#_id', el).text()
-    product =
-      _id: id
-      name: $("#name", el).val()
-      price: $("#price", el).val()
-      slug: $("#slug", el).text()
-      picture: $("#picture", el).val()
-      tags: $("#tags", el).val()
-      description: $("#description", el).val()
-      dimensions:
-        height: parseInt $("#height", el).val()
-        width: parseInt $("#width", el).val()
-        depth: parseInt $("#depth", el).val()
-      weight: parseInt $("#weight", el).val()
-      hasInventory: $("#hasInventory", el).prop('checked')
-      inventory: parseInt $("#inventory", el).val()
-    product
+  product: (cb) ->
+    product = {}
+    flow = webdriver.promise.createFlow (f) =>
+      f.execute => @getText "#editProduct #_id", (text) -> product._id = text
+      f.execute => @getValue "#editProduct #name", (text) -> product.name = text
+      f.execute => @getValue "#editProduct #price", (text) -> product.price = text
+      f.execute => @getText "#editProduct #slug", (text) -> product.slug = text
+      f.execute => @getValue "#editProduct #picture", (text) -> product.picture = text
+      f.execute => @getValue "#editProduct #tags", (text) -> product.tags = text
+      f.execute => @getValue "#editProduct #description", (text) -> product.description = text
+      f.execute => @getValue "#editProduct #height", (text) -> product.height = parseInt text
+      f.execute => @getValue "#editProduct #width", (text) -> product.width = parseInt text
+      f.execute => @getValue "#editProduct #depth", (text) -> product.depth = parseInt text
+      f.execute => @getValue "#editProduct #weight", (text) -> product.weight = parseInt text
+      f.execute => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
+      f.execute => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
+    flow.then (-> cb(product)), cb
+    #@doInParallel [
+      #( (done) -> @getText "#editProduct #_id", (t) -> product._id = t;done()),
+    #], (-> cb(product))
   setFieldsAs: (product, cb) =>
-    @browser.fill "#name", product.name
-    @browser.fill "#price", product.price
-    @browser.fill "#picture", product.picture
-    @browser.fill "#tags", product.tags?.join ","
-    @browser.fill "#description", product.description
-    @browser.fill "#height", product.dimensions?.height
-    @browser.fill "#width", product.dimensions?.width
-    @browser.fill "#depth", product.dimensions?.depth
-    @browser.fill "#weight", product.weight
-    if product.hasInventory then @browser.check "#hasInventory" else @browser.uncheck '#hasInventory'
-    @browser.fill "#inventory", product.inventory
-    @browser.evaluate "$('#editProduct #name,#price,#picture,#tags,#description,#height,#width,#depth,#weight,#hasInventory,#inventory').change()"
+    @type "#name", product.name
+    @type "#price", product.price
+    @type "#picture", product.picture
+    @type "#tags", product.tags?.join ","
+    @type "#description", product.description
+    @type "#height", product.dimensions?.height
+    @type "#width", product.dimensions?.width
+    @type "#depth", product.dimensions?.depth
+    @type "#weight", product.weight
+    if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
+    @type "#inventory", product.inventory
     cb()
-  clickUpdateProduct: (cb) => @browser.pressButton "#updateProduct", cb
-  clickDeleteProduct: (cb) => @browser.pressButton "#deleteProduct", cb
-  clickConfirmDeleteProduct: (cb) => @browser.pressButton "#confirmDeleteProduct", cb
+  clickUpdateProduct: (cb) => @pressButton "#updateProduct", cb
+  clickDeleteProduct: (cb) => @pressButton "#deleteProduct", cb
+  clickConfirmDeleteProduct: (cb) =>
+    btn = @findElement "#confirmDeleteProduct"
+    @driver.wait (-> btn.isDisplayed().then((itIs) -> itIs)), 1000
+    @pressButton "#confirmDeleteProduct", cb

@@ -1,10 +1,15 @@
 require './support/_specHelper'
-Store     = require '../../app/models/store'
-Product   = require '../../app/models/product'
-User      = require '../../app/models/user'
+Store                       = require '../../app/models/store'
+Product                     = require '../../app/models/product'
+User                        = require '../../app/models/user'
+AdminManageProductPage      = new require './support/pages/adminManageProductPage'
+page                        = new AdminManageProductPage()
+LoginPage                   = require './support/pages/loginPageSelenium'
+loginPage                   = new LoginPage page.driver
+webdriver       = require 'selenium-webdriver'
 
 describe 'Admin Manage Product page', ->
-  page = product = product2 = store = userSeller = browser = page = null
+  product = product2 = store = userSeller = null
   before (done) ->
     cleanDB (error) ->
       return done error if error
@@ -19,39 +24,40 @@ describe 'Admin Manage Product page', ->
         userSeller.stores.push store
         userSeller.save()
         done()
-  after -> browser.destroy() if browser?
-  describe 'viewing product', (done) ->
+  after (done) -> page.closeBrowser done
+  beforeEach -> page.clearCookies()
+  describe 'viewing product', ->
     before (done) ->
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
-        page.visit store.slug, product._id.toString(), done
-    it 'shows product', ->
-      aproduct = page.product()
-      aproduct._id.should.equal product._id.toString()
-      aproduct.name.should.equal product.name
-      aproduct.price.should.equal product.price.toString()
-      aproduct.slug.should.equal product.slug
-      aproduct.picture.should.equal product.picture
-      aproduct.tags.should.equal product.tags.join ', '
-      aproduct.description.should.equal product.description
-      aproduct.dimensions.height.should.equal product.dimensions.height
-      aproduct.dimensions.width.should.equal product.dimensions.width
-      aproduct.dimensions.depth.should.equal product.dimensions.depth
-      aproduct.weight.should.equal product.weight
-      aproduct.hasInventory.should.equal product.hasInventory
-      aproduct.inventory.should.equal product.inventory
+      loginPage.navigateAndLoginWith userSeller, ->
+        page.visit store.slug, product._id.toString()
+        done()
+    it 'shows product', (done) ->
+      page.product (aproduct) ->
+        aproduct._id.should.equal product._id.toString()
+        aproduct.name.should.equal product.name
+        aproduct.price.should.equal product.price.toString()
+        aproduct.slug.should.equal product.slug
+        aproduct.picture.should.equal product.picture
+        aproduct.tags.should.equal product.tags.join ', '
+        aproduct.description.should.equal product.description
+        aproduct.height.should.equal product.dimensions.height
+        aproduct.width.should.equal product.dimensions.width
+        aproduct.depth.should.equal product.dimensions.depth
+        aproduct.weight.should.equal product.weight
+        aproduct.hasInventory.should.equal product.hasInventory
+        aproduct.inventory.should.equal product.inventory
+        done()
 
   describe 'cant update invalid product', ->
     before (done) ->
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs {name:'', price:'', picture: 'abc', height:'dd', width: 'ee', depth:'ff', weight: 'gg', inventory: 'hh'}, ->
-            page.clickUpdateProduct done
-    it 'is at the product manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
+      loginPage.navigateAndLoginWith userSeller, ->
+        page.visit store.slug, product._id.toString()
+        page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', inventory: 'hh'}, ->
+          page.clickUpdateProduct done
+    it 'is at the product manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
+        done()
     it 'did not update the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
         return done err if err
@@ -67,30 +73,30 @@ describe 'Admin Manage Product page', ->
         productOnDb.hasInventory.should.equal product.hasInventory
         productOnDb.inventory.should.equal product.inventory
         done()
-    it 'shows error messages', ->
-      page.errorMessageFor('name').should.equal 'O nome é obrigatório.'
-      page.errorMessageFor('price').should.equal 'O preço é obrigatório.'
-      page.errorMessageFor('picture').should.equal 'A imagem deve ser uma url.'
-      page.errorMessageFor('height').should.equal 'A altura deve ser um número.'
-      page.errorMessageFor('width').should.equal 'A largura deve ser um número.'
-      page.errorMessageFor('depth').should.equal 'A profundidade deve ser um número.'
-      page.errorMessageFor('weight').should.equal 'O peso deve ser um número.'
-      page.errorMessageFor('inventory').should.equal 'O estoque deve ser um número.'
+    it 'shows error messages', (done) ->
+      page.errorMessagesIn '#editProduct', (errorMsgs) ->
+        errorMsgs.name.should.equal 'O nome é obrigatório.'
+        errorMsgs.price.should.equal 'O preço é obrigatório.'
+        errorMsgs.picture.should.equal 'A imagem deve ser uma url.'
+        errorMsgs.height.should.equal 'A altura deve ser um número.'
+        errorMsgs.width.should.equal 'A largura deve ser um número.'
+        errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
+        errorMsgs.weight.should.equal 'O peso deve ser um número.'
+        errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
+        done()
 
   describe 'editing product', ->
     otherProduct = null
     before (done) ->
       otherProduct = generator.product.b()
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
+      loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, product._id.toString()
-        page.waitSelector '#description', ->
-          page.setFieldsAs otherProduct, ->
-            page.clickUpdateProduct()
-            browser.wait ((window)->window.location is "http://localhost:8000/admin#store/#{product.storeSlug}"), done
-    it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        page.setFieldsAs otherProduct, ->
+          page.clickUpdateProduct done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        done()
     it 'updated the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
         return done err if err
@@ -110,14 +116,14 @@ describe 'Admin Manage Product page', ->
   describe 'deleting product', ->
     otherProduct = null
     before (done) ->
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
-        page.visit store.slug, product2._id.toString(), ->
-          page.clickDeleteProduct ->
-            page.clickConfirmDeleteProduct done
-    it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"
+      loginPage.navigateAndLoginWith userSeller, ->
+        page.visit store.slug, product2._id.toString()
+        page.clickDeleteProduct ->
+          page.clickConfirmDeleteProduct done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"
+        done()
     it 'deleted the product', (done) ->
       Product.findById product2._id, (err, productOnDb) ->
         return done err if err
