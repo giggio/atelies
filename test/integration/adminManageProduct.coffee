@@ -6,7 +6,6 @@ AdminManageProductPage      = new require './support/pages/adminManageProductPag
 page                        = new AdminManageProductPage()
 LoginPage                   = require './support/pages/loginPageSelenium'
 loginPage                   = new LoginPage page.driver
-webdriver       = require 'selenium-webdriver'
 
 describe 'Admin Manage Product page', ->
   product = product2 = store = userSeller = null
@@ -119,7 +118,8 @@ describe 'Admin Manage Product page', ->
       loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, product2._id.toString()
         page.clickDeleteProduct ->
-          page.clickConfirmDeleteProduct done
+          page.clickConfirmDeleteProduct ->
+            page.waitForUrl "http://localhost:8000/admin#store/#{product2.storeSlug}", done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"
