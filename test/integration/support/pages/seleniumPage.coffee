@@ -55,3 +55,12 @@ module.exports = class Page
   clickLink: (selector, cb) -> @pressButton selector, cb
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
+  parallel: (actions, cb) ->
+    flow = webdriver.promise.createFlow (f) =>
+      for action in actions
+        do (action) -> f.execute action
+      undefined
+    flow.then cb, cb
+  waitForUrl: (url, cb) ->
+    @driver.wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000
+    cb()

@@ -1,6 +1,5 @@
 $             = require 'jquery'
 Page          = require './seleniumPage'
-webdriver     = require 'selenium-webdriver'
 
 module.exports = class AdminManageProductPage extends Page
   visit: (storeSlug, productId) ->
@@ -11,24 +10,21 @@ module.exports = class AdminManageProductPage extends Page
        
   product: (cb) ->
     product = {}
-    flow = webdriver.promise.createFlow (f) =>
-      f.execute => @getText "#editProduct #_id", (text) -> product._id = text
-      f.execute => @getValue "#editProduct #name", (text) -> product.name = text
-      f.execute => @getValue "#editProduct #price", (text) -> product.price = text
-      f.execute => @getText "#editProduct #slug", (text) -> product.slug = text
-      f.execute => @getValue "#editProduct #picture", (text) -> product.picture = text
-      f.execute => @getValue "#editProduct #tags", (text) -> product.tags = text
-      f.execute => @getValue "#editProduct #description", (text) -> product.description = text
-      f.execute => @getValue "#editProduct #height", (text) -> product.height = parseInt text
-      f.execute => @getValue "#editProduct #width", (text) -> product.width = parseInt text
-      f.execute => @getValue "#editProduct #depth", (text) -> product.depth = parseInt text
-      f.execute => @getValue "#editProduct #weight", (text) -> product.weight = parseInt text
-      f.execute => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
-      f.execute => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
-    flow.then (-> cb(product)), cb
-    #@doInParallel [
-      #( (done) -> @getText "#editProduct #_id", (t) -> product._id = t;done()),
-    #], (-> cb(product))
+    @parallel [
+      => @getText "#editProduct #_id", (text) -> product._id = text
+      => @getValue "#editProduct #name", (text) -> product.name = text
+      => @getValue "#editProduct #price", (text) -> product.price = text
+      => @getText "#editProduct #slug", (text) -> product.slug = text
+      => @getValue "#editProduct #picture", (text) -> product.picture = text
+      => @getValue "#editProduct #tags", (text) -> product.tags = text
+      => @getValue "#editProduct #description", (text) -> product.description = text
+      => @getValue "#editProduct #height", (text) -> product.height = parseInt text
+      => @getValue "#editProduct #width", (text) -> product.width = parseInt text
+      => @getValue "#editProduct #depth", (text) -> product.depth = parseInt text
+      => @getValue "#editProduct #weight", (text) -> product.weight = parseInt text
+      => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
+      => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
+    ], (-> cb(product))
   setFieldsAs: (product, cb) =>
     @type "#name", product.name
     @type "#price", product.price
