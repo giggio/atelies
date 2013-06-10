@@ -42,5 +42,5 @@ module.exports = class AdminManageProductPage extends Page
   clickDeleteProduct: (cb) => @pressButton "#deleteProduct", cb
   clickConfirmDeleteProduct: (cb) =>
     btn = @findElement "#confirmDeleteProduct"
-    @driver.wait (-> btn.isDisplayed().then((itIs) -> itIs)), 1000
-    @pressButton "#confirmDeleteProduct", cb
+    @wait (-> btn.isDisplayed().then((itIs) -> itIs)), 1000, =>
+      @pressButton "#confirmDeleteProduct", cb

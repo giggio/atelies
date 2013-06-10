@@ -61,5 +61,7 @@ module.exports = class Page
       undefined
     flow.then cb, cb
   waitForUrl: (url, cb) ->
-    @driver.wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000
-    cb()
+    @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
+  wait: (fn, timeout, cb) ->
+    @driver.wait fn, timeout
+    process.nextTick cb
