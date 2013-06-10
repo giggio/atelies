@@ -8,7 +8,6 @@ AdminHomePage           = require './pages/adminHomePage'
 LoginPage               = require './pages/loginPage'
 RegisterPage            = require './pages/registerPage'
 AdminStorePage          = require './pages/adminStorePage'
-AdminManageProductPage  = require './pages/adminManageProductPage'
 ChangePasswordPage      = require './pages/changePasswordPage'
 
 #parser = require("html5")
@@ -48,6 +47,5 @@ exports.newBrowser = (browser) ->
   browser.changePasswordPage = new ChangePasswordPage browser
   browser.registerPage = new RegisterPage browser
   browser.adminStorePage = new AdminStorePage browser
-  browser.adminManageProductPage = new AdminManageProductPage browser
   browser.showHtml = -> console.log browser.evaluate "$('html').html()"
   browser
