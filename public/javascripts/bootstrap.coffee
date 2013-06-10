@@ -40,9 +40,8 @@ if global? #nodejs only (tests)
   requirejs './backboneConfig'
 else
   requirejs [
-    'app'
     './backboneConfig'
     './loginPopover'
     './jqueryValidationExt'
-  ], (App) ->
-    App.start()
+  ], ->
+    requirejs [ 'app' ], (App) -> App.start()
