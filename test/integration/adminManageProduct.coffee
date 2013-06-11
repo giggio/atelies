@@ -4,8 +4,6 @@ Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
 AdminManageProductPage      = new require './support/pages/adminManageProductPage'
 page                        = new AdminManageProductPage()
-LoginPage                   = require './support/pages/loginPageSelenium'
-loginPage                   = new LoginPage page
 
 describe 'Admin Manage Product page', ->
   product = product2 = store = userSeller = null

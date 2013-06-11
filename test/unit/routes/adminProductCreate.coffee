@@ -31,10 +31,11 @@ describe 'AdminProductCreateRoute', ->
         storeSlug: store.slug
       body = req.body
       res = send: sinon.spy()
-      routes = SandboxedModule.require '../../../app/routes',
+      Routes = SandboxedModule.require '../../../app/routes',
         requires:
           '../models/product': ProductStub
           '../models/store': Store
+      routes = new Routes()
       routes.adminProductCreate req, res
     after ->
       Store.findBySlug.restore()
@@ -55,7 +56,8 @@ describe 'AdminProductCreateRoute', ->
   describe 'Access is denied', ->
     routes = null
     before ->
-      routes = require '../../../app/routes',
+      Routes = require '../../../app/routes'
+      routes = new Routes()
     it "a seller but does not own this product's store denies access and throws", sinon.test ->
       @stub(Store, 'findBySlug').yields()
       user =

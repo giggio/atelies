@@ -1,7 +1,9 @@
-routes    = require './index'
+Routes    = require './index'
 
 exports.route = (app) ->
-  app.get     "/",                                                          routes.index
+  routes = new Routes app.get "env"
+  domain = app.get 'domain'
+  app.get     "/",                                                          routes.index domain
   app.get     "/stores/search/:searchTerm",                                 routes.storesSearch
   app.get     "/products/search/:searchTerm",                               routes.productsSearch
   app.get     "/account/changePassword",                                    routes.changePasswordShow

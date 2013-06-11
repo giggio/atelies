@@ -6,7 +6,7 @@ everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
 
 class Routes
-  constructor: ->
+  constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
 
@@ -101,14 +101,26 @@ class Routes
         if err?
           return res.json 400
         res.send 200, store
-  
-  index: (req, res) ->
-    Product.find (err, products) ->
-      dealWith err
-      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-      Store.findForHome (err, stores) ->
+
+  _getSubdomain: (domain, host) ->
+    return undefined if @env isnt 'production' and host is 'localhost'
+    if host isnt domain and host isnt "www.#{domain}"
+      subdomain = host.replace ".#{domain}", ''
+    subdomain
+
+  index: (domain) ->
+    route = (req, res) =>
+      subdomain = @_getSubdomain domain, req.host.toLowerCase()
+      if subdomain?
+        req.params.storeSlug = subdomain
+        return @store req, res
+      Product.find (err, products) ->
         dealWith err
-        res.render "index", products: viewModelProducts, stores: stores
+        viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+        Store.findForHome (err, stores) ->
+          dealWith err
+          res.render "index", products: viewModelProducts, stores: stores
+    route
   
   store: (req, res) ->
     Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
@@ -180,4 +192,4 @@ class Routes
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
 
-module.exports = new Routes()
+module.exports = Routes

@@ -15,14 +15,14 @@ describe 'Admin Create Product page', ->
         userSeller = generator.user.c()
         userSeller.stores.push store
         userSeller.save()
-        done()
+        waitSeconds 3, -> done()
   after -> browser.destroy() if browser?
 
   describe 'cant create invalid product', ->
     before (done) ->
       browser = newBrowser browser
       page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
+      waitSeconds 10, -> browser.loginPage.navigateAndLoginWith userSeller, ->
         page.visit store.slug, ->
           page.setFieldsAs {name:'', price:'', picture: 'abc', height:'dd', width: 'ee', depth:'ff', weight: 'gg', inventory: 'hh'}, ->
             page.clickUpdateProduct done

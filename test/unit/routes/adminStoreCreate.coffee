@@ -1,8 +1,10 @@
-routes          = require '../../../app/routes'
+Routes          = require '../../../app/routes'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminStoreCreateRoute', ->
+  routes = null
+  before -> routes = new Routes()
   describe 'Access is granted', ->
     store = res = body = user = null
     before ->

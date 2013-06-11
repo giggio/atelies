@@ -1,8 +1,10 @@
-routes          = require '../../../app/routes'
+Routes          = require '../../../app/routes'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminStoreUpdateRoute', ->
+  routes = null
+  before -> routes = new Routes()
   describe 'If user owns the store', ->
     exampleStore = store = req = res = body = user = null
     before ->

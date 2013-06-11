@@ -6,7 +6,7 @@ describe 'store home page', ->
   browser = null
   store = null
   after -> browser.destroy() if browser?
-  describe 'when store doesnt exist', (done) ->
+  describe 'when store doesnt exist', ->
     before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
@@ -23,7 +23,7 @@ describe 'store home page', ->
     it 'should return a not found status code', ->
       expect(browser.statusCode).to.equal 404
     
-  describe 'when store exists and has no products', (done) ->
+  describe 'when store exists and has no products', ->
     before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
@@ -35,7 +35,7 @@ describe 'store home page', ->
     it 'should display no products', ->
       browser.storeHomePage.products().length.should.equal 0
 
-  describe 'when store exists and has products', (done) ->
+  describe 'when store exists and has products', ->
     before (done) ->
       browser = newBrowser browser
       cleanDB (error) ->
@@ -48,5 +48,22 @@ describe 'store home page', ->
         product2.save()
         whenServerLoaded ->
           browser.storeHomePage.visit "store_1", done
+    it 'should display the products', ->
+      browser.storeHomePage.products().length.should.equal 2
+
+  describe 'store at subdomain', ->
+    before (done) ->
+      browser = newBrowser browser
+      browser.site = undefined
+      cleanDB (error) ->
+        return done error if error
+        store = generator.store.a()
+        store.save()
+        product1 = generator.product.a()
+        product2 = generator.product.b()
+        product1.save()
+        product2.save()
+        whenServerLoaded ->
+          browser.visit "http://store_1.localhost.com:8000", done
     it 'should display the products', ->
       browser.storeHomePage.products().length.should.equal 2

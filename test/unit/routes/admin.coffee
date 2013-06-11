@@ -1,7 +1,9 @@
-routes      = require '../../../app/routes'
+Routes      = require '../../../app/routes'
 Store       = require '../../../app/models/store'
 
 describe 'AdminRoute', ->
+  routes = null
+  before -> routes = new Routes()
   describe 'Access is granted correctly', ->
     it 'allows access and renders all the stores if signed in and seller', ->
       stores = []

@@ -53,6 +53,11 @@ exports.start = (cb) ->
   mongoose.connect connStr
   mongoose.connection.on 'error', dealWith
 
+  if app.get("env") is 'production'
+    app.set 'domain', 'atelies.com.br'
+  else
+    app.set 'domain', 'localhost.com'
+
   router.route app
 
   server = http.createServer(app)
