@@ -5,14 +5,14 @@ exports.localMongoDB = "mongodb://localhost/openstore"
 
 exports.startServer = (cb) ->
   app.start (server) ->
-    exports._server = server
+    exports.expressServer = server
     cb null, server if cb
 
 exports.whenServerLoaded = (cb) ->
-  if exports._server
+  if exports.expressServer
     setImmediate cb
     return
-  exports.whenDone((-> exports._server isnt null), -> cb())
+  exports.whenDone((-> exports.expressServer isnt null), -> cb())
 
 exports.openNewConnection = (cb) ->
   process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB unless process.env.CUSTOMCONNSTR_mongo
@@ -44,7 +44,7 @@ before (done) ->
       done()
 
 after ->
-  if exports._server
+  if exports.expressServer
     app.stop()
   else
     console.info "Server not defined on 'afterAll'"
@@ -55,3 +55,5 @@ exports.doneError = (error, done) ->
     done error
   else
     done()
+
+exports.getExpressServer = -> exports.expressServer

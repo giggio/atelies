@@ -37,11 +37,13 @@ exports.start = (cb) ->
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
 
+  sessionStore = new express.session.MemoryStore()
+
   app.use express.favicon()
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
-  app.use express.session()
+  app.use express.session store:sessionStore
   app.use less src: path.join(__dirname, '..', 'public'), debug:false
   app.use express.static(path.join(__dirname, '..', "public"))
   everyauthConfig.configure app
@@ -53,7 +55,12 @@ exports.start = (cb) ->
 
   router.route app
 
-  exports.server = http.createServer(app).listen app.get("port"), ->
+  server = http.createServer(app)
+  if app.get("env") isnt 'production'
+    server.sessionStore = sessionStore
+    server.cookieSecret = cookieSecret
+  exports.server = server
+  server.listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
     console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
     cb(exports.server) if cb

@@ -24,10 +24,9 @@ describe 'Admin Manage Product page', ->
         userSeller.save()
         done()
   after (done) -> page.closeBrowser done
-  beforeEach -> page.clearCookies()
   describe 'viewing product', ->
     before (done) ->
-      loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString()
         done()
     it 'shows product', (done) ->
@@ -49,7 +48,7 @@ describe 'Admin Manage Product page', ->
 
   describe 'cant update invalid product', ->
     before (done) ->
-      loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString()
         page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', inventory: 'hh'}, ->
           page.clickUpdateProduct done
@@ -88,7 +87,7 @@ describe 'Admin Manage Product page', ->
     otherProduct = null
     before (done) ->
       otherProduct = generator.product.b()
-      loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString()
         page.setFieldsAs otherProduct, ->
           page.clickUpdateProduct done
@@ -115,7 +114,7 @@ describe 'Admin Manage Product page', ->
   describe 'deleting product', ->
     otherProduct = null
     before (done) ->
-      loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, product2._id.toString()
         page.clickDeleteProduct ->
           page.clickConfirmDeleteProduct ->

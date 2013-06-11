@@ -1,5 +1,6 @@
 webdriver       = require 'selenium-webdriver'
 chromedriver    = require 'chromedriver'
+connectUtils = require 'express/node_modules/connect/lib/utils'
 
 webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text
@@ -65,3 +66,17 @@ module.exports = class Page
   wait: (fn, timeout, cb) ->
     @driver.wait fn, timeout
     process.nextTick cb
+  visitBlank: -> Page::visit.call @, 'blank'
+  loginFor: (_id, cb) ->
+    @currentUrl (url) =>
+      @visitBlank() unless url.substr(0,4) is 'http' #need the browser loaded to access cookies and have a session cookie id
+      @driver.manage().getCookie('connect.sid').then (cookie) ->
+        sessionId = cookie.value
+        sessionStore = getExpressServer().sessionStore
+        sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
+        sessionStore.get sessionId, (err, session) ->
+          session.auth = {} unless session.auth?
+          auth = session.auth
+          auth.userId = _id
+          auth.loggedIn = true
+          sessionStore.set sessionId, session, cb
