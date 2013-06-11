@@ -49,6 +49,9 @@ class Routes
     return res.redirect 'notseller' unless req.user.isSeller
     req.user.populate 'stores', (err, user) ->
       res.render 'admin', stores: user.stores
+
+  blank: (req, res) ->
+    res.render 'blank'
   
   notSeller: (req, res) -> res.render 'notseller'
  

@@ -9,6 +9,7 @@ exports.route = (app) ->
   app.get     "/account/passwordChanged",                                   routes.passwordChanged
   app.get     "/notseller",                                                 routes.notSeller
   app.get     "/admin",                                                     routes.admin
+  app.get     "/blank",                                                     routes.blank
   #store
   app.post    "/admin/store",                                               routes.adminStoreCreate
   app.put     "/admin/store/:storeId",                                      routes.adminStoreUpdate
