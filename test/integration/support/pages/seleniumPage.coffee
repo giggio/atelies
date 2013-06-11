@@ -80,3 +80,4 @@ module.exports = class Page
           auth.userId = _id
           auth.loggedIn = true
           sessionStore.set sessionId, session, cb
+  eval: (script, cb) -> @driver.executeScript(script).then cb

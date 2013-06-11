@@ -40,7 +40,4 @@ module.exports = class AdminManageProductPage extends Page
     cb()
   clickUpdateProduct: (cb) => @pressButton "#updateProduct", cb
   clickDeleteProduct: (cb) => @pressButton "#deleteProduct", cb
-  clickConfirmDeleteProduct: (cb) =>
-    btn = @findElement "#confirmDeleteProduct"
-    @wait (-> btn.isDisplayed().then((itIs) -> itIs)), 1000, =>
-      @pressButton "#confirmDeleteProduct", cb
+  clickConfirmDeleteProduct: (cb) => @eval "$('#confirmDeleteProduct').click()", cb
