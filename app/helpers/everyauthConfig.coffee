@@ -42,6 +42,7 @@ exports.configure = (app) ->
           cb.fulfill(if succeeded then user else ["Login falhou"])
       cb
     registerLocals: (req, res) ->
+      userParams: deliveryAddress:{}
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
       cb = @Promise()
@@ -62,6 +63,12 @@ exports.configure = (app) ->
     extractExtraRegistrationParams: (req) ->
       name: req.body.name
       isSeller: req.body.isSeller?
+      deliveryAddress:
+        street: req.body.deliveryStreet
+        street2: req.body.deliveryStreet2
+        city: req.body.deliveryCity
+        state: req.body.deliveryState
+      phoneNumber: req.body.phoneNumber
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
     User.findById userId, (error, user) ->

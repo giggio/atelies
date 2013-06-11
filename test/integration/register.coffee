@@ -32,7 +32,7 @@ describe 'Register', ->
     before (done) ->
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false, passwordVerify: 'abc123'
+        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false, passwordVerify: 'abc123', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877'
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
@@ -53,6 +53,12 @@ describe 'Register', ->
         expect(user.name).to.equal "Some Person"
         expect(user.isSeller).to.be.false
         bcrypt.compareSync('abc123', user.passwordHash).should.be.true
+        user.phoneNumber.should.equal '4567-9877'
+        deliveryAddress = user.deliveryAddress
+        deliveryAddress.state.should.equal 'SP'
+        deliveryAddress.street.should.equal 'Rua A, 23'
+        deliveryAddress.street2.should.equal 'ap 21'
+        deliveryAddress.city.should.equal 'Sao Paulo'
         done()
   
   describe 'Can register as seller successfully with correct information', ->

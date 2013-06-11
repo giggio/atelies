@@ -3,11 +3,17 @@ _         = require 'underscore'
 Store     = require './store'
 
 userSchema = new mongoose.Schema
-  name:         type: String, required: true
-  email:        type: String, required: true
-  passwordHash: type: String, required: true
-  isSeller:     type: Boolean, default: false
-  stores:       [{type: mongoose.Schema.Types.ObjectId, ref: 'store'}]
+  name:             type: String, required: true
+  email:            type: String, required: true
+  passwordHash:     type: String, required: true
+  isSeller:         type: Boolean, default: false
+  stores:           [{type: mongoose.Schema.Types.ObjectId, ref: 'store'}]
+  deliveryAddress:
+    street:         String
+    street2:        String
+    city:           String
+    state:          String
+  phoneNumber:    String
 
 userSchema.methods.createStore = ->
   store = new Store()

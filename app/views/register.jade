@@ -13,16 +13,16 @@ append content
             li.error= error
       form#registerForm.validatable.form-horizontal(action='/account/register', method='post')
         .control-group
+          label.control-label Nome:
+          .controls
+            input#name(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.")
+        .control-group
           label.control-label Email:
           .controls
             input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
         .control-group
-          label.control-label Nome:
           .controls
-            input#name(type='text', name="name", value=userParams["name"], class="required", title="Informe seu nome.")
-        .control-group
-          .controls
-            input#isSeller(type='checkbox', name="isSeller", value=userParams["isSeller"], checked)
+            input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
             | registrar-se como vendedor
         .control-group
           label.control-label Senha:
@@ -32,6 +32,53 @@ append content
           label.control-label Confirme sua senha:
           .controls
             input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
+        .control-group
+          label.control-label Endereço:
+          .controls
+            input#deliveryStreet(type='text', name="deliveryStreet", value=userParams.deliveryAddress.street, class="", title="Informe sua rua.")
+        .control-group
+          label.control-label Endereço (complemento):
+          .controls
+            input#deliveryStreet2(type='text', name="deliveryStreet2", value=userParams.deliveryAddress.street2, class="", title="Informe o complemento do seu endereço (apto, etc).")
+        .control-group
+          label.control-label Cidade:
+          .controls
+            input#deliveryCity(type='text', name="deliveryCity", value=userParams.deliveryAddress.city, class="", title="Informe sua cidade.")
+        .control-group
+          label.control-label Estado:
+          .controls
+            select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
+              option AC
+              option AL
+              option AP
+              option AM
+              option BA
+              option CE
+              option DF
+              option ES
+              option GO
+              option MA
+              option MT
+              option MS
+              option MG
+              option PR
+              option PB
+              option PA
+              option PE
+              option PI
+              option RJ
+              option RN
+              option RS
+              option RO
+              option RR
+              option SC
+              option SE
+              option(selected="selected") SP
+              option TO
+        .control-group
+          label.control-label Telefone:
+          .controls
+            input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, class="", title="Informe seu telefone.")
         .control-group
           .controls
             input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
