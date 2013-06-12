@@ -49,7 +49,7 @@ module.exports = class Page
     el.isSelected().then (itIs) -> if itIs then el.click().then cb else process.nextTick cb
   getText: (selector, cb) -> @findElement(selector).getText().then cb
   getAttribute: (selector, attribute, cb) -> @findElement(selector).getAttribute(attribute).then cb
-  getValue: @::getAttribute.partial undefined, 'value', undefined
+  getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
   clickLink: @::pressButton
