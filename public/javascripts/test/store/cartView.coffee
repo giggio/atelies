@@ -21,36 +21,36 @@ define [
       before ->
         cart = Cart.get(store1.slug)
         cart.clear()
-        cart.addItem _id: '1', name: 'produto 1'
+        cart.addItem _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1
         cartView = new CartView el:el, store: store1
         cartView.render()
       it 'shows a cart items table with one item', ->
         expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).text()).to.equal '1'
+        expect($("#cartItems .product", el).attr('data-id')).to.equal '1'
       it 'shows the first item name', ->
         expect($("#cartItems > tbody > tr > td:nth-child(2)", el).text()).to.equal 'produto 1'
     describe 'Removing item', ->
       before ->
         cart = Cart.get(store1.slug)
         cart.clear()
-        cart.addItem _id: '1', name: 'produto 1'
-        cart.addItem _id: '2', name: 'produto 2'
+        cart.addItem _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1
+        cart.addItem _id: '2', name: 'produto 2', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1
         cartView = new CartView el:el, store: store1
         cartView.render()
         cartView.removeById '2'
       it 'shows a cart items table with one item', ->
         expect($("#cartItems > tbody > tr", el).length).to.equal 1
       it 'shows the first item product id', ->
-        expect($("#cartItems > tbody > tr > td:first-child", el).text()).to.equal '1'
+        expect($("#cartItems .product", el).attr('data-id')).to.equal '1'
       it 'shows the first item name', ->
         expect($("#cartItems > tbody > tr > td:nth-child(2)", el).text()).to.equal 'produto 1'
     describe 'Clearing cart', ->
       before ->
         cart = Cart.get(store1.slug)
         cart.clear()
-        cart.addItem _id: '1', name: 'produto 1'
-        cart.addItem _id: '2', name: 'produto 2'
+        cart.addItem _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1
+        cart.addItem _id: '2', name: 'produto 2', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1
         cartView = new CartView el:el, store: store1
         cartView.render()
         $('#clearCart', el).trigger 'click'

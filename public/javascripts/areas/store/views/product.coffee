@@ -16,7 +16,7 @@ define [
         "click #product > #purchaseItem": 'purchase'
     purchase: ->
       @cart = Cart.get(@store.slug)
-      @cart.addItem _id: @product.get('_id'), name: @product.get('name')
+      @cart.addItem _id: @product.get('_id'), name: @product.get('name'), picture: @product.get('picture'), url: @product.get('url'), price: @product.get('price')
       Backbone.history.navigate '#cart', trigger: true
     render: ->
       @$el.empty()

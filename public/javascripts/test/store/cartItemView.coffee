@@ -11,7 +11,7 @@ define [
     describe 'Changing item quantity with valid values', ->
       changedCalled = false
       before ->
-        cartItemView = new CartItemView cartItem: {_id: '1', name:'prod 1', quantity: 2}
+        cartItemView = new CartItemView cartItem: {_id: '1', name:'prod 1', quantity: 2, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1 }
         cartItemView.changed -> changedCalled = true
         cartItemView.render()
         el.append cartItemView.$el
@@ -23,7 +23,7 @@ define [
     describe 'Changing item quantity with invalid values', ->
       changedCalled = false
       before ->
-        cartItemView = new CartItemView cartItem: {_id: '1', name:'prod 1', quantity: 2}
+        cartItemView = new CartItemView cartItem: {_id: '1', name:'prod 1', quantity: 2, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 11.1 }
         cartItemView.changed -> changedCalled = true
         cartItemView.render()
         el.append cartItemView.$el

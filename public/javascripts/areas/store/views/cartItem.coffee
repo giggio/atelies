@@ -19,8 +19,12 @@ define [
       "click .remove":'remove'
     bindings:
       ".quantity":"value:integerOr(quantity)"
-      "._id":"html:_id"
       ".name":"html:name"
+      ".picture":"attr:{src:picture}"
+      ".product":"attr:{'data-id':_id}"
+      ".nameLink":"attr:{href:url}"
+      ".pictureLink":"attr:{href:url}"
+      ".price":"html:price"
     template: cartItemTemplate
     render: ->
     remove: -> removed @cartItem for removed in @removedCallbacks
