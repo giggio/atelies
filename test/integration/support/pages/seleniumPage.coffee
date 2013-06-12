@@ -18,9 +18,10 @@ module.exports = class Page
         .usingServer('http://localhost:9515')
         .build()
       @driver.manage().timeouts().implicitlyWait 5000
-  visit: (url) ->
+  visit: (url, cb) ->
     url = @url unless url?
-    @driver.get "http://localhost:8000/#{url}"
+    promise = @driver.get "http://localhost:8000/#{url}"
+    promise.then cb if cb?
   closeBrowser: (cb = (->)) ->
     stopDriver = ->
       chromedriver.stop()

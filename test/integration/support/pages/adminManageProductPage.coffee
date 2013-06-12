@@ -2,11 +2,12 @@ $             = require 'jquery'
 Page          = require './seleniumPage'
 
 module.exports = class AdminManageProductPage extends Page
-  visit: (storeSlug, productId) ->
+  visit: (storeSlug, productId, cb) ->
     if typeof productId is 'string'
-      super "admin#manageProduct/#{storeSlug}/#{productId}"
+      super "admin#manageProduct/#{storeSlug}/#{productId}", cb
     else
-      super "admin#createProduct/#{storeSlug}"
+      cb = productId
+      super "admin#createProduct/#{storeSlug}", cb
        
   product: (cb) ->
     product = {}

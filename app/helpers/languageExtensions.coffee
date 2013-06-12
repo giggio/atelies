@@ -14,5 +14,4 @@ Function::partial = ->
     if arguments.length > pushedArgs
       for i in [pushedArgs..arguments.length - 1]
         args.push arguments[i]
-    console.log args
     fn.apply @, args

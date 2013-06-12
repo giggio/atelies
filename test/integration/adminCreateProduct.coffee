@@ -1,10 +1,12 @@
 require './support/_specHelper'
-Store     = require '../../app/models/store'
-Product   = require '../../app/models/product'
-User      = require '../../app/models/user'
+Store                       = require '../../app/models/store'
+Product                     = require '../../app/models/product'
+User                        = require '../../app/models/user'
+AdminManageProductPage      = new require './support/pages/adminManageProductPage'
+page                        = new AdminManageProductPage()
 
 describe 'Admin Create Product page', ->
-  page = product = store = userSeller = browser = page = null
+  product = store = userSeller = null
   before (done) ->
     cleanDB (error) ->
       return done error if error
@@ -15,44 +17,46 @@ describe 'Admin Create Product page', ->
         userSeller = generator.user.c()
         userSeller.stores.push store
         userSeller.save()
-        waitSeconds 3, -> done()
-  after -> browser.destroy() if browser?
+        done()
+  after (done) -> page.closeBrowser done
 
   describe 'cant create invalid product', ->
     before (done) ->
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      waitSeconds 10, -> browser.loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, ->
           page.setFieldsAs {name:'', price:'', picture: 'abc', height:'dd', width: 'ee', depth:'ff', weight: 'gg', inventory: 'hh'}, ->
             page.clickUpdateProduct done
-    it 'is at the product create page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
+    it 'is at the product create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
+        done()
     it 'did not create the product', (done) ->
       Product.find (err, products) ->
         return done err if err
         products.should.be.empty
         done()
-    it 'shows error messages', ->
-      page.errorMessageFor('name').should.equal 'O nome é obrigatório.'
-      page.errorMessageFor('price').should.equal 'O preço é obrigatório.'
-      page.errorMessageFor('picture').should.equal 'A imagem deve ser uma url.'
-      page.errorMessageFor('height').should.equal 'A altura deve ser um número.'
-      page.errorMessageFor('width').should.equal 'A largura deve ser um número.'
-      page.errorMessageFor('depth').should.equal 'A profundidade deve ser um número.'
-      page.errorMessageFor('weight').should.equal 'O peso deve ser um número.'
-      page.errorMessageFor('inventory').should.equal 'O estoque deve ser um número.'
+    it 'shows error messages', (done) ->
+      page.errorMessagesIn '#editProduct', (errorMsgs) ->
+        errorMsgs.name.should.equal 'O nome é obrigatório.'
+        errorMsgs.price.should.equal 'O preço é obrigatório.'
+        errorMsgs.picture.should.equal 'A imagem deve ser uma url.'
+        errorMsgs.height.should.equal 'A altura deve ser um número.'
+        errorMsgs.width.should.equal 'A largura deve ser um número.'
+        errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
+        errorMsgs.weight.should.equal 'O peso deve ser um número.'
+        errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
+        done()
 
   describe 'create product', ->
     before (done) ->
-      browser = newBrowser browser
-      page = browser.adminManageProductPage
-      browser.loginPage.navigateAndLoginWith userSeller, ->
+      page.loginFor userSeller._id, ->
         page.visit store.slug, ->
           page.setFieldsAs product, ->
             page.clickUpdateProduct done
-    it 'is at the store manage page', ->
-      browser.location.href.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        done()
     it 'created the product', (done) ->
       Product.find (err, productsOnDb) ->
         return done err if err
