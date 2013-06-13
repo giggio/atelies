@@ -17,7 +17,7 @@ module.exports = class Page
       @driver = new webdriver.Builder()
         .usingServer('http://localhost:9515')
         .build()
-      @driver.manage().timeouts().implicitlyWait 5000
+      @driver.manage().timeouts().implicitlyWait 1000
   visit: (url, cb) ->
     url = @url unless url?
     promise = @driver.get "http://localhost:8000/#{url}"
@@ -39,6 +39,7 @@ module.exports = class Page
               el.getText().then (text) -> errorMsgs[id] = text
     flow.then (-> cb(errorMsgs)), cb
   findElement: (selector) -> @driver.findElement(webdriver.By.css(selector))
+  findElements: (selector) -> @driver.findElements(webdriver.By.css(selector))
   clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
   type: (selector, text) -> @findElement(selector).type text
   check: (selector, cb = (->)) ->
@@ -48,8 +49,17 @@ module.exports = class Page
     el = @findElement selector
     el.isSelected().then (itIs) -> if itIs then el.click().then cb else process.nextTick cb
   getText: (selector, cb) -> @findElement(selector).getText().then cb
+  getTexts: (selector, cb) ->
+    texts = []
+    flow = webdriver.promise.createFlow (f) =>
+      @findElements(selector).then (els) ->
+        for el in els
+          do (el) -> f.execute -> el.getText().then (text) -> texts.push text
+        undefined
+    flow.then (-> cb(texts)), cb
   getAttribute: (selector, attribute, cb) -> @findElement(selector).getAttribute(attribute).then cb
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
+  getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
   clickLink: @::pressButton
@@ -65,7 +75,7 @@ module.exports = class Page
   wait: (fn, timeout, cb) ->
     @driver.wait fn, timeout
     process.nextTick cb
-  visitBlank: -> Page::visit.call @, 'blank'
+  visitBlank: (cb) -> Page::visit.call @, 'blank', cb
   loginFor: (_id, cb) ->
     @currentUrl (url) =>
       @visitBlank() unless url.substr(0,4) is 'http' #need the browser loaded to access cookies and have a session cookie id
@@ -80,3 +90,5 @@ module.exports = class Page
           auth.loggedIn = true
           sessionStore.set sessionId, session, cb
   eval: (script, cb) -> @driver.executeScript(script).then cb
+  clearLocalStorage: (cb) ->
+    @visitBlank => @eval 'localStorage.clear()', cb

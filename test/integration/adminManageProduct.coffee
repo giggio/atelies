@@ -2,7 +2,7 @@ require './support/_specHelper'
 Store                       = require '../../app/models/store'
 Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
-AdminManageProductPage      = new require './support/pages/adminManageProductPage'
+AdminManageProductPage      = require './support/pages/adminManageProductPage'
 page                        = new AdminManageProductPage()
 
 describe 'Admin Manage Product page', ->
