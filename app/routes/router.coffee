@@ -22,5 +22,5 @@ exports.route = (app) ->
   app.put     "/admin/:storeSlug/products/:productId",                      routes.adminProductUpdate
   app.delete  "/admin/:storeSlug/products/:productId",                      routes.adminProductDelete
   
-  app.get     "/:storeSlug",                                                routes.store
+  app.get     "/:storeSlug",                                                routes.store domain
   app.get     "/:storeSlug/:productSlug",                                   routes.product

@@ -113,7 +113,7 @@ class Routes
       subdomain = @_getSubdomain domain, req.host.toLowerCase()
       if subdomain?
         req.params.storeSlug = subdomain
-        return @store req, res
+        return @storeWithDomain req, res
       Product.find (err, products) ->
         dealWith err
         viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
@@ -122,14 +122,18 @@ class Routes
           res.render "index", products: viewModelProducts, stores: stores
     route
   
-  store: (req, res) ->
-    Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
-      dealWith err
-      return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
-      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-      res.render "store", store: store, products: viewModelProducts, (err, html) ->
-        #console.log html
-        res.send html
+  store: (domain) ->
+    @storeWithDomain = (req, res) =>
+      subdomain = @_getSubdomain domain, req.host.toLowerCase()
+      return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
+      Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
+        dealWith err
+        return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
+        viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+        res.render "store", store: store, products: viewModelProducts, (err, html) ->
+          #console.log html
+          res.send html
+    @storeWithDomain
   
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug, (err, products) ->
