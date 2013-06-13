@@ -3,11 +3,11 @@ Store                       = require '../../app/models/store'
 Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
 AdminManageProductPage      = require './support/pages/adminManageProductPage'
-page                        = new AdminManageProductPage()
 
 describe 'Admin Manage Product page', ->
-  product = product2 = store = userSeller = null
+  page = product = product2 = store = userSeller = null
   before (done) ->
+    page = new AdminManageProductPage()
     cleanDB (error) ->
       return done error if error
       whenServerLoaded ->

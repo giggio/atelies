@@ -2,12 +2,12 @@ require './support/_specHelper'
 Store                       = require '../../app/models/store'
 Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
-AdminManageProductPage      = new require './support/pages/adminManageProductPage'
-page                        = new AdminManageProductPage()
+AdminManageProductPage      = require './support/pages/adminManageProductPage'
 
 describe 'Admin Create Product page', ->
-  product = store = userSeller = null
+  page = product = store = userSeller = null
   before (done) ->
+    page = new AdminManageProductPage()
     cleanDB (error) ->
       return done error if error
       whenServerLoaded ->

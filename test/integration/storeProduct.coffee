@@ -2,12 +2,12 @@ require './support/_specHelper'
 Store                 = require '../../app/models/store'
 Product               = require '../../app/models/product'
 StoreProductPage      = require './support/pages/storeProductPage'
-page                  = new StoreProductPage()
 
 describe 'Store product page', ->
+  page = store = product1 = null
+  before -> page = new StoreProductPage()
   after (done) -> page.closeBrowser done
   describe 'regular product', ->
-    store = product1 = null
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -39,7 +39,6 @@ describe 'Store product page', ->
           itDoes.should.be.false
           done()
   describe 'store without banner', ->
-    store = product1 = null
     before (done) ->
       cleanDB (error) ->
         return done error if error

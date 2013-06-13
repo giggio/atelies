@@ -2,16 +2,16 @@ require './support/_specHelper'
 Store                           = require '../../app/models/store'
 Product                         = require '../../app/models/product'
 StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShippingPage'
-page                            = new StoreFinishOrderShippingPage()
 StoreCartPage                   = require './support/pages/storeCartPage'
-storeCartPage                   = new StoreCartPage page
 StoreProductPage                = require './support/pages/storeProductPage'
-storeProductPage                = new StoreProductPage page
 
 describe 'Store Finish Order: Shipping', ->
-  store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
+  page = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
   after (done) -> page.closeBrowser done
   before (done) =>
+    page = new StoreFinishOrderShippingPage()
+    storeCartPage = new StoreCartPage page
+    storeProductPage = new StoreProductPage page
     cleanDB (error) ->
       return done error if error
       store = generator.store.a()

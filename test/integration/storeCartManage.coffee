@@ -2,14 +2,14 @@ require './support/_specHelper'
 Store               = require '../../app/models/store'
 Product             = require '../../app/models/product'
 StoreCartPage       = require './support/pages/storeCartPage'
-page                = new StoreCartPage()
 StoreProductPage    = require './support/pages/storeProductPage'
-storeProductPage    = new StoreProductPage page
 
 describe 'Store shopping cart page (manage)', ->
-  store = product1 = product2 = store2 = product3 = null
+  page = storeProductPage = store = product1 = product2 = store2 = product3 = null
   after (done) -> page.closeBrowser done
   before (done) =>
+    page = new StoreCartPage()
+    storeProductPage = new StoreProductPage page
     cleanDB (error) ->
       return done error if error
       store = generator.store.a()
