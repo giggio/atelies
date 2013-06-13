@@ -4,9 +4,10 @@ define [
   'backboneValidation'
   './openModel'
   './openView'
+  './converters'
   'twitterBootstrap'
   'epoxy'
-], ($, _, Validation, OpenModel, OpenView) ->
+], ($, _, Validation, OpenModel, OpenView, converters) ->
   Validation.configure forceUpdate: true
   _.extend Validation.callbacks,
     valid: (view, attr, selector) ->
@@ -52,6 +53,7 @@ define [
   Backbone.Open.View = OpenView
   Backbone.Epoxy.binding.addFilter 'integerOr', (val) -> if $.isNumeric val then parseInt val else val
   Backbone.Epoxy.binding.addFilter 'decimalOr', (val) -> if $.isNumeric val then parseFloat val else val
+  Backbone.Epoxy.binding.addFilter 'currency', converters.currency
   Backbone.View::render = ->
   Backbone.View::close = ->
     try

@@ -72,6 +72,10 @@ describe 'Store shopping cart page', ->
       page.quantity (q) ->
         q.should.equal 2
         done()
+    it 'shows totals', (done) ->
+      page.totalPrice (totalPrice) ->
+        totalPrice.should.equal "R$ 22,20"
+        done()
   
   describe 'when working with a cart with products from different stores', ->
     before (done) =>

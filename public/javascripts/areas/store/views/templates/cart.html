@@ -1,11 +1,28 @@
-<div>
-  <h2>Carrinho da loja {{store.name}}</h2>
+<div id="cart">
+  <div>
+    <h2>Carrinho da loja {{store.name}}</h2>
+  </div>
+  {{#if hasItems}}
+  <table id="cartItems">
+    <thead>
+      <tr>
+        <th colspan="2">Produto</th>
+        <th>Qtd</th>
+        <th>Valor unitário</th>
+        <th>Valor total</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3"></td>
+        <td>Total:</td>
+        <td><span id="totalPrice"></span></td>
+      </tr>
+    </tfoot>
+  </table>
+  <button class="updateQuantity btn-primary">Atualizar quantidade</button>
+  {{/if}}
+  <button id="clearCart" class="btn-danger">Limpar carrinho</button>
 </div>
-{{#if hasItems}}
-<table id="cartItems">
-  <tbody>
-  </tbody>
-</table>
-<button class="updateQuantity btn-primary">Atualizar quantidade</button>
-{{/if}}
-<button id="clearCart" class="btn-danger">Limpar carrinho</button>

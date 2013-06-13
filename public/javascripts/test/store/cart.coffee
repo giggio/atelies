@@ -85,3 +85,16 @@ define [
       expect(items[0].quantity).to.equal 1
       expect(items[0]._id).to.equal 2
       expect(Cart.get('store_5').items().length).to.equal 1
+    it 'when two different products are added it has correct price', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      item2 = _id: 2, price: 12.1
+      cart.addItem item2
+      cart.totalPrice().should.equal 23.2
+    it 'when two different products are added it has correct price', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      cart.addItem item
+      cart.totalPrice().should.equal 22.2

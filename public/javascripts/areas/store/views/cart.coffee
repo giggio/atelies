@@ -6,7 +6,8 @@ define [
   '../models/cart'
   'text!./templates/cart.html'
   './cartItem'
-], ($, Backbone, Handlebars, Products, Cart, cartTemplate, CartItemView) ->
+  '../../../converters'
+], ($, Backbone, Handlebars, Products, Cart, cartTemplate, CartItemView, converters) ->
   class CartView extends Backbone.View
     events:
       'click #clearCart':'clear'
@@ -20,11 +21,13 @@ define [
       @$el.html context cartItems: cartItems, store: @store, hasItems: cartItems.length isnt 0
       @renderCartItems()
     renderCartItems: =>
-      for item in @cart.items()
+      items = @cart.items()
+      for item in items
         cartItemView = new CartItemView cartItem: item
         $('#cartItems > tbody', @$el).append cartItemView.$el
         cartItemView.removed @remove
         cartItemView.changed @change
+      $("#totalPrice", @$el).html converters.currency @cart.totalPrice()
     remove: (item) =>
       @removeById item._id
     removeById: (id) =>
@@ -32,6 +35,7 @@ define [
       @render()
     change: =>
       @cart.save()
+      @render()
     clear: =>
       @cart.clear()
       @render()

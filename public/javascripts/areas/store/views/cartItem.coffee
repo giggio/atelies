@@ -24,10 +24,13 @@ define [
       ".product":"attr:{'data-id':_id}"
       ".nameLink":"attr:{href:url}"
       ".pictureLink":"attr:{href:url}"
-      ".price":"html:price"
+      ".price":"html:currency(price)"
+      ".totalPrice":"html:currency(price)"
     template: cartItemTemplate
     render: ->
-    remove: -> removed @cartItem for removed in @removedCallbacks
+    remove: (e) ->
+      removed @cartItem for removed in @removedCallbacks
+      e.preventDefault()
     removed: (cb) -> @removedCallbacks.push cb
     removedCallbacks: []
     change: => callChanged @model for callChanged in @changedCallbacks

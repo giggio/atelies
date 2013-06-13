@@ -36,3 +36,8 @@ define ['underscore'], (_) ->
     removeById: (id) =>
       @_items = _.reject @_items, (item) -> item._id is id
       @save()
+    totalPrice: ->
+      total = _.chain(@_items)
+        .map((i)->i.price*i.quantity)
+        .reduce(((p, t) -> p+t), 0).value()
+      total

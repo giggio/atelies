@@ -14,3 +14,4 @@ module.exports = class StoreCartPage extends Page
       @eval "$('[data-id=#{product._id}] .updateQuantity').click()", cb
   clearCart: @::pressButton.partial "#clearCart"
   cartItemsExists: @::hasElement.partial '#cartItems'
+  totalPrice: @::getText.partial '#cart #totalPrice'
