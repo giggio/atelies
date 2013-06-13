@@ -22,6 +22,19 @@ db.users.insert
   isSeller: true
   stores: []
 userSeller = db.users.findOne email:'c@a.com'
+db.users.insert
+  email: 'd@a.com'
+  passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+  name: 'Joao Silva'
+  isSeller: false
+  stores: []
+  deliveryAddress:
+    street: 'Rua A'
+    street2: 'Aclimacao'
+    city: 'Sao Paulo'
+    state: 'SP'
+    zip: '01234-567'
+  phoneNumber: '+55 (11) 98765-4321'
 
 db.products.remove()
 db.products.insert

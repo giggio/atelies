@@ -11,6 +11,7 @@ define [
   class CartView extends Backbone.View
     events:
       'click #clearCart':'clear'
+      'click #finishOrder':'finishOrder'
     template: cartTemplate
     initialize: (opt) =>
       @store = opt.store
@@ -39,3 +40,5 @@ define [
     clear: =>
       @cart.clear()
       @render()
+    finishOrder: ->
+      Backbone.history.navigate '#finishOrder/shipping', trigger: true

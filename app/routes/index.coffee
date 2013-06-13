@@ -130,7 +130,16 @@ class Routes
         dealWith err
         return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
         viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-        res.render "store", store: store, products: viewModelProducts, (err, html) ->
+        user =
+          if req.user?
+            name: req.user.name
+            _id: req.user._id
+            email: req.user.email
+            deliveryAddress: req.user.deliveryAddress
+            phoneNumber: req.user.phoneNumber
+          else
+            undefined
+        res.render "store", {store: store, products: viewModelProducts, user: user}, (err, html) ->
           #console.log html
           res.send html
     @storeWithDomain

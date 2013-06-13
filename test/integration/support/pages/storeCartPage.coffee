@@ -16,3 +16,4 @@ module.exports = class StoreCartPage extends Page
   clearCart: @::pressButton.partial "#clearCart"
   cartItemsExists: @::hasElement.partial '#cartItems'
   totalPrice: @::getText.partial '#cart #totalPrice'
+  clickFinishOrder: @::pressButton.partial '#finishOrder'

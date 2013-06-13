@@ -4,7 +4,8 @@ append head
   script
     var storeBootstrapModel = {
       store:!{JSON.stringify(store)},
-      products:!{JSON.stringify(products)}
+      products:!{JSON.stringify(products)},
+      user:!{typeof(user)==='undefined'?'undefined':JSON.stringify(user)}
     }
   script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/storeBootstrap.js')
 

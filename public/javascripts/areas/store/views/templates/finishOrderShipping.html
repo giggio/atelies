@@ -1,0 +1,13 @@
+<div id="cart">
+  <div>
+    <h2>Endereço de entrega</h2>
+  </div>
+  {{#with user.deliveryAddress}}
+  <div id="deliveryAddress">
+    <div id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></div>
+    <div id="city">{{city}}</div>
+    <div id="state">{{state}}</div>
+  </div>
+  {{/with}}
+  <button id="finishOrder" class="btn btn-primary">Continuar</button>
+</div>

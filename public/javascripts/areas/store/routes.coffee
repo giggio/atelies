@@ -4,9 +4,11 @@ define [
   './views/store'
   './views/product'
   './views/cart'
+  './views/finishOrderShipping'
   './models/products'
   './models/store'
-],($, viewsManager, StoreView, ProductView, CartView, Products, Store) ->
+  './models/cart'
+],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, Products, Store, Cart) ->
   viewsManager.$el = $ '#app-container > .store'
   home: ->
     store = storeBootstrapModel.store
@@ -26,3 +28,8 @@ define [
     store = storeBootstrapModel.store
     cartView = new CartView store: store
     viewsManager.show cartView
+  finishOrderShipping: ->
+    store = storeBootstrapModel.store
+    user = storeBootstrapModel.user
+    finishOrderShippingView = new FinishOrderShippingView store: store, cart: Cart.get(store.slug), user: user
+    viewsManager.show finishOrderShippingView
