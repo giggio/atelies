@@ -13,6 +13,8 @@ define [
   describe 'CartView', ->
     describe 'Empty cart', ->
       before ->
+        cart = Cart.get(store1.slug)
+        cart.clear()
         cartView = new CartView el:el, store: store1
         cartView.render()
       it 'does not show the cart items table', ->
