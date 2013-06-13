@@ -36,6 +36,36 @@ define [
         $("#cartItems .totalPrice", el).text().should.equal 'R$ 1.234.567,10'
       it 'shows the total cart price', ->
         $("#cart #totalPrice", el).text().should.equal 'R$ 1.234.567,10'
+    describe 'One item cart with quantity two', ->
+      before ->
+        cart = Cart.get(store1.slug)
+        cart.clear()
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
+        cart.addItem item
+        cart.addItem item
+        cartView = new CartView el:el, store: store1
+        cartView.render()
+      it 'shows the product price', ->
+        $("#cartItems .price", el).text().should.equal 'R$ 1.234.567,10'
+      it 'shows the total price per unit', ->
+        $("#cartItems .totalPrice", el).text().should.equal 'R$ 2.469.134,20'
+      it 'shows the total cart price', ->
+        $("#cart #totalPrice", el).text().should.equal 'R$ 2.469.134,20'
+    describe 'Setting quantity', ->
+      before ->
+        cart = Cart.get(store1.slug)
+        cart.clear()
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
+        cart.addItem item
+        cartView = new CartView el:el, store: store1
+        cartView.render()
+        $('.quantity', el).val(2).change()
+      it 'shows the product price', ->
+        $("#cartItems .price", el).text().should.equal 'R$ 1.234.567,10'
+      it 'shows the total price per unit', ->
+        $("#cartItems .totalPrice", el).text().should.equal 'R$ 2.469.134,20'
+      it 'shows the total cart price', ->
+        $("#cart #totalPrice", el).text().should.equal 'R$ 2.469.134,20'
     describe 'Removing item', ->
       before ->
         cart = Cart.get(store1.slug)

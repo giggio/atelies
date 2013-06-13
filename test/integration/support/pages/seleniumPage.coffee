@@ -16,6 +16,7 @@ module.exports = class Page
       chromedriver.start()
       @driver = new webdriver.Builder()
         .usingServer('http://localhost:9515')
+        #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
         .build()
       @driver.manage().timeouts().implicitlyWait 1000
   visit: (url, cb) ->

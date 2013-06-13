@@ -13,7 +13,7 @@ define [
       Validation.bind @, selector: 'class'
       @model.on 'change', =>
         if @model.isValid()
-          @cartItem.quantity = @model.get 'quantity'
+          @cartItem.setQuantity @model.get 'quantity'
           @change()
     events:
       "click .remove":'remove'
@@ -25,7 +25,7 @@ define [
       ".nameLink":"attr:{href:url}"
       ".pictureLink":"attr:{href:url}"
       ".price":"html:currency(price)"
-      ".totalPrice":"html:currency(price)"
+      ".totalPrice":"html:currency(totalPrice)"
     template: cartItemTemplate
     render: ->
     remove: (e) ->

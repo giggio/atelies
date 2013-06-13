@@ -19,16 +19,24 @@ define ['underscore'], (_) ->
     _load: ->
       @_items = []
       previousSessionItems = localStorage.getItem "cartItems#{@storeSlug}"
-      if previousSessionItems? then @_items = JSON.parse previousSessionItems
+      if previousSessionItems?
+        @_items = JSON.parse previousSessionItems
+        @_constructItem item for item in @_items
     save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) =>
       if existingItem = _.findWhere @_items, { _id: item._id }
-        existingItem.quantity++
+        item = existingItem
+        item.setQuantity item.quantity + 1
       else
-        item.quantity = 1
+        @_constructItem item
+        item.setQuantity 1
         @_items.push item
       @save()
+    _constructItem: (item) ->
+      item.setQuantity = (q) ->
+        @quantity = q
+        @totalPrice = @quantity * @price
     clear: =>
       @_items = []
       localStorage.removeItem "cartItems#{@storeSlug}"

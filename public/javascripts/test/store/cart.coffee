@@ -25,24 +25,34 @@ define [
       expect(cart.items.length).to.equal 0
     it 'is restored with items from previous session', ->
       cart = Cart.get('store_1')
-      item = _id: 1
+      item = _id: 1, price: 1
       cart.addItem item
       Cart._carts = null
       newCart = Cart.get('store_1')
       expect(cart).not.to.equal newCart
-      expect(newCart.items()).to.be.like [item]
+      similar(newCart.items()[0], item).should.be.true
     it 'is restored with items from previous session and without other cart items', ->
       cart1 = Cart.get('store_1')
-      item1 = _id: 1
+      item1 = _id: 1, price: 1
       cart1.addItem item1
       cart2 = Cart.get('store_2')
-      item2 = _id: 2
+      item2 = _id: 2, price: 2
       cart2.addItem item2
       Cart._carts = null
       newCart1 = Cart.get('store_1')
-      expect(newCart1.items()).to.be.like [item1]
+      similar(newCart1.items()[0], item1).should.be.true
       newCart2 = Cart.get('store_2')
-      expect(newCart2.items()).to.be.like [item2]
+      similar(newCart2.items()[0], item2).should.be.true
+    it 'restored cart sets quantity', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      sameItem = _id: 1, price: 11.1
+      cart.addItem item
+      Cart._carts = null
+      newCart = Cart.get('store_1')
+      cart.addItem sameItem
+      expect(cart.items()[0].totalPrice).to.equal 22.2
+      cart.totalPrice().should.equal 22.2
     it 'has items', ->
       cart = Cart.get('store_1')
       item = _id: 1
@@ -63,6 +73,12 @@ define [
       cart.addItem item
       cart.addItem item
       expect(cart.items()[0].quantity).to.equal 2
+    it 'when two same products are added it shows correct total price', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.11
+      cart.addItem item
+      cart.addItem item
+      expect(cart.items()[0].totalPrice).to.equal 22.22
     it 'when two different products are added it shows correct quantity', ->
       cart = Cart.get('store_1')
       item = _id: 1
