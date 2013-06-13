@@ -58,23 +58,29 @@ describe 'Store shopping cart page', ->
       page.clearLocalStorage ->
         storeProductPage.visit 'store_1', 'name_1', ->
           storeProductPage.purchaseItem ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem done
+          storeProductPage.visit 'store_1', 'name_1', ->
+            storeProductPage.purchaseItem ->
+              storeProductPage.visit 'store_1', 'name_2', ->
+                storeProductPage.purchaseItem done
     it 'is at the cart location', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/store_1#cart"
         done()
     it 'shows a cart with one item', (done) ->
       page.itemsQuantity (q) ->
-        q.should.equal 1
+        q.should.equal 2
         done()
     it 'shows quantity of two', (done) ->
       page.quantity (q) ->
         q.should.equal 2
         done()
+    it 'shows total price for item with quantity of two', (done) ->
+      page.itemTotalPrice (p) ->
+        p.should.equal 'R$ 22,20'
+        done()
     it 'shows totals', (done) ->
       page.totalPrice (totalPrice) ->
-        totalPrice.should.equal "R$ 22,20"
+        totalPrice.should.equal "R$ 44,40"
         done()
   
   describe 'when working with a cart with products from different stores', ->
