@@ -3,12 +3,13 @@
     <h2>Endereço de entrega</h2>
   </div>
   {{#with user.deliveryAddress}}
-  <div id="deliveryAddress">
-    <div id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></div>
-    <div id="city">{{city}}</div>
-    <div id="state">{{state}}</div>
-    <div id="zip">{{zip}}</div>
-  </div>
+  <address id="deliveryAddress">
+    <span id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></span><br />
+    <span id="city">{{city}}</span><br />
+    <span id="state">{{state}}</span><br />
+    <span id="zip">{{zip}}</span>
+  </address>
   {{/with}}
+  <a id="updateProfile" class="btn btn-primary" href="/account/updateProfile">Atualizar cadastro</a>
   <button id="finishOrder" class="btn btn-primary">Continuar</button>
 </div>

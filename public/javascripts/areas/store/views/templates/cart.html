@@ -1,12 +1,13 @@
 <div id="cart">
   <div>
-    <h2>Carrinho da loja {{store.name}}</h2>
+    <h2>Carrinho</h2>
   </div>
+  <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
   {{#if hasItems}}
-  <table id="cartItems">
+  <table id="cartItems" class="table table-hover table-condensed">
     <thead>
       <tr>
-        <th colspan="2">Produto</th>
+        <th colspan="2">Produtos no carrinho</th>
         <th>Qtd</th>
         <th>Valor unitário</th>
         <th>Valor total</th>
@@ -17,13 +18,19 @@
     <tfoot>
       <tr>
         <td colspan="3"></td>
-        <td>Total:</td>
-        <td><span id="totalPrice"></span></td>
+        <td><strong>Total:</strong></td>
+        <td><strong><span id="totalPrice"></span></strong></td>
       </tr>
     </tfoot>
   </table>
-  <button id="clearCart" class="btn btn-danger">Limpar carrinho</button>
-  <button class="updateQuantity btn btn-primary">Atualizar quantidade</button>
-  <button id="finishOrder" class="btn btn-primary">Continuar</button>
+  <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
+  <div class="pull-right">
+    <button id="clearCart" class="btn btn-danger">Limpar carrinho</button>
+    <button class="updateQuantity btn btn-primary">Atualizar quantidade</button>
+    <button id="finishOrder" class="btn btn-primary">Continuar</button>
+  </div>
+  {{else}}
+  <h3>Carrinho vazio</h3>
+  <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
   {{/if}}
 </div>
