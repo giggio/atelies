@@ -11,5 +11,6 @@ define [
       'finishOrder/shipping': routes.finishOrderShipping
       'finishOrder/updateProfile': routes.finishOrderUpdateProfile
       'finishOrder/payment': routes.finishOrderPayment
+      'finishOrder/orderFinished': routes.finishOrderOrderFinished
     initialize: ->
       Backbone.history.start()
