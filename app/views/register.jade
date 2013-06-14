@@ -15,11 +15,11 @@ append content
         .control-group
           label.control-label Nome:
           .controls
-            input#name(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.")
+            input#name.span4(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.", maxlength="50")
         .control-group
           label.control-label Email:
           .controls
-            input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com")
+            input#email.span4(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com", maxlength="50")
         .control-group
           .controls
             input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
@@ -27,23 +27,23 @@ append content
         .control-group
           label.control-label Senha:
           .controls
-            input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+            input#password.span4(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", maxlength="50")
         .control-group
           label.control-label Confirme sua senha:
           .controls
-            input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password")
+            input#passwordVerify.span4(type='password', name='passwordVerify', title="A senha não confere.", matches="password", maxlength="50")
         .control-group
           label.control-label Endereço:
           .controls
-            input#deliveryStreet(type='text', name="deliveryStreet", value=userParams.deliveryAddress.street, class="", title="Informe sua rua.")
+            input#deliveryStreet.span6(type='text', name="deliveryStreet", value=userParams.deliveryAddress.street, title="Informe sua rua.", maxlength="50")
         .control-group
           label.control-label Endereço (complemento):
           .controls
-            input#deliveryStreet2(type='text', name="deliveryStreet2", value=userParams.deliveryAddress.street2, class="", title="Informe o complemento do seu endereço (apto, etc).")
+            input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=userParams.deliveryAddress.street2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
         .control-group
           label.control-label Cidade:
           .controls
-            input#deliveryCity(type='text', name="deliveryCity", value=userParams.deliveryAddress.city, class="", title="Informe sua cidade.")
+            input#deliveryCity.span4(type='text', name="deliveryCity", value=userParams.deliveryAddress.city, class="", title="Informe sua cidade.", maxlength="30")
         .control-group
           label.control-label Estado:
           .controls
@@ -76,9 +76,13 @@ append content
               option(selected="selected") SP
               option TO
         .control-group
+          label.control-label CEP:
+          .controls
+            input#deliveryZIP(type='text', name="deliveryZIP", value=userParams.deliveryZIP, title="Informe seu CEP.", placeholder="01234-567", maxlength="9")
+        .control-group
           label.control-label Telefone:
           .controls
-            input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, class="", title="Informe seu telefone.")
+            input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
         .control-group
           .controls
             input#register(type='submit',class='btn btn-primary', value='Cadastre-se')

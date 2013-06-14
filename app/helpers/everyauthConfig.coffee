@@ -68,6 +68,7 @@ exports.configure = (app) ->
         street2: req.body.deliveryStreet2
         city: req.body.deliveryCity
         state: req.body.deliveryState
+        zip: req.body.deliveryZIP
       phoneNumber: req.body.phoneNumber
   
   everyauth.everymodule.findUserById (req, userId, cb) ->

@@ -43,6 +43,7 @@ describe 'Store Finish Order: Shipping', ->
         a.street2.should.equal userAddress.street2
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
+        a.zip.should.equal userAddress.zip
         done()
 
   describe 'not logged in user', (done) ->

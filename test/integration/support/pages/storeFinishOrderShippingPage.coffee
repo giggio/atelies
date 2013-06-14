@@ -9,4 +9,5 @@ module.exports = class StoreCartPage extends Page
       => @getText "#deliveryAddress #street2", (t) -> address.street2 = t
       => @getText "#deliveryAddress #city", (t) -> address.city = t
       => @getText "#deliveryAddress #state", (t) -> address.state = t
+      => @getText "#deliveryAddress #zip", (t) -> address.zip = t
     ], (-> cb(address))

@@ -27,6 +27,6 @@ define [
         window.location = "/account/login?redirectTo=/#{@store.slug}#finishOrder/shipping"
         return true
       ad = @user.deliveryAddress
-      unless ad.street? and ad.state? and ad.city
+      unless ad.street? and ad.state? and ad.city and ad.zip
         Backbone.history.navigate 'finishOrder/updateProfile', trigger: true
         return true

@@ -32,7 +32,7 @@ describe 'Register', ->
     before (done) ->
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false, passwordVerify: 'abc123', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877'
+        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "abc123", isSeller: false, passwordVerify: 'abc123', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567'
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
@@ -59,6 +59,7 @@ describe 'Register', ->
         deliveryAddress.street.should.equal 'Rua A, 23'
         deliveryAddress.street2.should.equal 'ap 21'
         deliveryAddress.city.should.equal 'Sao Paulo'
+        deliveryAddress.zip.should.equal '01234-567'
         done()
   
   describe 'Can register as seller successfully with correct information', ->

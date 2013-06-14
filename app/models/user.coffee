@@ -13,6 +13,7 @@ userSchema = new mongoose.Schema
     street2:        String
     city:           String
     state:          String
+    zip:            String
   phoneNumber:    String
 
 userSchema.methods.createStore = ->
