@@ -9,5 +9,6 @@ define [
       'cart': routes.cart
       ':productSlug': routes.product
       'finishOrder/shipping': routes.finishOrderShipping
+      'finishOrder/updateProfile': routes.finishOrderUpdateProfile
     initialize: ->
       Backbone.history.start()
