@@ -8,6 +8,7 @@
           b.caret
         ul.dropdown-menu
           li: a#goChangePassword(href="/account/changePassword") Troque sua senha
+          li: a#goUpdateProfile(href="/account/updateProfile") Atualize seu cadastro
           li: a#logout(href="/account/logout") Sair
     else
       li: a#loginPop.pop(href="#") Entrar

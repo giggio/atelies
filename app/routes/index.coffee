@@ -4,10 +4,11 @@ Store           = require '../models/store'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
+values          = require '../helpers/values'
 
 class Routes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin'
+    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
 
   _auth: ->
@@ -26,18 +27,53 @@ class Routes
           throw new AccessDenied() unless req.loggedIn and req.user?.isSeller
           original.apply @, arguments
   
+  updateProfileShow: (req, res) ->
+    user = req.user
+    console.log 9999999
+    console.log values.states
+    res.render 'updateProfile', user:
+      name: user.name
+      deliveryStreet: user.deliveryAddress.street
+      deliveryStreet2: user.deliveryAddress.street2
+      deliveryCity: user.deliveryAddress.city
+      deliveryState: user.deliveryAddress.state
+      deliveryZIP: user.deliveryAddress.zip
+      phoneNumber: user.phoneNumber
+      isSeller: user.isSeller
+    , states: values.states
+
+  updateProfile: (req, res) ->
+    user = req.user
+    body = req.body
+    user.name = body.name
+    user.deliveryAddress.street = body.deliveryStreet
+    user.deliveryAddress.street2 = body.deliveryStreet2
+    user.deliveryAddress.city = body.deliveryCity
+    user.deliveryAddress.state = body.deliveryState
+    user.deliveryAddress.zip = body.deliveryZIP
+    user.phoneNumber = body.phoneNumber
+    user.isSeller = true if body.isSeller
+    user.save (error, user) =>
+      if error?
+        res.render 'updateProfile', errors: error.errors, user: body, states: values.states
+      else
+        res.redirect 'account/profileUpdated'
+
+  profileUpdated: (req, res) ->
+    res.render 'profileUpdated'
+  
   changePasswordShow: (req, res) ->
     res.render 'changePassword'
   
   changePassword: (req, res) ->
     user = req.user
     email = user.email.toLowerCase()
-    user.verifyPassword req.body.password, (err, succeeded) ->
-      dealWith err
+    user.verifyPassword req.body.password, (error, succeeded) ->
+      dealWith error
       if succeeded
         user.setPassword req.body.newPassword
         user.save (error, user) ->
-          dealWith err
+          dealWith error
           res.redirect 'account/passwordChanged'
       else
         res.render 'changePassword', errors: [ 'Senha inválida.' ]

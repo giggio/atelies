@@ -1,0 +1,50 @@
+extends homeLayout
+append head
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/loginBootstrap.js')
+append content
+  .container
+    h2 Atualize seu cadastro
+    if ('undefined' !== typeof errors && errors.length)
+      ul#errors
+        - each error in errors
+          li.error= error
+    form#updateProfileForm.validatable.form-horizontal(action='/account/updateProfile', method='post')
+      .control-group
+        label.control-label Nome:
+        .controls
+          input#name.span4(type='text', name="name", value=user.name, class="required", title="Informe seu nome.", maxlength="50")
+      unless user.isSeller
+        .control-group
+          .controls
+            input#isSeller(type='checkbox', name="isSeller", checked=user.isSeller)
+            | registrar-se como vendedor
+      p Os dados de endereço são opcionais no cadastro, mas são obrigatórios para completar uma compra.
+      .control-group
+        label.control-label Endereço:
+        .controls
+          input#deliveryStreet.span6(type='text', name="deliveryStreet", value=user.deliveryStreet, title="Informe sua rua.", maxlength="50")
+      .control-group
+        label.control-label Endereço (complemento):
+        .controls
+          input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=user.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
+      .control-group
+        label.control-label Cidade:
+        .controls
+          input#deliveryCity.span4(type='text', name="deliveryCity", value=user.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
+      .control-group
+        label.control-label Estado:
+        .controls
+          select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
+            each state in states
+              option(value=state, selected=state===user.deliveryState)= state
+      .control-group
+        label.control-label CEP:
+        .controls
+          input#deliveryZIP(type='text', name="deliveryZIP", value=user.deliveryZIP, title="Informe seu CEP.", placeholder="01234-567", maxlength="9")
+      .control-group
+        label.control-label Telefone:
+        .controls
+          input#phoneNumber(type='text', name="phoneNumber", value=user.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
+      .control-group
+        .controls
+          input#updateProfile(type='submit',class='btn btn-primary', value='Atualizar')

@@ -1,6 +1,7 @@
 path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
+values        = require './values'
 
 exports.configure = (app) ->
   everyauth.password.configure
@@ -42,7 +43,8 @@ exports.configure = (app) ->
           cb.fulfill(if succeeded then user else ["Login falhou"])
       cb
     registerLocals: (req, res) ->
-      userParams: deliveryAddress:{}
+      states: values.states
+      userParams: req.body
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
       cb = @Promise()
@@ -53,22 +55,32 @@ exports.configure = (app) ->
       cb
     registerUser: (newUserAttrs) ->
       cb = @Promise()
-      newUserAttrs[@loginKey()] = newUserAttrs[@loginKey()].toLowerCase()
       password = newUserAttrs.password
-      delete newUserAttrs.password
-      user = new User newUserAttrs
+      attrs =
+        name: newUserAttrs.name
+        email: newUserAttrs.email.toLowerCase()
+        isSeller: newUserAttrs.isSeller
+        deliveryAddress:
+          street: newUserAttrs.deliveryStreet
+          street2: newUserAttrs.deliveryStreet2
+          city: newUserAttrs.deliveryCity
+          state: newUserAttrs.deliveryState
+          zip: newUserAttrs.deliveryZIP
+        phoneNumber: newUserAttrs.phoneNumber
+      user = new User attrs
       user.setPassword password
       user.save (error, user) -> cb.fulfill(if error? then [error] else user)
       cb
+
     extractExtraRegistrationParams: (req) ->
       name: req.body.name
+      email: req.body.email
       isSeller: req.body.isSeller?
-      deliveryAddress:
-        street: req.body.deliveryStreet
-        street2: req.body.deliveryStreet2
-        city: req.body.deliveryCity
-        state: req.body.deliveryState
-        zip: req.body.deliveryZIP
+      deliveryStreet: req.body.deliveryStreet
+      deliveryStreet2: req.body.deliveryStreet2
+      deliveryCity: req.body.deliveryCity
+      deliveryState: req.body.deliveryState
+      deliveryZIP: req.body.deliveryZIP
       phoneNumber: req.body.phoneNumber
   
   everyauth.everymodule.findUserById (req, userId, cb) ->

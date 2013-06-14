@@ -32,49 +32,25 @@ append content
           label.control-label Confirme sua senha:
           .controls
             input#passwordVerify.span4(type='password', name='passwordVerify', title="A senha não confere.", matches="password", maxlength="50")
+        p Os dados de endereço são opcionais no registro, mas são obrigatórios para completar uma compra. Você não precisa preenchê-los agora, mas precisará preenchê-los antes de fechar sua primeira compra.
         .control-group
           label.control-label Endereço:
           .controls
-            input#deliveryStreet.span6(type='text', name="deliveryStreet", value=userParams.deliveryAddress.street, title="Informe sua rua.", maxlength="50")
+            input#deliveryStreet.span6(type='text', name="deliveryStreet", value=userParams.deliveryStreet, title="Informe sua rua.", maxlength="50")
         .control-group
           label.control-label Endereço (complemento):
           .controls
-            input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=userParams.deliveryAddress.street2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
+            input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=userParams.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
         .control-group
           label.control-label Cidade:
           .controls
-            input#deliveryCity.span4(type='text', name="deliveryCity", value=userParams.deliveryAddress.city, class="", title="Informe sua cidade.", maxlength="30")
+            input#deliveryCity.span4(type='text', name="deliveryCity", value=userParams.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
         .control-group
           label.control-label Estado:
           .controls
             select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
-              option AC
-              option AL
-              option AP
-              option AM
-              option BA
-              option CE
-              option DF
-              option ES
-              option GO
-              option MA
-              option MT
-              option MS
-              option MG
-              option PR
-              option PB
-              option PA
-              option PE
-              option PI
-              option RJ
-              option RN
-              option RS
-              option RO
-              option RR
-              option SC
-              option SE
-              option(selected="selected") SP
-              option TO
+              each state in states
+                option(value=state, selected=state===userParams.deliveryState)= state
         .control-group
           label.control-label CEP:
           .controls
