@@ -1,11 +1,14 @@
 require './support/_specHelper'
-Store     = require '../../app/models/store'
-User      = require '../../app/models/user'
+Store                     = require '../../app/models/store'
+User                      = require '../../app/models/user'
+AdminManageStorePage      = require './support/pages/adminManageStorePage'
 
 describe 'Admin create store page', ->
-  exampleStore = userSeller = browser = null
-  before (done) -> whenServerLoaded done
-  after -> browser.destroy() if browser?
+  page = exampleStore = userSeller = null
+  after (done) -> page.closeBrowser done
+  before (done) ->
+    page = new AdminManageStorePage()
+    whenServerLoaded done
   describe 'creates a store', (done) ->
     before (done) ->
       cleanDB (error) ->
@@ -13,16 +16,18 @@ describe 'Admin create store page', ->
         userSeller = generator.user.c()
         userSeller.save()
         exampleStore = generator.store.a()
-        browser = newBrowser browser
-        browser.loginPage.navigateAndLoginWith userSeller, ->
-          browser.adminManageStorePage.visit (error) ->
-            return done error if error
-            browser.adminManageStorePage.setFieldsAs exampleStore
-            browser.adminManageStorePage.clickUpdateStoreButton done
-    it 'is at the admin store page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
-    it 'shows store created message', ->
-      browser.text('#message').endsWith("Loja criada com sucesso").should.be.true
+        page.loginFor userSeller._id, ->
+          page.visit ->
+            page.setFieldsAs exampleStore, ->
+              page.clickUpdateStoreButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        done()
+    it 'shows store created message', (done) ->
+      page.message (msg) ->
+        msg.endsWith("Loja criada com sucesso").should.be.true
+        done()
     it 'created a new store with correct information', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
@@ -49,35 +54,37 @@ describe 'Admin create store page', ->
         done()
 
   describe 'does not create a store (missing or wrong info)', (done) ->
-    page = null
     before (done) ->
       cleanDB (error) ->
         return done error if error
         userSeller = generator.user.c()
         userSeller.save()
-        browser = newBrowser browser
         exampleStore = generator.store.empty()
-        browser.loginPage.navigateAndLoginWith userSeller, ->
-          page = browser.adminManageStorePage
-          page.visit (error) ->
-            return done error if error
+        page.loginFor userSeller._id, ->
+          page.visit ->
             exampleStore.banner = "abc"
             exampleStore.email = "bla"
             exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
-            page.setFieldsAs exampleStore
-            page.clickUpdateStoreButton done
-    it 'is at the store create page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#createStore"
-    it 'does not show store created message', ->
-      expect(browser.query('#message')).to.be.null
-    it 'shows validation messages', ->
-      page.errorMessageFor('name').should.equal "Informe o nome da loja."
-      page.errorMessageFor('email').should.equal "O e-mail deve ser válido."
-      page.errorMessageFor('city').should.equal "Informe a cidade."
-      page.errorMessageFor('banner').should.equal "Informe um link válido para o banner, começando com http ou https."
-      page.errorMessageFor('flyer').should.equal "Informe um link válido para o flyer, começando com http ou https."
-      page.errorMessageFor('otherUrl').should.equal "Informe um link válido para o outro site, começando com http ou https."
+            page.setFieldsAs exampleStore, ->
+              page.clickUpdateStoreButton done
+    it 'is at the store create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#createStore"
+        done()
+    it 'does not show store created message', (done) ->
+      page.hasMessage (itDoes) ->
+        itDoes.should.be.false
+        done()
+    it 'shows validation messages', (done) ->
+      page.errorMessagesIn "#manageStoreBlock", (msgs) ->
+        msgs.name.should.equal "Informe o nome da loja."
+        msgs.email.should.equal "O e-mail deve ser válido."
+        msgs.city.should.equal "Informe a cidade."
+        msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
+        msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
+        msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
+        done()
     it 'did not create a store with missing info', (done) ->
       Store.find (error, stores) ->
         return done error if error

@@ -1,7 +1,6 @@
 Browser                 = require 'zombie'
 HomePage                = require './pages/homePage'
 StoreHomePage           = require './pages/storeHomePage'
-AdminManageStorePage    = require './pages/adminManageStorePage'
 AdminHomePage           = require './pages/adminHomePage'
 LoginPage               = require './pages/loginPage'
 RegisterPage            = require './pages/registerPage'
@@ -37,7 +36,6 @@ exports.newBrowser = (browser) ->
   browser.clickLinkWait = exports.clickLinkWait
   browser.homePage = new HomePage browser
   browser.storeHomePage = new StoreHomePage browser
-  browser.adminManageStorePage = new AdminManageStorePage browser
   browser.adminHomePage = new AdminHomePage browser
   browser.loginPage = new LoginPage browser
   browser.changePasswordPage = new ChangePasswordPage browser

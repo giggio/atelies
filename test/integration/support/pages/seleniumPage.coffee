@@ -1,6 +1,7 @@
 webdriver       = require 'selenium-webdriver'
 chromedriver    = require 'chromedriver'
-connectUtils = require 'express/node_modules/connect/lib/utils'
+connectUtils    = require 'express/node_modules/connect/lib/utils'
+_               = require 'underscore'
 
 webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text
@@ -43,6 +44,17 @@ module.exports = class Page
   findElements: (selector) -> @driver.findElements(webdriver.By.css(selector))
   clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
   type: (selector, text) -> @findElement(selector).type text
+  select: (selector, text, cb) ->
+    @findElement(selector).findElements(webdriver.By.tagName('option')).then (els) ->
+      elsWithText = []
+      flow = webdriver.promise.createFlow (f) ->
+        for el in els
+          do (el) -> f.execute -> el.getText().then (text) -> elsWithText.push {text: text, el: el}
+        undefined
+      flow.then ->
+        _.findWhere(elsWithText, text:text).el.click().then cb
+      , cb
+
   check: (selector, cb = (->)) ->
     el = @findElement selector
     el.isSelected().then (itIs) -> if itIs then process.nextTick cb else el.click().then cb

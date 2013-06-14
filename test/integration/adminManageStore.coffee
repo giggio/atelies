@@ -1,11 +1,14 @@
 require './support/_specHelper'
-Store     = require '../../app/models/store'
-User      = require '../../app/models/user'
+Store                     = require '../../app/models/store'
+User                      = require '../../app/models/user'
+AdminManageStorePage      = require './support/pages/adminManageStorePage'
 
 describe 'Admin manage store page', ->
-  exampleStore = otherStore = userSeller = browser = null
-  before (done) -> whenServerLoaded done
-  after -> browser.destroy() if browser?
+  page = exampleStore = otherStore = userSeller = null
+  after (done) -> page.closeBrowser done
+  before (done) ->
+    page = new AdminManageStorePage()
+    whenServerLoaded done
   describe 'updates a store', (done) ->
     before (done) ->
       cleanDB (error) ->
@@ -16,16 +19,19 @@ describe 'Admin manage store page', ->
         userSeller.save()
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
-        browser = newBrowser browser
-        browser.loginPage.navigateAndLoginWith userSeller, ->
-          browser.adminManageStorePage.visit exampleStore._id.toString(), (error) ->
+        page.loginFor userSeller._id, ->
+          page.visit exampleStore._id.toString(), (error) ->
             return done error if error
-            browser.adminManageStorePage.setFieldsAs otherStore
-            browser.adminManageStorePage.clickUpdateStoreButton done
-    it 'is at the admin store page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
-    it 'shows store updated message', ->
-      browser.text('#message').endsWith("Loja atualizada com sucesso").should.be.true
+            page.setFieldsAs otherStore, ->
+              page.clickUpdateStoreButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
+        done()
+    it 'shows store updated message', (done) ->
+      page.message (msg) ->
+        msg.endsWith("Loja atualizada com sucesso").should.be.true
+        done()
     it 'created a new store with correct information', (done) ->
       Store.find (error, stores) ->
         return done error if error
@@ -54,37 +60,40 @@ describe 'Admin manage store page', ->
         done()
 
   describe 'does not update a store (missing or wrong info)', (done) ->
-    page = null
     before (done) ->
       cleanDB (error) ->
         return done error if error
         userSeller = generator.user.c()
         userSeller.save()
-        browser = newBrowser browser
         exampleStore = generator.store.a()
         exampleStore.save()
         emptyStore = generator.store.empty()
-        browser.loginPage.navigateAndLoginWith userSeller, ->
-          page = browser.adminManageStorePage
+        page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), (error) ->
             return done error if error
             emptyStore.banner = "abc"
             emptyStore.email = "bla"
             emptyStore.flyer = "mng"
             emptyStore.otherUrl = "def"
-            page.setFieldsAs emptyStore
-            page.clickUpdateStoreButton done
-    it 'is at the store manage page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
-    it 'does not show store updated message', ->
-      expect(browser.query('#message')).to.be.null
-    it 'shows validation messages', ->
-      page.errorMessageFor('name').should.equal "Informe o nome da loja."
-      page.errorMessageFor('email').should.equal "O e-mail deve ser válido."
-      page.errorMessageFor('city').should.equal "Informe a cidade."
-      page.errorMessageFor('banner').should.equal "Informe um link válido para o banner, começando com http ou https."
-      page.errorMessageFor('flyer').should.equal "Informe um link válido para o flyer, começando com http ou https."
-      page.errorMessageFor('otherUrl').should.equal "Informe um link válido para o outro site, começando com http ou https."
+            page.setFieldsAs emptyStore, ->
+              page.clickUpdateStoreButton done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
+        done()
+    it 'does not show store updated message', (done) ->
+      page.hasMessage (itDoes) ->
+        itDoes.should.be.false
+        done()
+    it 'shows validation messages', (done) ->
+      page.errorMessagesIn "#manageStoreBlock", (msgs) ->
+        msgs.name.should.equal "Informe o nome da loja."
+        msgs.email.should.equal "O e-mail deve ser válido."
+        msgs.city.should.equal "Informe a cidade."
+        msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
+        msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
+        msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
+        done()
     it 'did not update the store with wrong info', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
