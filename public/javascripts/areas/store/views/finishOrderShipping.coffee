@@ -21,7 +21,7 @@ define [
       context = Handlebars.compile @template
       @$el.html context user: @user
     finishOrder: ->
-      Backbone.history.navigate 'finishOrder/shipping', trigger: true
+      Backbone.history.navigate 'finishOrder/payment', trigger: true
     _redirectIfUserNotSatisfied: ->
       if @user is undefined
         window.location = "/account/login?redirectTo=/#{@store.slug}#finishOrder/shipping"

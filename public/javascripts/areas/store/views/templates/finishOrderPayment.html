@@ -1,0 +1,25 @@
+<div id="storeFinishOrderPayment">
+  <div>
+    <h2>Pagamento</h2>
+  </div>
+
+  {{#with orderSummary}}
+  <div id="orderSummary">
+    <div id="shippingCost">{{shippingCost}}</div>
+    <div id="productsInfo">{{productsInfo}}</div>
+    <div id="totalProductsPrice">{{totalProductsPrice}}</div>
+    <div id="totalSaleAmount">{{totalSaleAmount}}</div>
+  </div>
+  {{/with}}
+    
+  {{#with user.deliveryAddress}}
+  <address id="deliveryAddress">
+    <span id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></span><br />
+    <span id="city">{{city}}</span><br />
+    <span id="state">{{state}}</span><br />
+    <span id="zip">{{zip}}</span>
+  </address>
+  {{/with}}
+  <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
+  <button id="finishOrder" class="btn btn-primary">Concluir a compra</button>
+</div>

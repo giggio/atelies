@@ -10,5 +10,6 @@ define [
       ':productSlug': routes.product
       'finishOrder/shipping': routes.finishOrderShipping
       'finishOrder/updateProfile': routes.finishOrderUpdateProfile
+      'finishOrder/payment': routes.finishOrderPayment
     initialize: ->
       Backbone.history.start()

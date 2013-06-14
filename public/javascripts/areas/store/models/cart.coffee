@@ -49,3 +49,5 @@ define ['underscore'], (_) ->
         .map((i)->i.price*i.quantity)
         .reduce(((p, t) -> p+t), 0).value()
       total
+    shippingCost: -> 1
+    totalSaleAmount: -> @totalPrice() + @shippingCost()
