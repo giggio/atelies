@@ -60,7 +60,7 @@ describe 'Store Finish Order: Payment', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
         done()
 
-  describe 'completing payment', ->
+  describe.only 'completing payment', ->
     before (done) ->
       page.clearCookies ->
         page.clearLocalStorage ->
@@ -86,6 +86,7 @@ describe 'Store Finish Order: Payment', ->
         order.shippingCost.should.equal 1
         order.totalProductsPrice.should.equal product1.price+product2.price*2
         order.totalSaleAmount.should.equal order.totalProductsPrice+order.shippingCost
+        order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()
         p1 = order.items[0]
         p2 = order.items[1]
         p1.product.toString().should.equal product1._id.toString()

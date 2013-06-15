@@ -9,6 +9,13 @@ describe 'Order', ->
     order = store = user = p1 = p2 = shippingCost = null
     before (done) ->
       user = new User()
+      deliveryAddress =
+        street: 'a'
+        street2: 'b'
+        city: 'c'
+        state: 'SP'
+        zip: '12345-678'
+      user.deliveryAddress = deliveryAddress
       store = new Store()
       p1 = new Product price: 10
       p2 = new Product price: 20
@@ -29,6 +36,8 @@ describe 'Order', ->
       order.totalSaleAmount.should.equal 51
     it 'has correct date', ->
       (new Date() - order.orderDate).should.be.below 2000
+    it 'has delivery address', ->
+      order.deliveryAddress.toJSON().should.be.like user.deliveryAddress.toJSON()
     it 'has items', ->
       items = order.items
       items.length.should.equal 2

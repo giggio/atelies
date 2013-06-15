@@ -14,6 +14,12 @@ orderSchema = new mongoose.Schema
   totalSaleAmount:            type: Number, required: true
   orderDate:                  type: Date, required: true, default: Date.now
   customer:                   type: mongoose.Schema.Types.ObjectId, ref: 'user'
+  deliveryAddress:
+    street:         String
+    street2:        String
+    city:           String
+    state:          String
+    zip:            String
 
 orderSchema.methods.toSimpleOrder = ->
   items = _.map @items, (i) ->
@@ -34,6 +40,7 @@ Order.create = (user, store, items, shippingCost, cb) ->
     order.items.push product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity
   order.totalProductsPrice = _.chain(order.items).map((i)->i.totalPrice).reduce(((p, i) -> p+i), 0).value()
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
+  order.deliveryAddress = user.deliveryAddress
   process.nextTick -> cb order
 
 module.exports = Order
