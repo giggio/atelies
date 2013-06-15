@@ -30,8 +30,7 @@ class Routes
   
   updateProfileShow: (req, res) ->
     user = req.user
-    console.log 9999999
-    console.log values.states
+    redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
     res.render 'updateProfile', user:
       name: user.name
       deliveryStreet: user.deliveryAddress.street
@@ -41,7 +40,7 @@ class Routes
       deliveryZIP: user.deliveryAddress.zip
       phoneNumber: user.phoneNumber
       isSeller: user.isSeller
-    , states: values.states
+    , states: values.states, redirectTo: redirectTo
 
   updateProfile: (req, res) ->
     user = req.user
@@ -58,10 +57,11 @@ class Routes
       if error?
         res.render 'updateProfile', errors: error.errors, user: body, states: values.states
       else
-        res.redirect 'account/profileUpdated'
+        redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
+        res.redirect "account/profileUpdated#{redirectTo}"
 
   profileUpdated: (req, res) ->
-    res.render 'profileUpdated'
+    res.render 'profileUpdated', redirectTo: req.query.redirectTo
   
   changePasswordShow: (req, res) ->
     res.render 'changePassword'

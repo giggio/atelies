@@ -3,7 +3,8 @@ define [
   'areas/store/routes'
 ],
 (Backbone, routes) ->
-  class Router extends Backbone.Router
+  class Router extends Backbone.Open.Router
+    _routes: routes
     routes:
       '': routes.home
       'cart': routes.cart
@@ -12,5 +13,3 @@ define [
       'finishOrder/updateProfile': routes.finishOrderUpdateProfile
       'finishOrder/payment': routes.finishOrderPayment
       'finishOrder/orderFinished': routes.finishOrderOrderFinished
-    initialize: ->
-      Backbone.history.start()

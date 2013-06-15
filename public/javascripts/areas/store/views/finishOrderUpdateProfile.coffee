@@ -12,7 +12,8 @@ define [
     template: finishOrderUpdateProfileTemplate
     initialize: (opt) =>
       @user = opt.user
+      @store = opt.store
     render: =>
       context = Handlebars.compile @template
-      @$el.html context user: @user
-      setTimeout (-> window.location = "/account/updateProfile"), 10000
+      @$el.html context user: @user, storeSlug: @store.slug
+      setTimeout (=> window.location = "/account/updateProfile?redirectTo=/#{@store.slug}%23finishOrder/shipping"), 10000

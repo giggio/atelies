@@ -8,7 +8,7 @@ append content
       ul#errors
         - each error in errors
           li.error= error
-    form#updateProfileForm.validatable.form-horizontal(action='/account/updateProfile', method='post')
+    form#updateProfileForm.validatable.form-horizontal(action='/account/updateProfile#{redirectTo}', method='post')
       .control-group
         label.control-label Nome:
         .controls

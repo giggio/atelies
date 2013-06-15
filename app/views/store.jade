@@ -6,7 +6,10 @@ append head
       store:!{JSON.stringify(store)},
       products:!{JSON.stringify(products)},
       user:!{typeof(user)==='undefined'?'undefined':JSON.stringify(user)}
-    }
+    };
+  if typeof(bootstrapedRedirect) !== 'undefined'
+    script 
+      var boostrapedRedirect = '!{bootstrapedRedirect}';
   script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/storeBootstrap.js')
 
 append content

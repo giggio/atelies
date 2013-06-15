@@ -59,6 +59,11 @@ module.exports = class Page
         _.findWhere(elsWithText, text:text).el.click().then cb
       , cb
 
+  checkOrUncheck: (selector, check, cb) ->
+    if check
+      @check selector, cb
+    else
+      @uncheck selector, cb
   check: (selector, cb = (->)) ->
     el = @findElement selector
     el.isSelected().then (itIs) -> if itIs then process.nextTick cb else el.click().then cb

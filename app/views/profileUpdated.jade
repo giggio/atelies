@@ -5,3 +5,7 @@ append content
       button.close(data-dismiss="alert") x
       strong Muito bem!
       | &nbsp;Seu perfil foi atualizado com sucesso!
+      if typeof(redirectTo) !== 'undefined'
+        p Você será redirecionado em instantes para a página de origem. Ou <a id="redirectTo" href="#{redirectTo}">clique aqui</a> e seja redirecionado agora.
+        script
+          setTimeout(function() {window.location="#{redirectTo}"}, 5000);
