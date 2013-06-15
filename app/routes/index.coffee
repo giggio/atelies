@@ -1,6 +1,7 @@
 Product         = require '../models/product'
 User            = require '../models/user'
 Store           = require '../models/store'
+Order           = require '../models/order'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
@@ -8,7 +9,7 @@ values          = require '../helpers/values'
 
 class Routes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated'
+    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
 
   _auth: ->
@@ -240,5 +241,36 @@ class Routes
       dealWith err
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
+
+  orderCreate: (req, res) ->
+    user = req.user
+    Store.findById req.params.storeId, (err, store) ->
+      dealWith err
+      shippingCost = 1
+      items = []
+      errors = []
+      for item in req.body.items
+        do (item) ->
+          Product.findById item._id, (err, prod) ->
+            if err
+              errors.push err
+            else
+              items.push product: prod, quantity: item.quantity
+      foundProducts = ->
+        if errors.length + items.length is req.body.items.length
+          if errors.length > 0
+            res.json 400, errors
+          Order.create user, store, items, shippingCost, (order) ->
+            order.save (err, order) ->
+              for item in items
+                item.product.inventory--
+                item.product.save()
+              if err?
+                res.json 400, err
+              else
+                res.json 201, order.toSimpleOrder()
+        else
+          setImmediate foundProducts
+      process.nextTick foundProducts
 
 module.exports = Routes

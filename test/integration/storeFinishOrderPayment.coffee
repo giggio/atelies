@@ -1,6 +1,6 @@
 require './support/_specHelper'
-Store                           = require '../../app/models/store'
 Product                         = require '../../app/models/product'
+Order                           = require '../../app/models/order'
 StoreFinishOrderPaymentPage     = require './support/pages/storeFinishOrderPaymentPage'
 StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShippingPage'
 StoreCartPage                   = require './support/pages/storeCartPage'
@@ -60,7 +60,7 @@ describe 'Store Finish Order: Payment', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
         done()
 
-  xdescribe 'completing payment', ->
+  describe 'completing payment', ->
     before (done) ->
       page.clearCookies ->
         page.clearLocalStorage ->
@@ -69,26 +69,40 @@ describe 'Store Finish Order: Payment', ->
               storeProductPage.purchaseItem ->
                 storeProductPage.visit 'store_1', 'name_2', ->
                   storeProductPage.purchaseItem ->
-                    storeCartPage.clickFinishOrder ->
-                      storeFinishOrderShipping.clickContinue ->
-                        page.clickCompleteOrder done
+                    storeCartPage.updateQuantity product2, 2, ->
+                      storeCartPage.clickFinishOrder ->
+                        storeFinishOrderShippingPage.clickContinue ->
+                          page.clickCompleteOrder ->
+                            page.waitForUrl "http://localhost:8000/#{store.slug}#finishOrder/orderFinished", ->
+                              waitSeconds 1, done
     it 'should show have stored a new order on db', (done) ->
-      Order.find (orders) ->
+      Order.find (err, orders) ->
+        throw err if err
         orders.length.should.equal 1
         order = orders[0]
-        order.customer.should.equal user1
-        order.products.length.should.equal 2
-        p1 = order.products[0]
-        p2 = order.products[1]
-        p1._id.should.equal product1._id
-        p1.quantity.should.equal 1
-        p1.name.should.equal product1.name
+        order.customer.toString().should.equal user1._id.toString()
+        order.store.toString().should.equal store._id.toString()
+        order.items.length.should.equal 2
+        order.shippingCost.should.equal 1
+        order.totalProductsPrice.should.equal product1.price+product2.price*2
+        order.totalSaleAmount.should.equal order.totalProductsPrice+order.shippingCost
+        p1 = order.items[0]
+        p2 = order.items[1]
+        p1.product.toString().should.equal product1._id.toString()
         p1.price.should.equal product1.price
+        p1.quantity.should.equal 1
+        p1.totalPrice.should.equal product1.price
+        p2.product.toString().should.equal product2._id.toString()
+        p2.price.should.equal product2.price
+        p2.quantity.should.equal 2
+        p2.totalPrice.should.equal product2.price * 2
         done()
     it 'should have subtracted one item from the inventory of each product', (done) ->
-      Product.findById product1._id, (p1) ->
+      Product.findById product1._id, (err, p1) ->
+        throw err if err
         p1.inventory.should.equal p1Inventory - 1
-        Product.findById product2._id, (p2) ->
+        Product.findById product2._id, (err, p2) ->
+          throw err if err
           p2.inventory.should.equal p2Inventory - 1
           done()
     it 'should be at order completed page', (done) ->

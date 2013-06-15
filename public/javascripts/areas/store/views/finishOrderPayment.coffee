@@ -5,10 +5,11 @@ define [
   'handlebars'
   '../models/products'
   '../models/cart'
+  '../models/orders'
   'text!./templates/finishOrderPayment.html'
   './cartItem'
   '../../../converters'
-], ($, _, Backbone, Handlebars, Products, Cart, finishOrderPaymentTemplate, CartItemView, converters) ->
+], ($, _, Backbone, Handlebars, Products, Cart, Orders, finishOrderPaymentTemplate, CartItemView, converters) ->
   class FinishOrderPayment extends Backbone.View
     events:
       'click #finishOrder':'finishOrder'
@@ -27,4 +28,10 @@ define [
       context = Handlebars.compile @template
       @$el.html context user: @user, cart: @cart, store: @store, orderSummary: orderSummary
     finishOrder: ->
-      Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
+      items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
+      orders = new Orders storeId: @store._id
+      success = =>
+        @cart.clear()
+        Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
+      error = => #console.error 'Erro ao salvar'
+      order = orders.create items:items, {error: error, success: success}

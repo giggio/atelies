@@ -15,6 +15,18 @@ orderSchema = new mongoose.Schema
   orderDate:                  type: Date, required: true, default: Date.now
   customer:                   type: mongoose.Schema.Types.ObjectId, ref: 'user'
 
+orderSchema.methods.toSimpleOrder = ->
+  items = _.map @items, (i) ->
+    _id: i.product.toString()
+    price: i.price,
+    quantity: i.quantity
+    totalPrice: i.totalPrice
+  _id: @_id
+  totalProductsPrice: @totalProductsPrice
+  shippingCost: @shippingCost
+  totalSaleAmount: @totalSaleAmount
+  orderDate: @orderDate
+  items: items
 Order = mongoose.model 'order', orderSchema
 Order.create = (user, store, items, shippingCost, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
