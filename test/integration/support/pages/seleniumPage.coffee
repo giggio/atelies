@@ -6,6 +6,9 @@ _               = require 'underscore'
 webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text
 
+before -> chromedriver.start()
+after -> chromedriver.stop()
+
 module.exports = class Page
   constructor: (url, page) ->
     [url, page] = [page, url] if url instanceof Page
@@ -14,7 +17,6 @@ module.exports = class Page
     if driver?
       @driver = driver
     else
-      chromedriver.start()
       @driver = new webdriver.Builder()
         .usingServer('http://localhost:9515')
         #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
@@ -24,11 +26,7 @@ module.exports = class Page
     url = @url unless url?
     promise = @driver.get "http://localhost:8000/#{url}"
     promise.then cb if cb?
-  closeBrowser: (cb = (->)) ->
-    stopDriver = ->
-      chromedriver.stop()
-      cb()
-    @driver.quit().then stopDriver, cb
+  closeBrowser: (cb = (->)) -> @driver.quit().then cb, cb
   errorMessageFor: (field, cb) -> @getText "##{field} ~ .tooltip .tooltip-inner", cb
   errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
   errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) ->
