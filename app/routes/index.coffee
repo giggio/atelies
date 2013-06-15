@@ -9,7 +9,7 @@ values          = require '../helpers/values'
 
 class Routes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate'
+    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
 
   _auth: ->
@@ -273,5 +273,8 @@ class Routes
         else
           setImmediate foundProducts
       process.nextTick foundProducts
+
+  account: (req, res) ->
+    res.render 'account', user:req.user
 
 module.exports = Routes

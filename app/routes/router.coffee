@@ -12,6 +12,7 @@ exports.route = (app) ->
   #misc
   app.get     "/blank",                                                     routes.blank
   #account
+  app.get     "/account",                                                   routes.account
   app.get     "/account/changePassword",                                    routes.changePasswordShow
   app.post    "/account/changePassword",                                    routes.changePassword
   app.get     "/account/passwordChanged",                                   routes.passwordChanged

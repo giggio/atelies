@@ -1,6 +1,7 @@
 Product   = require '../../app/models/product'
 Store     = require '../../app/models/store'
 User      = require '../../app/models/user'
+Order     = require '../../app/models/order'
 
 exports.generator =
   product:
@@ -200,3 +201,18 @@ exports.generator =
         phoneNumber: '+55 (11) 98765-4321'
       user.password = 'abc'
       user
+  order:
+    a: -> new Order
+      store: exports.generator.store.a()
+      items: [
+        product: exports.generator.product.a()
+        price: exports.generator.product.a().price
+        quantity: 1
+        totalPrice: exports.generator.product.a().price
+      ]
+      totalProductsPrice: exports.generator.product.a().price
+      shippingCost: 1
+      totalSaleAmount: exports.generator.product.a().price + 1
+      orderDate: new Date(2013, 0, 1)
+      customer: exports.generator.user.d()
+      deliveryAddress: exports.generator.user.d().deliveryAddress

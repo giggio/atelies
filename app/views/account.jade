@@ -1,0 +1,13 @@
+extends homeLayout
+
+append head
+  script
+    var accountBootstrapModel = {
+      user:!{JSON.stringify(user)}
+    };
+  script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/accountBootstrap.js')
+
+append content
+  .container.accountContainer
+    section#app-container
+      .account Carregando...

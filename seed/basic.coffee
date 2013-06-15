@@ -35,6 +35,7 @@ db.users.insert
     state: 'SP'
     zip: '01234-567'
   phoneNumber: '+55 (11) 98765-4321'
+user1 = db.users.findOne email:'d@a.com'
 
 db.products.remove()
 db.products.insert
@@ -54,6 +55,7 @@ db.products.insert
   weight: 40
   hasInventory: true
   inventory: 30
+product1 = db.products.findOne name:'name 1'
 db.products.insert
   name: 'name 2'
   nameKeywords: ['name', '2']
@@ -193,7 +195,8 @@ db.stores.insert
   state: "SP"
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats/1'
-storeId = db.stores.findOne(slug:'store_1')._id
+store1 = db.stores.findOne(slug:'store_1')
+storeId = store1._id
 userSeller.stores.push storeId
 db.stores.insert
   name: 'Store 2'
@@ -264,3 +267,19 @@ for i in [4..15]
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
 db.users.save userSeller
+db.orders.remove()
+db.orders.insert
+  store: store1._id
+  items: [
+    product: product1._id
+    price: product1.price
+    quantity: 1
+    totalPrice: product1.price
+  ]
+  totalProductsPrice: product1.price
+  shippingCost: 1
+  totalSaleAmount: product1.price + 1
+  orderDate: new Date(2013, 0, 1)
+  customer: user1._id
+  deliveryAddress: user1.deliveryAddress
+db.orders.ensureIndex { customer: 1 }
