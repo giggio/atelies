@@ -20,8 +20,7 @@ describe 'Admin manage store page', ->
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
         page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), (error) ->
-            return done error if error
+          page.visit exampleStore._id.toString(), ->
             page.setFieldsAs otherStore, ->
               page.clickUpdateStoreButton done
     it 'is at the admin store page', (done) ->

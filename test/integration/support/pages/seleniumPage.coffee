@@ -6,27 +6,33 @@ _               = require 'underscore'
 webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text
 
-before -> chromedriver.start()
-after -> chromedriver.stop()
+before ->
+  chromedriver.start()
+  Page.driver = new webdriver.Builder()
+    .usingServer('http://localhost:9515')
+    #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
+    .build()
+  Page.driver.manage().timeouts().implicitlyWait 1000
+after (done) ->
+  Page.driver.quit().then ->
+    chromedriver.stop()
+    done()
 
 module.exports = class Page
   constructor: (url, page) ->
     [url, page] = [page, url] if url instanceof Page
-    driver = page?.driver
     @url = url if url?
-    if driver?
-      @driver = driver
-    else
-      @driver = new webdriver.Builder()
-        .usingServer('http://localhost:9515')
-        #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
-        .build()
-      @driver.manage().timeouts().implicitlyWait 1000
-  visit: (url, cb) ->
+    @driver = Page.driver
+  visit: (url, refresh, cb) ->
+    [refresh, cb] = [cb, refresh] if typeof refresh is 'function'
+    refresh = true unless refresh?
     url = @url unless url?
-    promise = @driver.get "http://localhost:8000/#{url}"
-    promise.then cb if cb?
-  closeBrowser: (cb = (->)) -> @driver.quit().then cb, cb
+    @driver.get("http://localhost:8000/#{url}").then =>
+      if refresh
+        @refresh cb
+      else
+        cb() if cb?
+  closeBrowser: (cb) -> cb() if cb?
   errorMessageFor: (field, cb) -> @getText "##{field} ~ .tooltip .tooltip-inner", cb
   errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
   errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) ->
@@ -86,7 +92,7 @@ module.exports = class Page
   wait: (fn, timeout, cb) ->
     @driver.wait fn, timeout
     process.nextTick cb
-  visitBlank: (cb) -> Page::visit.call @, 'blank', cb
+  visitBlank: (cb) -> Page::visit.call @, 'blank', false, cb
   loginFor: (_id, cb) ->
     @currentUrl (url) =>
       @visitBlank() unless url.substr(0,4) is 'http' #need the browser loaded to access cookies and have a session cookie id
@@ -103,3 +109,4 @@ module.exports = class Page
   eval: (script, cb) -> @driver.executeScript(script).then cb
   clearLocalStorage: (cb) ->
     @visitBlank => @eval 'localStorage.clear()', cb
+  refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
