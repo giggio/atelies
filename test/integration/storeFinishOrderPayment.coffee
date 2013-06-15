@@ -103,7 +103,7 @@ describe 'Store Finish Order: Payment', ->
         p1.inventory.should.equal p1Inventory - 1
         Product.findById product2._id, (err, p2) ->
           throw err if err
-          p2.inventory.should.equal p2Inventory - 1
+          p2.inventory.should.equal p2Inventory - 2
           done()
     it 'should be at order completed page', (done) ->
       page.currentUrl (url) ->

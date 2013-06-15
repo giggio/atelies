@@ -262,12 +262,13 @@ class Routes
             res.json 400, errors
           Order.create user, store, items, shippingCost, (order) ->
             order.save (err, order) ->
-              for item in items
-                item.product.inventory--
-                item.product.save()
               if err?
                 res.json 400, err
               else
+                for item in items
+                  p = item.product
+                  p.inventory -= item.quantity
+                  p.save()
                 res.json 201, order.toSimpleOrder()
         else
           setImmediate foundProducts
