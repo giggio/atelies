@@ -7,3 +7,4 @@ define [
     _routes: routes
     routes:
       '': routes.home
+      'orders': routes.orders

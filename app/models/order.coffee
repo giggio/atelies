@@ -42,5 +42,16 @@ Order.create = (user, store, items, shippingCost, cb) ->
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
   process.nextTick -> cb order
+Order.getSimpleByUser = (user, cb) ->
+  Order.find(customer: user).populate('store', 'name slug').exec (err, orders) ->
+    cb err, null if err?
+    simpleOrders = _.map orders, (o)->
+      _id: o._id.toString()
+      storeName: o.store.name
+      storeSlug: o.store.slug
+      totalSaleAmount: o.totalSaleAmount
+      orderDate: o.orderDate
+      numberOfItems: o.items.length
+    cb null, simpleOrders
 
 module.exports = Order

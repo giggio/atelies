@@ -6,8 +6,7 @@ define [
   '../models/cart'
   'text!./templates/finishOrderShipping.html'
   './cartItem'
-  '../../../converters'
-], ($, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView, converters) ->
+], ($, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView) ->
   class CartView extends Backbone.View
     events:
       'click #finishOrder':'finishOrder'

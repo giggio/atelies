@@ -25,6 +25,7 @@ module.exports = class Page
     @driver = Page.driver
   visit: (url, refresh, cb) ->
     [refresh, cb] = [cb, refresh] if typeof refresh is 'function'
+    [cb, url] = [url, cb] if typeof url is 'function'
     refresh = true unless refresh?
     url = @url unless url?
     @driver.get("http://localhost:8000/#{url}").then =>
@@ -46,6 +47,12 @@ module.exports = class Page
     flow.then (-> cb(errorMsgs)), cb
   findElement: (selector) -> @driver.findElement(webdriver.By.css(selector))
   findElements: (selector) -> @driver.findElements(webdriver.By.css(selector))
+  findElementIn: (selector, childSelector, cb) ->
+    el = if typeof selector is 'string' then @findElement(selector) else selector
+    el.findElement(webdriver.By.css(childSelector)).then cb, cb
+  findElementsIn: (selector, childrenSelector, cb) ->
+    el = if typeof selector is 'string' then @findElement(selector) else selector
+    el.findElements(webdriver.By.css(childrenSelector)).then cb
   clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
   type: (selector, text) -> @findElement(selector).type text
   select: (selector, text, cb) ->
@@ -70,7 +77,13 @@ module.exports = class Page
   uncheck: (selector, cb = (->)) ->
     el = @findElement selector
     el.isSelected().then (itIs) -> if itIs then el.click().then cb else process.nextTick cb
-  getText: (selector, cb) -> @findElement(selector).getText().then cb
+  getTextIn: (selector, childSelector, cb) ->
+    @findElementIn selector, childSelector, (el) => @getText el, cb
+  getAttributeIn: (selector, childSelector, attr, cb) ->
+    @findElementIn selector, childSelector, (el) => @getAttribute el, attr, cb
+  getText: (selector, cb) ->
+    el = if typeof selector is 'string' then @findElement(selector) else selector
+    el.getText().then cb
   getTexts: (selector, cb) ->
     texts = []
     flow = webdriver.promise.createFlow (f) =>
@@ -79,7 +92,9 @@ module.exports = class Page
           do (el) -> f.execute -> el.getText().then (text) -> texts.push text
         undefined
     flow.then (-> cb(texts)), cb
-  getAttribute: (selector, attribute, cb) -> @findElement(selector).getAttribute(attribute).then cb
+  getAttribute: (selector, attribute, cb) ->
+    el = if typeof selector is 'string' then @findElement(selector) else selector
+    el.getAttribute(attribute).then cb
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb

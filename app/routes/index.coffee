@@ -275,6 +275,8 @@ class Routes
       process.nextTick foundProducts
 
   account: (req, res) ->
-    res.render 'account', user:req.user
+    user = req.user
+    Order.getSimpleByUser user, (err, orders) ->
+      res.render 'account', user: user.toSimpleUser(), orders: orders
 
 module.exports = Routes

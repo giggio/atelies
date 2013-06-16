@@ -30,6 +30,12 @@ userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10
   @passwordHash = bcrypt.hashSync password, salt
+userSchema.methods.toSimpleUser = ->
+  _id: @_id
+  name: @name
+  email: @email
+  deliveryAddress: @deliveryAddress
+  phoneNumber: @phoneNumber
   
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb

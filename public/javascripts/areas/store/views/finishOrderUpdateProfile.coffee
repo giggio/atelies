@@ -6,8 +6,7 @@ define [
   '../models/cart'
   'text!./templates/finishOrderUpdateProfile.html'
   './cartItem'
-  '../../../converters'
-], ($, Backbone, Handlebars, Products, Cart, finishOrderUpdateProfileTemplate, CartItemView, converters) ->
+], ($, Backbone, Handlebars, Products, Cart, finishOrderUpdateProfileTemplate, CartItemView) ->
   class CartView extends Backbone.View
     template: finishOrderUpdateProfileTemplate
     initialize: (opt) =>

@@ -1,0 +1,23 @@
+<h2>Pedidos:</h2>
+<table class="table" id="orders">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Loja</th>
+      <th>Items</th>
+      <th>Valor</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each orders}}
+    <tr class="order">
+      <td><span class="_id" data-id="{{_id}}"></span><span class="orderDate">{{orderDate}}</span></td>
+      <td><a class="storeLink" href="/{{storeSlug}}">{{storeName}}</a></td>
+      <td><span class="numberOfItems">{{numberOfItems}}</span></td>
+      <td><span class="totalSaleAmount">{{totalSaleAmount}}</span></td>
+      <td><a class="orderLink" href="#orders/{{_id}}">Ver detalhes</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

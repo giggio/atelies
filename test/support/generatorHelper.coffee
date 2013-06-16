@@ -216,3 +216,17 @@ exports.generator =
       orderDate: new Date(2013, 0, 1)
       customer: exports.generator.user.d()
       deliveryAddress: exports.generator.user.d().deliveryAddress
+    b: -> new Order
+      store: exports.generator.store.a()
+      items: [
+        product: exports.generator.product.b()
+        price: exports.generator.product.b().price
+        quantity: 1
+        totalPrice: exports.generator.product.b().price
+      ]
+      totalProductsPrice: exports.generator.product.b().price
+      shippingCost: 1
+      totalSaleAmount: exports.generator.product.b().price + 1
+      orderDate: new Date(2013, 0, 5)
+      customer: exports.generator.user.d()
+      deliveryAddress: exports.generator.user.d().deliveryAddress
