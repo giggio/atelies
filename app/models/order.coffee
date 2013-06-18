@@ -54,4 +54,26 @@ Order.getSimpleByUser = (user, cb) ->
       numberOfItems: o.items.length
     cb null, simpleOrders
 
+Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
+  Order.findById(_id).populate('items.product', 'name slug picture').exec (err, order) ->
+    cb err, null if err?
+    return cb null, null if order.customer.toString() isnt user._id.toString()
+    simpleOrder =
+      _id: order._id.toString()
+      totalSaleAmount: order.totalSaleAmount
+      totalProductsPrice: order.totalProductsPrice
+      shippingCost: order.shippingCost
+      orderDate: order.orderDate
+      numberOfItems: order.items.length
+      deliveryAddress: order.deliveryAddress
+    simpleOrder.items = _.map order.items, (i) ->
+      _id: i._id
+      slug: i.product.slug
+      name: i.product.name
+      picture: i.product.picture
+      price: i.price
+      quantity: i.quantity
+      totalPrice: i.totalPrice
+    cb null, simpleOrder
+
 module.exports = Order

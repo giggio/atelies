@@ -28,7 +28,7 @@ describe 'Account orders page', ->
       order2.save()
       whenServerLoaded done
 
-  describe 'show empty cart', ->
+  describe 'with two orders', ->
     before (done) =>
       page.loginFor user._id, ->
         page.visit done

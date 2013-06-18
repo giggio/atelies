@@ -8,3 +8,4 @@ define [
     routes:
       '': routes.home
       'orders': routes.orders
+      'orders/:orderId': routes.order

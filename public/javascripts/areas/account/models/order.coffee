@@ -1,5 +1,5 @@
 define [
   'backbone'
 ], (Backbone) ->
-  class User extends Backbone.Model
+  class Order extends Backbone.Model
     idAttribute: "_id"

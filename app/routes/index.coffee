@@ -279,4 +279,10 @@ class Routes
     Order.getSimpleByUser user, (err, orders) ->
       res.render 'account', user: user.toSimpleUser(), orders: orders
 
+  order: (req, res) ->
+    user = req.user
+    Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) ->
+      return res.json 400, err if err?
+      res.json orders
+
 module.exports = Routes
