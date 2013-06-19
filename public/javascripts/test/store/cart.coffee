@@ -114,3 +114,16 @@ define [
       cart.addItem item
       cart.addItem item
       cart.totalPrice().should.equal 22.2
+    it 'knows it has to calculate the shipping cost', ->
+      cart = Cart.get('store_1')
+      cart.shippingCalculated().should.be.false
+    it 'is aware shipping cost has been calculated', ->
+      cart = Cart.get('store_1')
+      cart.setShippingCost 3
+      cart.shippingCalculated().should.be.true
+    it 'after product added, shipping cost needs to be calculated again', ->
+      cart = Cart.get('store_1')
+      cart.setShippingCost 3
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      cart.shippingCalculated().should.be.false

@@ -25,6 +25,7 @@ define ['underscore'], (_) ->
     save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) =>
+      @_shippingCost = undefined
       if existingItem = _.findWhere @_items, { _id: item._id }
         item = existingItem
         item.setQuantity item.quantity + 1
@@ -49,5 +50,8 @@ define ['underscore'], (_) ->
         .map((i)->i.price*i.quantity)
         .reduce(((p, t) -> p+t), 0).value()
       total
-    shippingCost: -> 1
-    totalSaleAmount: -> @totalPrice() + @shippingCost()
+    shippingCost: -> @_shippingCost
+    totalSaleAmount: -> @totalPrice() + @_shippingCost
+    shippingCalculated: -> @_shippingCost?
+    setShippingCost: (shippingCost) ->
+      @_shippingCost = shippingCost
