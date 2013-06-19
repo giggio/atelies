@@ -1,18 +1,17 @@
 <h2>Pedido:</h2>
-<div class="order">
-  <span id="_id" data-id="{{order._id}}"></span><span id="orderDate">{{order.orderDate}}</span><br />
-  <a id="storeLink" href="/{{order.storeSlug}}">{{order.storeName}}</a><br />
-  <span id="numberOfItems">{{order.numberOfItems}}</span> itens<br />
-  <span id="totalSaleAmount">{{order.totalSaleAmount}}</span><br />
-  <span id="shippingCost">{{order.shippingCost}}</span><br />
-  <span id="totalProductsPrice">{{order.totalProductsPrice}}</span><br />
+<div id="order">
+  <div id="orderDescription">
+    <span id="_id" data-id="{{order._id}}"></span>
+    Pedido realizado em <strong><span id="orderDate">{{order.orderDate}}</span></strong>
+    na loja  <strong><a id="storeLink" href="/{{order.storeSlug}}">{{order.storeName}}</a></strong>
+  </div>
   <address id="deliveryAddress">
-    <strong>Endereço:</strong><br />
+    <strong>Endereço de entrega:</strong><br />
     <span id="street">{{order.deliveryAddress.street}}</span> - <span id="street2">{{order.deliveryAddress.street2}}</span><br />
-    <span id="city">{{order.deliveryAddress.city}}</span><br />
-    <span id="state">{{order.deliveryAddress.state}}</span><br />
-    <span id="zip">{{order.deliveryAddress.zip}}</span>
+    <span id="city">{{order.deliveryAddress.city}}</span> / <span id="state">{{order.deliveryAddress.state}}</span><br />
+    CEP <span id="zip">{{order.deliveryAddress.zip}}</span>
   </address>
+  <strong>Produtos:</strong>
   <table class="table" id="items">
     <thead>
       <tr>
@@ -24,7 +23,7 @@
     </thead>
     <tbody>
     {{#each order.items}}
-      <tr class="OrdeItem">
+      <tr class="orderItem" data-id="{{_id}}">
         <td><a class="url" href="/{{storeSlug}}#{{slug}}"><img class="picture" src="{{picture}}" />{{name}}</a></td>
         <td class="price">{{price}}</td>
         <td class="quantity">{{quantity}}</td>
@@ -32,5 +31,40 @@
       </tr>
     {{/each}}
     </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <span id="numberOfItems">{{order.numberOfItems}}</span> itens
+        </td>
+        <td>
+        </td>
+        <td>
+          <strong>Valor dos produtos</strong>
+        </td>
+        <td>
+          <strong id="totalProductsPrice">{{order.totalProductsPrice}}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <strong>Frete</strong>
+        </td>
+        <td>
+          <strong id="shippingCost">{{order.shippingCost}}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <strong>Total</strong>
+        </td>
+        <td>
+          <strong id="totalSaleAmount">{{order.totalSaleAmount}}</strong>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>

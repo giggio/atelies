@@ -24,11 +24,12 @@ module.exports = class AccountOrdersPage extends Page
         do (el) =>
           item = {}
           items.push item
-          getData.push => @getAttributeIn el, "._id", 'data-id', (t) => item._id = t
-          getData.push => @getTextIn el, ".name", (t) => item.name = t
+          getData.push => @getAttribute el, 'data-id', (t) => item._id = t
+          getData.push => @getTextIn el, ".url", (t) => item.name = t
           getData.push => @getTextIn el, ".price", (t) => item.price = t
-          getData.push => @getTextIn el, ".quantity", (t) => item.quantity = t
-          getData.push => @getAttributeIn el, ".pictureLink", 'href', (t) => item.url = t
+          getData.push => @getTextIn el, ".quantity", (t) => item.quantity = parseInt t
+          getData.push => @getTextIn el, ".totalPrice", (t) => item.totalPrice = t
+          getData.push => @getAttributeIn el, ".url", 'href', (t) => item.url = t
           getData.push => @getAttributeIn el, ".picture", 'src', (t) => item.picture = t
       @parallel getData, -> cb(order)
       undefined

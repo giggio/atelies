@@ -26,6 +26,6 @@ define [
         name: i.name
         picture: i.picture
         price: converters.currency i.price
-        quantity: converters.currency i.quantity
+        quantity: i.quantity
         totalPrice: converters.currency i.totalPrice
       @$el.html context user: @user, order: order

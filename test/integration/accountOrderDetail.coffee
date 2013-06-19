@@ -47,20 +47,20 @@ describe 'Account order detail page', ->
         order.deliveryAddress.state.should.equal user.deliveryAddress.state
         order.deliveryAddress.zip.should.equal user.deliveryAddress.zip
         order.items.length.should.equal 2
-        return done() #TODO: items not returning correctly
-        console.log order.items
         i1 = order.items[0]
         i2 = order.items[1]
         i1._id.should.equal product1._id.toString()
         i1.name.should.equal product1.name
-        i1.price.should.equal product1.price
+        i1.price.should.equal 'R$ 11,10'
+        i1.totalPrice.should.equal 'R$ 11,10'
         i1.picture.should.equal product1.picture
         i1.quantity.should.equal 1
-        i1.url.should.equal product1.url
+        i1.url.should.equal "http://localhost:8000/#{product1.url()}"
         i2._id.should.equal product2._id.toString()
         i2.name.should.equal product2.name
-        i2.price.should.equal product2.price
+        i2.price.should.equal 'R$ 22,20'
+        i2.totalPrice.should.equal 'R$ 44,40'
         i2.picture.should.equal product2.picture
         i2.quantity.should.equal 2
-        i2.url.should.equal product2.url
+        i2.url.should.equal "http://localhost:8000/#{product2.url()}"
         done()

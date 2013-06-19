@@ -60,7 +60,7 @@ describe 'Store Finish Order: Payment', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
         done()
 
-  describe.only 'completing payment', ->
+  describe 'completing payment', ->
     before (done) ->
       page.clearCookies ->
         page.clearLocalStorage ->

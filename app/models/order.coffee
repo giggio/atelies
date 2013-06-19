@@ -37,7 +37,8 @@ Order = mongoose.model 'order', orderSchema
 Order.create = (user, store, items, shippingCost, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items
-    order.items.push product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity
+    item = product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity
+    order.items.push item
   order.totalProductsPrice = _.chain(order.items).map((i)->i.totalPrice).reduce(((p, i) -> p+i), 0).value()
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
@@ -55,7 +56,7 @@ Order.getSimpleByUser = (user, cb) ->
     cb null, simpleOrders
 
 Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
-  Order.findById(_id).populate('items.product', 'name slug picture').exec (err, order) ->
+  Order.findById(_id).populate('items.product', '_id name slug picture').exec (err, order) ->
     cb err, null if err?
     return cb null, null if order.customer.toString() isnt user._id.toString()
     simpleOrder =
@@ -67,7 +68,7 @@ Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
       numberOfItems: order.items.length
       deliveryAddress: order.deliveryAddress
     simpleOrder.items = _.map order.items, (i) ->
-      _id: i._id
+      _id: i.product._id
       slug: i.product.slug
       name: i.product.name
       picture: i.product.picture

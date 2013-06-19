@@ -65,7 +65,6 @@ module.exports = class Page
       flow.then ->
         _.findWhere(elsWithText, text:text).el.click().then cb
       , cb
-
   checkOrUncheck: (selector, check, cb) ->
     if check
       @check selector, cb
@@ -80,7 +79,8 @@ module.exports = class Page
   getTextIn: (selector, childSelector, cb) ->
     @findElementIn selector, childSelector, (el) => @getText el, cb
   getAttributeIn: (selector, childSelector, attr, cb) ->
-    @findElementIn selector, childSelector, (el) => @getAttribute el, attr, cb
+    @findElementIn selector, childSelector, (el) =>
+      @getAttribute el, attr, cb
   getText: (selector, cb) ->
     el = if typeof selector is 'string' then @findElement(selector) else selector
     el.getText().then cb
