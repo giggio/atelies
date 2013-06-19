@@ -25,7 +25,8 @@ define ['underscore'], (_) ->
     save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) =>
-      @_shippingCost = undefined
+      @_shippingOptions = undefined
+      @_shippingOptionSelected = undefined
       if existingItem = _.findWhere @_items, { _id: item._id }
         item = existingItem
         item.setQuantity item.quantity + 1
@@ -52,6 +53,10 @@ define ['underscore'], (_) ->
       total
     shippingCost: -> @_shippingCost
     totalSaleAmount: -> @totalPrice() + @_shippingCost
-    shippingCalculated: -> @_shippingCost?
-    setShippingCost: (shippingCost) ->
-      @_shippingCost = shippingCost
+    shippingCalculated: -> @_shippingOptions?
+    shippingSelected: -> @_shippingOptionSelected?
+    setShippingOptions: (opt) -> @_shippingOptions = opt
+    chooseShippingOption: (type) ->
+      opt = _.findWhere @_shippingOptions, type: type
+      throw new Error("Shipping option does not exist.") unless opt?
+      @_shippingOptionSelected = type

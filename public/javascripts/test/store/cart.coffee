@@ -117,13 +117,39 @@ define [
     it 'knows it has to calculate the shipping cost', ->
       cart = Cart.get('store_1')
       cart.shippingCalculated().should.be.false
-    it 'is aware shipping cost has been calculated', ->
+      cart.shippingSelected().should.be.false
+    it 'is aware shipping cost has been calculated but not selected', ->
       cart = Cart.get('store_1')
-      cart.setShippingCost 3
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+      ]
       cart.shippingCalculated().should.be.true
+      cart.shippingSelected().should.be.false
+    it 'is aware shipping cost has been calculated and selected', ->
+      cart = Cart.get('store_1')
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+      ]
+      cart.chooseShippingOption 'pac'
+      cart.shippingCalculated().should.be.true
+      cart.shippingSelected().should.be.true
     it 'after product added, shipping cost needs to be calculated again', ->
       cart = Cart.get('store_1')
-      cart.setShippingCost 3
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+      ]
+      cart.chooseShippingOption 'pac'
       item = _id: 1, price: 11.1
       cart.addItem item
       cart.shippingCalculated().should.be.false
+      cart.shippingSelected().should.be.false
+    it 'throws if shipping option selected does not exist', ->
+      cart = Cart.get('store_1')
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+      ]
+      expect(=> cart.chooseShippingOption('oops')).to.throw Error
