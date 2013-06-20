@@ -298,24 +298,25 @@ class Routes
     shippingOptions = [ pac, sedex ]
     Store.findBySlug req.params.storeSlug, (err, store) ->
       storeZip = store.zip
-      Product.getWeightAndDimensions ids, (err, products) ->
+      Product.getShippingWeightAndDimensions ids, (err, products) ->
         callbacks = 0
         for p in products
           do (p) ->
-            if p.weight? and p.dimensions? and
-            p.weight <= 30 and
-            11 <= p.dimensions.width <= 105 and
-            2 <= p.dimensions.height <= 105 and
-            16 <= p.dimensions.depth <= 105 and
-            p.dimensions.height + p.dimensions.width + p.dimensions.depth <= 200
+            shipping = p.shipping
+            if shipping.weight? and shipping.dimensions? and
+            shipping.weight <= 30 and
+            11 <= shipping.dimensions.width <= 105 and
+            2 <= shipping.dimensions.height <= 105 and
+            16 <= shipping.dimensions.depth <= 105 and
+            shipping.dimensions.height + shipping.dimensions.width + shipping.dimensions.depth <= 200
               deliverySpecs =
                 serviceType: 'pac'
                 from: storeZip
                 to: userZip
-                weight: p.weight
-                height: p.dimensions.height
-                width: p.dimensions.width
-                length: p.dimensions.depth
+                weight: shipping.weight
+                height: shipping.dimensions.height
+                width: shipping.dimensions.width
+                length: shipping.dimensions.depth
               callbacks++
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
