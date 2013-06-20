@@ -14,7 +14,8 @@ define [
       @model = opt.store
       context = Handlebars.compile @template
       @$el.html context new: @model.id? is false
-      @bindings = @initializeBindings()
+      @bindings = @initializeBindings
+        '#autoCalculateShipping':'checked:autoCalculateShipping'
       Validation.bind @
     _updateStore: =>
       return unless @model.isValid true

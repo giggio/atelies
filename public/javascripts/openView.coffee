@@ -5,7 +5,7 @@ define [
   class OpenView extends Backbone.Epoxy.View
     initializeBindings: (extension = {}) ->
       bindings = {}
-      for el in $("input[id][type!='button'],textarea[id],select[id]", @el)
+      for el in $("input[id][type!='button'][type!='checkbox'],textarea[id],select[id]", @el)
         name = $(el).attr 'id'
         bindings["##{name}"] = "value:#{name}"
       $.extend true, bindings, extension

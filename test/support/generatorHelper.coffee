@@ -131,6 +131,7 @@ exports.generator =
       otherUrl: 'http://myotherurl.com'
       banner: 'http://lorempixel.com/800/150/cats/1'
       flyer: 'http://lorempixel.com/350/400/nightlife/1'
+      autoCalculateShipping: true
     b: -> new Store
       name: 'Store 2'
       slug: 'store_2'
@@ -146,6 +147,7 @@ exports.generator =
       zip: "04365-000"
       otherUrl: 'http://someotherurl.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/2'
+      autoCalculateShipping: false
     c: -> new Store
       name: 'Store 3'
       slug: 'store_3'
@@ -161,6 +163,7 @@ exports.generator =
       zip: "04234-567"
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
+      autoCalculateShipping: true
     d: -> new Store
       name: 'My Very Nice Store'
       slug: 'my_very_nice_store'
@@ -177,6 +180,7 @@ exports.generator =
       otherUrl: 'http://somestoreinms.com'
       banner: 'http://lorempixel.com/800/150/cats/4'
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
+      autoCalculateShipping: false
     empty: -> new Store
       name: ''
       slug: ''
@@ -192,6 +196,7 @@ exports.generator =
       zip: ''
       otherUrl: ''
       flyer: ''
+      autoCalculateShipping: false
   user:
     a: ->
       user = new User

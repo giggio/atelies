@@ -52,6 +52,7 @@ describe 'Admin manage store page', ->
         expect(store.otherUrl).to.equal otherStore.otherUrl
         expect(store.banner).to.equal otherStore.banner
         expect(store.flyer).to.equal otherStore.flyer
+        expect(store.autoCalculateShipping).to.equal otherStore.autoCalculateShipping
         done()
     it 'kept the store to the user', (done) ->
       User.findById userSeller.id, (err, user) ->
@@ -114,4 +115,5 @@ describe 'Admin manage store page', ->
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.banner).to.equal exampleStore.banner
         expect(store.flyer).to.equal exampleStore.flyer
+        expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         done()

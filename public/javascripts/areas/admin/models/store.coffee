@@ -18,6 +18,7 @@ define [
       banner:undefined
       flyer:undefined
       phoneNumber:undefined
+      autoCalculateShipping:true
     validation:
       name:
         required: true

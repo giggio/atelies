@@ -15,6 +15,7 @@ describe 'AdminStoreUpdateRoute', ->
       store =
         _id: '9876'
         zip: '01234-567'
+        autoCalculateShipping: false
         save: sinon.stub().yields()
       sinon.stub(Store, 'findById').yields null, store
       user =

@@ -110,6 +110,7 @@ class Routes
     store.otherUrl = body.otherUrl
     store.banner = body.banner
     store.flyer = body.flyer
+    store.autoCalculateShipping = body.autoCalculateShipping
     store.save (err) ->
       return res.json 400, err if err?
       req.user.save (err) ->
@@ -137,6 +138,7 @@ class Routes
       store.otherUrl = body.otherUrl
       store.banner = body.banner
       store.flyer = body.flyer
+      store.autoCalculateShipping = body.autoCalculateShipping
       store.save (err) ->
         if err?
           return res.json 400

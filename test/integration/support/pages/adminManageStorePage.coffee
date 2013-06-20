@@ -21,10 +21,11 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #otherUrl", store.otherUrl
     @type "#manageStoreBlock #banner", store.banner
     @type "#manageStoreBlock #flyer", store.flyer
-    if store.state isnt ''
-      @select "#manageStoreBlock #state", store.state, cb
-    else
-      cb()
+    @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, =>
+      if store.state isnt ''
+        @select "#manageStoreBlock #state", store.state, cb
+      else
+        cb()
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'

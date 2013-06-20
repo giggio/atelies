@@ -61,6 +61,7 @@ define ->
         otherUrl: 'http://myotherurl.com'
         banner: 'http://e.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
+        autoCalculateShipping: true
       b: ->
         _id: '2'
         name: 'Store 2'
@@ -78,6 +79,7 @@ define ->
         otherUrl: 'http://someurl.com'
         banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
+        autoCalculateShipping: false
       c: ->
         _id: '3'
         name: 'Store 3'
@@ -94,6 +96,7 @@ define ->
         zip: "04234-567"
         otherUrl: 'http://other.com'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
+        autoCalculateShipping: true
       empty: ->
         _id: ''
         name: ''
@@ -108,3 +111,4 @@ define ->
         city: ""
         state: ""
         otherUrl: ''
+        autoCalculateShipping: false

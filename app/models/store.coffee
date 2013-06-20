@@ -19,6 +19,7 @@ storeSchema = new mongoose.Schema
   otherUrl:               String
   banner:                 String
   flyer:                  String
+  autoCalculateShipping:  Boolean
 
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
