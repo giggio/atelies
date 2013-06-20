@@ -14,6 +14,10 @@ define [
       width:undefined
       depth:undefined
       weight:undefined
+      shippingHeight:undefined
+      shippingWidth:undefined
+      shippingDepth:undefined
+      shippingWeight:undefined
       inventory:undefined
       hasInventory:true
     validation:
@@ -36,6 +40,18 @@ define [
         [{pattern:'digits', msg: 'A profundidade deve ser um número.'}
          {required: false}]
       weight:
+        [{pattern:'digits', msg: 'O peso deve ser um número.'}
+         {required: false}]
+      shippingHeight:
+        [{pattern:'digits', msg: 'A altura deve ser um número.'}
+         {required: false}]
+      shippingWidth:
+        [{pattern:'digits', msg: 'A largura deve ser um número.'}
+         {required: false}]
+      shippingDepth:
+        [{pattern:'digits', msg: 'A profundidade deve ser um número.'}
+         {required: false}]
+      shippingWeight:
         [{pattern:'digits', msg: 'O peso deve ser um número.'}
          {required: false}]
       inventory:

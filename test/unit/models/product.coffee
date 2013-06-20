@@ -28,6 +28,10 @@ describe 'Product', ->
       width: 4
       depth: 5
       weight: 6
+      shippingHeight: 7
+      shippingWidth: 8
+      shippingDepth: 9
+      shippingWeight: 10
       hasInventory: true
       inventory: 30
     product = new Product()
@@ -41,6 +45,10 @@ describe 'Product', ->
     product.dimensions.width.should.equal simpleProduct.width
     product.dimensions.depth.should.equal simpleProduct.depth
     product.weight.should.equal simpleProduct.weight
+    product.shipping.dimensions.height.should.equal simpleProduct.shippingHeight
+    product.shipping.dimensions.width.should.equal simpleProduct.shippingWidth
+    product.shipping.dimensions.depth.should.equal simpleProduct.shippingDepth
+    product.shipping.weight.should.equal simpleProduct.shippingWeight
     product.hasInventory.should.equal simpleProduct.hasInventory
     product.inventory.should.equal simpleProduct.inventory
   it 'should produce the correct url', ->
@@ -61,6 +69,10 @@ describe 'Product', ->
     simpleProduct.width.should.equal product.dimensions.width
     simpleProduct.depth.should.equal product.dimensions.depth
     simpleProduct.weight.should.equal product.weight
+    simpleProduct.shippingHeight.should.equal product.shipping.dimensions.height
+    simpleProduct.shippingWidth.should.equal product.shipping.dimensions.width
+    simpleProduct.shippingDepth.should.equal product.shipping.dimensions.depth
+    simpleProduct.shippingWeight.should.equal product.shipping.weight
     simpleProduct.hasInventory.should.equal product.hasInventory
     simpleProduct.inventory.should.equal product.inventory
   it 'produces a simple product with empty tags', ->

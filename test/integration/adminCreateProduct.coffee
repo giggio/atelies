@@ -44,6 +44,10 @@ describe 'Admin Create Product page', ->
         errorMsgs.width.should.equal 'A largura deve ser um número.'
         errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
         errorMsgs.weight.should.equal 'O peso deve ser um número.'
+        errorMsgs.shippingHeight.should.equal 'A altura deve ser um número.'
+        errorMsgs.shippingWidth.should.equal 'A largura deve ser um número.'
+        errorMsgs.shippingDepth.should.equal 'A profundidade deve ser um número.'
+        errorMsgs.shippingWeight.should.equal 'O peso deve ser um número.'
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
         done()
 
@@ -71,6 +75,10 @@ describe 'Admin Create Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
+        productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
+        productOnDb.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
+        productOnDb.shipping.weight.should.equal product.shipping.weight
         productOnDb.hasInventory.should.equal product.hasInventory
         productOnDb.inventory.should.equal product.inventory
         done()

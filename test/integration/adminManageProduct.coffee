@@ -36,10 +36,14 @@ describe 'Admin Manage Product page', ->
         aproduct.picture.should.equal product.picture
         aproduct.tags.should.equal product.tags.join ', '
         aproduct.description.should.equal product.description
-        aproduct.height.should.equal product.dimensions.height
-        aproduct.width.should.equal product.dimensions.width
-        aproduct.depth.should.equal product.dimensions.depth
+        aproduct.dimensions.height.should.equal product.dimensions.height
+        aproduct.dimensions.width.should.equal product.dimensions.width
+        aproduct.dimensions.depth.should.equal product.dimensions.depth
         aproduct.weight.should.equal product.weight
+        aproduct.shipping.dimensions.height.should.equal product.shipping.dimensions.height
+        aproduct.shipping.dimensions.width.should.equal product.shipping.dimensions.width
+        aproduct.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
+        aproduct.shipping.weight.should.equal product.shipping.weight
         aproduct.hasInventory.should.equal product.hasInventory
         aproduct.inventory.should.equal product.inventory
         done()
@@ -48,7 +52,7 @@ describe 'Admin Manage Product page', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString()
-        page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', inventory: 'hh'}, ->
+        page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
           page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
@@ -66,6 +70,10 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
+        productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
+        productOnDb.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
+        productOnDb.shipping.weight.should.equal product.shipping.weight
         productOnDb.hasInventory.should.equal product.hasInventory
         productOnDb.inventory.should.equal product.inventory
         done()
@@ -78,6 +86,10 @@ describe 'Admin Manage Product page', ->
         errorMsgs.width.should.equal 'A largura deve ser um número.'
         errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
         errorMsgs.weight.should.equal 'O peso deve ser um número.'
+        errorMsgs.shippingHeight.should.equal 'A altura deve ser um número.'
+        errorMsgs.shippingWidth.should.equal 'A largura deve ser um número.'
+        errorMsgs.shippingDepth.should.equal 'A profundidade deve ser um número.'
+        errorMsgs.shippingWeight.should.equal 'O peso deve ser um número.'
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
         done()
 
@@ -105,6 +117,10 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal otherProduct.dimensions.width
         productOnDb.dimensions.depth.should.equal otherProduct.dimensions.depth
         productOnDb.weight.should.equal otherProduct.weight
+        productOnDb.shipping.dimensions.height.should.equal otherProduct.shipping.dimensions.height
+        productOnDb.shipping.dimensions.width.should.equal otherProduct.shipping.dimensions.width
+        productOnDb.shipping.dimensions.depth.should.equal otherProduct.shipping.dimensions.depth
+        productOnDb.shipping.weight.should.equal otherProduct.shipping.weight
         productOnDb.hasInventory.should.equal otherProduct.hasInventory
         productOnDb.inventory.should.equal otherProduct.inventory
         done()

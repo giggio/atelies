@@ -31,6 +31,10 @@ define [
           expect($("#width", el).val()).to.equal product.width.toString()
           expect($("#depth", el).val()).to.equal product.depth.toString()
           expect($("#weight", el).val()).to.equal product.weight.toString()
+          expect($("#shippingHeight", el).val()).to.equal product.shippingHeight.toString()
+          expect($("#shippingWidth", el).val()).to.equal product.shippingWidth.toString()
+          expect($("#shippingDepth", el).val()).to.equal product.shippingDepth.toString()
+          expect($("#shippingWeight", el).val()).to.equal product.shippingWeight.toString()
           expect($("#hasInventory", el).prop('checked')).to.equal product.hasInventory
           expect($("#inventory", el).val()).to.equal product.inventory.toString()
   
@@ -58,6 +62,10 @@ define [
           $("#width", el).val(updatedProduct.width).change()
           $("#depth", el).val(updatedProduct.depth).change()
           $("#weight", el).val(updatedProduct.weight).change()
+          $("#shippingHeight", el).val(updatedProduct.shippingHeight).change()
+          $("#shippingWidth", el).val(updatedProduct.shippingWidth).change()
+          $("#shippingDepth", el).val(updatedProduct.shippingDepth).change()
+          $("#shippingWeight", el).val(updatedProduct.shippingWeight).change()
           $("#hasInventory", el).prop('checked', updatedProduct.hasInventory).change()
           $("#inventory", el).val(updatedProduct.inventory).change()
           $('#updateProduct', el).trigger 'click'
@@ -75,6 +83,10 @@ define [
           expect(productPosted.width).to.equal updatedProduct.width
           expect(productPosted.depth).to.equal updatedProduct.depth
           expect(productPosted.weight).to.equal updatedProduct.weight
+          expect(productPosted.shippingHeight).to.equal updatedProduct.shippingHeight
+          expect(productPosted.shippingWidth).to.equal updatedProduct.shippingWidth
+          expect(productPosted.shippingDepth).to.equal updatedProduct.shippingDepth
+          expect(productPosted.shippingWeight).to.equal updatedProduct.shippingWeight
           expect(productPosted.hasInventory).to.equal updatedProduct.hasInventory
           expect(productPosted.inventory).to.equal ''
         it 'navigated to store manage', ->
@@ -101,6 +113,10 @@ define [
           $("#width", el).val('g').change()
           $("#depth", el).val('h').change()
           $("#weight", el).val('i').change()
+          $("#shippingHeight", el).val('k').change()
+          $("#shippingWidth", el).val('l').change()
+          $("#shippingDepth", el).val('m').change()
+          $("#shippingWeight", el).val('n').change()
           $("#hasInventory", el).prop('checked', true).change()
           $("#inventory", el).val('j').change()
           $('#updateProduct', el).trigger 'click'
@@ -119,6 +135,10 @@ define [
           expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
           expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
           expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
           expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
 
     describe 'Creating a Product', ->
@@ -146,6 +166,10 @@ define [
           $("#width", el).val(product.width).change()
           $("#depth", el).val(product.depth).change()
           $("#weight", el).val(product.weight).change()
+          $("#shippingHeight", el).val(product.shippingHeight).change()
+          $("#shippingWidth", el).val(product.shippingWidth).change()
+          $("#shippingDepth", el).val(product.shippingDepth).change()
+          $("#shippingWeight", el).val(product.shippingWeight).change()
           $("#hasInventory", el).prop('checked', product.hasInventory).change()
           $("#inventory", el).val(product.inventory).change()
           $('#updateProduct', el).trigger 'click'
@@ -163,6 +187,10 @@ define [
           expect(productPosted.width).to.equal product.width
           expect(productPosted.depth).to.equal product.depth
           expect(productPosted.weight).to.equal product.weight
+          expect(productPosted.shippingHeight).to.equal product.shippingHeight
+          expect(productPosted.shippingWidth).to.equal product.shippingWidth
+          expect(productPosted.shippingDepth).to.equal product.shippingDepth
+          expect(productPosted.shippingWeight).to.equal product.shippingWeight
           expect(productPosted.hasInventory).to.equal product.hasInventory
           expect(productPosted.inventory).to.equal product.inventory
         it 'navigated to store manage', ->
@@ -190,6 +218,10 @@ define [
           $("#width", el).val('g').change()
           $("#depth", el).val('h').change()
           $("#weight", el).val('i').change()
+          $("#shippingHeight", el).val('f').change()
+          $("#shippingWidth", el).val('g').change()
+          $("#shippingDepth", el).val('h').change()
+          $("#shippingWeight", el).val('i').change()
           $("#hasInventory", el).prop('checked', true).change()
           $("#inventory", el).val('j').change()
           $('#updateProduct', el).trigger 'click'
@@ -208,6 +240,10 @@ define [
           expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
           expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
           expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
           expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
 
     describe 'Deleting a Product', ->
@@ -224,17 +260,6 @@ define [
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel
           manageProductView.render()
-          $("#name", el).val(product.name).change()
-          $("#price", el).val(product.price).change()
-          $("#picture", el).val(product.picture).change()
-          $("#tags", el).val(product.tags).change()
-          $("#description", el).val(product.description).change()
-          $("#height", el).val(product.height).change()
-          $("#width", el).val(product.width).change()
-          $("#depth", el).val(product.depth).change()
-          $("#weight", el).val(product.weight).change()
-          $("#hasInventory", el).prop('checked', product.hasInventory).change()
-          $("#inventory", el).val(product.inventory).change()
           $('#deleteProduct', el).trigger 'click'
           $('#confirmDeleteProduct', el).trigger 'click'
         after ->
@@ -259,17 +284,6 @@ define [
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel
           manageProductView.render()
-          $("#name", el).val(product.name).change()
-          $("#price", el).val(product.price).change()
-          $("#picture", el).val(product.picture).change()
-          $("#tags", el).val(product.tags).change()
-          $("#description", el).val(product.description).change()
-          $("#height", el).val(product.height).change()
-          $("#width", el).val(product.width).change()
-          $("#depth", el).val(product.depth).change()
-          $("#weight", el).val(product.weight).change()
-          $("#hasInventory", el).prop('checked', product.hasInventory).change()
-          $("#inventory", el).val(product.inventory).change()
           $('#deleteProduct', el).trigger 'click'
           $('#noConfirmDeleteProduct', el).trigger 'click'
         after ->

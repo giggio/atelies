@@ -53,6 +53,12 @@ db.products.insert
     width: 12
     depth: 17
   weight: 4
+  shipping:
+    dimensions:
+      height: 12
+      width: 13
+      depth: 18
+    weight: 5
   hasInventory: true
   inventory: 30
 product1 = db.products.findOne name:'name 1'
@@ -71,6 +77,12 @@ db.products.insert
     width: 16
     depth: 17
   weight: 8
+  shipping:
+    dimensions:
+      height: 16
+      width: 17
+      depth: 18
+    weight: 9
   hasInventory: true
   inventory: 40
 db.products.insert
@@ -88,6 +100,12 @@ db.products.insert
     width: 20
     depth:21
   weight: 5
+  shipping:
+    dimensions:
+      height: 20
+      width: 21
+      depth: 22
+    weight: 6
   hasInventory: false
 db.products.insert
   name: 'name 4'
@@ -104,6 +122,12 @@ db.products.insert
     width: 20
     depth: 21
   weight: 12
+  shipping:
+    dimensions:
+      height: 20
+      width: 21
+      depth: 22
+    weight: 13
   hasInventory: true
   inventory: 130
 db.products.insert
@@ -121,6 +145,12 @@ db.products.insert
     width: 20
     depth: 21
   weight: 12
+  shipping:
+    dimensions:
+      height: 20
+      width: 21
+      depth: 22
+    weight: 13
   hasInventory: true
   inventory: 130
 db.products.insert
@@ -138,6 +168,12 @@ db.products.insert
     width: 100
     depth: 110
   weight: 120
+  shipping:
+    dimensions:
+      height: 91
+      width: 101
+      depth: 111
+    weight: 121
   hasInventory: true
   inventory: 130
 db.products.insert
@@ -151,10 +187,16 @@ db.products.insert
   tags: ['mno', 'pqr']
   description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
   dimensions:
-    height: 90
-    width: 100
-    depth: 110
-  weight: 120
+    height: 15
+    width: 16
+    depth: 17
+  weight: 12
+  shipping:
+    dimensions:
+      height: 16
+      width: 17
+      depth: 18
+    weight: 13
   hasInventory: true
   inventory: 130
 for i in [8..25]
@@ -171,10 +213,16 @@ for i in [8..25]
     tags: ['mno', 'pqr']
     description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
     dimensions:
-      height: 90
-      width: 100
-      depth: 110
-    weight: 120
+      height: 16
+      width: 17
+      depth: 18
+    weight: 13
+    shipping:
+      dimensions:
+        height: 17
+        width: 18
+        depth: 19
+      weight: 14
     hasInventory: true
     inventory: 130
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }

@@ -17,6 +17,12 @@ productSchema = new mongoose.Schema
     width:        Number
     depth:        Number
   weight:         Number
+  shipping:
+    dimensions:
+      height:       Number
+      width:        Number
+      depth:        Number
+    weight:         Number
   hasInventory:   Boolean
   inventory:      Number
 
@@ -32,8 +38,10 @@ productSchema.methods.toSimpleProduct = ->
   url: @url(), tags: if @tags? then @tags.join ', ' else ''
   manageUrl: @manageUrl(), slug: @slug
   description: @description,
-  height: @dimensions.height, width: @dimensions.width, depth: @dimensions.depth
+  height: @dimensions?.height, width: @dimensions?.width, depth: @dimensions?.depth
   weight: @weight
+  shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
+  shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
 productSchema.methods.updateFromSimpleProduct = (simple) ->
   for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
@@ -42,6 +50,11 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
   @dimensions = {} unless @dimensions?
   for attr in ['height', 'width', 'depth']
     @dimensions[attr] = simple[attr]
+  @shipping = dimensions: {} unless @shipping?
+  @shipping.dimensions.height = simple.shippingHeight
+  @shipping.dimensions.width = simple.shippingWidth
+  @shipping.dimensions.depth = simple.shippingDepth
+  @shipping.weight = simple.shippingWeight
 
 Product = mongoose.model 'product', productSchema
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb

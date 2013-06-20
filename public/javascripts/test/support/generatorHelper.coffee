@@ -17,6 +17,10 @@ define ->
         width: 20
         depth: 30
         weight: 40
+        shippingHeight: 11
+        shippingWidth: 21
+        shippingDepth: 31
+        shippingWeight: 41
         hasInventory: true
         inventory: 30
       b: ->
@@ -34,6 +38,10 @@ define ->
         width: 60
         depth: 70
         weight: 80
+        shippingHeight: 51
+        shippingWidth: 61
+        shippingDepth: 71
+        shippingWeight: 81
         hasInventory: false
     store:
       a: ->

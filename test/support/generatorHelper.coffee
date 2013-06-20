@@ -19,6 +19,12 @@ exports.generator =
         width: 12
         depth: 17
       weight: 4
+      shipping:
+        dimensions:
+          height: 12
+          width: 13
+          depth: 18
+        weight: 4
       hasInventory: true
       inventory: 30
     b: -> new Product
@@ -35,6 +41,12 @@ exports.generator =
         width: 16
         depth: 17
       weight: 8
+      shipping:
+        dimensions:
+          height: 16
+          width: 17
+          depth: 18
+        weight: 9
       hasInventory: true
       inventory: 40
     c: -> new Product
@@ -51,6 +63,12 @@ exports.generator =
         width: 20
         depth: 21
       weight: 5
+      shipping:
+        dimensions:
+          height: 20
+          width: 21
+          depth: 22
+        weight: 6
       hasInventory: false
     d: -> new Product
       name: 'name 4'
@@ -66,6 +84,12 @@ exports.generator =
         width: 20
         depth: 21
       weight: 12
+      shipping:
+        dimensions:
+          height: 20
+          width: 21
+          depth: 22
+        weight: 13
       hasInventory: true
       inventory: 130
     d: -> new Product
@@ -82,6 +106,12 @@ exports.generator =
         width: 200
         depth: 210
       weight: 220
+      shipping:
+        dimensions:
+          height: 291
+          width: 201
+          depth: 211
+        weight: 221
       hasInventory: true
       inventory: 230
   store:
