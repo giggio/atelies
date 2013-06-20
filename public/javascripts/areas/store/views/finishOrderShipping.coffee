@@ -46,7 +46,7 @@ define [
         $("#shippingOptions_#{selectedType}", @$el).prop 'checked', true
         $('#finishOrder', @$el).removeAttr 'disabled'
         return
-      data = items: _.map(@cart.items(), (i) -> _id: i._id)
+      data = items: _.map(@cart.items(), (i) -> _id: i._id, quantity: i.quantity)
       $.ajax
         url: "/shipping/#{@store.slug}"
         data: data

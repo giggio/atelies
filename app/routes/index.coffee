@@ -309,6 +309,7 @@ class Routes
             2 <= shipping.dimensions.height <= 105 and
             16 <= shipping.dimensions.depth <= 105 and
             shipping.dimensions.height + shipping.dimensions.width + shipping.dimensions.depth <= 200
+              quantity = parseInt _.findWhere(data.items, _id: p._id.toString()).quantity
               deliverySpecs =
                 serviceType: 'pac'
                 from: storeZip
@@ -321,14 +322,14 @@ class Routes
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
                 dealWith err
-                pac.cost += delivery.GrandTotal
+                pac.cost += delivery.GrandTotal * quantity
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
               callbacks++
               deliverySpecs.serviceType = 'sedex'
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
                 dealWith err
-                sedex.cost += delivery.GrandTotal
+                sedex.cost += delivery.GrandTotal * quantity
                 sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
         ready = ->
           if callbacks is 0
