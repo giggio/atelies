@@ -15,6 +15,7 @@ storeSchema = new mongoose.Schema
   phoneNumber:            String
   city:                   type: String, required: true
   state:                  type: String, required: true
+  zip:                    type: String, required: true
   otherUrl:               String
   banner:                 String
   flyer:                  String

@@ -1,24 +1,31 @@
 define [
   'jquery'
+  'underscore'
   'backbone'
   'handlebars'
   '../models/products'
   '../models/cart'
   'text!./templates/finishOrderShipping.html'
   './cartItem'
-], ($, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView) ->
+  '../../../converters'
+], ($, _, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView, converters) ->
   class CartView extends Backbone.View
     events:
       'click #finishOrder':'finishOrder'
+      'click [name=shippingOptions]':'_shippingOptionSelected'
     template: finishOrderShippingTemplate
     initialize: (opt) =>
       @store = opt.store
       @cart = opt.cart
       @user = opt.user
-    render: =>
+      @hasShippingCosts = false
+      @context = Handlebars.compile @template
+    render: ->
       return if @_redirectIfUserNotSatisfied()
-      context = Handlebars.compile @template
-      @$el.html context user: @user
+      @show()
+      @_calculateShippingCosts()
+    show: ->
+      @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions
     finishOrder: ->
       Backbone.history.navigate 'finishOrder/payment', trigger: true
     _redirectIfUserNotSatisfied: ->
@@ -29,3 +36,29 @@ define [
       unless ad.street? and ad.state? and ad.city and ad.zip
         Backbone.history.navigate 'finishOrder/updateProfile', trigger: true
         return true
+    _calculateShippingCosts: ->
+      if @cart.shippingSelected()
+        @shippingOptions = $.extend true, [], @cart.shippingOptions()
+        o.cost = converters.currency o.cost for o in @shippingOptions
+        @hasShippingOptions = true
+        selectedType = @cart.shippingOptionSelected().type
+        @show()
+        $("#shippingOptions_#{selectedType}", @$el).prop 'checked', true
+        $('#finishOrder', @$el).removeAttr 'disabled'
+        return
+      data = items: _.map(@cart.items(), (i) -> _id: i._id)
+      $.ajax
+        url: "/shipping/#{@store.slug}"
+        data: data
+        type: 'POST'
+        error: (xhr, text, error) -> console.log error
+        success: (data, text, xhr) =>
+          @cart.setShippingOptions data
+          @shippingOptions = $.extend true, [], data
+          o.cost = converters.currency o.cost for o in @shippingOptions
+          @hasShippingOptions = true
+          @show()
+    _shippingOptionSelected: ->
+      shippingType = $('[name=shippingOptions]:checked', @$el).attr('value')
+      @cart.chooseShippingOption shippingType
+      $('#finishOrder', @$el).removeAttr 'disabled'

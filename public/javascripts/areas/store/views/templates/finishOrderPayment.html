@@ -69,15 +69,25 @@
     </div>
     {{/with}}
 
-    {{#with user.deliveryAddress}}
-    <address id="deliveryAddress" class="span4">
-      <h4>Dados de entrega</h4>
-      <span id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></span><br />
-      <span id="city">{{city}}</span><br />
-      <span id="state">{{state}}</span><br />
-      <span id="zip">{{zip}}</span>
-    </address>
-    {{/with}}
+    <div class="span4">
+      {{#with user.deliveryAddress}}
+      <address id="deliveryAddress">
+        <h4>Dados de entrega</h4>
+        <span id="fullAddress"><span id="street">{{street}}</span> - <span id="street2">{{street2}}</span></span><br />
+        <span id="city">{{city}}</span><br />
+        <span id="state">{{state}}</span><br />
+        <span id="zip">{{zip}}</span>
+      </address>
+      {{/with}}
+      <div id="shippingInfo">
+        Entrega por <strong>{{shippingOption.name}}</strong> em {{shippingOption.days}}
+        {{#if shippingOptionPlural}}
+        dias úteis
+        {{else}}
+        dia útil
+        {{/if}}
+      </div>
+    </div>
   </div>
   <div id="redirMsg">
     Ao clicar no botão de concluir a compra você será redirecionado ao nosso parceiro, onde fará o pagamento. <br />

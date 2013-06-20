@@ -49,6 +49,7 @@ define ->
         phoneNumber: '(11) 98745-7894'
         city: "São Paulo"
         state: "SP"
+        zip: "01234-567"
         otherUrl: 'http://myotherurl.com'
         banner: 'http://e.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
@@ -65,6 +66,7 @@ define ->
         phoneNumber: '(45) 6666-9999'
         city: "São Xilevers"
         state: "AP"
+        zip: "04365-000"
         otherUrl: 'http://someurl.com'
         banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
@@ -81,6 +83,7 @@ define ->
         phoneNumber: '(66) 6666-9999'
         city: "Las Vegas"
         state: "RJ"
+        zip: "04234-567"
         otherUrl: 'http://other.com'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
       empty: ->

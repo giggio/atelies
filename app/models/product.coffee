@@ -1,5 +1,6 @@
-mongoose = require 'mongoose'
-slug     = require '../helpers/slug'
+mongoose  = require 'mongoose'
+slug      = require '../helpers/slug'
+_         = require 'underscore'
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true
@@ -48,6 +49,10 @@ Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne
 Product.searchByName = (searchTerm, cb) ->
   Product.find nameKeywords:searchTerm.toLowerCase(), (err, products) ->
     return cb err if err
+    cb null, products
+Product.getWeightAndDimensions = (ids, cb) ->
+  Product.find '_id': '$in': ids, '_id weight dimensions', (err, products) ->
+    cb err if err?
     cb null, products
 
 module.exports = Product

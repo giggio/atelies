@@ -121,25 +121,34 @@ define [
     it 'is aware shipping cost has been calculated but not selected', ->
       cart = Cart.get('store_1')
       cart.setShippingOptions [
-        { type: 'pac', name: 'PAC', cost: 3.33 }
-        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       cart.shippingCalculated().should.be.true
       cart.shippingSelected().should.be.false
     it 'is aware shipping cost has been calculated and selected', ->
       cart = Cart.get('store_1')
       cart.setShippingOptions [
-        { type: 'pac', name: 'PAC', cost: 3.33 }
-        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       cart.chooseShippingOption 'pac'
       cart.shippingCalculated().should.be.true
       cart.shippingSelected().should.be.true
+    it 'sets shipping cost after shipping option is defined', ->
+      cart = Cart.get('store_1')
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+      ]
+      cart.chooseShippingOption 'pac'
+      cart.shippingCost().should.equal 3.33
+      cart.shippingOptionSelected().should.be.like { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
     it 'after product added, shipping cost needs to be calculated again', ->
       cart = Cart.get('store_1')
       cart.setShippingOptions [
-        { type: 'pac', name: 'PAC', cost: 3.33 }
-        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       cart.chooseShippingOption 'pac'
       item = _id: 1, price: 11.1
@@ -149,7 +158,7 @@ define [
     it 'throws if shipping option selected does not exist', ->
       cart = Cart.get('store_1')
       cart.setShippingOptions [
-        { type: 'pac', name: 'PAC', cost: 3.33 }
-        { type: 'sedex', name: 'Sedex', cost: 4.44 }
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       expect(=> cart.chooseShippingOption('oops')).to.throw Error

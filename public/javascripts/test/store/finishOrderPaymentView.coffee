@@ -20,15 +20,20 @@ define [
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item
         cart.addItem item2
+        cart.setShippingOptions [
+          { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+          { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+        ]
+        cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
         view.render()
       it 'shows the sales summary', ->
-        $("#shippingCost", el).text().should.equal 'R$ 1,00'
+        $("#shippingCost", el).text().should.equal 'R$ 3,33'
         $("#productsInfo", el).text().should.equal '2 produtos'
         $("#totalProductsPrice", el).text().should.equal 'R$ 1.234.568,10'
-        $("#totalSaleAmount", el).text().should.equal 'R$ 1.234.569,10'
+        $("#totalSaleAmount", el).text().should.equal 'R$ 1.234.571,43'
       it 'shows the delivery address', ->
         $("#street", el).text().should.equal deliveryAddress.street
         $("#street2", el).text().should.equal deliveryAddress.street2
@@ -46,6 +51,11 @@ define [
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item
         cart.addItem item2
+        cart.setShippingOptions [
+          { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+          { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+        ]
+        cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
@@ -87,6 +97,11 @@ define [
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item
         cart.addItem item2
+        cart.setShippingOptions [
+          { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+          { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+        ]
+        cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart

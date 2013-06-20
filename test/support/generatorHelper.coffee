@@ -15,10 +15,10 @@ exports.generator =
       tags: ['abc', 'def']
       description: "Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis."
       dimensions:
-        height: 10
-        width: 20
-        depth: 30
-      weight: 40
+        height: 11
+        width: 12
+        depth: 17
+      weight: 4
       hasInventory: true
       inventory: 30
     b: -> new Product
@@ -31,10 +31,10 @@ exports.generator =
       tags: ['ghi', 'jkl']
       description: "Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
       dimensions:
-        height: 50
-        width: 60
-        depth: 70
-      weight: 80
+        height: 15
+        width: 16
+        depth: 17
+      weight: 8
       hasInventory: true
       inventory: 40
     c: -> new Product
@@ -47,10 +47,10 @@ exports.generator =
       tags: ['abc', 'mno']
       description: "Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend."
       dimensions:
-        height: 90
-        width: 100
-        depth:110
-      weight: 50
+        height: 19
+        width: 20
+        depth: 21
+      weight: 5
       hasInventory: false
     d: -> new Product
       name: 'name 4'
@@ -62,10 +62,10 @@ exports.generator =
       tags: ['mno', 'pqr']
       description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
       dimensions:
-        height: 90
-        width: 100
-        depth: 110
-      weight: 120
+        height: 19
+        width: 20
+        depth: 21
+      weight: 12
       hasInventory: true
       inventory: 130
     d: -> new Product
@@ -97,6 +97,7 @@ exports.generator =
       phoneNumber: '(11) 98745-7894'
       city: "São Paulo"
       state: "SP"
+      zip: "01234-567"
       otherUrl: 'http://myotherurl.com'
       banner: 'http://lorempixel.com/800/150/cats/1'
       flyer: 'http://lorempixel.com/350/400/nightlife/1'
@@ -112,6 +113,7 @@ exports.generator =
       phoneNumber: '(85) 7788-1111'
       city: "Fortaleza"
       state: "CE"
+      zip: "04365-000"
       otherUrl: 'http://someotherurl.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/2'
     c: -> new Store
@@ -126,6 +128,7 @@ exports.generator =
       phoneNumber: '(77) 9999-9999'
       city: "Manaus"
       state: "AM"
+      zip: "04234-567"
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
     d: -> new Store
@@ -140,6 +143,7 @@ exports.generator =
       urlTwitter: ''
       city: "Campo Grande"
       state: "MS"
+      zip: "04334-567"
       otherUrl: 'http://somestoreinms.com'
       banner: 'http://lorempixel.com/800/150/cats/4'
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
@@ -155,6 +159,7 @@ exports.generator =
       phoneNumber: ''
       city: ''
       state: ''
+      zip: ''
       otherUrl: ''
       flyer: ''
   user:

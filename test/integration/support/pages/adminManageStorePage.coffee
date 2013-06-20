@@ -17,6 +17,7 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #urlTwitter", store.urlTwitter
     @type "#manageStoreBlock #phoneNumber", store.phoneNumber
     @type "#manageStoreBlock #city", store.city
+    @type "#manageStoreBlock #zip", store.zip
     @type "#manageStoreBlock #otherUrl", store.otherUrl
     @type "#manageStoreBlock #banner", store.banner
     @type "#manageStoreBlock #flyer", store.flyer

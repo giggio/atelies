@@ -10,7 +10,22 @@
     <span id="zip">{{zip}}</span>
   </address>
   {{/with}}
+  {{#if hasShippingOptions}}
+  <div id="shippingInfo">
+    <p>Opções de postagem:</p>
+    {{#each shippingOptions}}
+    <label class="radio">
+      <input id="shippingOptions_{{type}}" name="shippingOptions" type="radio" value="{{type}}" />
+      {{days}} dia(s) - {{name}} - {{cost}}
+    </label>
+    {{/each}}
+  </div>
+  {{else}}
+  <div id="gettingShippingInfo">
+    Obtendo custo do frete...
+  </div>
+  {{/if}}
   <a id="updateProfile" class="btn btn-primary" href="/account/updateProfile">Atualizar cadastro</a>
   <a href="#cart" id="goBackToCart" class="btn btn-primary">Voltar</a>
-  <button id="finishOrder" class="btn btn-primary">Continuar</button>
+  <button id="finishOrder" class="btn btn-primary" disabled="disabled">Continuar</button>
 </div>

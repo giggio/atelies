@@ -40,13 +40,14 @@ describe 'Store Finish Order: Payment', ->
                 storeProductPage.visit 'store_1', 'name_2', ->
                   storeProductPage.purchaseItem ->
                     storeCartPage.clickFinishOrder ->
-                      storeFinishOrderShippingPage.clickContinue done
+                      storeFinishOrderShippingPage.clickSedexOption ->
+                        storeFinishOrderShippingPage.clickContinue done
     it 'should show summary of sale', (done) ->
       page.summaryOfSale (s) ->
-        s.shippingCost.should.equal 'R$ 1,00'
+        s.shippingCost.should.equal 'R$ 43,60'
         s.productsInfo.should.equal '2 produtos'
         s.totalProductsPrice.should.equal 'R$ 33,30'
-        s.totalSaleAmount.should.equal 'R$ 34,30'
+        s.totalSaleAmount.should.equal 'R$ 76,90'
         a = s.address
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
@@ -71,10 +72,11 @@ describe 'Store Finish Order: Payment', ->
                   storeProductPage.purchaseItem ->
                     storeCartPage.updateQuantity product2, 2, ->
                       storeCartPage.clickFinishOrder ->
-                        storeFinishOrderShippingPage.clickContinue ->
-                          page.clickCompleteOrder ->
-                            page.waitForUrl "http://localhost:8000/#{store.slug}#finishOrder/orderFinished", ->
-                              waitSeconds 1, done
+                        storeFinishOrderShippingPage.clickSedexOption ->
+                          storeFinishOrderShippingPage.clickContinue ->
+                            page.clickCompleteOrder ->
+                              page.waitForUrl "http://localhost:8000/#{store.slug}#finishOrder/orderFinished", ->
+                                waitSeconds 1, done
     it 'should show have stored a new order on db', (done) ->
       Order.find (err, orders) ->
         throw err if err

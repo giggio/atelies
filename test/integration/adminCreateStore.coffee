@@ -43,6 +43,7 @@ describe 'Admin create store page', ->
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
         expect(store.city).to.equal exampleStore.city
         expect(store.state).to.equal exampleStore.state
+        expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.banner).to.equal exampleStore.banner
         expect(store.flyer).to.equal exampleStore.flyer
@@ -64,6 +65,7 @@ describe 'Admin create store page', ->
           page.visit ->
             exampleStore.banner = "abc"
             exampleStore.email = "bla"
+            exampleStore.zip = ''
             exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore, ->
@@ -81,6 +83,7 @@ describe 'Admin create store page', ->
         msgs.name.should.equal "Informe o nome da loja."
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
+        msgs.zip.should.equal "Informe o CEP."
         msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
         msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."

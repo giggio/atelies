@@ -51,10 +51,13 @@ define ['underscore'], (_) ->
         .map((i)->i.price*i.quantity)
         .reduce(((p, t) -> p+t), 0).value()
       total
-    shippingCost: -> @_shippingCost
-    totalSaleAmount: -> @totalPrice() + @_shippingCost
+    shippingCost: ->
+      @shippingOptionSelected()?.cost
+    totalSaleAmount: -> @totalPrice() + @shippingCost()
+    shippingOptions: -> @_shippingOptions
     shippingCalculated: -> @_shippingOptions?
     shippingSelected: -> @_shippingOptionSelected?
+    shippingOptionSelected: -> _.findWhere @_shippingOptions, type: @_shippingOptionSelected
     setShippingOptions: (opt) -> @_shippingOptions = opt
     chooseShippingOption: (type) ->
       opt = _.findWhere @_shippingOptions, type: type

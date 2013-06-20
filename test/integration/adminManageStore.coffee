@@ -31,7 +31,7 @@ describe 'Admin manage store page', ->
       page.message (msg) ->
         msg.endsWith("Loja atualizada com sucesso").should.be.true
         done()
-    it 'created a new store with correct information', (done) ->
+    it 'updated a new store with correct information', (done) ->
       Store.find (error, stores) ->
         return done error if error
         stores.length.should.equal 1
@@ -48,6 +48,7 @@ describe 'Admin manage store page', ->
         expect(store.phoneNumber).to.equal otherStore.phoneNumber
         expect(store.city).to.equal otherStore.city
         expect(store.state).to.equal otherStore.state
+        expect(store.zip).to.equal otherStore.zip
         expect(store.otherUrl).to.equal otherStore.otherUrl
         expect(store.banner).to.equal otherStore.banner
         expect(store.flyer).to.equal otherStore.flyer
@@ -89,6 +90,7 @@ describe 'Admin manage store page', ->
         msgs.name.should.equal "Informe o nome da loja."
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
+        msgs.zip.should.equal "Informe o CEP."
         msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
         msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
@@ -108,6 +110,7 @@ describe 'Admin manage store page', ->
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
         expect(store.city).to.equal exampleStore.city
         expect(store.state).to.equal exampleStore.state
+        expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.banner).to.equal exampleStore.banner
         expect(store.flyer).to.equal exampleStore.flyer

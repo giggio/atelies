@@ -12,3 +12,4 @@ module.exports = class StoreCartPage extends Page
       => @getText "#deliveryAddress #zip", (t) -> address.zip = t
     ], (-> cb(address))
   clickContinue: @::pressButton.partial '#finishOrder'
+  clickSedexOption: @::pressButton.partial '#shippingOptions_sedex'

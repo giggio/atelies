@@ -11,6 +11,7 @@ exports.route = (app) ->
   app.get     "/products/search/:searchTerm",                               routes.productsSearch
   #misc
   app.get     "/blank",                                                     routes.blank
+  app.post    "/shipping/:storeSlug",                                       routes.calculateShipping
   #account
   app.get     "/account",                                                   routes.account
   app.get     "/account/orders/:_id",                                       routes.order

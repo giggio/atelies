@@ -27,6 +27,7 @@ define [
         manageStoreView.$("#phoneNumber").val(exampleStore.phoneNumber).change()
         manageStoreView.$("#city").val(exampleStore.city).change()
         manageStoreView.$("#state").val(exampleStore.state).change()
+        manageStoreView.$("#zip").val(exampleStore.zip).change()
         manageStoreView.$("#otherUrl").val(exampleStore.otherUrl).change()
         manageStoreView.$("#banner").val(exampleStore.banner).change()
         manageStoreView.$("#flyer").val(exampleStore.flyer).change()
@@ -42,6 +43,7 @@ define [
         expect(storePassedIn.phoneNumber).to.equal exampleStore.phoneNumber
         expect(storePassedIn.city).to.equal exampleStore.city
         expect(storePassedIn.state).to.equal exampleStore.state
+        expect(storePassedIn.zip).to.equal exampleStore.zip
         expect(storePassedIn.otherUrl).to.equal exampleStore.otherUrl
         expect(storePassedIn.banner).to.equal exampleStore.banner
         expect(storePassedIn.flyer).to.equal exampleStore.flyer
@@ -96,6 +98,7 @@ define [
           manageStoreView.$("#phoneNumber").val(newStore.phoneNumber).change()
           manageStoreView.$("#city").val(newStore.city).change()
           manageStoreView.$("#state").val(newStore.state).change()
+          manageStoreView.$("#zip").val(newStore.zip).change()
           manageStoreView.$("#otherUrl").val(newStore.otherUrl).change()
           manageStoreView.$("#banner").val(newStore.banner).change()
           manageStoreView.$("#flyer").val(newStore.flyer).change()
@@ -111,6 +114,7 @@ define [
           expect(storePassedIn.phoneNumber).to.equal newStore.phoneNumber
           expect(storePassedIn.city).to.equal newStore.city
           expect(storePassedIn.state).to.equal newStore.state
+          expect(storePassedIn.zip).to.equal newStore.zip
           expect(storePassedIn.otherUrl).to.equal newStore.otherUrl
           expect(storePassedIn.banner).to.equal newStore.banner
           expect(storePassedIn.flyer).to.equal newStore.flyer

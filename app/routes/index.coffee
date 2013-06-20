@@ -6,10 +6,11 @@ _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
+correios        = require 'correios'
 
 class Routes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account'
+    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account', 'calculateShipping'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
 
   _auth: ->
@@ -105,6 +106,7 @@ class Routes
     store.phoneNumber = body.phoneNumber
     store.city = body.city
     store.state = body.state
+    store.zip = body.zip
     store.otherUrl = body.otherUrl
     store.banner = body.banner
     store.flyer = body.flyer
@@ -131,6 +133,7 @@ class Routes
       store.phoneNumber = body.phoneNumber
       store.city = body.city
       store.state = body.state
+      store.zip = body.zip
       store.otherUrl = body.otherUrl
       store.banner = body.banner
       store.flyer = body.flyer
@@ -284,5 +287,53 @@ class Routes
     Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) ->
       return res.json 400, err if err?
       res.json orders
+
+  calculateShipping: (req, res) ->
+    data = req.body
+    ids = _.map data.items, (i) -> i._id
+    user = req.user
+    userZip = user.deliveryAddress.zip
+    pac = type: 'pac', name: 'PAC', cost: 0, days: 0
+    sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
+    shippingOptions = [ pac, sedex ]
+    Store.findBySlug req.params.storeSlug, (err, store) ->
+      storeZip = store.zip
+      Product.getWeightAndDimensions ids, (err, products) ->
+        callbacks = 0
+        for p in products
+          do (p) ->
+            if p.weight? and p.dimensions? and
+            p.weight <= 30 and
+            11 <= p.dimensions.width <= 105 and
+            2 <= p.dimensions.height <= 105 and
+            16 <= p.dimensions.depth <= 105 and
+            p.dimensions.height + p.dimensions.width + p.dimensions.depth <= 200
+              deliverySpecs =
+                serviceType: 'pac'
+                from: storeZip
+                to: userZip
+                weight: p.weight
+                height: p.dimensions.height
+                width: p.dimensions.width
+                length: p.dimensions.depth
+              callbacks++
+              correios.getPrice deliverySpecs, (err, delivery) ->
+                callbacks--
+                dealWith err
+                pac.cost += delivery.GrandTotal
+                pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
+              callbacks++
+              deliverySpecs.serviceType = 'sedex'
+              correios.getPrice deliverySpecs, (err, delivery) ->
+                callbacks--
+                dealWith err
+                sedex.cost += delivery.GrandTotal
+                sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
+        ready = ->
+          if callbacks is 0
+            res.json shippingOptions
+          else
+            setImmediate ready
+        ready()
 
 module.exports = Routes

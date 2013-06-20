@@ -19,14 +19,17 @@ define [
       @cart = opt.cart
       @user = opt.user
     render: =>
+      unless @cart.shippingCalculated()
+        return Backbone.history.navigate 'finishOrder/shipping', trigger: true
       numberOfProducts = @cart.items().length
       orderSummary =
         shippingCost: converters.currency @cart.shippingCost()
-        productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's'}"
+        productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
+      shippingOption = @cart.shippingOptionSelected()
       context = Handlebars.compile @template
-      @$el.html context user: @user, cart: @cart, store: @store, orderSummary: orderSummary
+      @$el.html context user: @user, cart: @cart, store: @store, orderSummary: orderSummary, shippingOption: shippingOption, shippingOptionPlural: shippingOption.days > 1
     finishOrder: ->
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
       orders = new Orders storeId: @store._id

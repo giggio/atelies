@@ -13,6 +13,7 @@ define [
       urlTwitter:undefined
       city:undefined
       state:'SP'
+      zip:undefined
       otherUrl:undefined
       banner:undefined
       flyer:undefined
@@ -27,6 +28,9 @@ define [
       city:
         required: true
         msg: 'Informe a cidade.'
+      zip:
+        required: true
+        msg: 'Informe o CEP.'
       otherUrl:
         [{pattern:'url', msg:'Informe um link válido para o outro site, começando com http ou https.'}
         {required: false}]
