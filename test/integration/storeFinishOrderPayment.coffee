@@ -95,7 +95,7 @@ describe 'Store Finish Order: Payment', ->
         order.customer.toString().should.equal user1._id.toString()
         order.store.toString().should.equal store._id.toString()
         order.items.length.should.equal 2
-        order.shippingCost.should.equal 1
+        order.shippingCost.should.equal 71.50
         order.totalProductsPrice.should.equal product1.price+product2.price*2
         order.totalSaleAmount.should.equal order.totalProductsPrice+order.shippingCost
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()
@@ -123,7 +123,7 @@ describe 'Store Finish Order: Payment', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/orderFinished"
         done()
 
-  describe 'completing payment with manual shipping calculation and product without inventory', ->
+  describe 'completing the payment with manual shipping calculation and product without inventory', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error

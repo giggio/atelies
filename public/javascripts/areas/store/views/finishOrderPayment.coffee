@@ -23,8 +23,8 @@ define [
         return Backbone.history.navigate 'finishOrder/shipping', trigger: true
       context = Handlebars.compile @template
       numberOfProducts = @cart.items().length
-      hasAutoCalculatedShipping = @cart.shippingSelected()
-      if hasAutoCalculatedShipping
+      @hasAutoCalculatedShipping = @cart.shippingSelected()
+      if @hasAutoCalculatedShipping
         shippingCost = converters.currency @cart.shippingCost()
       else
         shippingCost = "Calculado posteriormente"
@@ -33,8 +33,8 @@ define [
         productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
-      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: hasAutoCalculatedShipping
-      if hasAutoCalculatedShipping
+      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: @hasAutoCalculatedShipping
+      if @hasAutoCalculatedShipping
         viewModel.shippingOption = @cart.shippingOptionSelected()
         viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
       @$el.html context viewModel
@@ -45,4 +45,6 @@ define [
         @cart.clear()
         Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
       error = => #console.error 'Erro ao salvar'
-      order = orders.create items:items, {error: error, success: success}
+      order = items: items
+      order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping
+      order = orders.create order, {error: error, success: success}

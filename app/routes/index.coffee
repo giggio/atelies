@@ -261,12 +261,8 @@ class Routes
 
   orderCreate: (req, res) ->
     user = req.user
-    Store.findById req.params.storeId, (err, store) ->
+    Store.findById req.params.storeId, (err, store) =>
       dealWith err
-      if store.autoCalculateShipping
-        shippingCost = 1
-      else
-        shippingCost = 0
       items = []
       errors = []
       for item in req.body.items
@@ -276,10 +272,10 @@ class Routes
               errors.push err
             else
               items.push product: prod, quantity: item.quantity
-      foundProducts = ->
-        if errors.length + items.length is req.body.items.length
-          if errors.length > 0
-            res.json 400, errors
+      foundProducts = =>
+        return setImmediate foundProducts unless errors.length + items.length is req.body.items.length
+        return res.json 400, errors if errors.length > 0
+        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) ->
           Order.create user, store, items, shippingCost, (order) ->
             order.save (err, order) ->
               if err?
@@ -290,9 +286,17 @@ class Routes
                   p.inventory -= item.quantity if p.hasInventory
                   p.save()
                 res.json 201, order.toSimpleOrder()
-        else
-          setImmediate foundProducts
       process.nextTick foundProducts
+
+  _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
+    if store.autoCalculateShipping
+      @_calculateShipping store.slug, data, user, (error, shippingOptions) ->
+        cb error if error?
+        shippingOption = _.findWhere shippingOptions, type: shippingType
+        shippingCost = shippingOption.cost
+        cb null, shippingCost
+    else
+      setImmediate -> cb null, 0
 
   account: (req, res) ->
     user = req.user
@@ -306,15 +310,18 @@ class Routes
       res.json orders
 
   calculateShipping: (req, res) ->
-    data = req.body
+    @_calculateShipping req.params.storeSlug, req.body, req.user, (error, shippingOptions) ->
+      return res.send 500, error: "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." if error
+      res.json shippingOptions
+
+  _calculateShipping: (storeSlug, data, user, cb) ->
     ids = _.map data.items, (i) -> i._id
-    user = req.user
     userZip = user.deliveryAddress.zip
     pac = type: 'pac', name: 'PAC', cost: 0, days: 0
     sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
     shippingOptions = [ pac, sedex ]
-    Store.findBySlug req.params.storeSlug, (err, store) ->
-      return res.send 500, error: "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
+    Store.findBySlug storeSlug, (err, store) ->
+      cb "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
         callbacks = 0
@@ -346,7 +353,7 @@ class Routes
                 sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
         ready = ->
           if callbacks is 0
-            res.json shippingOptions
+            cb null, shippingOptions
           else
             setImmediate ready
         ready()
