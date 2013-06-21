@@ -317,6 +317,7 @@ class Routes
         for p in products
           do (p) ->
             if p.hasShippingInfo()
+              shipping = p.shipping
               quantity = parseInt _.findWhere(data.items, _id: p._id.toString()).quantity
               deliverySpecs =
                 serviceType: 'pac'

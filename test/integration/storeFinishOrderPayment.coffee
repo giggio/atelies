@@ -6,8 +6,7 @@ StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShipp
 StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 
-#TODO: review how to finish order with stores that dont have autocalculated shipping costs
-xdescribe 'Store Finish Order: Payment', ->
+describe 'Store Finish Order: Payment', ->
   page = storeFinishOrderShippingPage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = p1Inventory = p2Inventory = null
   after (done) -> page.closeBrowser done
   before (done) =>
@@ -45,10 +44,10 @@ xdescribe 'Store Finish Order: Payment', ->
                         storeFinishOrderShippingPage.clickContinue done
     it 'should show summary of sale', (done) ->
       page.summaryOfSale (s) ->
-        s.shippingCost.should.equal 'R$ 43,60'
+        s.shippingCost.should.equal 'R$ 45,20'
         s.productsInfo.should.equal '2 produtos'
         s.totalProductsPrice.should.equal 'R$ 33,30'
-        s.totalSaleAmount.should.equal 'R$ 76,90'
+        s.totalSaleAmount.should.equal 'R$ 78,50'
         a = s.address
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
