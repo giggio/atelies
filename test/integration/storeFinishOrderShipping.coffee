@@ -8,7 +8,7 @@ AccountUpdateProfilePage        = require  './support/pages/accountUpdateProfile
 LoginPage                       = require  './support/pages/loginPageSelenium'
 
 describe 'Store Finish Order: Shipping', ->
-  page = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
+  page = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = storeWithoutAutoCalculateShipping = product1 = product2 = store2 = user1 = userIncompleteAddress = null
   after (done) -> page.closeBrowser done
   before (done) =>
     page = new StoreFinishOrderShippingPage()
@@ -24,6 +24,10 @@ describe 'Store Finish Order: Shipping', ->
       product1.save()
       product2 = generator.product.b()
       product2.save()
+      storeWithoutAutoCalculateShipping = generator.store.b()
+      storeWithoutAutoCalculateShipping.save()
+      product3 = generator.product.c()
+      product3.save()
       user1 = generator.user.d()
       user1.save()
       userIncompleteAddress = generator.user.a()
@@ -46,6 +50,18 @@ describe 'Store Finish Order: Shipping', ->
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
+        done()
+    it 'should show calculated shipping', (done) ->
+      page.shippingInfo (s) ->
+        s.options.length.should.equal 2
+        done()
+    it 'does not have next button enabled', (done) ->
+      page.finishOrderButtonIsEnabled (itIs) ->
+        itIs.should.equal false
+        done()
+    it 'does not show message about shipping manual calculation', (done) ->
+      page.manualShippingCalculationMessage (m) ->
+        expect(m).to.be.null
         done()
 
   describe 'not logged in user', (done) ->
@@ -119,4 +135,25 @@ describe 'Store Finish Order: Shipping', ->
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
+        done()
+
+  describe 'store without auto calculated shipping', ->
+    before (done) ->
+      page.clearCookies ->
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_2', 'name_3', ->
+              storeProductPage.purchaseItem ->
+                storeCartPage.clickFinishOrder done
+    it 'should not show calculated shipping', (done) ->
+      page.shippingInfoExists (itDoes) ->
+        itDoes.should.be.false
+        done()
+    it 'has next button enabled', (done) ->
+      page.finishOrderButtonIsEnabled (itIs) ->
+        itIs.should.equal true
+        done()
+    it 'shows message about shipping manual calculation', (done) ->
+      page.manualShippingCalculationMessage (m) ->
+        m.should.equal "O cálculo da postagem será feito posteriormente pela loja."
         done()

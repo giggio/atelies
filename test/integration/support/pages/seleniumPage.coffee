@@ -45,7 +45,7 @@ module.exports = class Page
             el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
               el.getText().then (text) -> errorMsgs[id] = text
     flow.then (-> cb(errorMsgs)), cb
-  findElement: (selector) -> @driver.findElement(webdriver.By.css(selector))
+  findElement: (selector) -> if typeof selector is 'string' then @driver.findElement(webdriver.By.css(selector)) else selector
   findElements: (selector) -> @driver.findElements(webdriver.By.css(selector))
   findElementIn: (selector, childSelector, cb) ->
     el = if typeof selector is 'string' then @findElement(selector) else selector
@@ -81,6 +81,10 @@ module.exports = class Page
   getAttributeIn: (selector, childSelector, attr, cb) ->
     @findElementIn selector, childSelector, (el) =>
       @getAttribute el, attr, cb
+  getTextIfExists: (selector, cb) ->
+    @hasElement selector, (itHas) =>
+      return cb null unless itHas
+      @getText selector, cb
   getText: (selector, cb) ->
     el = if typeof selector is 'string' then @findElement(selector) else selector
     el.getText().then cb
@@ -98,6 +102,7 @@ module.exports = class Page
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
+  getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb

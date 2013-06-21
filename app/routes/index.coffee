@@ -311,6 +311,7 @@ class Routes
     sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
     shippingOptions = [ pac, sedex ]
     Store.findBySlug req.params.storeSlug, (err, store) ->
+      return res.send 500, error: "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
         callbacks = 0

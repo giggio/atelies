@@ -13,3 +13,17 @@ module.exports = class StoreCartPage extends Page
     ], (-> cb(address))
   clickContinue: @::pressButton.partial '#finishOrder'
   clickSedexOption: @::pressButton.partial '#shippingOptions_sedex'
+  shippingInfo: (cb) ->
+    options = []
+    getData = []
+    @findElementsIn '#shippingInfo', 'input[type="radio"]', (els) =>
+      for el in els
+        do (el) =>
+          option = {}
+          options.push option
+          getData.push => @getValue el, (t) => option.value = t
+      @parallel getData, -> cb(options: options)
+      undefined
+  finishOrderButtonIsEnabled: @::getIsEnabled.partial '#finishOrder'
+  manualShippingCalculationMessage: @::getTextIfExists.partial '#manualShippingCalculationMessage'
+  shippingInfoExists: @::hasElement.partial '#shippingInfo'
