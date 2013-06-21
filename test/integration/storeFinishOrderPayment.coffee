@@ -141,8 +141,7 @@ describe 'Store Finish Order: Payment', ->
                   storeCartPage.clickFinishOrder ->
                     storeFinishOrderShippingPage.clickContinue ->
                       page.clickCompleteOrder ->
-                        page.waitForUrl "http://localhost:8000/#{store.slug}#finishOrder/orderFinished", ->
-                          waitSeconds 1, done
+                        waitSeconds 1, done
     it 'should have stored a new order on db', (done) ->
       Order.find (err, orders) ->
         throw err if err
