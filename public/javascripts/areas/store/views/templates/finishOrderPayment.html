@@ -79,6 +79,7 @@
         <span id="zip">{{zip}}</span>
       </address>
       {{/with}}
+      {{#if hasAutoCalculatedShipping}}
       <div id="shippingInfo">
         Entrega por <strong>{{shippingOption.name}}</strong> em {{shippingOption.days}}
         {{#if shippingOptionPlural}}
@@ -87,6 +88,9 @@
         dia útil
         {{/if}}
       </div>
+      {{else}}
+      <div id="manualShippingCalculationMessage">O cálculo da postagem será feito posteriormente pela loja.</div>
+      {{/if}}
     </div>
   </div>
   <div id="redirMsg">

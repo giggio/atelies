@@ -38,6 +38,7 @@ define [
         return true
     _calculateShippingCosts: ->
       unless @store.autoCalculateShipping
+        @cart.setManualShipping()
         $('#finishOrder', @$el).removeAttr 'disabled'
         return
       if @cart.shippingSelected()

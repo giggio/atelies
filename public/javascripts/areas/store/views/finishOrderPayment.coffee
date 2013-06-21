@@ -19,17 +19,25 @@ define [
       @cart = opt.cart
       @user = opt.user
     render: =>
-      unless @cart.shippingCalculated()
+      if @cart.autoCalculatedShipping and @cart.shippingCalculated() is false
         return Backbone.history.navigate 'finishOrder/shipping', trigger: true
+      context = Handlebars.compile @template
       numberOfProducts = @cart.items().length
+      hasAutoCalculatedShipping = @cart.shippingSelected()
+      if hasAutoCalculatedShipping
+        shippingCost = converters.currency @cart.shippingCost()
+      else
+        shippingCost = "Calculado posteriormente"
       orderSummary =
-        shippingCost: converters.currency @cart.shippingCost()
+        shippingCost: shippingCost
         productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
-      shippingOption = @cart.shippingOptionSelected()
-      context = Handlebars.compile @template
-      @$el.html context user: @user, cart: @cart, store: @store, orderSummary: orderSummary, shippingOption: shippingOption, shippingOptionPlural: shippingOption.days > 1
+      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: hasAutoCalculatedShipping
+      if hasAutoCalculatedShipping
+        viewModel.shippingOption = @cart.shippingOptionSelected()
+        viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
+      @$el.html context viewModel
     finishOrder: ->
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
       orders = new Orders storeId: @store._id

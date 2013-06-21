@@ -8,14 +8,16 @@ define [
   product1  = generatorc.product.a()
   product2  = generatorc.product.b()
   store1    = generatorc.store.a()
+  store2    = generatorc.store.b()
+  product3  = generatorc.product.c()
   view = deliveryAddress = null
   el = $('<div></div>')
   describe 'FinishOrderPaymentView', ->
     describe 'Showing order to be finished', ->
       after -> view.close()
       before ->
+        Cart.clear()
         cart = Cart.get(store1.slug)
-        cart.clear()
         item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item
@@ -41,12 +43,33 @@ define [
         $("#state", el).text().should.equal deliveryAddress.state
         $("#zip", el).text().should.equal deliveryAddress.zip
 
+    describe 'Showing order to be finished without shipping cost', ->
+      after -> view.close()
+      before ->
+        Cart.clear()
+        cart = Cart.get(store2.slug)
+        item = _id: '1', name: 'produto 1', picture: 'http://someurl.com', url: 'store_2#prod_1', price: 2
+        item2 = _id: '2', name: 'produto 2', picture: 'http://someurl2.com', url: 'store_2#prod_2', price: 4
+        cart.addItem item
+        cart.addItem item2
+        cart.addItem item2
+        cart.setManualShipping()
+        deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
+        user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
+        view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
+        view.render()
+      it 'shows the sales summary', ->
+        $("#shippingCost", el).text().should.equal 'Calculado posteriormente'
+        $("#productsInfo", el).text().should.equal '2 produtos'
+        $("#totalProductsPrice", el).text().should.equal 'R$ 10,00'
+        $("#totalSaleAmount", el).text().should.equal 'R$ 10,00'
+
     describe 'Finishing order', ->
       item = item2 = ajaxSpy = historySpy = dataPosted = orderPosted = null
       after -> view.close()
       before ->
+        Cart.clear()
         cart = Cart.get(store1.slug)
-        cart.clear()
         item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item
@@ -91,8 +114,8 @@ define [
       item = item2 = ajaxSpy = historySpy = dataPosted = orderPosted = null
       after -> view.close()
       before ->
+        Cart.clear()
         cart = Cart.get(store1.slug)
-        cart.clear()
         item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
         item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
         cart.addItem item

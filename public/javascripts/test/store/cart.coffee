@@ -162,3 +162,21 @@ define [
         { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       expect(=> cart.chooseShippingOption('oops')).to.throw Error
+    it 'when two products are added and shipping calculated it has correct total sale amount', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      cart.addItem item
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+      ]
+      cart.chooseShippingOption 'pac'
+      cart.totalSaleAmount().should.equal 25.53
+    it 'when two products are added and no shipping cost selected the price of the products is the total sale amount', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      cart.addItem item
+      cart.setManualShipping()
+      cart.totalSaleAmount().should.equal 22.2

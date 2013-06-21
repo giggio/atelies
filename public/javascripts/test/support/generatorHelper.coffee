@@ -43,6 +43,24 @@ define ->
         shippingDepth: 71
         shippingWeight: 81
         hasInventory: false
+      c: ->
+        name: 'name 3'
+        slug: 'name_3'
+        picture: 'http://lorempixel.com/150/150/cats'
+        price: 33.33
+        storeName: 'store 2'
+        storeSlug: 'store_2'
+        tags: 'abc, mno'
+        description: "Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend."
+        height: 19
+        width: 20
+        depth: 21
+        weight: 5
+        shippingHeight: 20
+        shippingWidth: 21
+        shippingDepth: 22
+        shippingWeight: 6
+        hasInventory: false
     store:
       a: ->
         _id: '1'

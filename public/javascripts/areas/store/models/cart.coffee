@@ -1,6 +1,9 @@
 define ['underscore'], (_) ->
   class Cart
     @_carts: null
+    @clear: ->
+      Cart._carts = null
+      localStorage.clear()
     @get: (storeSlug) ->
       unless @_carts?
         @_carts = []
@@ -52,7 +55,11 @@ define ['underscore'], (_) ->
         .reduce(((p, t) -> p+t), 0).value()
       total
     shippingCost: ->
-      @shippingOptionSelected()?.cost
+      shippingOption = @shippingOptionSelected()
+      if @autoCalculatedShipping
+        shippingOption?.cost
+      else
+        0
     totalSaleAmount: -> @totalPrice() + @shippingCost()
     shippingOptions: -> @_shippingOptions
     shippingCalculated: -> @_shippingOptions?
@@ -63,3 +70,6 @@ define ['underscore'], (_) ->
       opt = _.findWhere @_shippingOptions, type: type
       throw new Error("Shipping option does not exist.") unless opt?
       @_shippingOptionSelected = type
+    autoCalculatedShipping: true
+    setManualShipping: -> @autoCalculatedShipping = false
+    setAutoCalculatedShipping: -> @autoCalculatedShipping = true

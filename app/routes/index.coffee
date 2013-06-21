@@ -263,7 +263,10 @@ class Routes
     user = req.user
     Store.findById req.params.storeId, (err, store) ->
       dealWith err
-      shippingCost = 1
+      if store.autoCalculateShipping
+        shippingCost = 1
+      else
+        shippingCost = 0
       items = []
       errors = []
       for item in req.body.items
@@ -284,7 +287,7 @@ class Routes
               else
                 for item in items
                   p = item.product
-                  p.inventory -= item.quantity
+                  p.inventory -= item.quantity if p.hasInventory
                   p.save()
                 res.json 201, order.toSimpleOrder()
         else
