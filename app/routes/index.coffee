@@ -11,7 +11,7 @@ correios        = require 'correios'
 class Routes
   constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account', 'calculateShipping'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn'
 
   _auth: ->
     for fn in arguments
@@ -138,11 +138,23 @@ class Routes
       store.otherUrl = body.otherUrl
       store.banner = body.banner
       store.flyer = body.flyer
-      store.autoCalculateShipping = body.autoCalculateShipping
       store.save (err) ->
         if err?
           return res.json 400
         res.send 200, store
+  adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
+  adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
+  _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
+    Store.findById req.params.storeId, (err, store) ->
+      dealWith err
+      throw new AccessDenied() unless req.user.hasStore store
+      store.setAutoCalculateShipping autoCalculateShipping, (set) ->
+        if set
+          store.save (err) ->
+            return res.json 400 if err?
+            res.send 204
+        else
+          res.send 409
 
   _getSubdomain: (domain, host) ->
     return undefined if @env isnt 'production' and host is 'localhost'
@@ -304,13 +316,7 @@ class Routes
         callbacks = 0
         for p in products
           do (p) ->
-            shipping = p.shipping
-            if shipping.weight? and shipping.dimensions? and
-            shipping.weight <= 30 and
-            11 <= shipping.dimensions.width <= 105 and
-            2 <= shipping.dimensions.height <= 105 and
-            16 <= shipping.dimensions.depth <= 105 and
-            shipping.dimensions.height + shipping.dimensions.width + shipping.dimensions.depth <= 200
+            if p.hasShippingInfo()
               quantity = parseInt _.findWhere(data.items, _id: p._id.toString()).quantity
               deliverySpecs =
                 serviceType: 'pac'

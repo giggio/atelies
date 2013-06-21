@@ -244,6 +244,7 @@ db.stores.insert
   zip: "01234-567"
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats/1'
+  autoCalculateShipping: true
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
@@ -263,6 +264,7 @@ db.stores.insert
   zip: "04365-000"
   otherUrl: 'http://someotherurl.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/2'
+  autoCalculateShipping: false
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert
@@ -281,6 +283,7 @@ db.stores.insert
   zip: "04234-567"
   otherUrl: 'http://idontownthisstore.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/3'
+  autoCalculateShipping: true
 db.stores.insert
   name: 'Some Fancy Name'
   nameKeywords: ['some', 'fancy', 'name']
@@ -297,6 +300,7 @@ db.stores.insert
   zip: "04334-567"
   otherUrl: 'http://somestorefromms.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/4'
+  autoCalculateShipping: false
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -317,6 +321,7 @@ for i in [4..15]
     otherUrl: 'http://myotherurl.com'
     banner: "http://lorempixel.com/800/150/cats/#{pictureId}"
     flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
+    autoCalculateShipping: false
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
 db.users.save userSeller

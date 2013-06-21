@@ -55,6 +55,15 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
   @shipping.dimensions.width = simple.shippingWidth
   @shipping.dimensions.depth = simple.shippingDepth
   @shipping.weight = simple.shippingWeight
+productSchema.methods.hasShippingInfo = ->
+  shipping = @shipping
+  has = shipping.weight? and shipping.dimensions? and
+  shipping.weight <= 30 and
+  11 <= shipping.dimensions.width <= 105 and
+  2 <= shipping.dimensions.height <= 105 and
+  16 <= shipping.dimensions.depth <= 105 and
+  shipping.dimensions.height + shipping.dimensions.width + shipping.dimensions.depth <= 200
+  has
 
 Product = mongoose.model 'product', productSchema
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb

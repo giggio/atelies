@@ -9,11 +9,13 @@ define [
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
+      'click #confirmSetAutoCalculateShipping':'_confirmSetAutoCalculateShipping'
+      'click #confirmUnsetAutoCalculateShipping':'_confirmUnsetAutoCalculateShipping'
     template: manageStoreTemplate
     initialize: (opt) ->
       @model = opt.store
       context = Handlebars.compile @template
-      @$el.html context new: @model.id? is false
+      @$el.html context new: @model.id? is false, autoCalculateShipping: @model.get 'autoCalculateShipping'
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
       Validation.bind @
@@ -33,3 +35,19 @@ define [
       StoreView.justCreated = !update
       StoreView.justUpdated = update
       Backbone.history.navigate "store/#{store.get('slug')}", trigger: true
+    _confirmSetAutoCalculateShipping: -> @_setAutoCalculateShipping on
+    _confirmUnsetAutoCalculateShipping: -> @_setAutoCalculateShipping off
+    _setAutoCalculateShipping: (set) ->
+      url = "/admin/store/#{@model.get('_id')}/setAutoCalculateShipping"
+      url += if set then "On" else "Off"
+      $.ajax
+        url: url
+        type: 'PUT'
+        error: (xhr, text, error) ->
+          return console.log error, xhr if xhr.status isnt 409
+          $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
+          $('#modalCannotAutoCalculateShipping', @el).modal 'show'
+        success: (data, text, xhr) =>
+          @model.set 'autoCalculateShipping', set
+          $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
+          @_storeCreated @model

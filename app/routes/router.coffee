@@ -1,7 +1,8 @@
 Routes    = require './index'
-
+_         = require 'underscore'
 exports.route = (app) ->
   routes = new Routes app.get "env"
+  _.bindAll routes
   domain = app.get 'domain'
   app.get     "/",                                                          routes.index domain
   #order
@@ -27,6 +28,8 @@ exports.route = (app) ->
   #admin store
   app.post    "/admin/store",                                               routes.adminStoreCreate
   app.put     "/admin/store/:storeId",                                      routes.adminStoreUpdate
+  app.put     "/admin/store/:storeId/setAutoCalculateShippingOn",           routes.adminStoreUpdateSetAutoCalculateShippingOn
+  app.put     "/admin/store/:storeId/setAutoCalculateShippingOff",          routes.adminStoreUpdateSetAutoCalculateShippingOff
   #admin product
   app.get     "/admin/:storeSlug/products",                                 routes.storeProducts
   app.post    "/admin/:storeSlug/products",                                 routes.adminProductCreate

@@ -1,6 +1,7 @@
 mongoose = require 'mongoose'
 Product  = require './product'
 slug     = require '../helpers/slug'
+_        = require 'underscore'
 
 storeSchema = new mongoose.Schema
   name:                   type: String, required: true
@@ -25,6 +26,15 @@ storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
+storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
+  unless val
+    @autoCalculateShipping = false
+    setImmediate => cb true
+    return
+  Product.findByStoreSlug @slug, (err, products) =>
+    productWithMissingInfo = _.find products, (p) -> p.hasShippingInfo() is false
+    @autoCalculateShipping = true unless productWithMissingInfo?
+    cb not productWithMissingInfo?
 
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
