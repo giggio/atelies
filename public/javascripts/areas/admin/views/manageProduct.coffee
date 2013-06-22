@@ -16,6 +16,7 @@ define [
     template: manageProductTemplate
     initialize: (opt) =>
       @model = opt.product
+      @store = opt.store
       @$el.html @template
       @bindings = @initializeBindings
         "#_id": "html:_id"
@@ -33,14 +34,25 @@ define [
         "#inventory": "value:integerOr(inventory)"
         "#price": "value:decimalOr(price)"
         "#hasInventory": "checked:hasInventory"
+      @_setValidation()
+    _setValidation: ->
+      val = @model.validation
+      unless @store.get 'autoCalculateShipping'
+        vals = [ val.shippingHeight, val.shippingWidth, val.shippingDepth, val.shippingWeight ]
+        for v in vals
+          digits = v.pop()
+          required = v.pop()
+          required.required = false
+          v.push digits, required
       Validation.bind @
+      #@model.bind 'validated:invalid', (model, errors) -> print errors
     _updateProduct: =>
       if @model.isValid true
         @model.save @model.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
     _deleteProduct: =>
       @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
-      Backbone.history.navigate "store/#{@model.get('storeSlug')}", trigger: true
+      Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
     _productDeleted: =>
       $('#confirmDeleteModal').modal 'hide'
-      Backbone.history.navigate "store/#{@model.get('storeSlug')}", trigger: true
+      Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true

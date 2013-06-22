@@ -31,14 +31,18 @@ define [
         storeView = new StoreView store: store, products: products
         viewsManager.show storeView
     @manageProduct: (storeSlug, productId) =>
+      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
+      storeModel = new Store store
       @_findProduct storeSlug, productId, (product) ->
-        manageProductView = new ManageProductView storeSlug: storeSlug, product: product
+        manageProductView = new ManageProductView storeSlug: storeSlug, product: product, store: storeModel
         manageProductView.render()
         viewsManager.show manageProductView
     @createProduct: (storeSlug) =>
       product = new Product()
       products = new Products [product], storeSlug: storeSlug
-      manageProductView = new ManageProductView storeSlug: storeSlug, product: product
+      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
+      storeModel = new Store store
+      manageProductView = new ManageProductView storeSlug: storeSlug, product: product, store: storeModel
       viewsManager.show manageProductView
 
     @_findProducts: (storeSlug, cb) =>

@@ -25,8 +25,7 @@ describe 'Admin Manage Product page', ->
   describe 'viewing product', ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        done()
+        page.visit store.slug, product._id.toString(), done
     it 'shows product', (done) ->
       page.product (aproduct) ->
         aproduct._id.should.equal product._id.toString()
@@ -48,12 +47,12 @@ describe 'Admin Manage Product page', ->
         aproduct.inventory.should.equal product.inventory
         done()
 
-  describe 'cant update invalid product', ->
+  describe "can't update invalid product", ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
-          page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString(), ->
+          page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
+            page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
@@ -93,14 +92,32 @@ describe 'Admin Manage Product page', ->
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
         done()
 
+  describe "can't delete shipping info on a product that is in a store that auto calculates shipping", ->
+    before (done) ->
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, product._id.toString(), ->
+          page.setFieldsAs {}, ->
+            page.clickUpdateProduct done
+    it 'is at the product manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
+        done()
+    it 'shows error messages', (done) ->
+      page.errorMessagesIn '#editProduct', (errorMsgs) ->
+        errorMsgs.shippingHeight.should.equal 'A altura de postagem é obrigatória.'
+        errorMsgs.shippingWidth.should.equal 'A largura de postagem é obrigatória.'
+        errorMsgs.shippingDepth.should.equal 'A profundidade de postagem é obrigatória.'
+        errorMsgs.shippingWeight.should.equal 'O peso de postagem é obrigatório.'
+        done()
+
   describe 'editing product', ->
     otherProduct = null
     before (done) ->
       otherProduct = generator.product.b()
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        page.setFieldsAs otherProduct, ->
-          page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString(), ->
+          page.setFieldsAs otherProduct, ->
+            page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
@@ -129,10 +146,10 @@ describe 'Admin Manage Product page', ->
     otherProduct = null
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product2._id.toString()
-        page.clickDeleteProduct ->
-          page.clickConfirmDeleteProduct ->
-            page.waitForUrl "http://localhost:8000/admin#store/#{product2.storeSlug}", done
+        page.visit store.slug, product2._id.toString(), ->
+          page.clickDeleteProduct ->
+            page.clickConfirmDeleteProduct ->
+              page.waitForUrl "http://localhost:8000/admin#store/#{product2.storeSlug}", done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"

@@ -11,7 +11,7 @@ module.exports = class StoreCartPage extends Page
       => @getText "#deliveryAddress #state", (t) -> address.state = t
       => @getText "#deliveryAddress #zip", (t) -> address.zip = t
     ]
-    @parallel actions, (-> print address;cb(address))
+    @parallel actions, -> print address;cb address
   clickContinue: @::pressButton.partial '#finishOrder'
   clickSedexOption: @::pressButton.partial '#shippingOptions_sedex'
   shippingInfo: (cb) ->

@@ -4,20 +4,27 @@ define [
   'areas/admin/views/manageProduct'
   'areas/admin/models/product'
   'areas/admin/models/products'
+  'areas/admin/models/store'
   'backboneConfig'
   '../support/_specHelper'
-], ($, ManageProductView, Product, Products) ->
+], ($, ManageProductView, Product, Products, Store) ->
   el = $('<div></div>')
   describe 'ManageProductView', ->
+    storeModel2 = storeModel = newproduct = product = store = store2 = historySpy = productPosted = dataPosted = ajaxSpy = manageProductView = updatedProduct = null
+    before ->
+      product = generatorc.product.a()
+      newproduct = generatorc.product.a()
+      newproduct._id = undefined
+      store = generatorc.store.a()
+      storeModel = new Store store
+      store2 = generatorc.store.b()
+      storeModel2 = new Store store2
     describe 'Updating Product', ->
       describe 'Shows product', ->
-        product = store = manageProductView = null
         before ->
-          store = generatorc.store.a()
-          product = generatorc.product.a()
           products = new Products [product], storeSlug: product.storeSlug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
         it 'shows product', ->
           expect($("#_id", el).text()).to.equal product._id
@@ -39,19 +46,17 @@ define [
           expect($("#inventory", el).val()).to.equal product.inventory.toString()
   
       describe 'Updates product', ->
-        historySpy = productPosted = dataPosted = ajaxSpy = updatedProduct = product = store = manageProductView = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
           product = generatorc.product.a()
           updatedProduct = generatorc.product.b()
           products = new Products [product], storeSlug: product.storeSlug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
           $("#name", el).val(updatedProduct.name).change()
           $("#price", el).val(updatedProduct.price).change()
@@ -72,6 +77,7 @@ define [
         after ->
           ajaxSpy.restore()
           historySpy.restore()
+          manageProductView.close()
         it 'updated product', ->
           expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal updatedProduct.name
@@ -96,15 +102,12 @@ define [
           expect(dataPosted.type).to.equal "PUT"
   
       describe 'Does not update product when invalid', ->
-        historySpy = ajaxSpy = product = store = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
-          product = generatorc.product.a()
           products = new Products [product], storeSlug: product.storeSlug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
           $("#name", el).val('').change()
           $("#price", el).val('d').change()
@@ -123,9 +126,10 @@ define [
         after ->
           ajaxSpy.restore()
           historySpy.restore()
-        xit 'did not update product', ->
+          manageProductView.close()
+        it 'did not update product', ->
           expect(ajaxSpy).not.to.have.been.called
-        xit 'did not navigate', ->
+        it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
           expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
@@ -143,39 +147,36 @@ define [
 
     describe 'Creating a Product', ->
       describe 'Creates product', ->
-        historySpy = productPosted = dataPosted = ajaxSpy = product = store = manageProductView = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success(_id: '456')
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
-          product = generatorc.product.a()
-          product._id = undefined
-          products = new Products [product], storeSlug: store.slug
+          products = new Products [newproduct], storeSlug: store.slug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
-          $("#name", el).val(product.name).change()
-          $("#price", el).val(product.price).change()
-          $("#picture", el).val(product.picture).change()
-          $("#tags", el).val(product.tags).change()
-          $("#description", el).val(product.description).change()
-          $("#height", el).val(product.height).change()
-          $("#width", el).val(product.width).change()
-          $("#depth", el).val(product.depth).change()
-          $("#weight", el).val(product.weight).change()
-          $("#shippingHeight", el).val(product.shippingHeight).change()
-          $("#shippingWidth", el).val(product.shippingWidth).change()
-          $("#shippingDepth", el).val(product.shippingDepth).change()
-          $("#shippingWeight", el).val(product.shippingWeight).change()
-          $("#hasInventory", el).prop('checked', product.hasInventory).change()
-          $("#inventory", el).val(product.inventory).change()
+          $("#name", el).val(newproduct.name).change()
+          $("#price", el).val(newproduct.price).change()
+          $("#picture", el).val(newproduct.picture).change()
+          $("#tags", el).val(newproduct.tags).change()
+          $("#description", el).val(newproduct.description).change()
+          $("#height", el).val(newproduct.height).change()
+          $("#width", el).val(newproduct.width).change()
+          $("#depth", el).val(newproduct.depth).change()
+          $("#weight", el).val(newproduct.weight).change()
+          $("#shippingHeight", el).val(newproduct.shippingHeight).change()
+          $("#shippingWidth", el).val(newproduct.shippingWidth).change()
+          $("#shippingDepth", el).val(newproduct.shippingDepth).change()
+          $("#shippingWeight", el).val(newproduct.shippingWeight).change()
+          $("#hasInventory", el).prop('checked', newproduct.hasInventory).change()
+          $("#inventory", el).val(newproduct.inventory).change()
           $('#updateProduct', el).trigger 'click'
         after ->
           ajaxSpy.restore()
           historySpy.restore()
+          manageProductView.close()
         it 'created the product', ->
           expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal product.name
@@ -200,16 +201,12 @@ define [
           expect(dataPosted.type).to.equal "POST"
   
       describe 'Does not create product when invalid', ->
-        historySpy = ajaxSpy = product = store = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
-          product = generatorc.product.a()
-          product._id = undefined
-          products = new Products [product], storeSlug: product.storeSlug
+          products = new Products [newproduct], storeSlug: newproduct.storeSlug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
           $("#name", el).val('').change()
           $("#price", el).val('d').change()
@@ -228,9 +225,10 @@ define [
         after ->
           ajaxSpy.restore()
           historySpy.restore()
-        xit 'did not update product', ->
+          manageProductView.close()
+        it 'did not update product', ->
           expect(ajaxSpy).not.to.have.been.called
-        xit 'did not navigate', ->
+        it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
           expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
@@ -246,25 +244,115 @@ define [
           expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
           expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
 
+      describe 'Does not create product when missing shipping info on a store that requires it (auto calculate shipping)', ->
+        before ->
+          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          historySpy = sinon.spy Backbone.history, "navigate"
+          products = new Products [newproduct], storeSlug: newproduct.storeSlug
+          productModel = products.at 0
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
+          manageProductView.render()
+          $("#name", el).val(newproduct.name).change()
+          $("#price", el).val(newproduct.price).change()
+          $("#picture", el).val(newproduct.picture).change()
+          $("#tags", el).val(newproduct.tags).change()
+          $("#description", el).val(newproduct.description).change()
+          $("#height", el).val(newproduct.height).change()
+          $("#width", el).val(newproduct.width).change()
+          $("#depth", el).val(newproduct.depth).change()
+          $("#weight", el).val(newproduct.weight).change()
+          $("#shippingHeight", el).val('').change()
+          $("#shippingWidth", el).val('').change()
+          $("#shippingDepth", el).val('').change()
+          $("#shippingWeight", el).val('').change()
+          $("#hasInventory", el).prop('checked', newproduct.hasInventory).change()
+          $("#inventory", el).val(newproduct.inventory).change()
+          $('#updateProduct', el).trigger 'click'
+        after ->
+          ajaxSpy.restore()
+          historySpy.restore()
+          manageProductView.close()
+        it 'did not update product', ->
+          expect(ajaxSpy).not.to.have.been.called
+        it 'did not navigate', ->
+          expect(historySpy).not.to.have.been.called
+        it 'showed validation messages', ->
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura de postagem é obrigatória.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura de postagem é obrigatória.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade de postagem é obrigatória.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso de postagem é obrigatório.'
+
+      describe 'Creates a product when missing shipping info on a store that does not require it (no auto calculate shipping)', ->
+        before ->
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            dataPosted = opt
+            productPosted = JSON.parse opt.data
+            opt.success(_id: '456')
+          historySpy = sinon.spy Backbone.history, "navigate"
+          products = new Products [newproduct], storeSlug: store2.slug
+          productModel = products.at 0
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel2
+          manageProductView.render()
+          $("#name", el).val(newproduct.name).change()
+          $("#price", el).val(newproduct.price).change()
+          $("#picture", el).val(newproduct.picture).change()
+          $("#tags", el).val(newproduct.tags).change()
+          $("#description", el).val(newproduct.description).change()
+          $("#height", el).val(newproduct.height).change()
+          $("#width", el).val(newproduct.width).change()
+          $("#depth", el).val(newproduct.depth).change()
+          $("#weight", el).val(newproduct.weight).change()
+          $("#shippingHeight", el).val('').change()
+          $("#shippingWidth", el).val('').change()
+          $("#shippingDepth", el).val('').change()
+          $("#shippingWeight", el).val('').change()
+          $("#hasInventory", el).prop('checked', newproduct.hasInventory).change()
+          $("#inventory", el).val(newproduct.inventory).change()
+          $('#updateProduct', el).trigger 'click'
+        after ->
+          ajaxSpy.restore()
+          historySpy.restore()
+          manageProductView.close()
+        it 'created the product', ->
+          expect(ajaxSpy).to.have.been.called
+          expect(productPosted.name).to.equal newproduct.name
+          expect(productPosted.price).to.equal newproduct.price
+          expect(productPosted.picture).to.equal newproduct.picture
+          expect(productPosted.tags).to.equal newproduct.tags
+          expect(productPosted.description).to.equal newproduct.description
+          expect(productPosted.height).to.equal newproduct.height
+          expect(productPosted.width).to.equal newproduct.width
+          expect(productPosted.depth).to.equal newproduct.depth
+          expect(productPosted.weight).to.equal newproduct.weight
+          expect(productPosted.shippingHeight).to.equal ''
+          expect(productPosted.shippingWidth).to.equal ''
+          expect(productPosted.shippingDepth).to.equal ''
+          expect(productPosted.shippingWeight).to.equal ''
+          expect(productPosted.hasInventory).to.equal newproduct.hasInventory
+          expect(productPosted.inventory).to.equal newproduct.inventory
+        it 'navigated to store manage', ->
+          expect(historySpy).to.have.been.calledWith "store/#{store2.slug}", trigger:true
+        it 'posted to correct url', ->
+          expect(dataPosted.url).to.equal "/admin/#{store2.slug}/products"
+          expect(dataPosted.type).to.equal "POST"
+
     describe 'Deleting a Product', ->
       describe 'Deletes product', ->
-        historySpy = productPosted = dataPosted = ajaxSpy = product = store = manageProductView = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
             dataPosted = opt
             opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
-          product = generatorc.product.a()
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
           $('#deleteProduct', el).trigger 'click'
           $('#confirmDeleteProduct', el).trigger 'click'
         after ->
           ajaxSpy.restore()
           historySpy.restore()
+          manageProductView.close()
         it 'deleted the product', ->
           ajaxSpy.should.have.been.called
         it 'navigated to store manage', ->
@@ -274,21 +362,19 @@ define [
           expect(dataPosted.type).to.equal "DELETE"
 
       describe 'does not confirm product deletion', ->
-        historySpy = productPosted = dataPosted = ajaxSpy = product = store = manageProductView = null
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
-          store = generatorc.store.a()
-          product = generatorc.product.a()
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
-          manageProductView = new ManageProductView el:el, product: productModel
+          manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
           $('#deleteProduct', el).trigger 'click'
           $('#noConfirmDeleteProduct', el).trigger 'click'
         after ->
           ajaxSpy.restore()
           historySpy.restore()
+          manageProductView.close()
         it 'did not delete the product', ->
           ajaxSpy.should.not.have.been.called
         it 'stays at the product manage page', ->
