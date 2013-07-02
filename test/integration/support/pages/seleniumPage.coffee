@@ -26,7 +26,7 @@ module.exports = class Page
   visit: (url, refresh, cb) ->
     [refresh, cb] = [cb, refresh] if typeof refresh is 'function'
     [cb, url] = [url, cb] if typeof url is 'function'
-    refresh = true unless refresh?
+    refresh = false unless refresh?
     url = @url unless url?
     url = "http://localhost:8000/#{url}"
     @driver.get('about:blank').then =>
@@ -115,6 +115,7 @@ module.exports = class Page
         do (action) -> f.execute action
       undefined
     flow.then cb, cb
+  waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
   wait: (fn, timeout, cb) ->
     @driver.wait fn, timeout

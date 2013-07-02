@@ -323,14 +323,13 @@
       }
     },
     "grunt-coffeelint": {
-      "version": "0.0.6",
+      "version": "0.0.7",
       "from": "grunt-coffeelint@",
-      "resolved": "https://registry.npmjs.org/grunt-coffeelint/-/grunt-coffeelint-0.0.6.tgz",
+      "resolved": "https://registry.npmjs.org/grunt-coffeelint/-/grunt-coffeelint-0.0.7.tgz",
       "dependencies": {
         "coffeelint": {
-          "version": "0.5.4",
+          "version": "0.5.6",
           "from": "coffeelint@~0.5",
-          "resolved": "https://registry.npmjs.org/coffeelint/-/coffeelint-0.5.4.tgz",
           "dependencies": {
             "optimist": {
               "version": "0.3.5",
@@ -384,9 +383,9 @@
               }
             },
             "vows": {
-              "version": "0.6.4",
-              "from": "vows@0.6.4",
-              "resolved": "https://registry.npmjs.org/vows/-/vows-0.6.4.tgz",
+              "version": "0.7.0",
+              "from": "vows@0.7.0",
+              "resolved": "https://registry.npmjs.org/vows/-/vows-0.7.0.tgz",
               "dependencies": {
                 "eyes": {
                   "version": "0.1.8",
@@ -1293,9 +1292,9 @@
       "resolved": "https://registry.npmjs.org/chai-fuzzy/-/chai-fuzzy-1.2.0.tgz"
     },
     "grunt-express-server": {
-      "version": "0.3.1",
+      "version": "0.4.1",
       "from": "grunt-express-server@",
-      "resolved": "https://registry.npmjs.org/grunt-express-server/-/grunt-express-server-0.3.1.tgz"
+      "resolved": "https://registry.npmjs.org/grunt-express-server/-/grunt-express-server-0.4.1.tgz"
     },
     "mocha-lcov-reporter": {
       "version": "0.0.1",

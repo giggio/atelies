@@ -60,6 +60,10 @@ module.exports = (grunt) ->
       dev:
         options:
           script: 'server.js'
+      prod:
+        options:
+          script: 'server.js'
+          node_env: 'production'
 
     mochacov:
       options:
@@ -154,15 +158,22 @@ module.exports = (grunt) ->
   #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:dev' ]
+  grunt.registerTask 'server:prod', [ 'express:prod' ]
   grunt.registerTask 'server:watch', [ 'compileAndStartServer', 'watch:server' ]
-  grunt.registerTask 'compileAndStartServer', ->
+  grunt.registerTask 'server:watch:prod', [ 'compileAndStartServer:production', 'watch:server' ]
+  grunt.registerTask 'compileAndStartServer', (env) ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
       tasks.push 'test:client'
       grunt.log.writeln "Running #{'client'.blue} unit tests"
     if grunt.config(['server', 'src']).length isnt 0
       tasks.push 'test:unit'
-      tasks.push 'express:dev'
+      if env is 'production'
+        grunt.log.writeln "Running in #{'PRODUCTION'.red} environment"
+        tasks.push 'express:prod'
+      else
+        grunt.log.writeln "Running in #{'dev'.blue} environment"
+        tasks.push 'express:dev'
       grunt.log.writeln 'Compiling and starting server'
       grunt.log.writeln "Running #{'server'.blue} unit tests"
     else

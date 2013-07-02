@@ -1,5 +1,7 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
+Postman   = require './postman'
+postman = new Postman()
 
 orderSchema = new mongoose.Schema
   store:                      type: mongoose.Schema.Types.ObjectId, ref: 'store'
@@ -33,6 +35,15 @@ orderSchema.methods.toSimpleOrder = ->
   totalSaleAmount: @totalSaleAmount
   orderDate: @orderDate
   items: items
+orderSchema.methods.sendMailAfterPurchase = (cb) ->
+  @populate 'store customer', =>
+    body = "<html>
+      <h1>#{@store.name}</h1>
+      <h2>Recebemos seu pedido</h2>
+      <div>Você será avisado assim que ele for liberado.</div>
+      <div>Total da venda: #{@totalSaleAmount}</div>
+      </html>"
+    postman.send @store, @customer, "Pedido realizado", body, cb
 Order = mongoose.model 'order', orderSchema
 Order.create = (user, store, items, shippingCost, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost

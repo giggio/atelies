@@ -6,8 +6,15 @@ class Postman
       auth:
         user: user
         pass: password
+    @running = true
+  @stop = -> @smtp.close() if @running
+
+  @dryrun = off
 
   send: (from, to, subject, body, cb = (->)) ->
+    if Postman.dryrun
+      console.log "NOT sending mail, dry run"
+      return cb()
     mail =
       from: "'#{from.name}' <#{from.email}>"
       to: "'#{to.name}' <#{to.email}>"
@@ -15,7 +22,10 @@ class Postman
       html: body
       generateTextFromHTML: true
       forceEmbeddedImages: true
+    console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
     Postman.smtp.sendMail mail, cb
+
+module.exports = Postman
 
 #Postman.configure "contato@atelies.com.br", "somepass"
 #p = new Postman()

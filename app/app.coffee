@@ -12,6 +12,7 @@ exports.start = (cb) ->
   everyauthConfig     = require './helpers/everyauthConfig'
   router              = require './routes/router'
   less                = require 'connect-less'
+  Postman             = require './models/postman'
 
   cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
   app.configure "development", ->
@@ -20,6 +21,11 @@ exports.start = (cb) ->
     app.use express.errorHandler()
     app.locals.pretty = on
     everyauth.debug = on
+    if process.env.SEND_MAIL?
+      console.log "SENDING MAIL!"
+      Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
+    else
+      Postman.dryrun = on
   
   app.configure "test", ->
     process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
@@ -27,6 +33,10 @@ exports.start = (cb) ->
     app.use express.errorHandler()
     app.locals.pretty = on
     #everyauth.debug = on
+    Postman.dryrun = on
+
+  app.configure "production", ->
+    Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
 
   port = process.env.PORT or switch app.get 'env'
     when 'development', 'production' then 3000
@@ -59,6 +69,9 @@ exports.start = (cb) ->
     app.set 'domain', 'localhost.com'
 
   router.route app
+  
+  process.on 'exit', ->
+    Postman.stop()
 
   server = http.createServer(app)
   if app.get("env") isnt 'production'

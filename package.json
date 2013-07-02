@@ -52,13 +52,13 @@
     "amdefine": "0.0.x",
     "sandboxed-module": "~0.2.x",
     "grunt-contrib-watch": "~0.4.x",
-    "grunt-express-server": "~0.3.x",
     "grunt-mocha-cov": "0.0.x",
     "blanket": "~1.1.x",
     "mocha-lcov-reporter": "0.0.x",
     "grunt-notify": "~0.2.x",
     "zombie": "~2.0.0-alpha19",
     "selenium-webdriver": "~2.33.0",
-    "chromedriver": "~2.0.1"
+    "chromedriver": "~2.0.1",
+    "grunt-express-server": "~0.4.x"
   }
 }

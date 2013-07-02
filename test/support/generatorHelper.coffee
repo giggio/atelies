@@ -71,28 +71,6 @@ exports.generator =
         weight: 6
       hasInventory: false
     d: -> new Product
-      name: 'name 4'
-      slug: 'name_4'
-      picture: 'http://lorempixel.com/150/200/cats'
-      price: 42.2
-      storeName: 'store 1'
-      storeSlug: 'store_1'
-      tags: ['mno', 'pqr']
-      description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
-      dimensions:
-        height: 19
-        width: 20
-        depth: 21
-      weight: 12
-      shipping:
-        dimensions:
-          height: 20
-          width: 21
-          depth: 22
-        weight: 13
-      hasInventory: true
-      inventory: 130
-    d: -> new Product
       name: 'Some Cool Item'
       slug: 'some_cool_item'
       picture: 'http://lorempixel.com/150/200/cats/5'
@@ -114,6 +92,28 @@ exports.generator =
         weight: 221
       hasInventory: true
       inventory: 230
+    e: -> new Product
+      name: 'name 4'
+      slug: 'name_4'
+      picture: 'http://lorempixel.com/150/200/cats'
+      price: 42.2
+      storeName: 'store 1'
+      storeSlug: 'store_1'
+      tags: ['mno', 'pqr']
+      description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
+      dimensions:
+        height: 19
+        width: 20
+        depth: 21
+      weight: 12
+      shipping:
+        dimensions:
+          height: 20
+          width: 21
+          depth: 22
+        weight: 13
+      hasInventory: true
+      inventory: 130
   store:
     a: -> new Store
       name: 'Store 1'

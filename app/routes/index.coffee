@@ -275,9 +275,9 @@ class Routes
       foundProducts = =>
         return setImmediate foundProducts unless errors.length + items.length is req.body.items.length
         return res.json 400, errors if errors.length > 0
-        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) ->
-          Order.create user, store, items, shippingCost, (order) ->
-            order.save (err, order) ->
+        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
+          Order.create user, store, items, shippingCost, (order) =>
+            order.save (err, order) =>
               if err?
                 res.json 400, err
               else
@@ -285,7 +285,9 @@ class Routes
                   p = item.product
                   p.inventory -= item.quantity if p.hasInventory
                   p.save()
-                res.json 201, order.toSimpleOrder()
+                order.sendMailAfterPurchase (error, mailResponse) ->
+                  console.log "Error sending mail: #{error}" if error?
+                  res.json 201, order.toSimpleOrder()
       process.nextTick foundProducts
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->

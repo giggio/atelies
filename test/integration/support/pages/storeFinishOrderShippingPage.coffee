@@ -13,7 +13,9 @@ module.exports = class StoreCartPage extends Page
     ]
     @parallel actions, -> print address;cb address
   clickContinue: @::pressButton.partial '#finishOrder'
-  clickSedexOption: @::pressButton.partial '#shippingOptions_sedex'
+  clickSedexOption: (cb) ->
+    @waitForSelector '#shippingOptions_sedex', =>
+      @pressButton '#shippingOptions_sedex', cb
   shippingInfo: (cb) ->
     options = []
     getData = []
