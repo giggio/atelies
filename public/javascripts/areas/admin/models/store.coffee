@@ -2,6 +2,10 @@ define [
   'backbone'
 ], (Backbone) ->
   class Product extends Backbone.Open.Model
+    initialize: ->
+      @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged
+    _autoCalculateShippingChanged: ->
+      @set('pagseguro', false) unless @get 'autoCalculateShipping'
     defaults:
       _id:undefined
       name:undefined
