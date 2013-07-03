@@ -23,6 +23,28 @@ storeSchema = new mongoose.Schema
   autoCalculateShipping:  Boolean
   pmtGateways:            [String]
 
+storeSchema.methods.toSimple = ->
+  store =
+    _id: @_id
+    name: @name
+    slug: @slug
+    email: @email
+    description: @description
+    homePageDescription: @homePageDescription
+    homePageImage: @homePageImage
+    urlFacebook: @urlFacebook
+    urlTwitter: @urlTwitter
+    phoneNumber: @phoneNumber
+    city: @city
+    state: @state
+    zip: @zip
+    otherUrl: @otherUrl
+    banner: @banner
+    flyer: @flyer
+    autoCalculateShipping: @autoCalculateShipping
+    pmtGateways: @pmtGateways
+  store.pagseguro = 'pagseguro' in @pmtGateways
+  store
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
@@ -36,6 +58,12 @@ storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
     productWithMissingInfo = _.find products, (p) -> p.hasShippingInfo() is false
     @autoCalculateShipping = true unless productWithMissingInfo?
     cb not productWithMissingInfo?
+storeSchema.methods.setPagseguro = (set) ->
+  index = @pmtGateways.indexOf 'pagseguro'
+  if set
+    @pmtGateways.push 'pagseguro' if index is -1
+  else
+    @pmtGateways.splice index, 1 if index isnt -1
 
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb

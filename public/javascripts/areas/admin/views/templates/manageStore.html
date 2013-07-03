@@ -27,9 +27,6 @@
       <input type="checkbox" id="pagseguro" name="pagseguro" checked>utilizar PagSeguro nas vendas</input>
     </div>
   </div>
-  {{else}}
-    {{#if autoCalculateShipping}}
-    {{/if}}
   {{/if}}
   <div class="control-group">
     <label>Descrição:</label>
@@ -145,12 +142,56 @@
           <h3 id="confirmModalLabel">Desligar cálculo automático de frete</h3>
         </div>
         <div class="modal-body">
-          <p>Ao ativar o cálculo automático de postagem todas as vendas futuras terão o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
-          <p>Para ligar o cálculo automático de postagem todos os seus produtos precisam do peso e das dimensões de postagem. Se algum produto estiver fora das dimensões ou peso ou com informações faltando esta ação irá falhar.</p>
+          <p>Ao desativar o cálculo automático de postagem todas as vendas futuras deixarão de ter o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
+          <p>O uso de qualquer gateway de pagamento (como PagSeguro) também será imediatamente desligado.</p>
+          <p>Após desativar o cálculo automático de postagem você poderá alterar seus produtos para dimensões e pesos diferentes dos autorizados pelos Correios.</p>
         </div>
         <div class="modal-footer">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
           <button id="confirmUnsetAutoCalculateShipping" class="btn btn-primary">Desligar</button>
+        </div>
+      </div>
+      {{#if pagseguro}}
+        <input id="unsetPagseguro" type="button" class="btn btn-primary" value="Desativar PagSeguro" data-toggle="modal" data-target="#modalConfirmPagseguro"/>
+        <div id="modalConfirmPagseguro" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelPagseguro" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="confirmModalLabelPagseguro">Desligar Pagseguro</h3>
+          </div>
+          <div class="modal-body">
+            <p>Ao desativar o PagSeguro nenhuma venda futura poderá ser feita pelo PagSeguro, e todas deverão ser fechadas manualmente.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button id="confirmUnsetPagseguro" class="btn btn-primary">Desativar</button>
+          </div>
+        </div>
+      {{else}}
+        <input id="setPagseguro" type="button" class="btn btn-primary" value="Ativar PagSeguro" data-toggle="modal" data-target="#modalConfirmPagseguro"/>
+        <div id="modalConfirmPagseguro" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelPagseguro" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="confirmModalLabelPagseguro">Ativar Pagseguro</h3>
+          </div>
+          <div class="modal-body">
+            <p>Ao ativar o PagSeguro seu cliente poderá optar por fechar a venda manualmente (em contato com você) ou usar o PagSeguro.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button id="confirmSetPagseguro" class="btn btn-primary">Ativar</button>
+          </div>
+        </div>
+      {{/if}}
+      <div id="modalCannotPagseguro" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cannotPagseguroModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="cannotPagseguroModalLabel">Não foi alterar o status do PagSeguro</h3>
+        </div>
+        <div class="modal-body">
+          <p>O cálculo de postagem não foi alterado. Tente novamente mais tarde.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
         </div>
       </div>
     {{else}}
@@ -161,8 +202,8 @@
           <h3 id="confirmModalLabel">Ligar cálculo automático de frete</h3>
         </div>
         <div class="modal-body">
-          <p>Ao desativar o cálculo automático de postagem todas as vendas futuras deixarão de ter o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
-          <p>Após desativar o cálculo automático de postagem você poderá alterar seus produtos para dimensões e pesos diferentes dos autorizados pelos Correios.</p>
+          <p>Ao ativar o cálculo automático de postagem todas as vendas futuras terão o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
+          <p>Para ligar o cálculo automático de postagem todos os seus produtos precisam do peso e das dimensões de postagem. Se algum produto estiver fora das dimensões ou peso ou com informações faltando esta ação irá falhar.</p>
         </div>
         <div class="modal-footer">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>

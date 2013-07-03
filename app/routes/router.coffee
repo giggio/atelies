@@ -30,6 +30,8 @@ exports.route = (app) ->
   app.put     "/admin/store/:storeId",                                      routes.adminStoreUpdate
   app.put     "/admin/store/:storeId/setAutoCalculateShippingOn",           routes.adminStoreUpdateSetAutoCalculateShippingOn
   app.put     "/admin/store/:storeId/setAutoCalculateShippingOff",          routes.adminStoreUpdateSetAutoCalculateShippingOff
+  app.put     "/admin/store/:storeId/setPagseguroOn",                       routes.adminStoreUpdateSetPagseguroOn
+  app.put     "/admin/store/:storeId/setPagseguroOff",                      routes.adminStoreUpdateSetPagseguroOff
   #admin product
   app.get     "/admin/:storeSlug/products",                                 routes.storeProducts
   app.post    "/admin/:storeSlug/products",                                 routes.adminProductCreate

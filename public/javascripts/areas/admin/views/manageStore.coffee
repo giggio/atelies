@@ -11,11 +11,13 @@ define [
       'click #updateStore':'_updateStore'
       'click #confirmSetAutoCalculateShipping':'_confirmSetAutoCalculateShipping'
       'click #confirmUnsetAutoCalculateShipping':'_confirmUnsetAutoCalculateShipping'
+      'click #confirmSetPagseguro':'_confirmSetPagSeguro'
+      'click #confirmUnsetPagseguro':'_confirmUnsetPagSeguro'
     template: manageStoreTemplate
     initialize: (opt) ->
       @model = opt.store
       context = Handlebars.compile @template
-      @$el.html context new: @model.id? is false, autoCalculateShipping: @model.get 'autoCalculateShipping'
+      @$el.html context new: @model.id? is false, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro')
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
         '#pagseguro':'checked:pagseguro'
@@ -51,4 +53,20 @@ define [
         success: (data, text, xhr) =>
           @model.set 'autoCalculateShipping', set
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
+          @_storeCreated @model
+    _confirmSetPagSeguro: -> @_setPagseguro on
+    _confirmUnsetPagSeguro: -> @_setPagseguro off
+    _setPagseguro: (set) ->
+      url = "/admin/store/#{@model.get('_id')}/setPagSeguro"
+      url += if set then "On" else "Off"
+      $.ajax
+        url: url
+        type: 'PUT'
+        error: (xhr, text, error) ->
+          return console.log error, xhr if xhr.status isnt 409
+          $('#modalConfirmPagseguro', @el).modal 'hide'
+          $('#modalCannotPagseguro', @el).modal 'show'
+        success: (data, text, xhr) =>
+          @model.set 'autoCalculateShipping', set
+          $('#modalConfirmPagseguro', @el).modal 'hide'
           @_storeCreated @model

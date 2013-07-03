@@ -30,3 +30,28 @@ describe 'Store', ->
     store = new Store()
     store.name = null
     store.nameKeywords.should.be.like []
+  it 'sets pagseguro when not previously set', ->
+    store = new Store()
+    store.setPagseguro on
+    store.pmtGateways.should.be.like ['pagseguro']
+  it 'sets pagseguro when already set', ->
+    store = new Store()
+    store.pmtGateways.push 'pagseguro'
+    store.setPagseguro on
+    store.pmtGateways.should.be.like ['pagseguro']
+  it 'unsets pagseguro when previously set', ->
+    store = new Store()
+    store.pmtGateways.push 'pagseguro'
+    store.setPagseguro off
+    store.pmtGateways.should.be.like []
+  it 'unsets pagseguro when not previously set', ->
+    store = new Store()
+    store.pmtGateways.push 'other'
+    store.setPagseguro off
+    store.pmtGateways.should.be.like ['other']
+  it 'unsets pagseguro when previously set with other', ->
+    store = new Store()
+    store.pmtGateways.push 'other'
+    store.pmtGateways.push 'pagseguro'
+    store.setPagseguro off
+    store.pmtGateways.should.be.like ['other']

@@ -11,7 +11,7 @@ correios        = require 'correios'
 class Routes
   constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account', 'calculateShipping'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn'
 
   _auth: ->
     for fn in arguments
@@ -86,7 +86,7 @@ class Routes
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
     req.user.populate 'stores', (err, user) ->
-      res.render 'admin', stores: user.stores
+      res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple())
 
   blank: (req, res) ->
     res.render 'blank'
@@ -156,6 +156,16 @@ class Routes
             res.send 204
         else
           res.send 409
+  adminStoreUpdateSetPagseguroOff: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, off
+  adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, on
+  _adminStoreUpdateSetPagseguro: (req, res, set) ->
+    Store.findById req.params.storeId, (err, store) ->
+      dealWith err
+      throw new AccessDenied() unless req.user.hasStore store
+      store.setPagseguro set
+      store.save (err) ->
+        return res.json 400 if err?
+        res.send 204
 
   _getSubdomain: (domain, host) ->
     return undefined if @env isnt 'production' and host is 'localhost'

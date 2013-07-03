@@ -159,6 +159,60 @@ describe 'Admin manage store page', ->
         expect(store.autoCalculateShipping).to.equal false
         done()
 
+  describe 'updates a store to use pagseguro', (done) ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        exampleStore = generator.store.c()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+        page.loginFor userSeller._id, ->
+          page.visit exampleStore._id.toString(), ->
+            page.clickSetPagseguroButton ->
+              page.clickConfirmSetPagseguroButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        done()
+    it 'shows store updated message', (done) ->
+      page.message (msg) ->
+        msg.endsWith("Loja atualizada com sucesso").should.be.true
+        done()
+    it 'updated the store and set pagseguro', (done) ->
+      Store.findBySlug exampleStore.slug, (error, store) ->
+        return done error if error
+        expect(store.pmtGateways).to.be.like ['pagseguro']
+        done()
+
+  describe 'updates a store to do not use pagseguro', (done) ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        exampleStore = generator.store.a()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+        page.loginFor userSeller._id, ->
+          page.visit exampleStore._id.toString(), ->
+            page.clickUnsetPagseguroButton ->
+              page.clickConfirmUnsetPagseguroButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        done()
+    it 'shows store updated message', (done) ->
+      page.message (msg) ->
+        msg.endsWith("Loja atualizada com sucesso").should.be.true
+        done()
+    it 'updated the store and set pagseguro', (done) ->
+      Store.findBySlug exampleStore.slug, (error, store) ->
+        return done error if error
+        store.pmtGateways.should.be.empty
+        done()
+
   describe 'does not update a store (missing or wrong info)', (done) ->
     before (done) ->
       cleanDB (error) ->

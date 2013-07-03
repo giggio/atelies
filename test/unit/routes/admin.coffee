@@ -26,7 +26,8 @@ describe 'AdminRoute', ->
       res.redirect.should.have.been.calledWith '/account/login?redirectTo=/admin'
   describe 'Shows correct content', ->
     it 'only user stories are shown', ->
-      stores = [1]
+      store = toSimple: -> @
+      stores = [store]
       user = isSeller:true, stores: []
       user.populate = (path, cb) ->
         user.stores = stores

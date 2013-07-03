@@ -38,3 +38,7 @@ module.exports = class AdminManageStorePage extends Page
   clickConfirmSetAutoCalculateShippingButton: (cb) => @eval "$('#confirmSetAutoCalculateShipping').click()", cb
   clickUnsetAutoCalculateShippingButton: @::pressButton.partial "#unsetAutoCalculateShipping"
   clickConfirmUnsetAutoCalculateShippingButton: (cb) => @eval "$('#confirmUnsetAutoCalculateShipping').click()", cb
+  clickSetPagseguroButton: @::pressButton.partial "#setPagseguro"
+  clickConfirmSetPagseguroButton: (cb) => @eval "$('#confirmSetPagseguro').click()", cb
+  clickUnsetPagseguroButton: @::pressButton.partial "#unsetPagseguro"
+  clickConfirmUnsetPagseguroButton: (cb) => @eval "$('#confirmUnsetPagseguro').click()", cb
