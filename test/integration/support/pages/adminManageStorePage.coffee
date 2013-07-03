@@ -23,9 +23,13 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #flyer", store.flyer
     store.autoCalculateShipping = true unless store.autoCalculateShipping?
     store.pmtGateways = [] unless store.pmtGateways?
-    @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, =>
-      @checkOrUncheck "#manageStoreBlock #pagseguro", 'pagseguro' in store.pmtGateways, =>
-        @select "#manageStoreBlock #state", store.state, cb
+    @parallel [
+      => @hasElement "#manageStoreBlock #autoCalculateShipping", (itHas) ->
+        @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping if itHas
+      => @hasElement "#manageStoreBlock #pagseguro", (itHas) ->
+        @checkOrUncheck "#manageStoreBlock #pagseguro", 'pagseguro' in store.pmtGateways if itHas
+      => @select "#manageStoreBlock #state", store.state
+    ], cb
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
