@@ -8,7 +8,7 @@ describe 'AdminStoreCreateRoute', ->
   describe 'Access is granted', ->
     store = res = body = user = null
     before ->
-      store = save: (cb) -> cb()
+      store = pmtGateways: [], save: (cb) -> cb()
       user = isSeller: true
       user.createStore = -> store
       user.save = (cb) -> cb null, user
@@ -21,6 +21,7 @@ describe 'AdminStoreCreateRoute', ->
         state: 'd'
         otherUrl: 'e'
         banner: 'f'
+        pagseguro: true
       body = req.body
       res = json: sinon.spy()
       routes.adminStoreCreate req, res
@@ -33,6 +34,7 @@ describe 'AdminStoreCreateRoute', ->
       store.state.should.equal body.state
       store.otherUrl.should.equal body.otherUrl
       store.banner.should.equal body.banner
+      store.pmtGateways.should.be.like ['pagseguro']
     it 'added store to the user', ->
       user.createStore.should.have.been.called
     it 'saved the user', ->

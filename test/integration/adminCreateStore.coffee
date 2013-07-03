@@ -48,6 +48,7 @@ describe 'Admin create store page', ->
         expect(store.banner).to.equal exampleStore.banner
         expect(store.flyer).to.equal exampleStore.flyer
         expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
+        expect(store.pmtGateways).to.be.like exampleStore.pmtGateways
         done()
     it 'added the store to the user', (done) ->
       User.findById userSeller.id, (err, user) ->

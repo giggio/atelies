@@ -21,19 +21,14 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #otherUrl", store.otherUrl
     @type "#manageStoreBlock #banner", store.banner
     @type "#manageStoreBlock #flyer", store.flyer
-    if store.autoCalculateShipping?
-      setAutoCalculateShipping = (setcb) => @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, setcb
-    else
-      setAutoCalculateShipping = (setcb) => setImmediate setcb
-    setAutoCalculateShipping =>
-      if store.state isnt ''
+    store.autoCalculateShipping = true unless store.autoCalculateShipping?
+    store.pmtGateways = [] unless store.pmtGateways?
+    @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, =>
+      @checkOrUncheck "#manageStoreBlock #pagseguro", 'pagseguro' in store.pmtGateways, =>
         @select "#manageStoreBlock #state", store.state, cb
-      else
-        cb()
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
-  #checkAutoCalculateShipping: @::checkOrUncheck.partial '#autoCalculateShipping'
   autoCalculateShippingErrorMsg: @::getText.partial "#modalCannotAutoCalculateShipping .modal-body"
   clickSetAutoCalculateShippingButton: @::pressButton.partial "#setAutoCalculateShipping"
   clickConfirmSetAutoCalculateShippingButton: (cb) => @eval "$('#confirmSetAutoCalculateShipping').click()", cb

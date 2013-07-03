@@ -132,6 +132,7 @@ exports.generator =
       banner: 'http://lorempixel.com/800/150/cats/1'
       flyer: 'http://lorempixel.com/350/400/nightlife/1'
       autoCalculateShipping: true
+      pmtGateways: ['pagseguro']
     b: -> new Store
       name: 'Store 2'
       slug: 'store_2'
@@ -148,6 +149,7 @@ exports.generator =
       otherUrl: 'http://someotherurl.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/2'
       autoCalculateShipping: false
+      pmtGateways: []
     c: -> new Store
       name: 'Store 3'
       slug: 'store_3'
@@ -164,6 +166,7 @@ exports.generator =
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
       autoCalculateShipping: true
+      pmtGateways: []
     d: -> new Store
       name: 'My Very Nice Store'
       slug: 'my_very_nice_store'
@@ -181,6 +184,7 @@ exports.generator =
       banner: 'http://lorempixel.com/800/150/cats/4'
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
       autoCalculateShipping: false
+      pmtGateways: []
     empty: -> new Store
       name: ''
       slug: ''
@@ -197,6 +201,7 @@ exports.generator =
       otherUrl: ''
       flyer: ''
       autoCalculateShipping: false
+      pmtGateways: []
   user:
     a: ->
       user = new User

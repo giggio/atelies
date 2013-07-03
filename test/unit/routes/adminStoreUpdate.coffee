@@ -16,6 +16,7 @@ describe 'AdminStoreUpdateRoute', ->
         _id: '9876'
         zip: '01234-567'
         autoCalculateShipping: true
+        pmtGateways: ['pagseguro']
         save: sinon.stub().yields()
       sinon.stub(Store, 'findById').yields null, store
       user =
@@ -33,7 +34,7 @@ describe 'AdminStoreUpdateRoute', ->
     it 'access allowed and return code is correct', ->
       res.send.should.have.been.calledWith 200
     it 'store is updated correctly', ->
-      expect(store[k]).to.equal v for k, v of exampleStore
+      expect(store[k]).to.be.like v for k, v of exampleStore
     it "does not try to change the store's slug", ->
       expect(store.slug).to.be.undefined
     it 'store should had been saved', ->

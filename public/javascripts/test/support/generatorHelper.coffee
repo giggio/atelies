@@ -80,6 +80,7 @@ define ->
         banner: 'http://e.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
         autoCalculateShipping: true
+        pagseguro: true
       b: ->
         _id: '2'
         name: 'Store 2'
@@ -98,6 +99,7 @@ define ->
         banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
         autoCalculateShipping: false
+        pagseguro: false
       c: ->
         _id: '3'
         name: 'Store 3'
@@ -115,6 +117,7 @@ define ->
         otherUrl: 'http://other.com'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
         autoCalculateShipping: true
+        pagseguro: false
       empty: ->
         _id: ''
         name: ''
@@ -130,3 +133,4 @@ define ->
         state: ""
         otherUrl: ''
         autoCalculateShipping: false
+        pagseguro: false

@@ -245,6 +245,7 @@ db.stores.insert
   otherUrl: 'http://myotherurl.com'
   banner: 'http://lorempixel.com/800/150/cats/1'
   autoCalculateShipping: true
+  pmtGateways: ['pagseguro']
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
@@ -265,6 +266,7 @@ db.stores.insert
   otherUrl: 'http://someotherurl.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/2'
   autoCalculateShipping: false
+  pmtGateways: []
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert
@@ -284,6 +286,7 @@ db.stores.insert
   otherUrl: 'http://idontownthisstore.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/3'
   autoCalculateShipping: true
+  pmtGateways: []
 db.stores.insert
   name: 'Some Fancy Name'
   nameKeywords: ['some', 'fancy', 'name']
@@ -301,6 +304,7 @@ db.stores.insert
   otherUrl: 'http://somestorefromms.com'
   flyer: 'http://lorempixel.com/350/400/nightlife/4'
   autoCalculateShipping: false
+  pmtGateways: []
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -322,6 +326,7 @@ for i in [4..15]
     banner: "http://lorempixel.com/800/150/cats/#{pictureId}"
     flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
     autoCalculateShipping: false
+    pmtGateways: []
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
 db.users.save userSeller

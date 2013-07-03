@@ -18,6 +18,7 @@ define [
       @$el.html context new: @model.id? is false, autoCalculateShipping: @model.get 'autoCalculateShipping'
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
+        '#pagseguro':'checked:pagseguro'
       Validation.bind @
     _updateStore: =>
       return unless @model.isValid true

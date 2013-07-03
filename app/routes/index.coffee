@@ -111,6 +111,7 @@ class Routes
     store.banner = body.banner
     store.flyer = body.flyer
     store.autoCalculateShipping = body.autoCalculateShipping
+    store.pmtGateways.push 'pagseguro' if body.pagseguro
     store.save (err) ->
       return res.json 400, err if err?
       req.user.save (err) ->

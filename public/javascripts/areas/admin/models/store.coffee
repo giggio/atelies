@@ -19,6 +19,7 @@ define [
       flyer:undefined
       phoneNumber:undefined
       autoCalculateShipping:true
+      pagseguro:true
     validation:
       name:
         required: true

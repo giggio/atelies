@@ -22,6 +22,14 @@
       <input type="checkbox" id="autoCalculateShipping" name="autoCalculateShipping" checked>calcular o frete automaticamente usando o serviço dos correios</input>
     </div>
   </div>
+  <div class="control-group">
+    <div class="controls">
+      <input type="checkbox" id="pagseguro" name="pagseguro" checked>utilizar PagSeguro nas vendas</input>
+    </div>
+  </div>
+  {{else}}
+    {{#if autoCalculateShipping}}
+    {{/if}}
   {{/if}}
   <div class="control-group">
     <label>Descrição:</label>

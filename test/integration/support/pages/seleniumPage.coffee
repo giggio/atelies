@@ -58,6 +58,7 @@ module.exports = class Page
   clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
   type: (selector, text) -> @findElement(selector).type text
   select: (selector, text, cb) ->
+    return setImmediate cb if text is ''
     @findElement(selector).findElements(webdriver.By.tagName('option')).then (els) ->
       elsWithText = []
       flow = webdriver.promise.createFlow (f) ->

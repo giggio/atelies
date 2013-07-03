@@ -31,6 +31,8 @@ define [
         manageStoreView.$("#otherUrl").val(exampleStore.otherUrl).change()
         manageStoreView.$("#banner").val(exampleStore.banner).change()
         manageStoreView.$("#flyer").val(exampleStore.flyer).change()
+        manageStoreView.$("#autoCalculateShipping").prop('checked', true).change()
+        manageStoreView.$("#pagseguro").prop('checked', true).change()
         $('#updateStore', el).trigger 'click'
       after ->
         $.ajax.restore()
@@ -47,6 +49,8 @@ define [
         expect(storePassedIn.otherUrl).to.equal exampleStore.otherUrl
         expect(storePassedIn.banner).to.equal exampleStore.banner
         expect(storePassedIn.flyer).to.equal exampleStore.flyer
+        expect(storePassedIn.autoCalculateShipping).to.be.true
+        expect(storePassedIn.pagseguro).to.be.true
       it 'adds store to stores in the bootstrapped model', ->
         expect(global.adminStoresBootstrapModel.stores[0]).to.be.like exampleStore
 
