@@ -7,28 +7,13 @@ everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
+RouteFunctions  = require './routeFunctions'
 
 class Routes
   constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'admin', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'orderCreate', 'account', 'calculateShipping'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn'
 
-  _auth: ->
-    for fn in arguments
-      do (fn) =>
-        original = @[fn]
-        @[fn] = (req, res) ->
-          return res.redirect "/account/login?redirectTo=#{req.originalUrl}" unless req.loggedIn
-          original.apply @, arguments
-
-  _authSeller: ->
-    for fn in arguments
-      do (fn) =>
-        original = @[fn]
-        @[fn] = (req, res) ->
-          throw new AccessDenied() unless req.loggedIn and req.user?.isSeller
-          original.apply @, arguments
-  
   updateProfileShow: (req, res) ->
     user = req.user
     redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
@@ -370,5 +355,7 @@ class Routes
           else
             setImmediate ready
         ready()
+
+_.extend Routes::, RouteFunctions::
 
 module.exports = Routes
