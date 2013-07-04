@@ -8,6 +8,7 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
+async           = require 'async'
 
 class Routes
   constructor: (@env, @domain) ->
@@ -43,18 +44,13 @@ class Routes
     user = req.user
     Store.findById req.params.storeId, (err, store) =>
       dealWith err
-      items = []
-      errors = []
-      for item in req.body.items
+      getItems = for item in req.body.items
         do (item) ->
-          Product.findById item._id, (err, prod) ->
-            if err
-              errors.push err
-            else
-              items.push product: prod, quantity: item.quantity
-      foundProducts = =>
-        return setImmediate foundProducts unless errors.length + items.length is req.body.items.length
-        return res.json 400, errors if errors.length > 0
+          (cb) =>
+            Product.findById item._id, (err, product) =>
+              cb err, product: product, quantity: item.quantity
+      async.parallel getItems, (errors, items) =>
+        return res.json 400, errors if errors?
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
           Order.create user, store, items, shippingCost, (order) =>
             order.save (err, order) =>
@@ -68,7 +64,6 @@ class Routes
                 order.sendMailAfterPurchase (error, mailResponse) ->
                   console.log "Error sending mail: #{error}" if error?
                   res.json 201, order.toSimpleOrder()
-      process.nextTick foundProducts
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
     if store.autoCalculateShipping

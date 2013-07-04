@@ -1274,6 +1274,10 @@
         }
       }
     },
+    "async": {
+      "version": "0.2.9",
+      "from": "async@"
+    },
     "amdefine": {
       "version": "0.0.5",
       "from": "amdefine@"
@@ -1310,13 +1314,13 @@
       "from": "sinon-chai@",
       "resolved": "https://registry.npmjs.org/sinon-chai/-/sinon-chai-2.4.0.tgz"
     },
-    "underscore.string": {
-      "version": "2.3.1",
-      "from": "underscore.string@~2.3.1"
-    },
     "xmlhttprequest": {
       "version": "1.5.0",
       "from": "xmlhttprequest@"
+    },
+    "underscore.string": {
+      "version": "2.3.1",
+      "from": "underscore.string@~2.3.1"
     },
     "grunt-notify": {
       "version": "0.2.3",
