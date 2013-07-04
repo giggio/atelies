@@ -1,10 +1,10 @@
 define = require('amdefine')(module, requirejs) if (typeof define isnt 'function')
 define [
   'jquery'
-  'areas/store/views/finishOrderPayment'
+  'areas/store/views/finishOrderSummary'
   'areas/store/models/cart'
   '../support/_specHelper'
-], ($, FinishOrderPaymentView, Cart) ->
+], ($, FinishOrderSummaryView, Cart) ->
   product1  = generatorc.product.a()
   product2  = generatorc.product.b()
   store1    = generatorc.store.a()
@@ -12,7 +12,7 @@ define [
   product3  = generatorc.product.c()
   view = deliveryAddress = null
   el = $('<div></div>')
-  describe 'FinishOrderPaymentView', ->
+  describe 'FinishOrderSummaryView', ->
     describe 'Showing order to be finished', ->
       after -> view.close()
       before ->
@@ -29,7 +29,7 @@ define [
         cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
-        view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
+        view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         view.render()
       it 'shows the sales summary', ->
         $("#shippingCost", el).text().should.equal 'R$ 3,33'
@@ -56,7 +56,7 @@ define [
         cart.setManualShipping()
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
-        view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
+        view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         view.render()
       it 'shows the sales summary', ->
         $("#shippingCost", el).text().should.equal 'Calculado posteriormente'
@@ -81,7 +81,7 @@ define [
         cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
-        view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
+        view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         ajaxSpy = sinon.stub $, 'ajax', (opt) =>
           dataPosted = opt
           orderPosted = JSON.parse opt.data
@@ -127,7 +127,7 @@ define [
         cart.chooseShippingOption 'pac'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
-        view = new FinishOrderPaymentView el:el, store: store1, user: user, cart: cart
+        view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         ajaxSpy = sinon.stub $, 'ajax', (opt) =>
           opt.error()
         historySpy = sinon.spy Backbone.history, "navigate"
