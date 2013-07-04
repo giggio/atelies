@@ -5,6 +5,7 @@ StoreFinishOrderPaymentPage     = require './support/pages/storeFinishOrderPayme
 StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShippingPage'
 StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
+_                               = require 'underscore'
 
 describe 'Store Finish Order: Payment', ->
   page = storeFinishOrderShippingPage = storeCartPage = storeProductPage = store = product1 = product2 = product3 = store2 = user1 = p1Inventory = p2Inventory = null
@@ -35,12 +36,14 @@ describe 'Store Finish Order: Payment', ->
             page.loginFor user1._id, ->
               storeProductPage.visit 'store_1', 'name_1', ->
                 storeProductPage.purchaseItem ->
-                  storeProductPage.visit 'store_1', 'name_2', ->
-                    storeProductPage.purchaseItem ->
-                      storeCartPage.clickFinishOrder ->
-                        storeFinishOrderShippingPage.clickSedexOption ->
-                          storeFinishOrderShippingPage.clickContinue done
+                  storeCartPage.clickFinishOrder ->
+                    storeFinishOrderShippingPage.clickSedexOption ->
+                      storeFinishOrderShippingPage.clickContinue done
     it 'should show options for payment type with PagSeguro already selected', (done) ->
+      page.paymentTypes (pts) ->
+        pts.length.should.equal 2
+        selectedPaymentType = _.findWhere pts, selected:true
+        selectedPaymentType.value.should.equal 'pagseguro'
         done()
     it 'should be at payment page', (done) ->
       page.currentUrl (url) ->

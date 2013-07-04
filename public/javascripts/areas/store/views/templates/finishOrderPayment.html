@@ -1,6 +1,16 @@
 <div id="storeFinishOrderPayment">
   <div>
     <h2>Selecione a forma de pagamento</h2>
+    <div id="paymentTypesHolder">
+      <label class="radio">
+        <input id="pagseguro" name="paymentTypes" type="radio" value="pagseguro" checked/>
+        Pagamento via PagSeguro (online, mais rápido)
+      </label>
+      <label class="radio">
+        <input id="directSell" name="paymentTypes" type="radio" value="directSell" />
+        Pagamento direto ao fornecedor (via contato por e-mail ou telefone, mais lento)
+      </label>
+    </div>
   </div>
   <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
   <a href="#finishOrder/shipping" id="goBackToShipping" class="btn btn-primary">Voltar</a>

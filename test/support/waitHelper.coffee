@@ -11,3 +11,11 @@ exports.waitSeconds = (seconds, callback) ->
     now = new Date()
     now > future
   , callback
+
+exports.waitMilliseconds = (mils, callback) ->
+  future = new Date()
+  future.setMilliseconds(new Date().getMilliseconds()+mils)
+  exports.whenDone ->
+    now = new Date()
+    now > future
+  , callback

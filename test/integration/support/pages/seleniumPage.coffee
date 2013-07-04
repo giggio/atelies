@@ -30,11 +30,12 @@ module.exports = class Page
     url = @url unless url?
     url = "http://localhost:8000/#{url}"
     @driver.get('about:blank').then =>
-      @driver.get(url).then =>
-        if refresh
-          @refresh cb
-        else
-          cb() if cb?
+      waitMilliseconds 100, =>
+        @driver.get(url).then =>
+          if refresh
+            @refresh cb
+          else
+            cb() if cb?
   closeBrowser: (cb) -> cb() if cb?
   errorMessageFor: (field, cb) -> @getText "##{field} ~ .tooltip .tooltip-inner", cb
   errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
