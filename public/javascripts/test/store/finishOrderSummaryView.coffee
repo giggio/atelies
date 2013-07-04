@@ -57,6 +57,7 @@ define [
         cart.addItem item2
         cart.addItem item2
         cart.setManualShipping()
+        cart.choosePaymentType type:'directSell', name:'Pagamento direto ao fornecedor'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
@@ -82,6 +83,7 @@ define [
           { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
         ]
         cart.chooseShippingOption 'pac'
+        cart.choosePaymentType type:'pagseguro', name:'PagSeguro'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
@@ -128,6 +130,7 @@ define [
           { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
         ]
         cart.chooseShippingOption 'pac'
+        cart.choosePaymentType type:'pagseguro', name:'PagSeguro'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
