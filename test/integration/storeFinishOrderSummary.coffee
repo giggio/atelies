@@ -7,7 +7,7 @@ StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 StoreFinishOrderSummaryPage     = require './support/pages/storeFinishOrderSummaryPage'
 
-describe 'Store Finish Order: Payment', ->
+describe 'Store Finish Order: Summary', ->
   page = storeFinishOrderPaymentPage = storeFinishOrderShippingPage = storeCartPage = storeProductPage = store = product1 = product2 = product3 = store2 = user1 = p1Inventory = p2Inventory = null
   after (done) -> page.closeBrowser done
   before (done) =>
@@ -32,17 +32,16 @@ describe 'Store Finish Order: Payment', ->
         p2Inventory = product2.inventory
         user1 = generator.user.d()
         user1.save()
-        page.clearCookies ->
-          page.clearLocalStorage ->
-            page.loginFor user1._id, ->
-              storeProductPage.visit 'store_1', 'name_1', ->
-                storeProductPage.purchaseItem ->
-                  storeProductPage.visit 'store_1', 'name_2', ->
-                    storeProductPage.purchaseItem ->
-                      storeCartPage.clickFinishOrder ->
-                        storeFinishOrderShippingPage.clickSedexOption ->
-                          storeFinishOrderShippingPage.clickContinue ->
-                            storeFinishOrderPaymentPage.clickSelectPaymentType done
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_1', 'name_1', ->
+              storeProductPage.purchaseItem ->
+                storeProductPage.visit 'store_1', 'name_2', ->
+                  storeProductPage.purchaseItem ->
+                    storeCartPage.clickFinishOrder ->
+                      storeFinishOrderShippingPage.clickSedexOption ->
+                        storeFinishOrderShippingPage.clickContinue ->
+                          storeFinishOrderPaymentPage.clickSelectPaymentType done
     it 'should show summary of sale', (done) ->
       page.summaryOfSale (s) ->
         s.shippingCost.should.equal 'R$ 45,20'
@@ -76,20 +75,19 @@ describe 'Store Finish Order: Payment', ->
         p2Inventory = product2.inventory
         user1 = generator.user.d()
         user1.save()
-        page.clearCookies ->
-          page.clearLocalStorage ->
-            page.loginFor user1._id, ->
-              storeProductPage.visit 'store_1', 'name_1', ->
-                storeProductPage.purchaseItem ->
-                  storeProductPage.visit 'store_1', 'name_2', ->
-                    storeProductPage.purchaseItem ->
-                      storeCartPage.updateQuantity product2, 2, ->
-                        storeCartPage.clickFinishOrder ->
-                          storeFinishOrderShippingPage.clickSedexOption ->
-                            storeFinishOrderShippingPage.clickContinue ->
-                              storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                                page.clickCompleteOrder ->
-                                  waitSeconds 2, done
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_1', 'name_1', ->
+              storeProductPage.purchaseItem ->
+                storeProductPage.visit 'store_1', 'name_2', ->
+                  storeProductPage.purchaseItem ->
+                    storeCartPage.updateQuantity product2, 2, ->
+                      storeCartPage.clickFinishOrder ->
+                        storeFinishOrderShippingPage.clickSedexOption ->
+                          storeFinishOrderShippingPage.clickContinue ->
+                            storeFinishOrderPaymentPage.clickSelectPaymentType ->
+                              page.clickCompleteOrder ->
+                                waitSeconds 2, done
     it 'should have stored a new order on db', (done) ->
       Order.find (err, orders) ->
         throw err if err
@@ -136,16 +134,15 @@ describe 'Store Finish Order: Payment', ->
         product3.save()
         user1 = generator.user.d()
         user1.save()
-        page.clearCookies ->
-          page.clearLocalStorage ->
-            page.loginFor user1._id, ->
-              storeProductPage.visit 'store_2', 'name_3', ->
-                storeProductPage.purchaseItem ->
-                  storeCartPage.clickFinishOrder ->
-                    storeFinishOrderShippingPage.clickContinue ->
-                      storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                        page.clickCompleteOrder ->
-                          waitSeconds 2, done
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_2', 'name_3', ->
+              storeProductPage.purchaseItem ->
+                storeCartPage.clickFinishOrder ->
+                  storeFinishOrderShippingPage.clickContinue ->
+                    storeFinishOrderPaymentPage.clickSelectPaymentType ->
+                      page.clickCompleteOrder ->
+                        waitSeconds 2, done
     it 'should have stored a new order on db', (done) ->
       Order.find (err, orders) ->
         throw err if err

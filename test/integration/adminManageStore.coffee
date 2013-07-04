@@ -186,7 +186,7 @@ describe 'Admin manage store page', ->
         expect(store.pmtGateways).to.be.like ['pagseguro']
         done()
 
-  describe 'updates a store to do not use pagseguro', (done) ->
+  describe 'updates a store to do not use pagseguro', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error

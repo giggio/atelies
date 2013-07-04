@@ -36,12 +36,11 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'logged in user with full address', ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder done
+      page.clearLocalStorage ->
+        page.loginFor user1._id, ->
+          storeProductPage.visit 'store_1', 'name_1', ->
+            storeProductPage.purchaseItem ->
+              storeCartPage.clickFinishOrder done
     it 'should show address', (done) ->
       page.address (a) ->
         userAddress = user1.deliveryAddress
@@ -78,12 +77,11 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'logged in user with incomplete address', ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          page.loginFor userIncompleteAddress._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder done
+      page.clearLocalStorage ->
+        page.loginFor userIncompleteAddress._id, ->
+          storeProductPage.visit 'store_1', 'name_1', ->
+            storeProductPage.purchaseItem ->
+              storeCartPage.clickFinishOrder done
     it 'should redirect to update profile page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/updateProfile"
@@ -91,16 +89,15 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'logged in user with incomplete address completes address and comes back to the store and cart', ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          page.loginFor userIncompleteAddress._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder ->
-                  page.pressButton "#updateProfile", ->
-                    accountUpdateProfilePage.setFieldsAs user1, ->
-                      accountUpdateProfilePage.clickUpdateProfileButton ->
-                        page.pressButton "#redirectTo", done
+      page.clearLocalStorage ->
+        page.loginFor userIncompleteAddress._id, ->
+          storeProductPage.visit 'store_1', 'name_1', ->
+            storeProductPage.purchaseItem ->
+              storeCartPage.clickFinishOrder ->
+                page.pressButton "#updateProfile", ->
+                  accountUpdateProfilePage.setFieldsAs user1, ->
+                    accountUpdateProfilePage.clickUpdateProfileButton ->
+                      page.pressButton "#redirectTo", done
     it 'should take back to the shipping page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/shipping"
@@ -139,12 +136,11 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'store without auto calculated shipping', ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_2', 'name_3', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder done
+      page.clearLocalStorage ->
+        page.loginFor user1._id, ->
+          storeProductPage.visit 'store_2', 'name_3', ->
+            storeProductPage.purchaseItem ->
+              storeCartPage.clickFinishOrder done
     it 'should not show calculated shipping', (done) ->
       page.shippingInfoExists (itDoes) ->
         itDoes.should.be.false

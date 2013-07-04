@@ -29,13 +29,12 @@ module.exports = class Page
     refresh = false unless refresh?
     url = @url unless url?
     url = "http://localhost:8000/#{url}"
-    @driver.get('about:blank').then =>
-      waitMilliseconds 100, =>
-        @driver.get(url).then =>
-          if refresh
-            @refresh cb
-          else
-            cb() if cb?
+    @driver.get('chrome://version/').then => #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
+      @driver.get(url).then =>
+        if refresh
+          @refresh cb
+        else
+          cb() if cb?
   closeBrowser: (cb) -> cb() if cb?
   errorMessageFor: (field, cb) -> @getText "##{field} ~ .tooltip .tooltip-inner", cb
   errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
@@ -125,18 +124,34 @@ module.exports = class Page
   visitBlank: (cb) -> Page::visit.call @, 'blank', false, cb
   loginFor: (_id, cb) ->
     @currentUrl (url) =>
-      @visitBlank() unless url.substr(0,4) is 'http' #need the browser loaded to access cookies and have a session cookie id
-      @driver.manage().getCookie('connect.sid').then (cookie) ->
-        sessionId = cookie.value
-        sessionStore = getExpressServer().sessionStore
-        sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
-        sessionStore.get sessionId, (err, session) ->
-          session.auth = {} unless session.auth?
-          auth = session.auth
-          auth.userId = _id
-          auth.loggedIn = true
-          sessionStore.set sessionId, session, cb
+      doLogin = =>
+        @driver.manage().getCookie('connect.sid').then (cookie) =>
+          continueLogin = (cookie) =>
+            sessionId = cookie.value
+            sessionStore = getExpressServer().sessionStore
+            sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
+            sessionStore.get sessionId, (err, session) ->
+              session.auth = {} unless session.auth?
+              auth = session.auth
+              auth.userId = _id
+              auth.loggedIn = true
+              sessionStore.set sessionId, session, cb
+          if cookie?
+            continueLogin cookie
+          else
+            @refresh =>
+              @driver.manage().getCookie('connect.sid').then (cookie) =>
+                continueLogin cookie
+      if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
+        @visitBlank doLogin
+      else
+        doLogin()
   eval: (script, cb) -> @driver.executeScript(script).then cb
   clearLocalStorage: (cb) ->
-    @visitBlank => @eval 'localStorage.clear()', cb
+    @currentUrl (url) =>
+      clear = => @eval 'localStorage.clear()', cb
+      if url.substr(0,4) isnt 'http' #need the browser loaded to access localstorage
+        @visitBlank clear
+      else
+        clear()
   refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
