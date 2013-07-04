@@ -7,11 +7,12 @@ define [
   './views/finishOrderShipping'
   './views/finishOrderUpdateProfile'
   './views/finishOrderPayment'
+  './views/finishOrderSummary'
   './views/finishOrderOrderFinished'
   './models/products'
   './models/store'
   './models/cart'
-],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderOrderFinishedView, Products, Store, Cart) ->
+],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart) ->
   class Routes extends Backbone.Open.Routes
     constructor: ->
       viewsManager.$el = $ '#app-container > .store'
@@ -49,6 +50,12 @@ define [
       cart = Cart.get store.slug
       finishOrderPaymentView = new FinishOrderPaymentView store: store, cart: cart, user: user
       viewsManager.show finishOrderPaymentView
+    finishOrderSummary: ->
+      store = storeBootstrapModel.store
+      user = storeBootstrapModel.user
+      cart = Cart.get store.slug
+      finishOrderSummaryView = new FinishOrderSummaryView store: store, cart: cart, user: user
+      viewsManager.show finishOrderSummaryView
     finishOrderOrderFinished: ->
       finishOrderOrderFinishedView = new FinishOrderOrderFinishedView()
       viewsManager.show finishOrderOrderFinishedView

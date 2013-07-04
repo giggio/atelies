@@ -12,4 +12,5 @@ define [
       'finishOrder/shipping': routes.finishOrderShipping
       'finishOrder/updateProfile': routes.finishOrderUpdateProfile
       'finishOrder/payment': routes.finishOrderPayment
+      'finishOrder/summary': routes.finishOrderSummary
       'finishOrder/orderFinished': routes.finishOrderOrderFinished
