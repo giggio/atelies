@@ -2,12 +2,14 @@
   <div>
     <h2>Selecione a forma de pagamento</h2>
     <div id="paymentTypesHolder">
+      {{#if pagseguro}}
       <label class="radio">
         <input id="pagseguro" name="paymentTypes" type="radio" value="pagseguro" checked/>
         Pagamento via PagSeguro (online, mais rápido)
       </label>
+      {{/if}}
       <label class="radio">
-        <input id="directSell" name="paymentTypes" type="radio" value="directSell" />
+        <input id="directSell" name="paymentTypes" type="radio" value="directSell" {{#unless pagseguro}}checked{{/unless}} />
         Pagamento direto ao fornecedor (via contato por e-mail ou telefone, mais lento)
       </label>
     </div>

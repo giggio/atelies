@@ -48,3 +48,33 @@ describe 'Store Finish Order: Payment', ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
         done()
+
+  describe 'payment info for store without pagseguro enabled', ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        store = generator.store.c()
+        store.save()
+        product1 = generator.product.a()
+        product1.storeSlug = store.slug
+        product1.storeName = store.name
+        product1.save()
+        user1 = generator.user.d()
+        user1.save()
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_3', 'name_1', ->
+              storeProductPage.purchaseItem ->
+                storeCartPage.clickFinishOrder ->
+                  storeFinishOrderShippingPage.clickSedexOption ->
+                    storeFinishOrderShippingPage.clickContinue done
+    it 'should show options for payment type with direct payment already selected', (done) ->
+      page.paymentTypes (pts) ->
+        pts.length.should.equal 1
+        selectedPaymentType = _.findWhere pts, selected:true
+        selectedPaymentType.value.should.equal 'directSell'
+        done()
+    it 'should be at payment page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
+        done()

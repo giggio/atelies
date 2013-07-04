@@ -204,7 +204,7 @@ class Routes
             phoneNumber: req.user.phoneNumber
           else
             undefined
-        res.render "store", {store: store, products: viewModelProducts, user: user}, (err, html) ->
+        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user}, (err, html) ->
           #console.log html
           res.send html
     @storeWithDomain

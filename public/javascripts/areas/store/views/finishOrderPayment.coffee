@@ -20,7 +20,7 @@ define [
       @user = opt.user
     render: =>
       context = Handlebars.compile @template
-      @$el.html context()
+      @$el.html context pagseguro:@store.pagseguro
     _selectPaymentType: ->
       selected = $('#paymentTypesHolder input[type=radio][checked]', @$el)
       paymentType = switch selected.val()
