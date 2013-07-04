@@ -1,0 +1,44 @@
+Product         = require '../models/product'
+User            = require '../models/user'
+Store           = require '../models/store'
+Order           = require '../models/order'
+_               = require 'underscore'
+everyauth       = require 'everyauth'
+AccessDenied    = require '../errors/accessDenied'
+values          = require '../helpers/values'
+correios        = require 'correios'
+RouteFunctions  = require './routeFunctions'
+
+class Routes
+  constructor: (@env) ->
+  
+  index: (domain) ->
+    route = (req, res) =>
+      subdomain = @_getSubdomain domain, req.host.toLowerCase()
+      if subdomain?
+        req.params.storeSlug = subdomain
+        return @storeWithDomain req, res
+      Product.find (err, products) ->
+        dealWith err
+        viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+        Store.findForHome (err, stores) ->
+          dealWith err
+          res.render "index", products: viewModelProducts, stores: stores
+    route
+  
+  blank: (req, res) -> res.render 'blank'
+  
+  storesSearch: (req, res) ->
+    Store.searchByName req.params.searchTerm, (err, stores) ->
+      dealWith err
+      res.json stores
+  
+  productsSearch: (req, res) ->
+    Product.searchByName req.params.searchTerm, (err, products) ->
+      dealWith err
+      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+      res.json viewModelProducts
+
+_.extend Routes::, RouteFunctions::
+
+module.exports = Routes

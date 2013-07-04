@@ -18,6 +18,12 @@ class Functions
         @[fn] = (req, res) ->
           throw new AccessDenied() unless req.loggedIn and req.user?.isSeller
           original.apply @, arguments
+
+  _getSubdomain: (domain, host) ->
+    return undefined if @env isnt 'production' and host is 'localhost'
+    if host isnt domain and host isnt "www.#{domain}"
+      subdomain = host.replace ".#{domain}", ''
+    subdomain
   
 
 module.exports = Functions

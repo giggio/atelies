@@ -1,4 +1,4 @@
-Routes          = require '../../../app/routes'
+Routes          = require '../../../app/routes/admin'
 Store           = require '../../../app/models/store'
 Product         = require '../../../app/models/product'
 AccessDenied    = require '../../../app/errors/accessDenied'

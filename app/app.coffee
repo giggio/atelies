@@ -5,7 +5,6 @@ exports.start = (cb) ->
   require './helpers/languageExtensions'
   everyauth           = require 'everyauth'
   express             = require "express"
-  routes              = require "./routes"
   http                = require "http"
   path                = require "path"
   app                 = express()
