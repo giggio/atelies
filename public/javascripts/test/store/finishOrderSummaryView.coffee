@@ -27,6 +27,7 @@ define [
           { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
         ]
         cart.chooseShippingOption 'pac'
+        cart.choosePaymentType type:'pagseguro', name:"PagSeguro"
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
@@ -42,6 +43,8 @@ define [
         $("#city", el).text().should.equal deliveryAddress.city
         $("#state", el).text().should.equal deliveryAddress.state
         $("#zip", el).text().should.equal deliveryAddress.zip
+      it 'shows the payment type', ->
+        $("#paymentType", el).text().should.equal "PagSeguro"
 
     describe 'Showing order to be finished without shipping cost', ->
       after -> view.close()

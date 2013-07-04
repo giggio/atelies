@@ -73,3 +73,5 @@ define ['underscore'], (_) ->
     autoCalculatedShipping: true
     setManualShipping: -> @autoCalculatedShipping = false
     setAutoCalculatedShipping: -> @autoCalculatedShipping = true
+    choosePaymentType: (paymentType) -> @_paymentType = paymentType
+    paymentTypeSelected: -> @_paymentType

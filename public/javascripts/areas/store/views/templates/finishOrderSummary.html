@@ -1,4 +1,4 @@
-<div id="storeFinishOrderPayment">
+<div id="storeFinishOrderSummary">
   <div>
     <h2>Pagamento</h2>
   </div>
@@ -42,9 +42,10 @@
       </table>
     </div>
     {{/with}}
-      
+  </div>
+  <div class="row">
     {{#with cart}}
-    <div id="cart" class="span4">
+    <div id="cart" class="span8">
       <h4>Produtos no carrinho</strong></h4>
       <table id="cartItems" class="table table-hover table-condensed">
         <thead>
@@ -68,7 +69,8 @@
       </table>
     </div>
     {{/with}}
-
+  </div>
+  <div class="row">
     <div class="span4">
       {{#with user.deliveryAddress}}
       <address id="deliveryAddress">
@@ -91,6 +93,11 @@
       {{else}}
       <div id="manualShippingCalculationMessage">O cálculo da postagem será feito posteriormente pela loja.</div>
       {{/if}}
+    </div>
+
+    <div class="span4">
+      <h4>Dados de pagamento</h4>
+      <span id="paymentType">{{paymentType}}</span></span>
     </div>
   </div>
   <div id="redirMsg">
