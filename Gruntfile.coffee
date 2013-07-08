@@ -52,7 +52,7 @@ module.exports = (grunt) ->
           livereload: true
       coffee:
         files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'coffee', 'coffeelint' ]
+        tasks: [ 'compile' ]
         options:
           nospawn: true
 

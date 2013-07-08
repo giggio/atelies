@@ -1,7 +1,7 @@
 define [
   'backbone'
 ], (Backbone) ->
-  class Product extends Backbone.Open.Model
+  class Store extends Backbone.Open.Model
     initialize: ->
       @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged
     _autoCalculateShippingChanged: ->
@@ -24,6 +24,8 @@ define [
       phoneNumber:undefined
       autoCalculateShipping:true
       pagseguro:true
+      pagseguroEmail:undefined
+      pagseguroToken:undefined
     validation:
       name:
         required: true
@@ -39,10 +41,16 @@ define [
         msg: 'Informe o CEP.'
       otherUrl:
         [{pattern:'url', msg:'Informe um link válido para o outro site, começando com http ou https.'}
-        {required: false}]
+         {required: false}]
       banner:
         [{pattern:'url', msg:"Informe um link válido para o banner, começando com http ou https."}
-        {required: false}]
+         {required: false}]
       flyer:
         [{pattern:'url', msg:"Informe um link válido para o flyer, começando com http ou https."}
-        {required: false}]
+         {required: false}]
+      pagseguroEmail:
+        [{required: true, msg:'O e-mail é obrigatório.'}
+         {pattern:'email', msg:'O e-mail deve ser válido.'}]
+      pagseguroToken:
+        [{required: true, msg:'O token do PagSeguro é obrigatório.'}
+         {length: 32, msg: 'O token do PagSeguro deve possuir 32 caracteres.'}]

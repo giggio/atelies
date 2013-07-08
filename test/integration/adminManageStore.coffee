@@ -9,6 +9,7 @@ describe 'Admin manage store page', ->
   before (done) ->
     page = new AdminManageStorePage()
     whenServerLoaded done
+
   describe 'updates a store', (done) ->
     before (done) ->
       cleanDB (error) ->
@@ -171,7 +172,8 @@ describe 'Admin manage store page', ->
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
             page.clickSetPagseguroButton ->
-              page.clickConfirmSetPagseguroButton done
+              page.setPagseguroValuesAs email: 'pagseguro@a.com', token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA', ->
+                page.clickConfirmSetPagseguroButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
@@ -183,7 +185,43 @@ describe 'Admin manage store page', ->
     it 'updated the store and set pagseguro', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
-        expect(store.pmtGateways).to.be.like ['pagseguro']
+        store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
+        store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+        done()
+
+  describe 'does not update a store to use pagseguro if information is missing', (done) ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        exampleStore = generator.store.c()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+        page.loginFor userSeller._id, ->
+          page.visit exampleStore._id.toString(), ->
+            page.clickSetPagseguroButton ->
+              page.setPagseguroValuesAs email: '', token: '', ->
+                page.clickConfirmSetPagseguroButton done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
+        done()
+    it 'does not show store updated message', (done) ->
+      page.hasMessage (itDoes) ->
+        itDoes.should.be.false
+        done()
+    it 'shows error messages', (done) ->
+      page.pagseguroEmailErrorMsg (emailMsg) ->
+        emailMsg.should.equal "O e-mail deve existir e ser válido."
+        page.pagseguroTokenErrorMsg (tokenMsg) ->
+          tokenMsg.should.equal 'O token do PagSeguro é obrigatório e deve possuir 32 caracteres.'
+          done()
+    it 'did not update the store and set pagseguro', (done) ->
+      Store.findBySlug exampleStore.slug, (error, store) ->
+        return done error if error
+        expect(store.pmtGateways.pagseguro.email).to.be.undefined
+        expect(store.pmtGateways.pagseguro.token).to.be.undefined
         done()
 
   describe 'updates a store to do not use pagseguro', ->
@@ -207,10 +245,11 @@ describe 'Admin manage store page', ->
       page.message (msg) ->
         msg.endsWith("Loja atualizada com sucesso").should.be.true
         done()
-    it 'updated the store and set pagseguro', (done) ->
+    it 'updated the store and unset pagseguro', (done) ->
       Store.findBySlug exampleStore.slug, (error, store) ->
         return done error if error
-        store.pmtGateways.should.be.empty
+        expect(store.pmtGateways.pagseguro.email).to.be.undefined
+        expect(store.pmtGateways.pagseguro.token).to.be.undefined
         done()
 
   describe 'does not update a store (missing or wrong info)', (done) ->

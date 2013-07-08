@@ -44,16 +44,16 @@ define [
          {required: false}]
       shippingHeight:
         [{required: true, msg: 'A altura de postagem é obrigatória.'}
-         {pattern:'digits', msg: 'A altura deve ser um número.'}]
+         {range:[2,105], msg: 'A altura deve ser um número entre 2 e 105.'}]
       shippingWidth:
         [{required: true, msg: 'A largura de postagem é obrigatória.'}
-         {pattern:'digits', msg: 'A largura deve ser um número.'}]
+         {range:[11,105], msg: 'A largura deve ser um número entre 11 e 105.'}]
       shippingDepth:
         [{required: true, msg: 'A profundidade de postagem é obrigatória.'}
-         {pattern:'digits', msg: 'A profundidade deve ser um número.'}]
+         {range:[16,105], msg: 'A profundidade deve ser um número entre 16 e 105.'}]
       shippingWeight:
         [{required: true, msg: 'O peso de postagem é obrigatório.'}
-         {pattern:'digits', msg: 'O peso deve ser um número.'}]
+         {range:[0,30], msg: 'O peso deve ser um número entre 0 e 30.'}]
       inventory:
         [{pattern:'digits', msg: 'O estoque deve ser um número.'}
         {required: false}]

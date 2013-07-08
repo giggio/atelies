@@ -6,10 +6,11 @@ define [
   '../models/products'
   '../models/cart'
   '../models/orders'
+  '../models/order'
   'text!./templates/finishOrderSummary.html'
   './cartItem'
   '../../../converters'
-], ($, _, Backbone, Handlebars, Products, Cart, Orders, finishOrderSummaryTemplate, CartItemView, converters) ->
+], ($, _, Backbone, Handlebars, Products, Cart, Orders, Order, finishOrderSummaryTemplate, CartItemView, converters) ->
   class FinishOrderPayment extends Backbone.View
     events:
       'click #finishOrder':'finishOrder'
@@ -41,10 +42,15 @@ define [
     finishOrder: ->
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
       orders = new Orders storeId: @store._id
-      success = =>
+      success = (model, response, opt) =>
         @cart.clear()
-        Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
-      error = => #console.error 'Erro ao salvar'
+        if @store.pagseguro
+          window.location = response.redirect
+        else
+          Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
+      error = (model, xhr, opt) => console.error "Erro ao salvar #{xhr}"
       order = items: items
       order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping
-      order = orders.create order, {error: error, success: success}
+      order = new Order order
+      orders.add order
+      order.save order.attributes, error: error, success: success

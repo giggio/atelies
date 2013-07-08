@@ -21,7 +21,10 @@ storeSchema = new mongoose.Schema
   banner:                 String
   flyer:                  String
   autoCalculateShipping:  Boolean
-  pmtGateways:            [String]
+  pmtGateways:
+    pagseguro:
+      email:              String
+      token:              String
 
 storeSchema.methods.toSimple = ->
   store =
@@ -42,8 +45,7 @@ storeSchema.methods.toSimple = ->
     banner: @banner
     flyer: @flyer
     autoCalculateShipping: @autoCalculateShipping
-    pmtGateways: @pmtGateways
-  store.pagseguro = 'pagseguro' in @pmtGateways
+  store.pagseguro = @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
   store
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
@@ -59,11 +61,10 @@ storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
     @autoCalculateShipping = true unless productWithMissingInfo?
     cb not productWithMissingInfo?
 storeSchema.methods.setPagseguro = (set) ->
-  index = @pmtGateways.indexOf 'pagseguro'
-  if set
-    @pmtGateways.push 'pagseguro' if index is -1
+  if typeof set is 'boolean' and set is false
+    @pmtGateways.pagseguro = undefined
   else
-    @pmtGateways.splice index, 1 if index isnt -1
+    @pmtGateways.pagseguro = set
 
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
@@ -72,6 +73,13 @@ Store.findWithProductsBySlug = (slug, cb) ->
     return cb err if err
     return cb(null, null) if store is null
     Product.findByStoreSlug slug, (err, products) ->
+      return cb err if err
+      cb null, store, products
+Store.findWithProductsById = (_id, cb) ->
+  Store.findById _id, (err, store) ->
+    return cb err if err
+    return cb(null, null) if store is null
+    Product.findByStoreSlug store.slug, (err, products) ->
       return cb err if err
       cb null, store, products
 Store.findForHome = (cb) -> Store.find flyer: /./, cb

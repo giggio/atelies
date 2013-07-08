@@ -112,7 +112,7 @@ describe 'Store Finish Order: Shipping', ->
         a.zip.should.equal userAddress.zip
         done()
 
-  describe 'not logged in user logs in and comes back to the store and cart', ->
+  describe 'a not logged in user logs in and comes back to the store and cart', ->
     before (done) ->
       page.clearCookies ->
         page.clearLocalStorage ->

@@ -33,6 +33,8 @@ define [
         manageStoreView.$("#flyer").val(exampleStore.flyer).change()
         manageStoreView.$("#autoCalculateShipping").prop('checked', true).change()
         manageStoreView.$("#pagseguro").prop('checked', true).change()
+        manageStoreView.$("#pagseguroEmail").val(exampleStore.pagseguroEmail).change()
+        manageStoreView.$("#pagseguroToken").val(exampleStore.pagseguroToken).change()
         $('#updateStore', el).trigger 'click'
       after ->
         $.ajax.restore()
@@ -51,6 +53,8 @@ define [
         expect(storePassedIn.flyer).to.equal exampleStore.flyer
         expect(storePassedIn.autoCalculateShipping).to.be.true
         expect(storePassedIn.pagseguro).to.be.true
+        expect(storePassedIn.pagseguroEmail).to.equal exampleStore.pagseguroEmail
+        expect(storePassedIn.pagseguroToken).to.equal exampleStore.pagseguroToken
       it 'adds store to stores in the bootstrapped model', ->
         expect(global.adminStoresBootstrapModel.stores[0]).to.be.like exampleStore
 
@@ -88,6 +92,10 @@ define [
         goToStoreManagePageSpy = storePassedIn = null
         store = generatorc.store.a()
         newStore = generatorc.store.b()
+        newStore.autoCalculateShipping = true
+        newStore.pagseguro = true
+        newStore.pagseguroEmail = store.pagseguroEmail
+        newStore.pagseguroToken = store.pagseguroToken
         newStore._id = store._id
         before ->
           global.adminStoresBootstrapModel = stores:[store]

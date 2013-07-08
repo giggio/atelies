@@ -11,7 +11,7 @@ define [
   './models/store'
 ],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, Products, Product, Stores, Store) ->
   class Routes
-    viewsManager.$el = $ "#app-container"
+    viewsManager.$el = $ "#app-container > .admin"
     @admin: =>
       homeView = new AdminView stores: adminStoresBootstrapModel.stores
       viewsManager.show homeView

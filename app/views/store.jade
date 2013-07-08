@@ -5,7 +5,8 @@ append scriptsFooter
     var storeBootstrapModel = {
       store:!{JSON.stringify(store)},
       products:!{JSON.stringify(products)},
-      user:!{typeof(user)==='undefined'?'undefined':JSON.stringify(user)}
+      user:!{typeof(user)==='undefined'?'undefined':JSON.stringify(user)},
+      order:!{typeof(order)==='undefined'?'undefined':JSON.stringify(order)}
     };
   if typeof(bootstrapedRedirect) !== 'undefined'
     script 

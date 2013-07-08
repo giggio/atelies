@@ -32,26 +32,25 @@ describe 'Store', ->
     store.nameKeywords.should.be.like []
   it 'sets pagseguro when not previously set', ->
     store = new Store()
-    store.setPagseguro on
-    store.pmtGateways.should.be.like ['pagseguro']
+    store.setPagseguro
+      email: 'pagseguro@a.com'
+      token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+    store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
+    store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
   it 'sets pagseguro when already set', ->
     store = new Store()
-    store.pmtGateways.push 'pagseguro'
-    store.setPagseguro on
-    store.pmtGateways.should.be.like ['pagseguro']
+    store.pmtGateways.pagseguro =
+      email: 'pagseguro@a.com'
+      token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+    store.setPagseguro
+      email: 'pagseguro@a.com'
+      token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+    store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
+    store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
   it 'unsets pagseguro when previously set', ->
     store = new Store()
-    store.pmtGateways.push 'pagseguro'
+    store.pmtGateways.pagseguro =
+      email: 'pagseguro@a.com'
+      token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     store.setPagseguro off
-    store.pmtGateways.should.be.like []
-  it 'unsets pagseguro when not previously set', ->
-    store = new Store()
-    store.pmtGateways.push 'other'
-    store.setPagseguro off
-    store.pmtGateways.should.be.like ['other']
-  it 'unsets pagseguro when previously set with other', ->
-    store = new Store()
-    store.pmtGateways.push 'other'
-    store.pmtGateways.push 'pagseguro'
-    store.setPagseguro off
-    store.pmtGateways.should.be.like ['other']
+    expect(JSON.stringify(store.pmtGateways.pagseguro)).to.equal undefined

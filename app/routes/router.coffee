@@ -47,9 +47,11 @@ exports.route = (app) ->
   app.get     "/admin/:storeSlug/products/:productId",                      admin.storeProduct
   app.put     "/admin/:storeSlug/products/:productId",                      admin.adminProductUpdate
   app.delete  "/admin/:storeSlug/products/:productId",                      admin.adminProductDelete
+  #store order
+  app.post    "/orders/:storeId",                                           store.orderCreate
+  app.get     "/paymentGateway/pagseguro/:storeSlug/returnFromPayment",     store.pagseguroReturnFromPayment
+  app.post    "/paymentGateway/pagseguro/:storeSlug/statusChanged",         store.pagseguroStatusChanged
+  app.post    "/shipping/:storeSlug",                                       store.calculateShipping
   #store
   app.get     "/:storeSlug",                                                store.store
   app.get     "/:storeSlug/:productSlug",                                   store.product
-  #store order
-  app.post    "/orders/:storeId",                                           store.orderCreate
-  app.post    "/shipping/:storeSlug",                                       store.calculateShipping

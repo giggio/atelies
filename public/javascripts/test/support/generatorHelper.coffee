@@ -20,7 +20,7 @@ define ->
         shippingHeight: 11
         shippingWidth: 21
         shippingDepth: 31
-        shippingWeight: 41
+        shippingWeight: 21
         hasInventory: true
         inventory: 30
       b: ->
@@ -41,7 +41,7 @@ define ->
         shippingHeight: 51
         shippingWidth: 61
         shippingDepth: 71
-        shippingWeight: 81
+        shippingWeight: 11
         hasInventory: false
       c: ->
         name: 'name 3'
@@ -81,6 +81,8 @@ define ->
         flyer: 'http://lorempixel.com/350/400/nightlife/'
         autoCalculateShipping: true
         pagseguro: true
+        pagseguroEmail: 'pagseguro@a.com'
+        pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
       b: ->
         _id: '2'
         name: 'Store 2'

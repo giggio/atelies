@@ -37,7 +37,10 @@ class Routes
     store.banner = body.banner
     store.flyer = body.flyer
     store.autoCalculateShipping = body.autoCalculateShipping
-    store.pmtGateways.push 'pagseguro' if body.pagseguro
+    if body.pagseguro
+      store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
+      store.pmtGateways.pagseguro.email = body.pagseguroEmail
+      store.pmtGateways.pagseguro.token = body.pagseguroToken
     store.save (err) ->
       return res.json 400, err if err?
       req.user.save (err) ->
@@ -83,7 +86,7 @@ class Routes
         else
           res.send 409
   adminStoreUpdateSetPagseguroOff: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, off
-  adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, on
+  adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, email: req.body.email, token: req.body.token
   _adminStoreUpdateSetPagseguro: (req, res, set) ->
     Store.findById req.params.storeId, (err, store) ->
       dealWith err

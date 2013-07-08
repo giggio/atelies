@@ -1,17 +1,20 @@
 Page          = require './seleniumPage'
+async         = require 'async'
 
 module.exports = class StoreCartPage extends Page
   visit: (storeSlug, cb) => super "#{storeSlug}#finishOrder/shipping", cb
   address: (cb) ->
     address = {}
     actions = [
-      => @getText "#deliveryAddress #street", (t) -> address.street = t
-      => @getText "#deliveryAddress #street2", (t) -> address.street2 = t
-      => @getText "#deliveryAddress #city", (t) -> address.city = t
-      => @getText "#deliveryAddress #state", (t) -> address.state = t
-      => @getText "#deliveryAddress #zip", (t) -> address.zip = t
+      (cb) => @getText "#deliveryAddress #street", (t) -> address.street = t;cb()
+      (cb) => @getText "#deliveryAddress #street2", (t) -> address.street2 = t;cb()
+      (cb) => @getText "#deliveryAddress #city", (t) -> address.city = t;cb()
+      (cb) => @getText "#deliveryAddress #state", (t) -> address.state = t;cb()
+      (cb) => @getText "#deliveryAddress #zip", (t) -> address.zip = t;cb()
     ]
-    @parallel actions, -> print address;cb address
+    async.parallel actions, ->
+      #print address
+      cb address
   clickContinue: @::pressButton.partial '#finishOrder'
   clickSedexOption: (cb) ->
     @waitForSelector '#shippingOptions_sedex', =>

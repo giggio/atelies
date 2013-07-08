@@ -50,10 +50,10 @@ describe 'Admin Create Product page', ->
         errorMsgs.width.should.equal 'A largura deve ser um número.'
         errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
         errorMsgs.weight.should.equal 'O peso deve ser um número.'
-        errorMsgs.shippingHeight.should.equal 'A altura deve ser um número.'
-        errorMsgs.shippingWidth.should.equal 'A largura deve ser um número.'
-        errorMsgs.shippingDepth.should.equal 'A profundidade deve ser um número.'
-        errorMsgs.shippingWeight.should.equal 'O peso deve ser um número.'
+        errorMsgs.shippingHeight.should.equal 'A altura deve ser um número entre 2 e 105.'
+        errorMsgs.shippingWidth.should.equal 'A largura deve ser um número entre 11 e 105.'
+        errorMsgs.shippingDepth.should.equal 'A profundidade deve ser um número entre 16 e 105.'
+        errorMsgs.shippingWeight.should.equal 'O peso deve ser um número entre 0 e 30.'
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
         done()
 

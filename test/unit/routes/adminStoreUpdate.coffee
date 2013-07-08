@@ -16,7 +16,10 @@ describe 'AdminStoreUpdateRoute', ->
         _id: '9876'
         zip: '01234-567'
         autoCalculateShipping: true
-        pmtGateways: ['pagseguro']
+        pmtGateways:
+          pagseguro:
+            email: 'pagseguro@a.com'
+            token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
         save: sinon.stub().yields()
       sinon.stub(Store, 'findById').yields null, store
       user =

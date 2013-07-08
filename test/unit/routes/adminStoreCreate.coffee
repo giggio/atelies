@@ -22,6 +22,8 @@ describe 'AdminStoreCreateRoute', ->
         otherUrl: 'e'
         banner: 'f'
         pagseguro: true
+        pagseguroEmail: 'pagseguro@a.com'
+        pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
       body = req.body
       res = json: sinon.spy()
       routes.adminStoreCreate req, res
@@ -34,7 +36,8 @@ describe 'AdminStoreCreateRoute', ->
       store.state.should.equal body.state
       store.otherUrl.should.equal body.otherUrl
       store.banner.should.equal body.banner
-      store.pmtGateways.should.be.like ['pagseguro']
+      store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
+      store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     it 'added store to the user', ->
       user.createStore.should.have.been.called
     it 'saved the user', ->

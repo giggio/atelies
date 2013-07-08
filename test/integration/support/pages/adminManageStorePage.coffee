@@ -1,4 +1,5 @@
 Page          = require './seleniumPage'
+async         = require 'async'
 
 module.exports = class AdminManageStorePage extends Page
   visit: (storeId, cb) ->
@@ -22,14 +23,29 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #banner", store.banner
     @type "#manageStoreBlock #flyer", store.flyer
     store.autoCalculateShipping = true unless store.autoCalculateShipping?
-    store.pmtGateways = [] unless store.pmtGateways?
-    @parallel [
-      => @hasElement "#manageStoreBlock #autoCalculateShipping", (itHas) ->
-        @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping if itHas
-      => @hasElement "#manageStoreBlock #pagseguro", (itHas) ->
-        @checkOrUncheck "#manageStoreBlock #pagseguro", 'pagseguro' in store.pmtGateways if itHas
-      => @select "#manageStoreBlock #state", store.state
+    store.pmtGateways = {} unless store.pmtGateways?
+    async.parallel [
+      (pcb) => @hasElement "#manageStoreBlock #autoCalculateShipping", (itHas) =>
+        if itHas
+          @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, pcb
+        else
+          pcb()
+      (pcb) => @hasElement "#manageStoreBlock #pagseguro", (itHas) =>
+        if itHas
+          if store.pmtGateways.pagseguro?
+            @check "#manageStoreBlock #pagseguro", =>
+              @type "#manageStoreBlock #pagseguroEmail", store.pmtGateways.pagseguro.email
+              @type "#manageStoreBlock #pagseguroToken", store.pmtGateways.pagseguro.token
+              pcb()
+          else
+            @uncheck "#manageStoreBlock #pagseguro", pcb
+        else
+          pcb()
+      (pcb) => @select "#manageStoreBlock #state", store.state, pcb
     ], cb
+  setPagseguroValuesAs: (val, cb) ->
+    @eval "$('#manageStoreBlock #pagseguroEmail').val('#{val.email}').change()", =>
+      @eval "$('#manageStoreBlock #pagseguroToken').val('#{val.token}').change()", cb
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
@@ -42,3 +58,5 @@ module.exports = class AdminManageStorePage extends Page
   clickConfirmSetPagseguroButton: (cb) => @eval "$('#confirmSetPagseguro').click()", cb
   clickUnsetPagseguroButton: @::pressButton.partial "#unsetPagseguro"
   clickConfirmUnsetPagseguroButton: (cb) => @eval "$('#confirmUnsetPagseguro').click()", cb
+  pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
+  pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"

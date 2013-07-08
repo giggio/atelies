@@ -9,6 +9,9 @@ values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 async           = require 'async'
+pagseguro       = require 'pagseguro'
+parseXml        = require('xml2js').parseString
+request         = require 'request'
 
 class Routes
   constructor: (@env, @domain) ->
@@ -30,7 +33,10 @@ class Routes
           phoneNumber: req.user.phoneNumber
         else
           undefined
-      res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user}, (err, html) ->
+      if req.session.recentOrder?
+        order = req.session.recentOrder
+        req.session.recentOrder = null
+      res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) ->
         #console.log html
         res.send html
 
@@ -54,16 +60,93 @@ class Routes
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
           Order.create user, store, items, shippingCost, (order) =>
             order.save (err, order) =>
-              if err?
-                res.json 400, err
+              return res.json 400, err if err?
+              for item in items
+                p = item.product
+                p.inventory -= item.quantity if p.hasInventory
+                p.save()
+              if store.pmtGateways.pagseguro?.token? and store.pmtGateways.pagseguro?.email?
+                pag = new pagseguro store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token
+                pag.currency 'BRL'
+                pag.reference order._id.toString()
+                for item, i in items
+                  product = item.product
+                  pagItem =
+                    id: i + 1
+                    description: product.name
+                    amount: product.price.toFixed 2
+                    quantity: item.quantity
+                  pagItem.weight = item.weight if product.shipping?.weight?
+                  pag.addItem pagItem
+                pag.addItem
+                  id: items.length
+                  description: "Frete"
+                  amount: shippingCost.toFixed 2
+                  quantity: 1
+                pag.buyer
+                  name: user.name
+                  email: user.email
+                pag.send (err, pagseguroResult) =>
+                  return res.json 400, err if err?
+                  return res.json 400, errorMsg: 'Loja não autorizada no PagSeguro' if pagseguroResult is 'Unauthorized'
+                  parseXml pagseguroResult, (err, pagseguroResult) =>
+                    return res.json 400, err if err?
+                    return res.json 400, pagseguroResult.errors if pagseguroResult.errors?
+                    res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroResult.checkout.code}"
               else
-                for item in items
-                  p = item.product
-                  p.inventory -= item.quantity if p.hasInventory
-                  p.save()
                 order.sendMailAfterPurchase (error, mailResponse) ->
                   console.log "Error sending mail: #{error}" if error?
                   res.json 201, order.toSimpleOrder()
+
+  pagseguroStatusChanged: (req, res) ->
+    Store.findBySlug req.params.storeSlug, (err, store) ->
+      notificationId = req.body.notificationCode
+      @_getSalestatusFromPagseguroNotificationId notificationId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId, saleStatus) ->
+        Order.findById orderId, (err, order) =>
+          order.updateStatus saleStatus, (err) =>
+            res.send 200
+  _getSalestatusFromPagseguroNotificationId: (notificationId, email, token, cb) ->
+    url = "https://ws.pagseguro.uol.com.br/v2/transactions/notifications/#{notificationId}?email=#{email}&token=#{token}"
+    request url, (error, response, body) ->
+      return cb error if error?
+      if response.statusCode isnt 200
+        return parseXml body, {explicitArray: false}, (error, errorResult) ->
+          errorMsg = errorResult.errors.error.message
+          cb new Error "Not a 200 status code response. Error: #{errorMsg}"
+      parseXml body, (error, psTransaction) ->
+        orderId = psTransaction.transaction.reference
+        saleStatus = switch psTransaction.transaction.status
+          when 1 then 'waitingPayment'
+          when 2 then 'waitingAnalysis'
+          when 3 then 'paid'
+          when 4 then 'available'
+          when 5 then 'disputed'
+          when 6 then 'returned'
+          when 7 then 'canceled'
+        cb null, orderId, saleStatus
+  pagseguroReturnFromPayment: (req, res) ->
+    Store.findBySlug req.params.storeSlug, (err, store) ->
+      psTransactionId = req.query.transactionId
+      @_getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) ->
+        return res.redirect "/error?msg=#{err}" if err?
+        Order.findById orderId, (err, order) =>
+          order.sendMailAfterPurchase (error, mailResponse) ->
+            console.log "Error sending mail: #{error}" if error?
+            req.session.recentOrder = order.toSimpleOrder()
+            order.populate 'store', 'slug', (err) ->
+              res.redirect "/#{order.store.slug}/finishOrder/orderFinished"
+
+  _getOrderIdFromPagseguroTransactionId: (transactionId, email, token, cb) ->
+    url = "https://ws.pagseguro.uol.com.br/v2/transactions/#{transactionId}?email=#{email}&token=#{token}"
+    request url, (error, response, body) ->
+      return cb error if error?
+      if response.statusCode isnt 200
+        return parseXml body, {explicitArray: false}, (error, errorResult) ->
+          errorMsg = errorResult.errors.error.message
+          cb new Error "Not a 200 status code response. Error: #{errorMsg}"
+      parseXml body, (error, psTransaction) ->
+        orderId = psTransaction.transaction.reference
+        cb null, orderId
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
     if store.autoCalculateShipping
@@ -108,7 +191,9 @@ class Routes
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
                 dealWith err
-                pac.cost += delivery.GrandTotal * quantity
+                #TODO: remover
+                #pac.cost += delivery.GrandTotal * quantity
+                pac.cost = 0.01
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
               callbacks++
               deliverySpecs.serviceType = 'sedex'

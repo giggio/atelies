@@ -4,24 +4,39 @@ define [
   'handlebars'
   'text!./templates/manageStore.html'
   './store'
+  './manageStorePagseguro'
   'backboneValidation'
-], ($, Backbone, Handlebars, manageStoreTemplate, StoreView, Validation) ->
+], ($, Backbone, Handlebars, manageStoreTemplate, StoreView, ManageStorePagseguroView, Validation) ->
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
       'click #confirmSetAutoCalculateShipping':'_confirmSetAutoCalculateShipping'
       'click #confirmUnsetAutoCalculateShipping':'_confirmUnsetAutoCalculateShipping'
-      'click #confirmSetPagseguro':'_confirmSetPagSeguro'
-      'click #confirmUnsetPagseguro':'_confirmUnsetPagSeguro'
+      'change #pagseguro':'_pagseguroChanged'
     template: manageStoreTemplate
     initialize: (opt) ->
       @model = opt.store
       context = Handlebars.compile @template
-      @$el.html context new: @model.id? is false, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro')
+      isnew = @model.id? is false
+      @$el.html context new: isnew, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro')
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
         '#pagseguro':'checked:pagseguro'
+      unless isnew
+        delete @bindings['#autoCalculateShipping']
+        delete @bindings['#pagseguro']
+        delete @bindings['#pagseguroEmail']
+        delete @bindings['#pagseguroToken']
+        delete @model.validation.pagseguroEmail
+        delete @model.validation.pagseguroToken
+        manageStorePagseguroView = new ManageStorePagseguroView pagseguro: @model.get('pagseguro'), storeId: @model.get('_id')
+        $('#pagseguroOptions', @$el).html manageStorePagseguroView.el
+        manageStorePagseguroView.render()
+        manageStorePagseguroView.on 'changed', (opt) =>
+          @model.set 'pagseguro', opt.pagseguro
+          @_storeCreated @model
       Validation.bind @
+      #@model.bind 'validated:invalid', (model, errors) -> console.log errors
     _updateStore: =>
       return unless @model.isValid true
       @model.save @model.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw message:'error when saving'
@@ -54,19 +69,12 @@ define [
           @model.set 'autoCalculateShipping', set
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
           @_storeCreated @model
-    _confirmSetPagSeguro: -> @_setPagseguro on
-    _confirmUnsetPagSeguro: -> @_setPagseguro off
-    _setPagseguro: (set) ->
-      url = "/admin/store/#{@model.get('_id')}/setPagSeguro"
-      url += if set then "On" else "Off"
-      $.ajax
-        url: url
-        type: 'PUT'
-        error: (xhr, text, error) ->
-          return console.log error, xhr if xhr.status isnt 409
-          $('#modalConfirmPagseguro', @el).modal 'hide'
-          $('#modalCannotPagseguro', @el).modal 'show'
-        success: (data, text, xhr) =>
-          @model.set 'autoCalculateShipping', set
-          $('#modalConfirmPagseguro', @el).modal 'hide'
-          @_storeCreated @model
+    _pagseguroChanged: ->
+      pagseguro = @model.get 'pagseguro'
+      val = @model.validation
+      for v in [ val.pagseguroEmail, val.pagseguroToken ]
+        v.reverse()
+        requiredIndex = if pagseguro then 0 else 1
+        v[requiredIndex].required = pagseguro
+      Validation.bind @
+      @model.validate()
