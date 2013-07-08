@@ -7,6 +7,7 @@ orderSchema = new mongoose.Schema
   store:                      type: mongoose.Schema.Types.ObjectId, ref: 'store'
   items: [
     product:                  type: mongoose.Schema.Types.ObjectId, ref: 'product'
+    name:                     type: String, required: true
     price:                    type: Number, required: true
     quantity:                 type: Number, required: true
     totalPrice:               type: Number, required: true
@@ -48,7 +49,7 @@ Order = mongoose.model 'order', orderSchema
 Order.create = (user, store, items, shippingCost, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items
-    item = product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity
+    item = product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity, name: i.product.name
     order.items.push item
   order.totalProductsPrice = _.chain(order.items).map((i)->i.totalPrice).reduce(((p, i) -> p+i), 0).value()
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost

@@ -65,38 +65,41 @@ class Routes
                 p = item.product
                 p.inventory -= item.quantity if p.hasInventory
                 p.save()
-              if store.pmtGateways.pagseguro?.token? and store.pmtGateways.pagseguro?.email?
-                pag = new pagseguro store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token
-                pag.currency 'BRL'
-                pag.reference order._id.toString()
-                for item, i in items
-                  product = item.product
-                  pagItem =
-                    id: i + 1
-                    description: product.name
-                    amount: product.price.toFixed 2
-                    quantity: item.quantity
-                  pagItem.weight = item.weight if product.shipping?.weight?
-                  pag.addItem pagItem
-                pag.addItem
-                  id: items.length
-                  description: "Frete"
-                  amount: shippingCost.toFixed 2
-                  quantity: 1
-                pag.buyer
-                  name: user.name
-                  email: user.email
-                pag.send (err, pagseguroResult) =>
+              if store.pagseguro()
+                @_sendToPagseguro store, order, user, (err, pagseguroCode) =>
                   return res.json 400, err if err?
-                  return res.json 400, errorMsg: 'Loja não autorizada no PagSeguro' if pagseguroResult is 'Unauthorized'
-                  parseXml pagseguroResult, (err, pagseguroResult) =>
-                    return res.json 400, err if err?
-                    return res.json 400, pagseguroResult.errors if pagseguroResult.errors?
-                    res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroResult.checkout.code}"
+                  res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroCode}"
               else
                 order.sendMailAfterPurchase (error, mailResponse) ->
                   console.log "Error sending mail: #{error}" if error?
                   res.json 201, order.toSimpleOrder()
+
+  _sendToPagseguro: (store, order, user, cb) ->
+    pag = new pagseguro store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token
+    pag.currency 'BRL'
+    pag.reference order._id.toString()
+    for item, i in order.items
+      pagItem =
+        id: i + 1
+        description: item.name
+        amount: item.price.toFixed 2
+        quantity: item.quantity
+      pag.addItem pagItem
+    pag.addItem
+      id: order.items.length
+      description: "Frete"
+      amount: order.shippingCost.toFixed 2
+      quantity: 1
+    pag.buyer
+      name: user.name
+      email: user.email
+    pag.send (err, pagseguroResult) =>
+      return cb err if err?
+      return cb errorMsg: 'Loja não autorizada no PagSeguro' if pagseguroResult is 'Unauthorized'
+      parseXml pagseguroResult, (err, pagseguroResult) =>
+        return cb err if err?
+        return cb pagseguroResult.errors if pagseguroResult.errors?
+        cb null, pagseguroResult.checkout.code
 
   pagseguroStatusChanged: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) ->

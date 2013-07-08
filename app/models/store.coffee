@@ -45,8 +45,9 @@ storeSchema.methods.toSimple = ->
     banner: @banner
     flyer: @flyer
     autoCalculateShipping: @autoCalculateShipping
-  store.pagseguro = @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
+  store.pagseguro = @pagseguro()
   store
+storeSchema.methods.pagseguro = -> @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
