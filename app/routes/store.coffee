@@ -125,12 +125,12 @@ class Routes
           when 7 then 'canceled'
         cb null, orderId, saleStatus
   pagseguroReturnFromPayment: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) ->
+    Store.findBySlug req.params.storeSlug, (err, store) =>
       psTransactionId = req.query.transactionId
-      @_getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) ->
+      @_getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) =>
         return res.redirect "/error?msg=#{err}" if err?
         Order.findById orderId, (err, order) =>
-          order.sendMailAfterPurchase (error, mailResponse) ->
+          order.sendMailAfterPurchase (error, mailResponse) =>
             console.log "Error sending mail: #{error}" if error?
             req.session.recentOrder = order.toSimpleOrder()
             order.populate 'store', 'slug', (err) ->
