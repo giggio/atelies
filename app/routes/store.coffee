@@ -134,7 +134,7 @@ class Routes
             console.log "Error sending mail: #{error}" if error?
             req.session.recentOrder = order.toSimpleOrder()
             order.populate 'store', 'slug', (err) ->
-              res.redirect "/#{order.store.slug}/finishOrder/orderFinished"
+              res.redirect "/#{order.store.slug}#finishOrder/orderFinished"
 
   _getOrderIdFromPagseguroTransactionId: (transactionId, email, token, cb) ->
     url = "https://ws.pagseguro.uol.com.br/v2/transactions/#{transactionId}?email=#{email}&token=#{token}"
