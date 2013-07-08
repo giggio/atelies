@@ -48,7 +48,7 @@ exports.start = (cb) ->
 
   sessionStore = new express.session.MemoryStore()
 
-  app.use express.favicon()
+  app.use express.favicon path.join __dirname, '..', 'public', 'images', 'favicon.ico'
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
