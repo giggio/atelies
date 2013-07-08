@@ -31,14 +31,14 @@
     "bcrypt": "~0.7.x",
     "connect-less": "~0.3.x",
     "mongoose": "~3.6.x",
-    "requirejs": "~2.1.5",
     "everyauth": "~0.4.3",
     "correios": "git://github.com/giggio/correios.js.git",
     "nodemailer": "~0.4.4",
     "async": "~0.2.9",
     "pagseguro": "0.0.4",
     "xml2js": "~0.2.8",
-    "request": "~2.22.0"
+    "request": "~2.22.0",
+    "requirejs": "~2.1.7"
   },
   "devDependencies": {
     "jsdom": "*",

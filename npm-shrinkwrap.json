@@ -928,10 +928,6 @@
         }
       }
     },
-    "requirejs": {
-      "version": "2.1.5",
-      "from": "requirejs@2.1.5"
-    },
     "everyauth": {
       "version": "0.4.3",
       "from": "everyauth@",
@@ -1416,6 +1412,11 @@
         }
       }
     },
+    "requirejs": {
+      "version": "2.1.7",
+      "from": "requirejs@2.1.7",
+      "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.7.tgz"
+    },
     "amdefine": {
       "version": "0.0.5",
       "from": "amdefine@"
@@ -1492,6 +1493,20 @@
         }
       }
     },
+    "html5": {
+      "version": "0.3.12",
+      "from": "html5@~0.3.11",
+      "dependencies": {
+        "opts": {
+          "version": "1.2.2",
+          "from": "opts@~1.2.1"
+        },
+        "html5-entities": {
+          "version": "0.5.0",
+          "from": "html5-entities@~0.5.0"
+        }
+      }
+    },
     "htmlparser2": {
       "version": "3.0.5",
       "from": "htmlparser2@~3.0.5",
@@ -1511,20 +1526,6 @@
         "readable-stream": {
           "version": "1.0.2",
           "from": "readable-stream@1.0"
-        }
-      }
-    },
-    "html5": {
-      "version": "0.3.12",
-      "from": "html5@~0.3.11",
-      "dependencies": {
-        "opts": {
-          "version": "1.2.2",
-          "from": "opts@~1.2.1"
-        },
-        "html5-entities": {
-          "version": "0.5.0",
-          "from": "html5-entities@~0.5.0"
         }
       }
     },

@@ -24,6 +24,7 @@ configureRequireJS = ->
   requirejs.config
     baseUrl: path.join __dirname, '..', ".."
     nodeRequire: require
+    suppress: nodeShim: true
   require '../../bootstrap'
 
 initDOM()
