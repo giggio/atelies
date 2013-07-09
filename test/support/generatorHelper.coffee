@@ -254,6 +254,7 @@ exports.generator =
       store: exports.generator.store.a()
       items: [
         product: exports.generator.product.a()
+        name: exports.generator.product.a().name
         price: exports.generator.product.a().price
         quantity: 1
         totalPrice: exports.generator.product.a().price
@@ -268,6 +269,7 @@ exports.generator =
       store: exports.generator.store.a()
       items: [
         product: exports.generator.product.b()
+        name: exports.generator.product.b().name
         price: exports.generator.product.b().price
         quantity: 1
         totalPrice: exports.generator.product.b().price

@@ -338,6 +338,7 @@ db.orders.insert
   store: store1._id
   items: [
     product: product1._id
+    name: product1.name
     price: product1.price
     quantity: 1
     totalPrice: product1.price
