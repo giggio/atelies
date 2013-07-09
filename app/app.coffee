@@ -12,65 +12,63 @@ exports.start = (cb) ->
   router              = require './routes/router'
   less                = require 'connect-less'
   Postman             = require './models/postman'
+  MongoStore          = require('connect-mongo')(express)
 
-  cookieSecret = if app.get("env") isnt 'production' then "abc" else process.env.APP_COOKIE_SECRET
-  app.configure "development", ->
-    process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
-    app.use express.logger "dev"
-    app.use express.errorHandler()
-    app.locals.pretty = on
-    everyauth.debug = on
-    if process.env.SEND_MAIL?
-      console.log "SENDING MAIL!"
-      Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
-    else
+  switch app.get("env")
+    when 'development'
+      cookieSecret = "abc"
+      app.use express.logger "dev"
+      app.use express.errorHandler()
+      app.locals.pretty = on
+      everyauth.debug = on
+      if process.env.SEND_MAIL?
+        console.log "SENDING MAIL!"
+        Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
+      else
+        Postman.dryrun = on
+      sessionStore = new express.session.MemoryStore()
+      connStr = "mongodb://localhost/openstore"
+      domain = 'localhost.com'
+      port = 3000
+    when "test"
+      cookieSecret = "abc"
+      #app.use express.logger "dev"
+      app.use express.errorHandler()
+      app.locals.pretty = on
+      #everyauth.debug = on
       Postman.dryrun = on
-  
-  app.configure "test", ->
-    process.env.CUSTOMCONNSTR_mongo = 'mongodb://localhost/openstore' unless process.env.CUSTOMCONNSTR_mongo
-    #app.use express.logger "dev"
-    app.use express.errorHandler()
-    app.locals.pretty = on
-    #everyauth.debug = on
-    Postman.dryrun = on
-
-  app.configure "production", ->
-    Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
-
-  port = process.env.PORT or switch app.get 'env'
-    when 'development', 'production' then 3000
-    when 'test' then 8000
-    else 3000
+      sessionStore = new express.session.MemoryStore()
+      connStr = "mongodb://localhost/openstoretest"
+      domain = 'localhost.com'
+      port = 8000
+    when "production"
+      cookieSecret = process.env.APP_COOKIE_SECRET
+      Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
+      connStr = process.env.MONGOLAB_URI
+      sessionStore = new MongoStore url:connStr
+      domain = 'atelies.com.br'
+      port = 3000
 
   app.set "port", port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
-
-  sessionStore = new express.session.MemoryStore()
+  app.set 'domain', domain
 
   app.use express.favicon path.join __dirname, '..', 'public', 'images', 'favicon.ico'
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
-  app.use express.session store:sessionStore
+  app.use express.session secret: cookieSecret, store:sessionStore
   app.use less src: path.join(__dirname, '..', 'public'), debug:false
   app.use express.static(path.join(__dirname, '..', "public"))
   everyauthConfig.configure app
   app.use everyauth.middleware()
-  #app.use app.router
-  connStr = if process.env.MONGOLAB_URI? then process.env.MONGOLAB_URI else process.env.CUSTOMCONNSTR_mongo
   mongoose.connect connStr
   mongoose.connection.on 'error', dealWith
 
-  if app.get("env") is 'production'
-    app.set 'domain', 'atelies.com.br'
-  else
-    app.set 'domain', 'localhost.com'
-
   router.route app
   
-  process.on 'exit', ->
-    Postman.stop()
+  process.on 'exit', -> Postman.stop()
 
   server = http.createServer(app)
   if app.get("env") isnt 'production'
@@ -79,7 +77,7 @@ exports.start = (cb) ->
   exports.server = server
   server.listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
-    console.log "Mongo database connection string: " + process.env.CUSTOMCONNSTR_mongo if app.get("env") is 'development'
+    console.log "Mongo database connection string: #{connStr}" if app.get("env") isnt 'production'
     cb(exports.server) if cb
 
 exports.stop = ->

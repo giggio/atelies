@@ -38,7 +38,8 @@
     "pagseguro": "0.0.4",
     "xml2js": "~0.2.8",
     "request": "~2.22.0",
-    "requirejs": "~2.1.7"
+    "requirejs": "~2.1.7",
+    "connect-mongo": "~0.3.3"
   },
   "devDependencies": {
     "jsdom": "*",

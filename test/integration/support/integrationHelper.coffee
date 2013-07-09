@@ -1,7 +1,7 @@
 mongoose    = require 'mongoose'
 app         = require '../../../app/app'
 
-exports.localMongoDB = "mongodb://localhost/openstore"
+exports.localMongoDB = "mongodb://localhost/openstoretest"
 
 exports.startServer = (cb) ->
   app.start (server) ->
@@ -15,8 +15,7 @@ exports.whenServerLoaded = (cb) ->
   exports.whenDone((-> exports.expressServer isnt null), -> cb())
 
 exports.openNewConnection = (cb) ->
-  process.env.CUSTOMCONNSTR_mongo = exports.localMongoDB unless process.env.CUSTOMCONNSTR_mongo
-  conn = mongoose.createConnection process.env.CUSTOMCONNSTR_mongo
+  conn = mongoose.createConnection exports.localMongoDB
   conn.on 'error', (err) ->
     console.error "connection error:#{err.stack}"
     cb err, null

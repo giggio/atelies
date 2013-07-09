@@ -1417,6 +1417,24 @@
       "from": "requirejs@2.1.7",
       "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.7.tgz"
     },
+    "connect-mongo": {
+      "version": "0.3.3",
+      "from": "connect-mongo@",
+      "resolved": "https://registry.npmjs.org/connect-mongo/-/connect-mongo-0.3.3.tgz",
+      "dependencies": {
+        "mongodb": {
+          "version": "1.2.14",
+          "from": "mongodb@1.2.x",
+          "dependencies": {
+            "bson": {
+              "version": "0.1.8",
+              "from": "bson@0.1.8",
+              "resolved": "https://registry.npmjs.org/bson/-/bson-0.1.8.tgz"
+            }
+          }
+        }
+      }
+    },
     "amdefine": {
       "version": "0.0.5",
       "from": "amdefine@"

@@ -64,6 +64,7 @@ module.exports = (grunt) ->
         options:
           script: 'server.js'
           node_env: 'production'
+          background: false
 
     mochacov:
       options:
