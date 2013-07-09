@@ -34,6 +34,8 @@ exports.route = (app) ->
   app.get     "/notseller",                                                 account.notSeller
   #admin
   app.get     "/admin",                                                     admin.admin
+  app.get     "/admin/orders",                                              admin.orders
+  app.get     "/admin/orders/:_id",                                         admin.order
   #admin store
   app.post    "/admin/store",                                               admin.adminStoreCreate
   app.put     "/admin/store/:storeId",                                      admin.adminStoreUpdate

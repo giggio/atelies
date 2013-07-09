@@ -1,0 +1,75 @@
+<h2>Pedido:</h2>
+<div id="order">
+  <div id="orderDescription">
+    <span id="_id" data-id="{{order._id}}"></span>
+    Pedido realizado em <strong><span id="orderDate">{{order.orderDate}}</span></strong>
+    na loja  <strong><a id="storeLink" href="/{{order.storeSlug}}">{{order.storeName}}</a></strong>
+  </div>
+  <div id="customer">
+    <div><strong>{{order.customer.name}}</strong></div>
+    <div>{{order.customer.email}}</div>
+    <div>{{order.customer.phoneNumber}}</div>
+  </div>
+  <address id="deliveryAddress">
+    <strong>Endereço de entrega:</strong><br />
+    <span id="street">{{order.deliveryAddress.street}}</span> - <span id="street2">{{order.deliveryAddress.street2}}</span><br />
+    <span id="city">{{order.deliveryAddress.city}}</span> / <span id="state">{{order.deliveryAddress.state}}</span><br />
+    CEP <span id="zip">{{order.deliveryAddress.zip}}</span>
+  </address>
+  <strong>Produtos:</strong>
+  <table class="table" id="items">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Valor total</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each order.items}}
+      <tr class="orderItem" data-id="{{_id}}">
+        <td><a class="url" href="/{{storeSlug}}#{{slug}}"><img class="picture" src="{{picture}}" />{{name}}</a></td>
+        <td class="price">{{price}}</td>
+        <td class="quantity">{{quantity}}</td>
+        <td class="totalPrice">{{totalPrice}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <span id="numberOfItems">{{order.numberOfItems}}</span> itens
+        </td>
+        <td>
+        </td>
+        <td>
+          <strong>Valor dos produtos</strong>
+        </td>
+        <td>
+          <strong id="totalProductsPrice">{{order.totalProductsPrice}}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <strong>Frete</strong>
+        </td>
+        <td>
+          <strong id="shippingCost">{{order.shippingCost}}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <strong>Total</strong>
+        </td>
+        <td>
+          <strong id="totalSaleAmount">{{order.totalSaleAmount}}</strong>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

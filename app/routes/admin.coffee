@@ -12,7 +12,7 @@ RouteFunctions  = require './routeFunctions'
 class Routes
   constructor: (@env) ->
     @_auth 'admin'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
   
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
@@ -139,6 +139,17 @@ class Routes
         res.json product.toSimpleProduct()
       else
         res.send 404
+
+  orders: (req, res) ->
+    user = req.user
+    Order.getSimpleByStores user.stores, (err, orders) ->
+      return res.json 400, err if err?
+      res.json orders
+
+  order: (req, res) ->
+    Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) ->
+      return res.json 400, err if err?
+      res.json order
   
 _.extend Routes::, RouteFunctions::
 

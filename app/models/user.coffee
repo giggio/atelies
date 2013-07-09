@@ -21,7 +21,11 @@ userSchema.methods.createStore = ->
   @stores.push store
   store
 userSchema.methods.hasStore = (store) ->
-  storeFound = _.find @stores, (_id) -> store._id.toString() is _id.toString()
+  if store._id?
+    id = store._id.toString()
+  else
+    id = store.toString()
+  storeFound = _.find @stores, (_id) -> id is _id.toString()
   storeFound?
 userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
   bcrypt = require 'bcrypt'

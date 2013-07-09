@@ -1,3 +1,4 @@
+<h3>Veja <a href="#orders">seus pedidos</a></h3>
 {{#if hasStores}}
 <h3>Suas lojas:</h3>
 <div id="stores">
@@ -18,25 +19,6 @@
   </div>
   {{/each}}
 </div>
-<!--<table id="stores">-->
-  <!--<thead></thead>-->
-  <!--<tbody>-->
-  <!--{{#each stores}}-->
-  <!--<tr>-->
-    <!--<td>-->
-      <!--<a href="#store/{{slug}}">-->
-        <!--{{#if flyer}}-->
-        <!--<img src="{{flyer}}" />-->
-        <!--{{else}}-->
-        <!--<img src="http://dummyimage.com/350x400/000/fff&text=%3F" />-->
-        <!--{{/if}}-->
-        <!--{{name}}-->
-      <!--</a>-->
-    <!--</td>-->
-  <!--</tr>-->
-  <!--{{/each}}-->
-  <!--</tbody>-->
-<!--</table>-->
 {{/if}}
 <div>
   <input type="button" id="createStore" class="btn btn-primary" value="Crie uma nova loja" />

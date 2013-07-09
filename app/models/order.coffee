@@ -66,7 +66,48 @@ Order.getSimpleByUser = (user, cb) ->
       orderDate: o.orderDate
       numberOfItems: o.items.length
     cb null, simpleOrders
+Order.getSimpleByStores = (stores, cb) ->
+  Order.find(store: $in: stores).populate('store', 'name slug').exec (err, orders) ->
+    cb err, null if err?
+    simpleOrders = _.map orders, (o)->
+      _id: o._id.toString()
+      storeName: o.store.name
+      storeSlug: o.store.slug
+      totalSaleAmount: o.totalSaleAmount
+      orderDate: o.orderDate
+      numberOfItems: o.items.length
+    cb null, simpleOrders
 
+Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
+  Order.findById(_id)
+  .populate('items.product', '_id name slug picture')
+  .populate('customer', 'name email phoneNumber')
+  .populate('store', 'name slug').exec (err, order) ->
+    cb err, null if err?
+    return cb null, null unless user.hasStore order.store
+    simpleOrder =
+      _id: order._id.toString()
+      storeName: order.store.name
+      storeSlug: order.store.slug
+      totalSaleAmount: order.totalSaleAmount
+      totalProductsPrice: order.totalProductsPrice
+      shippingCost: order.shippingCost
+      orderDate: order.orderDate
+      numberOfItems: order.items.length
+      deliveryAddress: order.deliveryAddress
+      customer:
+        name: order.customer.name
+        email: order.customer.email
+        phoneNumber: order.customer.phoneNumber
+    simpleOrder.items = _.map order.items, (i) ->
+      _id: i.product._id
+      slug: i.product.slug
+      name: i.product.name
+      picture: i.product.picture
+      price: i.price
+      quantity: i.quantity
+      totalPrice: i.totalPrice
+    cb null, simpleOrder
 Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
   Order.findById(_id).populate('items.product', '_id name slug picture').exec (err, order) ->
     cb err, null if err?

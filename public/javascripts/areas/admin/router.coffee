@@ -11,5 +11,7 @@ define [
       'store/:storeSlug': routes.store
       'manageProduct/:storeSlug/:productId': routes.manageProduct
       'createProduct/:storeSlug': routes.createProduct
+      'orders': routes.orders
+      'orders/:orderId': routes.order
     initialize: ->
       Backbone.history.start()

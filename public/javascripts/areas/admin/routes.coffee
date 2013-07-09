@@ -5,11 +5,15 @@ define [
   './views/manageStore'
   './views/store'
   './views/manageProduct'
+  './views/orders'
+  './views/order'
   './models/products'
   './models/product'
   './models/stores'
   './models/store'
-],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, Products, Product, Stores, Store) ->
+  './models/orders'
+  './models/order'
+],($, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, OrdersView, OrderView, Products, Product, Stores, Store, Orders, Order) ->
   class Routes
     viewsManager.$el = $ "#app-container > .admin"
     @admin: =>
@@ -59,3 +63,18 @@ define [
         cb product
       product.bind 'sync', callBackWhenChanged
       product.fetch()
+    @orders: ->
+      orders = new Orders()
+      orders.fetch
+        success: ->
+          ordersView = new OrdersView orders: orders.toJSON()
+          viewsManager.show ordersView
+    @order: (_id) ->
+      order = new Order _id: _id
+      orders = new Orders [order]
+      order.fetch
+        success: (order, res, opt) ->
+          orderView = new OrderView order: order.toJSON()
+          viewsManager.show orderView
+        error: (order, res, opt) ->
+          console.log 'error loading order'
