@@ -125,6 +125,18 @@ module.exports = (grunt) ->
           target: 'public/javascripts/lib'
           copy: false
 
+    requirejs:
+      admin:
+        options:
+          baseUrl: 'public/javascripts'
+          mainConfigFile: 'public/javascripts/bootstrap.js'
+          name: 'adminBootstrap'
+          include: ['areas/admin/router']
+          out: 'public/javascripts/adminBootstrap-built.js'
+          generateSourceMaps: true
+          optimize: "uglify2"
+          preserveLicenseComments: false
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -132,6 +144,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-cov'
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-notify'
+  grunt.loadNpmTasks 'grunt-contrib-requirejs'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->

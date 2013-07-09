@@ -33,7 +33,7 @@ requirejs.config
       deps: ['jquery']
       exports: '$.validator'
 
-if global? #nodejs only (tests)
+if global?.testing #nodejs only (tests)
   #needs to add jquery to global scope otherwise twitter bootstrap blows up
   global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
   #needs to call backbone config otherwise every test blows up
