@@ -26,11 +26,13 @@
     </div>
   </div>
   <div id="askAQuestion">
-    <strong>Ainda em dúvida?</strong><br />
-    <a href="#">Faça uma pergunta</a>
+    {{#if store.email}}
+      <strong>Ainda em dúvida?</strong><br />
+      <a href="mailto:{{store.email}}">Faça uma pergunta</a>
+    {{/if}}
   </div>
   <div class="clearfix"></div>
   <div id="productsPlaceHolder">
-    <strong>Esse vendedor não possui outros produtos</strong>
+    <strong></strong>
   </div>
 </div>

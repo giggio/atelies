@@ -27,6 +27,12 @@ class Routes
     route
   
   blank: (req, res) -> res.render 'blank'
+
+  about: (req, res) -> res.render 'about'
+
+  terms: (req, res) -> res.render 'terms'
+
+  faq: (req, res) -> res.render 'faq'
   
   storesSearch: (req, res) ->
     Store.searchByName req.params.searchTerm, (err, stores) ->

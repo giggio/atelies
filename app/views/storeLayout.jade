@@ -4,20 +4,12 @@ append layout
   block header
     section#main.container
       #site-banner.row(style="margin-bottom: 20px")
-        .span4
+        .span12
           a(href="#")
             if store.banner
               img#storeBanner(src="#{store.banner}")
             else
               h1#storeNameHeader= store.name
-        .span6
-          h3.nameHeader shopping virtual de artes e afins
-        .span2
-          ul.pull-right.social
-            if store.urlFacebook
-              li: a(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="/images/facebook.png")
-            if store.urlTwitter
-              li: a(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="/images/twitter.png")
       .navbar
         .navbar-inner
           .container
@@ -30,41 +22,37 @@ append layout
         footer
           .container
             .row
-              .span6
+              .span9
                 .page-header
                   h2 Sobre #{store.name}
                 p= store.description
                 h3 Contato
                 section#otherInfo
-                  #store
-                    #storeName= store.name
-                    div: span#storePhoneNumber= store.phoneNumber
-                    div
-                      span#storeCity= store.city
-                      span#storeState= store.state
-                    div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
-                    div: a(href="mailto:#{store.email}")= store.email
+                  #storeName= store.name
+                  div: span#storePhoneNumber= store.phoneNumber
+                  div
+                    span#storeCity= store.city
+                    span#storeState= store.state
+                  div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
+                  div: a(href="mailto:#{store.email}")= store.email
+                  if store.urlFacebook
+                    a.social(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="/images/facebook.png")
+                  if store.urlTwitter
+                    a.social(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="/images/twitter.png")
               .span3
                 .page-header
-                  h2 Produtos
+                  h2 Está comprando?
                 ul
-                  li: a Categorias
-                  li: a Tags
-                  li: a Busca lojas
-                  li: a Busca produtos
-              .span3
-                .page-header
-                  h2 Minha conta
-                ul
-                  li: a Carrinho
-                  li: a Troca de senha
-                  li: a Pedidos
+                  li: a(href="/account#orders") Meus pedidos
+                  li: a(href="/IWantToBuy") Quero comprar
+                  li: a(href="/faq#whybuyhere") Porque comprar aqui?
 
             p.text-center
-              &copy; 2013 - OpenStore
+              &copy; 2013 - 
+              a(href="http://www.atelies.com.br/") Ateliês
               &nbsp;|&nbsp;
-              a Termos de uso
+              a(href="/terms") Termos de uso
               &nbsp;|&nbsp;
-              a Sobre
+              a(href="/about") Sobre
               &nbsp;|&nbsp;
-              a Contato
+              a(href="mailto:contato@atelies.com.br") Contato

@@ -243,7 +243,7 @@ db.stores.insert
   state: "SP"
   zip: "01234-567"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/800/150/cats/1'
+  banner: 'http://lorempixel.com/1200/300/cats/1'
   autoCalculateShipping: true
   pmtGateways:
     pagseguro:
@@ -326,7 +326,7 @@ for i in [4..15]
     state: "SP"
     zip: "01234-667"
     otherUrl: 'http://myotherurl.com'
-    banner: "http://lorempixel.com/800/150/cats/#{pictureId}"
+    banner: "http://lorempixel.com/1200/250/cats/#{pictureId}"
     flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
     autoCalculateShipping: false
     pmtGateways: {}

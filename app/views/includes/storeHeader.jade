@@ -10,28 +10,13 @@ a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
     if (everyauth.loggedIn && user.isSeller)
       li: a#admin(href='admin') Administração
     li.dropdown
-      a.dropdown-toggle(href='#', data-toggle='dropdown')
-        i.icon-th-list
-        |  Categorias
-        b.caret
-      ul.dropdown-menu
-        li: a(href='#') Presentes
-        li: a(href='#') Festa
-        li.dropdown-submenu
-          a(href="#") Acessórios
-            ul.dropdown-menu
-              li: a(href='#') Brincos
-              li: a(href='#') Colares
-              li: a(href='#') Botas
-              li: a(href='#') Outros
-        li: a(href='#') Outros
-    li.dropdown
       a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
         b.caret
       ul.dropdown-menu
-        li: a(href='#') Sobre o site
-        li: a(href='#') Quanto custa
-        li: a(href='#') Tecnologia
+        li: a(href='/about') Sobre o Ateliês
+        li: a(href='/faq') Perguntas frequentes
+        li: a(href='/faq#howmuch') Quanto custa ter uma loja?
+        li: a(href='/technology') Tecnologia
   ul.nav
     li: a(href="#cart")
       i.icon-shopping-cart

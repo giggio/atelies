@@ -19,6 +19,9 @@ exports.route = (app) ->
   #home
   app.get     "/",                                                          home.index domain
   app.get     "/blank",                                                     home.blank
+  app.get     "/about",                                                     home.about
+  app.get     "/terms",                                                     home.terms
+  app.get     "/faq",                                                       home.faq
   #home search
   app.get     "/stores/search/:searchTerm",                                 home.storesSearch
   app.get     "/products/search/:searchTerm",                               home.productsSearch
