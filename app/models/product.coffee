@@ -43,6 +43,10 @@ productSchema.methods.toSimpleProduct = ->
   shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
+productSchema.methods.toSimplerProduct = ->
+  _id: @_id, name: @name, picture: @picture, price: @price,
+  storeName: @storeName, storeSlug: @storeSlug,
+  url: @url(), slug: @slug
 productSchema.methods.updateFromSimpleProduct = (simple) ->
   for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
     @[attr] = simple[attr]

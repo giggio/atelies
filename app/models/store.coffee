@@ -47,6 +47,14 @@ storeSchema.methods.toSimple = ->
     autoCalculateShipping: @autoCalculateShipping
   store.pagseguro = @pagseguro()
   store
+storeSchema.methods.toSimpler = ->
+  store =
+    _id: @_id
+    name: @name
+    slug: @slug
+    homePageImage: @homePageImage
+  store.pagseguro = @pagseguro()
+  store
 storeSchema.methods.pagseguro = -> @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '

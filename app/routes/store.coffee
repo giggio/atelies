@@ -23,7 +23,7 @@ class Routes
     Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
       dealWith err
       return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
-      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+      viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
       user =
         if req.user?
           name: req.user.name

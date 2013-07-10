@@ -20,10 +20,11 @@ class Routes
         return @storeWithDomain req, res
       Product.find (err, products) ->
         dealWith err
-        viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+        viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
         Store.findForHome (err, stores) ->
           dealWith err
-          res.render "index", products: viewModelProducts, stores: stores
+          viewModelStores = _.map stores, (s) -> s.toSimpler()
+          res.render "index", products: viewModelProducts, stores: viewModelStores
     route
   
   blank: (req, res) -> res.render 'blank'
