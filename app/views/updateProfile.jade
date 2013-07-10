@@ -1,6 +1,8 @@
 extends homeLayout
-append head
-  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/loginBootstrap.js')
+append scriptsFooter
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
+  script
+    require(['loginBootstrap']);
 append content
   .container
     h2 Atualize seu cadastro

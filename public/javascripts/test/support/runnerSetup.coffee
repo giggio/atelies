@@ -22,11 +22,12 @@ initDOM = ->
     global.localStorage = window.localStorage
 
 configureRequireJS = ->
+  require '../../bootstrap'
   requirejs.config
     baseUrl: path.join __dirname, '..', ".."
     nodeRequire: require
     suppress: nodeShim: true
-  require '../../bootstrap'
+  global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
 
 initDOM()
 configureRequireJS()

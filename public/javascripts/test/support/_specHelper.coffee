@@ -1,1 +1,3 @@
-requirejs ['./generatorHelper'], (g) -> exportAll g
+requirejs ['./generatorHelper'], (g) ->
+  exportAll g
+  requirejs './backboneConfig'

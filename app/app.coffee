@@ -16,6 +16,7 @@ exports.start = (cb) ->
 
   switch app.get("env")
     when 'development'
+      isProduction = false
       cookieSecret = "abc"
       app.use express.logger "dev"
       app.use express.errorHandler()
@@ -30,7 +31,9 @@ exports.start = (cb) ->
       connStr = "mongodb://localhost/openstore"
       domain = 'localhost.com'
       port = 3000
+      publicDir = path.join __dirname, '..', "public"
     when "test"
+      isProduction = false
       cookieSecret = "abc"
       #app.use express.logger "dev"
       app.use express.errorHandler()
@@ -41,26 +44,31 @@ exports.start = (cb) ->
       connStr = "mongodb://localhost/openstoretest"
       domain = 'localhost.com'
       port = 8000
+      publicDir = path.join __dirname, '..', "public"
     when "production"
+      isProduction = true
       cookieSecret = process.env.APP_COOKIE_SECRET
       Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
       connStr = process.env.MONGOLAB_URI
       sessionStore = new MongoStore url:connStr
       domain = 'atelies.com.br'
       port = 3000
+      publicDir = path.join __dirname, '..', "compiledPublic"
+
+  global.DEBUG = !isProduction
 
   app.set "port", port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
   app.set 'domain', domain
 
-  app.use express.favicon path.join __dirname, '..', 'public', 'images', 'favicon.ico'
+  app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
   app.use express.session secret: cookieSecret, store:sessionStore
-  app.use less src: path.join(__dirname, '..', 'public'), debug:false
-  app.use express.static(path.join(__dirname, '..', "public"))
+  app.use less src: publicDir, debug: false, compress: isProduction
+  app.use express.static publicDir
   everyauthConfig.configure app
   app.use everyauth.middleware()
   mongoose.connect connStr

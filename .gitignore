@@ -2,6 +2,7 @@ node_modules
 azure_error
 *.js
 public/**/lib
+compiledPublic
 *.map
 *.password
 *.css

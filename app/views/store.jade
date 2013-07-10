@@ -11,7 +11,9 @@ append scriptsFooter
   if typeof(bootstrapedRedirect) !== 'undefined'
     script 
       var boostrapedRedirect = '!{bootstrapedRedirect}';
-  script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/storeBootstrap.js')
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
+  script
+    require(['storeBootstrap']);
 
 append content
   .container.storeContainer

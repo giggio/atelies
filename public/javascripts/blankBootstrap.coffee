@@ -4,4 +4,3 @@ require ['bootstrap'], ->
     './loginPopover'
     './jqueryValidationExt'
   ], ->
-  require ['jquery', 'jqval'], ($) -> $ -> $('.validatable').validate()

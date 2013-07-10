@@ -6,7 +6,9 @@ append scriptsFooter
       user:!{JSON.stringify(user)},
       orders:!{JSON.stringify(orders)}
     };
-  script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/accountBootstrap.js')
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
+  script
+    require(['accountBootstrap']);
 
 append content
   .container.accountContainer

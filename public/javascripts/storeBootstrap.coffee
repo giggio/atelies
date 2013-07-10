@@ -1,3 +1,7 @@
-define 'app', ['areas/store/router'], (Router) ->
-  start: -> new Router()
-require ['bootstrap']
+require ['bootstrap'], ->
+  require [
+    './backboneConfig'
+    './loginPopover'
+    './jqueryValidationExt'
+  ], ->
+  require ['areas/store/router'], (Router) -> new Router()

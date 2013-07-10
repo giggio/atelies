@@ -5,8 +5,9 @@ append scriptsFooter
     var adminStoresBootstrapModel = {
       stores:!{JSON.stringify(stores)}
     }
-  script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/adminBootstrap.js')
-  //-script(src='javascripts/lib/requirejs/require.js', data-main='javascripts/adminBootstrap-built.js')
+  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
+  script
+    require(['adminBootstrap']);
 
 append content
   .container.adminContainer

@@ -126,7 +126,7 @@ module.exports = (grunt) ->
           copy: false
 
     requirejs:
-      admin:
+      singlefile:#do not use, just an example, the multipackage uses a shared component
         options:
           baseUrl: 'public/javascripts'
           mainConfigFile: 'public/javascripts/bootstrap.js'
@@ -136,6 +136,68 @@ module.exports = (grunt) ->
           generateSourceMaps: true
           optimize: "uglify2"
           preserveLicenseComments: false
+      multipackage:
+        options:
+          appDir: 'public'
+          baseUrl: 'javascripts'
+          dir: 'compiledPublic'
+          mainConfigFile: 'public/javascripts/bootstrap.js'
+          generateSourceMaps: true
+          optimize: "uglify2"
+          preserveLicenseComments: false
+          optimizeCss: 'none'
+          skipDirOptimize: true
+          modules:[
+            {
+              name: 'bootstrap'
+              include: [
+                'jquery'
+                'jqval'
+                'underscore'
+                'backbone'
+                'handlebars'
+                'text'
+                'twitterBootstrap'
+                'backboneValidation'
+                'epoxy'
+                'caroufredsel'
+                'imagesloaded'
+                'backboneConfig'
+                'converters'
+                'jqueryValidationExt'
+                'loginPopover'
+                'openModel'
+                'openRouter'
+                'openRoutes'
+                'openView'
+                'viewsManager'
+              ]
+            }
+            {
+              name: 'adminBootstrap'
+              include: ['areas/admin/router']
+              exclude: ['bootstrap']
+            }
+            {
+              name: 'accountBootstrap'
+              include: ['areas/account/router']
+              exclude: ['bootstrap']
+            }
+            {
+              name: 'homeBootstrap'
+              include: ['areas/home/router']
+              exclude: ['bootstrap']
+            }
+            {
+              name: 'loginBootstrap'
+              exclude: ['bootstrap']
+            }
+            {
+              name: 'storeBootstrap'
+              include: ['areas/store/router']
+              exclude: ['bootstrap']
+            }
+          ]
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -203,5 +265,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
-  grunt.registerTask 'install', [ 'bower', 'compile' ]
+  grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage' ]
   grunt.registerTask 'default', ['server:watch']

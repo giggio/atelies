@@ -1,13 +1,13 @@
 requirejs.config
   paths:
-    jquery: 'lib/jquery/jquery.min'
+    jquery: 'lib/jquery/jquery'
     jqval: 'lib/jquery.validation/jquery.validate'
-    underscore: 'lib/underscore/underscore-min'
-    backbone: 'lib/backbone/backbone-min'
+    underscore: 'lib/underscore/underscore'
+    backbone: 'lib/backbone/backbone'
     handlebars: 'lib/handlebars/index'
     text: 'lib/requirejs-text/text'
-    twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap.min'
-    backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd-min'
+    twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap'
+    backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd'
     epoxy: 'lib/backbone.epoxy/index'
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
@@ -32,16 +32,3 @@ requirejs.config
     'jqval':
       deps: ['jquery']
       exports: '$.validator'
-
-if global?.testing #nodejs only (tests)
-  #needs to add jquery to global scope otherwise twitter bootstrap blows up
-  global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
-  #needs to call backbone config otherwise every test blows up
-  requirejs './backboneConfig'
-else
-  requirejs [
-    './backboneConfig'
-    './loginPopover'
-    './jqueryValidationExt'
-  ], ->
-    requirejs [ 'app' ], (App) -> App.start()
