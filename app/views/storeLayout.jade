@@ -14,10 +14,10 @@ append layout
           h3.nameHeader shopping virtual de artes e afins
         .span2
           ul.pull-right.social
-            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
-            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
-            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
-            li: a: img.img-circle(src="http://dummyimage.com/40x/40/000/fff")
+            if store.urlFacebook
+              li: a(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="/images/facebook.png")
+            if store.urlTwitter
+              li: a(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="/images/twitter.png")
       .navbar
         .navbar-inner
           .container
