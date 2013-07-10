@@ -63,6 +63,7 @@ exports.start = (cb) ->
   app.set 'domain', domain
 
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
+  app.use express.compress() if isProduction
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser cookieSecret
