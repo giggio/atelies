@@ -57,7 +57,7 @@ exports.start = (cb) ->
 
   global.DEBUG = !isProduction
 
-  app.set "port", port
+  app.set "port", process.env.PORT or port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
   app.set 'domain', domain
