@@ -26,3 +26,4 @@ module.exports = class StoreProductPage extends Page
   storeNameHeader: @::getText.partial "#storeNameHeader"
   storeNameHeaderExists: @::hasElement.partial '#storeNameHeader'
   storeBannerExists: @::hasElement.partial '#storeBanner'
+  purchaseItemButtonEnabled: @::getIsEnabled.partial "#purchaseItem"

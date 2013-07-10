@@ -38,6 +38,7 @@ describe 'Store product page', ->
         page.storeNameHeaderExists (itDoes) ->
           itDoes.should.be.false
           done()
+
   describe 'store without banner', ->
     before (done) ->
       cleanDB (error) ->
@@ -53,4 +54,20 @@ describe 'Store product page', ->
     it 'shows store name header', (done) ->
       page.storeNameHeader (header) ->
         header.should.equal store.name
+        done()
+
+  describe 'product with no inventory available', ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        store = generator.store.a()
+        store.save()
+        product1 = generator.product.a()
+        product1.inventory = 0
+        product1.save()
+        whenServerLoaded ->
+          page.visit "store_1", "name_1", done
+    it 'has add cart button disabled', (done) ->
+      page.purchaseItemButtonEnabled (itIs) ->
+        itIs.should.be.false
         done()

@@ -9,7 +9,7 @@
     </h2>
     </div>
     <h3>R$ <span id="price">{{product.price}}</span></h3>
-    <a class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem"><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</a>
+    <button class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem" {{#unless canPurchase}}disabled{{/unless}}><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</button>
     <div id="description">{{product.description}}</div>
     <div id="dimensions">
       <div>Altura: <span id="height">{{product.height}}</span>cms</div>
