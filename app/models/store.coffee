@@ -53,6 +53,7 @@ storeSchema.methods.toSimpler = ->
     name: @name
     slug: @slug
     homePageImage: @homePageImage
+    flyer: @flyer
   store.pagseguro = @pagseguro()
   store
 storeSchema.methods.pagseguro = -> @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
