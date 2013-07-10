@@ -1,10 +1,12 @@
 require './support/_specHelper'
-Product   = require '../../app/models/product'
+Product                 = require '../../app/models/product'
+HomePage                = require './support/pages/homePage'
 
 describe 'Home Search Store', ->
-  browser = store1 = store2 = store3 = product1 = product2 = null
+  page = store1 = store2 = store3 = product1 = product2 = null
+  after (done) -> page.closeBrowser done
   before (done) ->
-    browser = newBrowser()
+    page = new HomePage()
     cleanDB (error) ->
       if error
         return done error
@@ -19,15 +21,15 @@ describe 'Home Search Store', ->
       store2.save()
       store3.save()
       whenServerLoaded ->
-        page = browser.homePage
         page.visit ->
           page.clickSearchStores ->
             page.searchStoresText 'very'
-            page.clickDoSearchStores ->
-              browser.reload done
-  after ->
-    browser.destroy()
-  it 'shows stores', ->
-    expect(browser.queryAll('#stores .store').length).to.equal 1
-  it 'links picture to store 1', ->
-    expect(browser.query("#store#{store3._id} .link").href.endsWith store3.slug).to.be.true
+            page.clickDoSearchStores done
+  it 'shows stores', (done) ->
+    page.storesLength (l) ->
+      l.should.equal 1
+      done()
+  it 'links picture to store 1', (done) ->
+    page.storeLink store3._id, (href) ->
+      href.endsWith(store3.slug).should.be.true
+      done()

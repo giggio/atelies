@@ -1,10 +1,11 @@
 require './support/_specHelper'
 Product   = require '../../app/models/product'
+HomePage  = require './support/pages/homePage'
 
 describe 'Home Search Product', ->
-  browser = store1 = product1 = product2 = null
+  page = store1 = product1 = product2 = null
   before (done) ->
-    browser = newBrowser()
+    page = new HomePage()
     cleanDB (error) ->
       if error
         return done error
@@ -15,14 +16,14 @@ describe 'Home Search Product', ->
       store1 = generator.store.a()
       store1.save()
       whenServerLoaded ->
-        page = browser.homePage
         page.visit ->
           page.searchProductsText 'cool'
-          page.clickDoSearchProducts ->
-            browser.reload done
-  after ->
-    browser.destroy()
-  it 'shows product', ->
-    expect(browser.queryAll('#productsSearchResults .product').length).to.equal 1
-  it 'links picture to product 2', ->
-    expect(browser.query("#product#{product2._id} .link").href.endsWith product2.slug).to.be.true
+          page.clickDoSearchProducts done
+  it 'shows product', (done) ->
+    page.productsLength (l) ->
+      l.should.equal 1
+      done()
+  it 'links picture to product 2', (done) ->
+    page.productLink product2._id, (href) ->
+      href.endsWith(product2.slug).should.be.true
+      done()

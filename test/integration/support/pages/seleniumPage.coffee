@@ -48,7 +48,12 @@ module.exports = class Page
               el.getText().then (text) -> errorMsgs[id] = text
     flow.then (-> cb(errorMsgs)), cb
   findElement: (selector) -> if typeof selector is 'string' then @driver.findElement(webdriver.By.css(selector)) else selector
-  findElements: (selector) -> @driver.findElements(webdriver.By.css(selector))
+  findElements: (selector, cb) ->
+    find = @driver.findElements(webdriver.By.css(selector))
+    if cb?
+      find.then cb
+    else
+      find
   findElementIn: (selector, childSelector, cb) ->
     el = if typeof selector is 'string' then @findElement(selector) else selector
     el.findElement(webdriver.By.css(childSelector)).then cb, cb
