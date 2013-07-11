@@ -194,9 +194,8 @@ class Routes
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
                 dealWith err
-                #TODO: remover
-                #pac.cost += delivery.GrandTotal * quantity
-                pac.cost = 0.01
+                pac.cost += delivery.GrandTotal * quantity
+                #pac.cost = 0.01
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
               callbacks++
               deliverySpecs.serviceType = 'sedex'
