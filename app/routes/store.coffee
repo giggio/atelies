@@ -212,6 +212,12 @@ class Routes
             setImmediate ready
         ready()
   
+  productsSearch: (req, res) ->
+    Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) ->
+      dealWith err
+      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
+      res.json viewModelProducts
+
 _.extend Routes::, RouteFunctions::
 
 module.exports = Routes

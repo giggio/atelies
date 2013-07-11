@@ -12,15 +12,16 @@ define [
   './models/products'
   './models/store'
   './models/cart'
-],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart) ->
+  './models/productsSearch'
+],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch) ->
   class Routes extends Backbone.Open.Routes
     constructor: ->
       viewsManager.$el = $ '#app-container > .store'
     home: ->
       store = storeBootstrapModel.store
       products = storeBootstrapModel.products
-      storeView = new StoreView store: store, products: products
-      viewsManager.show storeView
+      @storeView = new StoreView store: store, products: products
+      viewsManager.show @storeView
     product: (slug) ->
       store = storeBootstrapModel.store
       products = new Products store.slug, slug
@@ -59,4 +60,11 @@ define [
     finishOrderOrderFinished: ->
       finishOrderOrderFinishedView = new FinishOrderOrderFinishedView()
       viewsManager.show finishOrderOrderFinishedView
+    searchProducts: (searchTerm) =>
+      @home() unless @storeView?
+      storeSlug = storeBootstrapModel.store.slug
+      productsSearch = new ProductsSearch storeSlug: storeSlug, searchTerm:searchTerm
+      productsSearch.fetch
+        reset:true
+        success: => @storeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
   new Routes()

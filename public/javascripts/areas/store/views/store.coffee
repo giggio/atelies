@@ -4,7 +4,8 @@ define [
   'handlebars'
   './storeProducts'
   'text!./templates/store.html'
-], ($, Backbone, Handlebars, ProductsView, storeTemplate) ->
+  './productsSearchResults'
+], ($, Backbone, Handlebars, ProductsView, storeTemplate, ProductsSearchResultsView) ->
   class StoreView extends Backbone.View
     template: storeTemplate
     initialize: (opt) ->
@@ -16,3 +17,7 @@ define [
       @$el.html context store: @store
       @productsView = new ProductsView products:@products
       @$('#productsPlaceHolder').html @productsView.el
+    showProductsSearchResults: (searchTerm, products) ->
+      $('#productSearchTerm').val searchTerm
+      productsSearchResultsView = new ProductsSearchResultsView products:products
+      @$('#productsPlaceHolder').html productsSearchResultsView.el

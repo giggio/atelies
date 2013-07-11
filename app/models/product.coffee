@@ -76,6 +76,10 @@ Product.searchByName = (searchTerm, cb) ->
   Product.find nameKeywords:searchTerm.toLowerCase(), (err, products) ->
     return cb err if err
     cb null, products
+Product.searchByStoreSlugAndByName = (storeSlug, searchTerm, cb) ->
+  Product.find storeSlug: storeSlug, nameKeywords:searchTerm.toLowerCase(), (err, products) ->
+    return cb err if err
+    cb null, products
 Product.getShippingWeightAndDimensions = (ids, cb) ->
   Product.find '_id': '$in': ids, '_id shipping', (err, products) ->
     cb err if err?

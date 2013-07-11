@@ -6,5 +6,5 @@ module.exports = class StoreHomePage extends Page
   notExistentText: @::getText.partial "#notExistent"
   searchProductsText: @::type.partial "#productSearchTerm"
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
-  productsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
+  searchProductsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
   productLink: (_id, cb) -> @getAttribute "#product#{_id} .link", 'href', cb

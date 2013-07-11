@@ -14,3 +14,4 @@ define [
       'finishOrder/payment': routes.finishOrderPayment
       'finishOrder/summary': routes.finishOrderSummary
       'finishOrder/orderFinished': routes.finishOrderOrderFinished
+      'searchProducts/:searchTerm': routes.searchProducts
