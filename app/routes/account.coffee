@@ -57,6 +57,7 @@ class Routes
     user.verifyPassword req.body.password, (error, succeeded) ->
       dealWith error
       if succeeded
+        res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (error, user) ->
           dealWith error

@@ -18,7 +18,7 @@ describe 'Change Password', ->
         browser.loginPage.navigateAndLoginWith user, ->
           page.visit (error) ->
             return done error if error
-            page.setFieldsAs password: user.password, newPassword: 'newPassword', passwordVerify: 'newPassword'
+            page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
             page.clickChangePasswordButton done
     it 'does not show the change password failed message', ->
       expect(page.errors()).to.equal ''
@@ -27,7 +27,7 @@ describe 'Change Password', ->
     it 'changed the user password', (done) ->
       User.findByEmail user.email, (error, foundUser) ->
         return done error if error
-        bcrypt.compareSync('newPassword', foundUser.passwordHash).should.be.true
+        bcrypt.compareSync('newPassword1@', foundUser.passwordHash).should.be.true
         done()
 
   describe 'Can\'t change invalid password', ->
@@ -41,7 +41,7 @@ describe 'Change Password', ->
         browser.loginPage.navigateAndLoginWith user, ->
           page.visit (error) ->
             return done error if error
-            page.setFieldsAs password: "#{user.password}other", newPassword: 'newPassword', passwordVerify: 'newPassword'
+            page.setFieldsAs password: "#{user.password}other", newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
             page.clickChangePasswordButton done
     it 'shows the invalid password message', ->
       expect(page.errors()).to.equal 'Senha inválida.'
@@ -65,7 +65,7 @@ describe 'Change Password', ->
         browser.loginPage.navigateAndLoginWith user, ->
           page.visit (error) ->
             return done error if error
-            page.setFieldsAs password: user.password, newPassword: 'newPassword', passwordVerify: 'otherPassword'
+            page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'otherPassword'
             page.clickChangePasswordButton done
     it 'does not show the login failed message', ->
       expect(page.passwordVerifyMessage()).to.equal 'A senha não confere.'
