@@ -2,6 +2,7 @@ path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
 values        = require './values'
+Recaptcha     = require('recaptcha').Recaptcha
 
 exports.configure = (app) ->
   everyauth.password.configure
@@ -43,15 +44,27 @@ exports.configure = (app) ->
           cb.fulfill(if succeeded then user else ["Login falhou"])
       cb
     registerLocals: (req, res) ->
+      recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY
       states: values.states
       userParams: req.body
+      recaptchaForm: recaptcha.toHTML()
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
       cb = @Promise()
       User.findByEmail email, (error, user) ->
         return cb([error]) if error?
         errors.push "E-mail já cadastrado." if user?
-        cb.fulfill errors
+        if DEBUG
+          cb.fulfill errors
+        else
+          data =
+            remoteip:  newUserAttrs.remoteip
+            challenge: newUserAttrs.captchaChallenge
+            response:  newUserAttrs.captchaResponse
+          recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY, data
+          recaptcha.verify (success, errorCode) ->
+            errors.push "Código incorreto." unless success
+            cb.fulfill errors
       cb
     registerUser: (newUserAttrs) ->
       cb = @Promise()
@@ -73,6 +86,9 @@ exports.configure = (app) ->
       cb
 
     extractExtraRegistrationParams: (req) ->
+      remoteip: req.connection.remoteAddress
+      captchaChallenge: req.body.recaptcha_challenge_field
+      captchaResponse: req.body.recaptcha_response_field
       name: req.body.name
       email: req.body.email
       isSeller: req.body.isSeller?
