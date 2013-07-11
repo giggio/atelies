@@ -1,4 +1,5 @@
 Page          = require './seleniumPage'
+async         = require 'async'
 
 module.exports = class HomePage extends Page
   url: ''
@@ -9,5 +10,16 @@ module.exports = class HomePage extends Page
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
   storesLength: (cb) -> @findElements '#stores .store', (els) -> cb els.length
   storeLink: (_id, cb) -> @getAttribute "#store#{_id} .link", 'href', cb
-  productsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
+  searchProductsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
   productLink: (_id, cb) -> @getAttribute "#product#{_id} .link", 'href', cb
+  productsLength: (cb) -> @findElements '#products .product', (els) -> cb els.length
+  product: (_id, cb) ->
+    product = {}
+    actions = [
+      (cb) => @getAttribute "#product#{_id}", "data-id", (t) -> product._id = t;cb()
+      (cb) => @getText "#product#{_id}_storeName", (t) -> product.storeName = t;cb()
+      (cb) => @getAttribute "#product#{_id}_picture img", "src", (t) -> product.picture = t;cb()
+      (cb) => @getAttribute "#product#{_id}_picture", "href", (t) -> product.slug = t;cb()
+    ]
+    async.parallel actions, ->
+      cb product

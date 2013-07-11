@@ -28,7 +28,7 @@ module.exports = class Page
     [cb, url] = [url, cb] if typeof url is 'function'
     refresh = false unless refresh?
     url = @url unless url?
-    url = "http://localhost:8000/#{url}"
+    url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
     @driver.get('chrome://version/').then => #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
       @driver.get(url).then =>
         if refresh

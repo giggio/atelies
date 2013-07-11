@@ -1,5 +1,10 @@
-Page    = require './page'
+Page          = require './seleniumPage'
 
 module.exports = class StoreHomePage extends Page
-  visit: (storeSlug, options, cb) => super "#{storeSlug}", options, cb
-  products: -> @browser.queryAll('.storeContainer #products .product')
+  visit: (storeSlug, cb) => super storeSlug, cb
+  products: @::findElements.partial '.storeContainer #products .product'
+  notExistentText: @::getText.partial "#notExistent"
+  searchProductsText: @::type.partial "#productSearchTerm"
+  clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
+  productsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
+  productLink: (_id, cb) -> @getAttribute "#product#{_id} .link", 'href', cb

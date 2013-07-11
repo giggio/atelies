@@ -1,11 +1,11 @@
 require './support/_specHelper'
-Product   = require '../../app/models/product'
-HomePage  = require './support/pages/homePage'
+Product        = require '../../app/models/product'
+StoreHomePage  = require './support/pages/storeHomePage'
 
-describe 'Home Search Product', ->
+xdescribe 'Store Search Product', ->
   page = store1 = product1 = product2 = null
   before (done) ->
-    page = new HomePage()
+    page = new StoreHomePage()
     cleanDB (error) ->
       if error
         return done error
@@ -16,11 +16,11 @@ describe 'Home Search Product', ->
       store1 = generator.store.a()
       store1.save()
       whenServerLoaded ->
-        page.visit ->
+        page.visit store1.slug, ->
           page.searchProductsText 'cool'
           page.clickDoSearchProducts done
   it 'shows product', (done) ->
-    page.searchProductsLength (l) ->
+    page.productsLength (l) ->
       l.should.equal 1
       done()
   it 'links picture to product 2', (done) ->
