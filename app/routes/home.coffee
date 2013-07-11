@@ -31,7 +31,8 @@ class Routes
 
   _multiplesOf: (n, array) ->
     length = array.length
-    mod = length % 4
+    return array if length < n
+    mod = length % n
     array[mod..length]
   
   blank: (req, res) -> res.render 'blank'

@@ -100,7 +100,13 @@ Store.findRandomForHome = (howMany, cb) ->
     if stores.length > howMany / 2
       cb null, stores
     else
-      Store.find({flyer: /./, random:$lte:random}).sort('random').limit(howMany).exec cb
+      Store.find({flyer: /./, random:$lte:random}).sort('random').limit(howMany).exec (err, stores) ->
+        return cb err if err?
+        if stores.length > howMany / 2
+          cb null, stores
+        else
+          Store.find({flyer: /./}).sort('random').limit(howMany).exec cb
+
 Store.searchByName = (searchTerm, cb) ->
   Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
     return cb err if err

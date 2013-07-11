@@ -78,7 +78,12 @@ Product.findRandom = (howMany, cb) ->
     if products.length > howMany / 2
       cb null, products
     else
-      Product.find({random:$lte:random}).sort('random').limit(howMany).exec cb
+      Product.find({random:$lte:random}).sort('random').limit(howMany).exec (err, products) ->
+        return cb err if err?
+        if products.length > howMany / 2
+          cb null, products
+        else
+          Product.find().sort('random').limit(howMany).exec cb
 
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne {storeSlug: storeSlug, slug: productSlug}, cb
