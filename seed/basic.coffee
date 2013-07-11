@@ -61,6 +61,7 @@ db.products.insert
     weight: 5
   hasInventory: true
   inventory: 30
+  random: Math.random()
 product1 = db.products.findOne name:'name 1'
 db.products.insert
   name: 'name 2'
@@ -85,6 +86,7 @@ db.products.insert
     weight: 9
   hasInventory: true
   inventory: 40
+  random: Math.random()
 db.products.insert
   name: 'name 3'
   nameKeywords: ['name', '3']
@@ -107,6 +109,7 @@ db.products.insert
       depth: 22
     weight: 6
   hasInventory: false
+  random: Math.random()
 db.products.insert
   name: 'name 4'
   nameKeywords: ['name', '4']
@@ -130,6 +133,7 @@ db.products.insert
     weight: 13
   hasInventory: true
   inventory: 130
+  random: Math.random()
 db.products.insert
   name: 'name 5'
   nameKeywords: ['name', '5']
@@ -153,6 +157,7 @@ db.products.insert
     weight: 13
   hasInventory: true
   inventory: 130
+  random: Math.random()
 db.products.insert
   name: 'name 6'
   nameKeywords: ['name', '6']
@@ -176,6 +181,7 @@ db.products.insert
     weight: 121
   hasInventory: true
   inventory: 130
+  random: Math.random()
 db.products.insert
   name: 'Some Fancier Name 7'
   nameKeywords: ['some', 'fancier', 'name', '7']
@@ -199,6 +205,7 @@ db.products.insert
     weight: 13
   hasInventory: true
   inventory: 130
+  random: Math.random()
 for i in [8..25]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -225,6 +232,7 @@ for i in [8..25]
       weight: 14
     hasInventory: true
     inventory: 130
+    random: Math.random()
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
 db.products.ensureIndex { nameKeywords: 1 }
 db.stores.remove()

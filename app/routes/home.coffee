@@ -18,7 +18,7 @@ class Routes
       if subdomain?
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res
-      Product.find (err, products) ->
+      Product.findRandom 24, (err, products) ->
         dealWith err
         viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
         Store.findForHome (err, stores) ->

@@ -25,6 +25,7 @@ productSchema = new mongoose.Schema
     weight:         Number
   hasInventory:   Boolean
   inventory:      Number
+  random:         type: Number, required: true, default: Math.random()
 
 productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
@@ -70,6 +71,15 @@ productSchema.methods.hasShippingInfo = ->
   has
 
 Product = mongoose.model 'product', productSchema
+Product.findRandom = (howMany, cb) ->
+  random = Math.random()
+  Product.find({random:$gte:random}).sort('random').limit(howMany).exec (err, products) ->
+    return cb err if err?
+    if products.length > howMany / 2
+      cb null, products
+    else
+      Product.find({random:$lte:random}).sort('random').limit(howMany).exec cb
+
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne {storeSlug: storeSlug, slug: productSlug}, cb
 Product.searchByName = (searchTerm, cb) ->
