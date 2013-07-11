@@ -25,6 +25,7 @@ storeSchema = new mongoose.Schema
     pagseguro:
       email:              String
       token:              String
+  random:                 type: Number, required: true, default: Math.random()
 
 storeSchema.methods.toSimple = ->
   store =
@@ -92,7 +93,14 @@ Store.findWithProductsById = (_id, cb) ->
     Product.findByStoreSlug store.slug, (err, products) ->
       return cb err if err
       cb null, store, products
-Store.findForHome = (cb) -> Store.find flyer: /./, cb
+Store.findRandomForHome = (howMany, cb) ->
+  random = Math.random()
+  Store.find({flyer: /./, random:$gte:random}).sort('random').limit(howMany).exec (err, stores) ->
+    return cb err if err?
+    if stores.length > howMany / 2
+      cb null, stores
+    else
+      Store.find({flyer: /./, random:$lte:random}).sort('random').limit(howMany).exec cb
 Store.searchByName = (searchTerm, cb) ->
   Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
     return cb err if err
