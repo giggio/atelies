@@ -50,9 +50,16 @@ exports.configure = (app) ->
       recaptchaForm: recaptcha.toHTML()
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
+      password = newUserAttrs.password
       cb = @Promise()
+      unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test password
+        errors.push "A senha não é forte."
+        cb.fulfill errors
+        return cb
       User.findByEmail email, (error, user) ->
-        return cb([error]) if error?
+        if error?
+          errors.push error
+          return cb.fulfill errors
         errors.push "E-mail já cadastrado." if user?
         if DEBUG
           cb.fulfill errors
