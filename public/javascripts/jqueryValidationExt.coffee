@@ -8,5 +8,5 @@ define [
       return true
     , "Os campos não são iguais."
     validator.addMethod "strongPassword", (value, element) ->
-      return /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test value
+      return /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{8,}$/.test value
     , "A senha não é forte."

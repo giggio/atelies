@@ -52,7 +52,7 @@ exports.configure = (app) ->
       email = newUserAttrs.email.toLowerCase()
       password = newUserAttrs.password
       cb = @Promise()
-      unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test password
+      unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{8,}$/.test password
         errors.push "A senha não é forte."
         cb.fulfill errors
         return cb
