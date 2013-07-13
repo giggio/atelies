@@ -6,3 +6,4 @@ compiledPublic
 *.map
 *.password
 *.css
+.elasticbeanstalk/
