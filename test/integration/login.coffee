@@ -99,7 +99,7 @@ describe 'Login', ->
               done()
 
   describe 'Three errors on login shows captcha if user exists', ->
-    it 'shows login link', ->
+    it 'shows login link', (done) ->
       browser = newBrowser browser
       page = browser.loginPage
       page.visit (error) ->
