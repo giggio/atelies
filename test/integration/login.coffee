@@ -82,3 +82,33 @@ describe 'Login', ->
         page.clickLoginButton done
     it 'is at the admin page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/admin"
+
+  describe 'Three errors on login does not show captcha if user does not exist', ->
+    it 'does not show login link', (done) ->
+      browser = newBrowser browser
+      page = browser.loginPage
+      page.visit (error) ->
+        return done error if error
+        page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+        page.clickLoginButton ->
+          page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+          page.clickLoginButton ->
+            page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+            page.clickLoginButton ->
+              expect(page.showsCaptcha()).to.be.false
+              done()
+
+  describe 'Three errors on login shows captcha if user exists', ->
+    it 'shows login link', ->
+      browser = newBrowser browser
+      page = browser.loginPage
+      page.visit (error) ->
+        return done error if error
+        page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+        page.clickLoginButton ->
+          page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+          page.clickLoginButton ->
+            page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+            page.clickLoginButton ->
+              expect(page.showsCaptcha()).to.be.true
+              done()

@@ -15,3 +15,4 @@ module.exports = class LoginPage extends HomeLayout
   navigateAndLoginWith: (user, cb) ->
     @visit()
     @waitSelector '#loginForm #email', => @loginWith user, cb
+  showsCaptcha: -> @browser.query('.recaptcha')?

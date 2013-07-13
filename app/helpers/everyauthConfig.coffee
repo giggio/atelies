@@ -16,11 +16,74 @@ exports.configure = (app) ->
     postRegisterPath: "/account/register"
     registerView: path.join app.get('views'), "register.jade"
     loginView: path.join app.get('views'), "login.jade"
-    loginLocals: (req, res) ->
-      if req.query.redirectTo?
-        redirectTo: "?redirectTo=#{req.query.redirectTo}"
+    loginLocals: (req, res, cb) ->
+      locals =
+        if req.query.redirectTo?
+          redirectTo: "?redirectTo=#{req.query.redirectTo}"
+        else
+          redirectTo: ''
+      addRecaptcha = =>
+        recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY
+        locals.recaptchaForm = recaptcha.toHTML()
+      if req.session.carefulLogin
+        addRecaptcha()
+        setImmediate -> cb null, locals
+        return
+      else if req.body.email?
+        User.findByEmail req.body.email, (error, user) ->
+          cb error if error?
+          if user?.carefulLogin()
+            req.session.carefulLogin = true
+            addRecaptcha()
+          cb null, locals
       else
-        redirectTo: ''
+        setImmediate -> cb null, locals
+    extractLoginPassword: (req, res) ->
+      if req.session.carefulLogin
+        data =
+          remoteip: req.connection.remoteAddress
+          captchaChallenge: req.body.recaptcha_challenge_field
+          captchaResponse: req.body.recaptcha_response_field
+          password: req.body.password
+        [req.body.email, data]
+      else
+        [req.body.email, req.body.password]
+    authenticate: (email, password) ->
+      validatePassword = (user, p, cb) =>
+        p = p.password unless typeof p is 'string'
+        user.verifyPassword p, (error, success) ->
+          return cb false if error?
+          cb success
+      validateCaptcha = (data, cb) =>
+        return cb "O valor da imagem não foi informado." unless typeof data.remoteip?
+        recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY, remoteip: data.remoteip, challenge: data.captchaChallenge, response: data.captchaResponse
+        recaptcha.verify (success, errorCode) ->
+          error = null
+          error = "O valor informado para a imagem está errado." unless success
+          cb error, success
+      doValidatePassword = (user, password) ->
+        validatePassword user, password, (success) ->
+          if success
+            cb.fulfill user
+          else
+            cb.fulfill ["Login falhou"]
+      cb = @Promise()
+      errors = []
+      errors.push "Informe o e-mail" unless email?
+      errors.push "Informe a senha" unless password?
+      return cb.fulfill errors if errors.length isnt 0
+      User.findByEmail email.toLowerCase(), (error, user) ->
+        return cb.fulfill [error] if error?
+        return cb.fulfill ['Login falhou'] unless user?
+        if user.carefulLogin() and !DEBUG
+          validateCaptcha password, (error, success) ->
+            if success
+              doValidatePassword user, password
+            else
+              cb.fulfill [error]
+        else
+          doValidatePassword user, password
+      cb
     respondToLoginSucceed: (res, user, data) ->
       return unless user?
       if data.req.query.redirectTo?
@@ -28,21 +91,6 @@ exports.configure = (app) ->
       else
         @redirect res, '/'
     #performRedirect: (res, location) -> res.redirect location, 302
-    authenticate: (email, password) ->
-      errors = []
-      errors.push "Informe o e-mail" unless email?
-      errors.push "Informe a senha" unless password?
-      return errors if errors.length isnt 0
-      cb = @Promise()
-      User.findByEmail email.toLowerCase(), (error, user) ->
-        return cb([error]) if error?
-        return cb.fulfill ['Login falhou'] unless user?
-        user.verifyPassword password, (error, succeeded) ->
-          if error?
-            cb.fail error
-            return cb.fulfill ['Login falhou']
-          cb.fulfill(if succeeded then user else ["Login falhou"])
-      cb
     registerLocals: (req, res) ->
       recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY
       states: values.states

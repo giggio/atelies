@@ -213,6 +213,7 @@ exports.generator =
         name: 'Some Guy'
         isSeller: false
         stores: []
+        loginError: 0
       user.password = 'abc'
       user
     b: ->
@@ -222,6 +223,7 @@ exports.generator =
         name: 'Other Person'
         isSeller: false
         stores: []
+        loginError: 0
       user.password = 'def'
       user
     c: ->
@@ -231,6 +233,7 @@ exports.generator =
         name: 'Another Seller'
         isSeller: true
         stores: []
+        loginError: 0
       user.password = 'ghi'
       user
     d: ->
@@ -247,6 +250,7 @@ exports.generator =
           state: 'SP'
           zip: '01234-567'
         phoneNumber: '+55 (11) 98765-4321'
+        loginError: 0
       user.password = 'abc'
       user
   order:

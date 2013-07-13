@@ -14,7 +14,8 @@ userSchema = new mongoose.Schema
     city:           String
     state:          String
     zip:            String
-  phoneNumber:    String
+  phoneNumber:      String
+  loginError:       Number
 
 userSchema.methods.createStore = ->
   store = new Store()
@@ -27,9 +28,19 @@ userSchema.methods.hasStore = (store) ->
     id = store.toString()
   storeFound = _.find @stores, (_id) -> id is _id.toString()
   storeFound?
+userSchema.methods.carefulLogin = -> @loginError >= 3
 userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
   bcrypt = require 'bcrypt'
-  bcrypt.compare passwordToVerify, @passwordHash, cb
+  bcrypt.compare passwordToVerify, @passwordHash, (error, succeeded) =>
+    if succeeded
+      if @loginError isnt 0
+        @loginError = 0
+      else
+        return cb null, true
+    else
+      @loginError++
+    @save (err, u) =>
+      cb error, succeeded
 userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10

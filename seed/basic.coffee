@@ -9,18 +9,21 @@ db.users.insert
   name: 'Some Guy'
   isSeller: false
   stores: []
+  loginError: 0
 db.users.insert
   email: 'b@a.com'
   passwordHash: "$2a$10$s3I2jXWoT5d.oEFVt432T.U9fF1lk4ILFJnIzqq.JyXONDtTNZwlm" # hash for 'def'
   name: 'Other Person'
   isSeller: false
   stores: []
+  loginError: 0
 db.users.insert
   email: 'c@a.com'
   passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
   name: 'Another Seller'
   isSeller: true
   stores: []
+  loginError: 0
 userSeller = db.users.findOne email:'c@a.com'
 db.users.insert
   email: 'd@a.com'
@@ -35,6 +38,7 @@ db.users.insert
     state: 'SP'
     zip: '01234-567'
   phoneNumber: '+55 (11) 98765-4321'
+  loginError: 0
 user1 = db.users.findOne email:'d@a.com'
 
 db.products.remove()
