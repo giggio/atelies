@@ -38,8 +38,9 @@ append content
             input#email.span4(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com", maxlength="50")
         .control-group
           .controls
-            input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
-            | registrar-se como vendedor
+            label
+              input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
+              | registrar-se como vendedor
         .control-group
           label.control-label Senha (8 caracteres, no mínimo uma letra e um número:
           .controls
@@ -78,6 +79,11 @@ append content
         .control-group
           .controls
             != recaptchaForm
+        .control-group
+          .controls
+            label
+              input#isSeller.required(type='checkbox', name="termsOfUse", title="Você precisa aceitar os termos de uso.")
+              | Aceito os <a href="/terms">termos de uso</a>
         .control-group
           .controls
             input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
