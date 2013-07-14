@@ -1,11 +1,9 @@
 nodemailer = require 'nodemailer'
-class Postman
-  @configure = (user, password) ->
-    @smtp = nodemailer.createTransport "SMTP",
-      service: "Hotmail"
-      auth:
-        user: user
-        pass: password
+module.exports = class Postman
+  @configure = (id, secret) ->
+    @smtp = nodemailer.createTransport "SES",
+      AWSAccessKeyID: id
+      AWSSecretKey: secret
     @running = true
   @stop = -> @smtp.close() if @running
 
@@ -25,7 +23,7 @@ class Postman
     console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
     Postman.smtp.sendMail mail, cb
 
-module.exports = Postman
+  sendFromContact: @::send.partial {name:'Ateliês', email:'contato@atelies.com.br'}
 
 #Postman.configure "contato@atelies.com.br", "somepass"
 #p = new Postman()

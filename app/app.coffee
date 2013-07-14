@@ -24,7 +24,7 @@ exports.start = (cb) ->
       everyauth.debug = on
       if process.env.SEND_MAIL?
         console.log "SENDING MAIL!"
-        Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
+        Postman.configure process.env.AWSAccessKeyId, process.env.AWSSecretKey
       else
         Postman.dryrun = on
       sessionStore = new express.session.MemoryStore()
@@ -48,7 +48,7 @@ exports.start = (cb) ->
     when "production"
       isProduction = true
       cookieSecret = process.env.APP_COOKIE_SECRET
-      Postman.configure process.env.SMTP_USER, process.env.SMTP_PASSWORD
+      Postman.configure process.env.AWSAccessKeyId, process.env.AWSSecretKey
       connStr = process.env.MONGOLAB_URI
       sessionStore = new MongoStore url:connStr
       domain = 'atelies.com.br'
