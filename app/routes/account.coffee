@@ -82,6 +82,14 @@ class Routes
       return res.json 400, err if err?
       res.json orders
 
+  verifyUser: (req, res) ->
+    User.findById req.params._id, (err, user) ->
+      user.verified = true
+      user.save (err, user) ->
+        res.redirect 'account/verified'
+
+  verified: (req, res) -> res.render 'accountVerified'
+
 _.extend Routes::, RouteFunctions::
 
 module.exports = Routes

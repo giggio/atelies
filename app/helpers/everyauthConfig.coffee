@@ -137,7 +137,10 @@ exports.configure = (app) ->
         phoneNumber: newUserAttrs.phoneNumber
       user = new User attrs
       user.setPassword password
-      user.save (error, user) -> cb.fulfill(if error? then [error] else user)
+      user.save (error, user) ->
+        user.sendMailConfirmRegistration (error, mailResponse) ->
+          console.log "Error sending mail: #{error}" if error?
+          cb.fulfill(if error? then [error] else user)
       cb
 
     extractExtraRegistrationParams: (req) ->

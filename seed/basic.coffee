@@ -10,6 +10,7 @@ db.users.insert
   isSeller: false
   stores: []
   loginError: 0
+  verified: true
 db.users.insert
   email: 'b@a.com'
   passwordHash: "$2a$10$s3I2jXWoT5d.oEFVt432T.U9fF1lk4ILFJnIzqq.JyXONDtTNZwlm" # hash for 'def'
@@ -17,6 +18,7 @@ db.users.insert
   isSeller: false
   stores: []
   loginError: 0
+  verified: true
 db.users.insert
   email: 'c@a.com'
   passwordHash: '$2a$10$yVMG2zpWEGfKQGPxGD3K8.Uo0yvbMOF9hkD53rJBUkqCalRcQC6HG' # hash for 'ghi'
@@ -24,6 +26,7 @@ db.users.insert
   isSeller: true
   stores: []
   loginError: 0
+  verified: true
 userSeller = db.users.findOne email:'c@a.com'
 db.users.insert
   email: 'd@a.com'
@@ -39,6 +42,7 @@ db.users.insert
     zip: '01234-567'
   phoneNumber: '+55 (11) 98765-4321'
   loginError: 0
+  verified: true
 user1 = db.users.findOne email:'d@a.com'
 
 db.products.remove()

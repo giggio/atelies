@@ -1,6 +1,8 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
 Store     = require './store'
+Postman   = require './postman'
+postman = new Postman()
 
 userSchema = new mongoose.Schema
   name:             type: String, required: true
@@ -16,6 +18,7 @@ userSchema = new mongoose.Schema
     zip:            String
   phoneNumber:      String
   loginError:       Number
+  verified:         type: Boolean, default: false
 
 userSchema.methods.createStore = ->
   store = new Store()
@@ -51,6 +54,23 @@ userSchema.methods.toSimpleUser = ->
   email: @email
   deliveryAddress: @deliveryAddress
   phoneNumber: @phoneNumber
+userSchema.methods.sendMailConfirmRegistration = (cb) ->
+  registrationLink = "http://www.atelies.com.br/account/verifyUser/#{@_id}"
+  body = "<html>
+    <h1>Olá #{@name}!</h1>
+    <h2>Bem vindo ao Ateliês!</h2>
+    <div>
+      Recebemos um registro de novo usuário no Ateliês indicando este e-mail (#{@email}). Gostaríamos de confirmar que ele é mesmo seu!
+    </div>
+    <div>
+      Clique <a href='#{registrationLink}'>aqui</a> para confirmar seu registro. Ou copie e cole o texto abaixo:</br>
+      #{registrationLink}
+    </div>
+    <div>
+      Caso você não tenha se registrado basta nos comunicar em contato@atelies.com.br que excluiremos o usuário.
+    </div>
+    </html>"
+  postman.sendFromContact @, "Bem vindo ao Ateliês", body, cb
   
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb

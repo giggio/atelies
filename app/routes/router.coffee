@@ -27,6 +27,8 @@ exports.route = (app) ->
   app.get     "/products/search/:searchTerm",                               home.productsSearch
   #account
   app.get     "/account",                                                   account.account
+  app.get     "/account/verifyUser/:_id",                                   account.verifyUser
+  app.get     "/account/verified",                                          account.verified
   app.get     "/account/orders/:_id",                                       account.order
   app.get     "/account/changePassword",                                    account.changePasswordShow
   app.post    "/account/changePassword",                                    account.changePassword
