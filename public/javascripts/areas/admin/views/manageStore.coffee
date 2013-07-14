@@ -16,6 +16,8 @@ define [
     template: manageStoreTemplate
     initialize: (opt) ->
       @model = opt.store
+      @user = opt.user
+      return if @_redirectIfUserNotSatisfied()
       context = Handlebars.compile @template
       isnew = @model.id? is false
       @$el.html context new: isnew, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro')
@@ -37,6 +39,10 @@ define [
           @_storeCreated @model
       Validation.bind @
       #@model.bind 'validated:invalid', (model, errors) -> console.log errors
+    _redirectIfUserNotSatisfied: ->
+      unless @user.verified
+        window.location = "/account#userNotVerified"
+        return true
     _updateStore: =>
       return unless @model.isValid true
       @model.save @model.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw message:'error when saving'

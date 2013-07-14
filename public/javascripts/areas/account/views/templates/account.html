@@ -1,6 +1,14 @@
 <div id="accountHeader">
-  Olá {{user.name}}!
+  {{#unless user.verified}}
+  <div class="alert alert-warning">
+    <button class="close" data-dismiss="alert">x</button>
+    <strong>Você ainda não verificou seu e-mail.</strong> Faça isso o quanto antes, ou não poderá realizar pedidos.
+  </div>
+  {{/unless}}
   <div>
-    <a href="#orders">Ver pedidos</a>
+    <p>Olá {{user.name}}!</p>
+  </div>
+  <div>
+    <a href="#orders" class="btn btn-primary">Ver pedidos</a>
   </div>
 </div>

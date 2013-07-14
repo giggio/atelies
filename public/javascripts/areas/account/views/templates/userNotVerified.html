@@ -1,0 +1,12 @@
+<div id="accountHeader">
+  <div>
+    <p>Olá {{user.name}}!</p>
+  </div>
+  <div>
+    <p><strong>Você ainda não verificou seu e-mail.</strong></p>
+    <p>Enquanto o e-mail não for verificado você não poderá fazer compras.</p>
+    {{#if user.isSeller}}
+    <p>A criação de lojas também só será habilitada quando seu e-mail for verificado.</p>
+    {{/if}}
+  </div>
+</div>

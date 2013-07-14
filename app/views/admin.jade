@@ -3,7 +3,8 @@ extends homeLayout
 append scriptsFooter
   script
     var adminStoresBootstrapModel = {
-      stores:!{JSON.stringify(stores)}
+      stores:!{JSON.stringify(stores)},
+      user:!{JSON.stringify(user)}
     }
   script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
   script

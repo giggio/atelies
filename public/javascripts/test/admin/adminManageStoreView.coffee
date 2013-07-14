@@ -17,7 +17,8 @@ define [
         store = new Store()
         store._id = undefined
         stores = new Stores [store]
-        manageStoreView = new ManageStoreView el:el, store:store
+        user = verified: true
+        manageStoreView = new ManageStoreView el:el, store:store, user: user
         sinon.stub $, "ajax", (opt) ->
           storePassedIn = JSON.parse opt.data
           opt.success exampleStore
@@ -58,13 +59,22 @@ define [
       it 'adds store to stores in the bootstrapped model', ->
         expect(global.adminStoresBootstrapModel.stores[0]).to.be.like exampleStore
 
+    describe 'User not verified redirects to inform that', ->
+      it 'navigates to store manage page', ->
+        user = verified: false
+        manageStoreView = new ManageStoreView el:el, store:{}, user: user
+        manageStoreView.render()
+        window.location.should.equal "/account#userNotVerified"
+        manageStoreView.close()
+
     describe 'invalid Store does not get created', ->
       ajaxSpy = goToStoreManagePageSpy = null
       before ->
         store = new Store()
         store._id = undefined
         stores = new Stores [store]
-        manageStoreView = new ManageStoreView el:el, store:store
+        user = verified: true
+        manageStoreView = new ManageStoreView el:el, store:store, user:user
         ajaxSpy = sinon.spy $, "ajax"
         goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
         manageStoreView.render()
@@ -100,7 +110,8 @@ define [
         before ->
           global.adminStoresBootstrapModel = stores:[store]
           stores = new Stores [store]
-          manageStoreView = new ManageStoreView el:el, store:stores.at 0
+          user = verified: true
+          manageStoreView = new ManageStoreView el:el, store:stores.at(0), user:user
           sinon.stub $, "ajax", (opt) ->
             storePassedIn = JSON.parse opt.data
             opt.success newStore
@@ -138,7 +149,8 @@ define [
         store = generatorc.store.a()
         before ->
           stores = new Stores [store]
-          manageStoreView = new ManageStoreView el:el, store:stores.at 0
+          user = isVerified: true
+          manageStoreView = new ManageStoreView el:el, store:stores.at(0), user:user
           ajaxSpy = sinon.spy $, "ajax"
           goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
           manageStoreView.render()

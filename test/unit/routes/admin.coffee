@@ -7,11 +7,12 @@ describe 'AdminRoute', ->
   describe 'Access is granted correctly', ->
     it 'allows access and renders all the stores if signed in and seller', ->
       stores = []
-      req = user: {isSeller:true, stores:stores}, loggedIn: true
+      simpleUser = {}
+      req = user: {isSeller:true, stores:stores, toSimpleUser: -> simpleUser}, loggedIn: true
       req.user.populate = (path, cb) -> cb null, req.user
       res = render: sinon.spy()
       routes.admin req, res
-      res.render.should.have.been.calledWith 'admin', stores:stores
+      res.render.should.have.been.calledWith 'admin', stores:stores, user:simpleUser
     it 'denies access if the user isnt a seller and shows a message page', ->
       stores = []
       res = redirect:sinon.spy()
@@ -28,7 +29,8 @@ describe 'AdminRoute', ->
     it 'only user stories are shown', ->
       store = toSimple: -> @
       stores = [store]
-      user = isSeller:true, stores: []
+      simpleUser = {}
+      user = isSeller:true, stores: [], toSimpleUser: -> simpleUser
       user.populate = (path, cb) ->
         user.stores = stores
         cb null, user
@@ -37,4 +39,4 @@ describe 'AdminRoute', ->
       res = render: sinon.spy()
       routes.admin req, res
       user.populate.should.have.been.calledWith 'stores'
-      res.render.should.have.been.calledWith 'admin', stores:stores
+      res.render.should.have.been.calledWith 'admin', stores:stores, user: simpleUser

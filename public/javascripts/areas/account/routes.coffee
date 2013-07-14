@@ -4,8 +4,9 @@ define [
   './views/account'
   './views/orders'
   './views/order'
+  './views/userNotVerified'
   './models/orders'
-],($, viewsManager, AccountView, OrdersView, OrderView, Orders) ->
+],($, viewsManager, AccountView, OrdersView, OrderView, UserNotVerifiedView, Orders) ->
   class Routes extends Backbone.Open.Routes
     constructor: ->
       viewsManager.$el = $ '#app-container > .account'
@@ -29,5 +30,9 @@ define [
           viewsManager.show orderView
         error: (col, res, opt) ->
           console.log 'error loading orders'
+    userNotVerified: ->
+      user = accountBootstrapModel.user
+      userNotVerifiedView = new UserNotVerifiedView user: user
+      viewsManager.show userNotVerifiedView
 
   new Routes()

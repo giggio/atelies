@@ -18,7 +18,7 @@ class Routes
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
     req.user.populate 'stores', (err, user) ->
-      res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple())
+      res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple()), user: req.user.toSimpleUser()
 
   adminStoreCreate: (req, res) ->
     store = req.user.createStore()

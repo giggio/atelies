@@ -22,7 +22,8 @@ define [
     @createStore: =>
       store = new Store()
       stores = new Stores [store]
-      manageStoreView = new ManageStoreView store:store
+      user = adminStoresBootstrapModel.user
+      manageStoreView = new ManageStoreView store:store, user:user
       viewsManager.show manageStoreView
     @manageStore: (storeId) =>
       store = _.findWhere adminStoresBootstrapModel.stores, _id: storeId

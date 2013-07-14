@@ -32,6 +32,9 @@ define [
       if @user is undefined
         window.location = "/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
         return true
+      unless @user.verified
+        window.location = "/account#userNotVerified"
+        return true
       ad = @user.deliveryAddress
       unless ad.street? and ad.state? and ad.city and ad.zip
         Backbone.history.navigate 'finishOrder/updateProfile', trigger: true

@@ -9,3 +9,4 @@ define [
       '': routes.home
       'orders': routes.orders
       'orders/:orderId': routes.order
+      'userNotVerified': routes.userNotVerified
