@@ -9,7 +9,7 @@ describe 'AdminStoreCreateRoute', ->
     store = res = body = user = null
     before ->
       store = pmtGateways: [], save: (cb) -> cb()
-      user = isSeller: true
+      user = isSeller: true, verified: true
       user.createStore = -> store
       user.save = (cb) -> cb null, user
       sinon.spy user, 'createStore'
@@ -51,3 +51,9 @@ describe 'AdminStoreCreateRoute', ->
       req = loggedIn: false
       expect( -> routes.adminStoreCreate req, null).to.throw AccessDenied
 
+  describe 'Redirected if not verified', ->
+    it 'denies access if the user isnt a seller and throws', ->
+      req = user: {isSeller:true, verified:false}, loggedIn: true
+      res = redirect: sinon.spy()
+      routes.adminStoreCreate req, res
+      res.redirect.should.have.been.calledWith 'account/mustVerifyUser'

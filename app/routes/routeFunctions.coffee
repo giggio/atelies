@@ -19,6 +19,14 @@ class Functions
           throw new AccessDenied() unless req.loggedIn and req.user?.isSeller
           original.apply @, arguments
 
+  _authVerified: ->
+    for fn in arguments
+      do (fn) =>
+        original = @[fn]
+        @[fn] = (req, res) ->
+          return res.redirect 'account/mustVerifyUser' unless req.loggedIn and req.user?.verified
+          original.apply @, arguments
+
   _getSubdomain: (domain, host) ->
     return undefined if @env isnt 'production' and host is 'localhost'
     if host isnt domain and host isnt "www.#{domain}"

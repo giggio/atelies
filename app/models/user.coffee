@@ -54,6 +54,7 @@ userSchema.methods.toSimpleUser = ->
   email: @email
   deliveryAddress: @deliveryAddress
   phoneNumber: @phoneNumber
+  verified: @verified
 userSchema.methods.sendMailConfirmRegistration = (cb) ->
   registrationLink = "http://www.atelies.com.br/account/verifyUser/#{@_id}"
   body = "<html>

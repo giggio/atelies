@@ -12,6 +12,7 @@ RouteFunctions  = require './routeFunctions'
 class Routes
   constructor: (@env) ->
     @_auth 'admin'
+    @_authVerified 'adminStoreCreate'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
   
   admin: (req, res) ->

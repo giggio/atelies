@@ -16,6 +16,7 @@ request         = require 'request'
 class Routes
   constructor: (@env, @domain) ->
     @_auth 'orderCreate', 'calculateShipping'
+    @_authVerified 'orderCreate'
   
   store: (req, res) ->
     subdomain = @_getSubdomain @domain, req.host.toLowerCase()
