@@ -13,6 +13,8 @@ module.exports = class RegisterPage extends HomeLayout
     @browser.select "#registerForm #deliveryState", values.deliveryState if values.deliveryState?
     @browser.fill "#registerForm #deliveryZIP", values.deliveryZIP
     @browser.fill "#registerForm #phoneNumber", values.phoneNumber
+    if values.termsOfUse?
+      if values.termsOfUse then @browser.check "#registerForm #termsOfUse" else @browser.uncheck "#registerForm #termsOfUse"
     if values.isSeller then @browser.check "#registerForm #isSeller" else @browser.uncheck "#registerForm #isSeller"
   clickRegisterButton: (cb) => @browser.pressButtonWait "#registerForm #register", cb
   errors: => @browser.text '#errors > li'

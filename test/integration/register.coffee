@@ -32,7 +32,7 @@ describe 'Register', ->
     before (done) ->
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "P@ssw0rd12", isSeller: false, passwordVerify: 'P@ssw0rd12', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567'
+        page.setFieldsAs name: "Some Person", email: "some@email.com", password: "P@ssw0rd12", isSeller: false, passwordVerify: 'P@ssw0rd12', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567', termsOfUse: true
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
@@ -68,7 +68,7 @@ describe 'Register', ->
       page = browser.registerPage
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "P@ssw0rd12", isSeller: true, passwordVerify: 'P@ssw0rd12'
+        page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "P@ssw0rd12", isSeller: true, passwordVerify: 'P@ssw0rd12', termsOfUse: true
         page.clickRegisterButton done
     it 'is a seller', (done) ->
       User.findByEmail "someother@email.com", (error, user) ->
@@ -85,7 +85,7 @@ describe 'Register', ->
       page = browser.registerPage
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12'
+        page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', termsOfUse: true
         page.clickRegisterButton done
     it 'shows the register failed message', ->
       expect(page.errors()).to.equal 'E-mail já cadastrado.'
@@ -104,7 +104,7 @@ describe 'Register', ->
       page = browser.registerPage
       page.visit (error) ->
         return done error if error
-        page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass'
+        page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true
         page.clickRegisterButton done
     it 'is at the register page', ->
       expect(browser.location.toString()).to.equal "http://localhost:8000/account/register"
