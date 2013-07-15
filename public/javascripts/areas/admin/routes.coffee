@@ -28,7 +28,8 @@ define [
     @manageStore: (storeId) =>
       store = _.findWhere adminStoresBootstrapModel.stores, _id: storeId
       stores = new Stores [store]
-      manageStoreView = new ManageStoreView store:stores.at 0
+      user = adminStoresBootstrapModel.user
+      manageStoreView = new ManageStoreView store:stores.at(0), user:user
       viewsManager.show manageStoreView
     @store: (storeSlug) =>
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
