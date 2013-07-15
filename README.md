@@ -1,10 +1,12 @@
-﻿# Open Store
+﻿# Ateliês
 =======
 
-[![Build Status](https://travis-ci.org/giggio/open-store.png)](https://travis-ci.org/giggio/open-store)
-[![Coverage Status](https://coveralls.io/repos/giggio/open-store/badge.png)](https://coveralls.io/r/giggio/open-store)
+[![Build Status](https://travis-ci.org/giggio/atelies.png)](https://travis-ci.org/giggio/atelies)
+[![Coverage Status](https://coveralls.io/repos/giggio/atelies/badge.png)](https://coveralls.io/r/giggio/atelies)
 
 This is still a learning project. It will not be forever.
+
+We are almost there. Very soon we will be on production.
 
 ## Documentation
 
@@ -12,7 +14,7 @@ In the future...
 
 ## Issues and ideas
 
-* Check the Github backlog: [https://github.com/giggio/open-store/issues](https://github.com/giggio/open-store/issues)
+* Check the Github backlog: [https://github.com/giggio/atelies/issues](https://github.com/giggio/atelies/issues)
 
 ## Maintainers
 
