@@ -1,11 +1,11 @@
 extends homeLayout
 
 append scriptsFooter
-  script
+  script.
     var homeProductsBootstrapModel = !{JSON.stringify(products)};
     var homeStoresBootstrapModel = !{JSON.stringify(stores)};
   script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
-  script
+  script.
     require(['homeBootstrap']);
 append content
   .container.homeContainer

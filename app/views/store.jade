@@ -1,7 +1,7 @@
 extends storeLayout
 
 append scriptsFooter
-  script
+  script.
     var storeBootstrapModel = {
       store:!{JSON.stringify(store)},
       products:!{JSON.stringify(products)},
@@ -9,10 +9,10 @@ append scriptsFooter
       order:!{typeof(order)==='undefined'?'undefined':JSON.stringify(order)}
     };
   if typeof(bootstrapedRedirect) !== 'undefined'
-    script 
+    script .
       var boostrapedRedirect = '!{bootstrapedRedirect}';
   script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
-  script
+  script.
     require(['storeBootstrap']);
 
 append content

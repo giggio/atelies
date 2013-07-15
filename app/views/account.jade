@@ -1,13 +1,13 @@
 extends homeLayout
 
 append scriptsFooter
-  script
+  script.
     var accountBootstrapModel = {
       user:!{JSON.stringify(user)},
       orders:!{JSON.stringify(orders)}
     };
   script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
-  script
+  script.
     require(['accountBootstrap']);
 
 append content
