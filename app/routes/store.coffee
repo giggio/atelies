@@ -27,11 +27,7 @@ class Routes
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
       user =
         if req.user?
-          name: req.user.name
-          _id: req.user._id
-          email: req.user.email
-          deliveryAddress: req.user.deliveryAddress
-          phoneNumber: req.user.phoneNumber
+          req.user.toSimpleUser()
         else
           undefined
       if req.session.recentOrder?

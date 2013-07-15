@@ -214,6 +214,7 @@ exports.generator =
         isSeller: false
         stores: []
         loginError: 0
+        verified: true
       user.password = 'abc'
       user
     b: ->
@@ -224,6 +225,7 @@ exports.generator =
         isSeller: false
         stores: []
         loginError: 0
+        verified: true
       user.password = 'def'
       user
     c: ->
@@ -234,6 +236,7 @@ exports.generator =
         isSeller: true
         stores: []
         loginError: 0
+        verified: true
       user.password = 'ghi'
       user
     d: ->
@@ -251,6 +254,7 @@ exports.generator =
           zip: '01234-567'
         phoneNumber: '+55 (11) 98765-4321'
         loginError: 0
+        verified: true
       user.password = 'abc'
       user
   order:
