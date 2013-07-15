@@ -16,8 +16,8 @@ after_success:
 script: node_modules/grunt-cli/bin/grunt travis
 env:
   global:
-  - secure: ! 'gItUlkkuUKICxpIh7pSnDfPtouykOMQ7EcFflTwE14mkla+zxjuWcrd4FObt
+  - secure: ! 'nRhjqK0d3ttsH5d2mt0mODYBgcwSDpLMTi55ga8iawP2f6dshqNTjWrWzgkA
 
-      M04EHbzzEuIXG+CZjOV0xRwYKVupSHfgfoDTdJQf3v3o9upKrMT9kmLlnQt8
+      iuV48hiLY7y1HWB3Vdyb5SvdhfzwrFlFVB5yRcEBAlC9rwvBWzia63yk3ePu
 
-      Jw/27l8Hs0c1ru+N5wJ/wf6XkBb0VvJX+IOcW/kdlazxeYq5TZ8='
+      KDtLFkRLBQ0oWWX8hZlkFjseVckXi5Ec4BiGgpU3PmSXcPw0JjE='
