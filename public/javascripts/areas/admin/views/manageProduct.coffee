@@ -48,6 +48,11 @@ define [
       #@model.bind 'validated:invalid', (model, errors) -> print errors
     _updateProduct: =>
       if @model.isValid true
+        if $('#picture').val() isnt ''
+          @model.hasFiles = true
+          @model.form = $('#editProduct')
+        else
+          @model.hasFiles = false
         @model.save @model.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
     _deleteProduct: =>
       @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr

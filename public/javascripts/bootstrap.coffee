@@ -11,6 +11,7 @@ requirejs.config
     epoxy: 'lib/backbone.epoxy/index'
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
+    jqform: 'lib/jquery.form/index'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -32,3 +33,6 @@ requirejs.config
     'jqval':
       deps: ['jquery']
       exports: '$.validator'
+    'jqform':
+      deps: ['jquery']
+      exports: '$.fn.ajaxSubmit'

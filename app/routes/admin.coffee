@@ -8,6 +8,7 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
+FileUploader    = require '../helpers/amazonFileUploader'
 
 class Routes
   constructor: (@env) ->
@@ -124,8 +125,17 @@ class Routes
       product.updateFromSimpleProduct req.body
       product.storeName = store.name
       product.storeSlug = store.slug
-      product.save (err) ->
-        res.send 201, product.toSimpleProduct()
+      saveProduct = =>
+        product.save (err) =>
+          res.send 201, product.toSimpleProduct()
+      file = req.files?.picture
+      if file?
+        uploader = new FileUploader()
+        uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
+          product.picture = fileUrl
+          saveProduct()
+      else
+        saveProduct()
   
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug, (err, products) ->

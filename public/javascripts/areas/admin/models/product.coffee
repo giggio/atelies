@@ -1,7 +1,18 @@
 define [
   'backbone'
+  'jqform'
 ], (Backbone) ->
   class Product extends Backbone.Open.Model
+    sync: (method, model, opt) ->
+      return Backbone.sync.apply @, arguments unless @hasFiles
+      methodMap = create:'POST', update:'PUT', patch:'PATCH', delete:'DELETE', read:'GET'
+      type = methodMap[method]
+      options = type: type, url: @url()
+      options.success = (data, code, xhr) =>
+        opt.success data if opt.success?
+      options.error = (xhr, error, type) ->
+        opt.error error if opt.error?
+      @form.ajaxSubmit options
     defaults:
       _id:undefined
       slug:undefined
@@ -9,7 +20,7 @@ define [
       description:undefined
       tags:undefined
       price:undefined
-      picture:undefined
+      #picture:undefined
       height:undefined
       width:undefined
       depth:undefined
@@ -27,9 +38,9 @@ define [
       price:
         [{required: true, msg: 'O preço é obrigatório.'}
          {pattern:'number', msg: 'O preço deve ser um número.'}]
-      picture:
-        [{pattern:'url', msg: 'A imagem deve ser uma url.'}
-         {required: false}]
+      #picture:
+        #[{pattern:'url', msg: 'A imagem deve ser uma url.'}
+         #{required: false}]
       height:
         [{pattern:'digits', msg: 'A altura deve ser um número.'}
          {required: false}]
