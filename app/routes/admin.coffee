@@ -105,8 +105,18 @@ class Routes
         dealWith err
         throw new AccessDenied() unless req.user.hasStore store
         product.updateFromSimpleProduct req.body
-        product.save (err) ->
-          res.send 204
+        saveProduct = =>
+          product.save (err) ->
+            res.send 204
+        file = req.files?.picture
+        if file?
+          uploader = new FileUploader()
+          uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
+            uploader.delete product.picture, (err) ->
+              product.picture = fileUrl
+              saveProduct()
+        else
+          saveProduct()
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) ->

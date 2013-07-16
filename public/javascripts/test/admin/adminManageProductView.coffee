@@ -31,7 +31,7 @@ define [
           expect($("#name", el).val()).to.equal product.name
           expect($("#price", el).val()).to.equal product.price.toString()
           expect($("#slug", el).text()).to.equal product.slug
-          expect($("#picture", el).val()).to.equal product.picture
+          expect($("#showPicture", el).attr('src')).to.equal product.picture
           expect($("#tags", el).val()).to.equal product.tags
           expect($("#description", el).val()).to.equal product.description
           expect($("#height", el).val()).to.equal product.height.toString()
@@ -61,7 +61,6 @@ define [
           manageProductView.render()
           $("#name", el).val(updatedProduct.name).change()
           $("#price", el).val(updatedProduct.price).change()
-          $("#picture", el).val(updatedProduct.picture).change()
           $("#tags", el).val(updatedProduct.tags).change()
           $("#description", el).val(updatedProduct.description).change()
           $("#height", el).val(updatedProduct.height).change()
@@ -83,7 +82,6 @@ define [
           expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal updatedProduct.name
           expect(productPosted.price).to.equal updatedProduct.price
-          expect(productPosted.picture).to.equal updatedProduct.picture
           expect(productPosted.tags).to.equal updatedProduct.tags
           expect(productPosted.description).to.equal updatedProduct.description
           expect(productPosted.height).to.equal updatedProduct.height
@@ -112,7 +110,6 @@ define [
           manageProductView.render()
           $("#name", el).val('').change()
           $("#price", el).val('d').change()
-          $("#picture", el).val('e').change()
           $("#height", el).val('f').change()
           $("#width", el).val('g').change()
           $("#depth", el).val('h').change()
@@ -135,7 +132,6 @@ define [
         it 'showed validation messages', ->
           expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
           expect($("#price ~ .tooltip .tooltip-inner", el).text()).to.equal 'O preço deve ser um número.'
-          expect($("#picture ~ .tooltip .tooltip-inner", el).text()).to.equal 'A imagem deve ser uma url.'
           expect($("#height ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
           expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
           expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
@@ -160,7 +156,6 @@ define [
           manageProductView.render()
           $("#name", el).val(newproduct.name).change()
           $("#price", el).val(newproduct.price).change()
-          $("#picture", el).val(newproduct.picture).change()
           $("#tags", el).val(newproduct.tags).change()
           $("#description", el).val(newproduct.description).change()
           $("#height", el).val(newproduct.height).change()
@@ -182,7 +177,6 @@ define [
           expect(ajaxSpy).to.have.been.called
           expect(productPosted.name).to.equal product.name
           expect(productPosted.price).to.equal product.price
-          expect(productPosted.picture).to.equal product.picture
           expect(productPosted.tags).to.equal product.tags
           expect(productPosted.description).to.equal product.description
           expect(productPosted.height).to.equal product.height
@@ -211,7 +205,6 @@ define [
           manageProductView.render()
           $("#name", el).val('').change()
           $("#price", el).val('d').change()
-          $("#picture", el).val('e').change()
           $("#height", el).val('f').change()
           $("#width", el).val('g').change()
           $("#depth", el).val('h').change()
@@ -234,7 +227,6 @@ define [
         it 'showed validation messages', ->
           expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
           expect($("#price ~ .tooltip .tooltip-inner", el).text()).to.equal 'O preço deve ser um número.'
-          expect($("#picture ~ .tooltip .tooltip-inner", el).text()).to.equal 'A imagem deve ser uma url.'
           expect($("#height ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
           expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
           expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
@@ -255,7 +247,6 @@ define [
           manageProductView.render()
           $("#name", el).val(newproduct.name).change()
           $("#price", el).val(newproduct.price).change()
-          $("#picture", el).val(newproduct.picture).change()
           $("#tags", el).val(newproduct.tags).change()
           $("#description", el).val(newproduct.description).change()
           $("#height", el).val(newproduct.height).change()

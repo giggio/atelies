@@ -34,6 +34,7 @@ define [
         "#inventory": "value:integerOr(inventory)"
         "#price": "value:decimalOr(price)"
         "#hasInventory": "checked:hasInventory"
+        "#showPicture": "attr:{src:picture}"
       @_setValidation()
     _setValidation: ->
       val = @model.validation
@@ -48,10 +49,12 @@ define [
       #@model.bind 'validated:invalid', (model, errors) -> print errors
     _updateProduct: =>
       if @model.isValid true
-        if $('#picture').val() isnt ''
+        pictureVal = $('#picture').val()
+        if typeof val isnt 'undefined' and val isnt ''
           @model.hasFiles = true
           @model.form = $('#editProduct')
         else
+          @model.hasFiles = true
           @model.hasFiles = false
         @model.save @model.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
     _deleteProduct: =>

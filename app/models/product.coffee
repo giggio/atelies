@@ -50,16 +50,16 @@ productSchema.methods.toSimplerProduct = ->
   url: @url(), slug: @slug
 productSchema.methods.updateFromSimpleProduct = (simple) ->
   for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
-    @[attr] = simple[attr]
-  @tags = simple.tags?.split ','
+    @[attr] = simple[attr] if simple[attr]? and simple[attr] isnt ''
+  @tags = simple.tags?.split ',' if simple.tags? and simple.tags isnt ''
   @dimensions = {} unless @dimensions?
   for attr in ['height', 'width', 'depth']
-    @dimensions[attr] = simple[attr]
+    @dimensions[attr] = simple[attr] if simple[attr]? and simple[attr] isnt ''
   @shipping = dimensions: {} unless @shipping?
-  @shipping.dimensions.height = simple.shippingHeight
-  @shipping.dimensions.width = simple.shippingWidth
-  @shipping.dimensions.depth = simple.shippingDepth
-  @shipping.weight = simple.shippingWeight
+  @shipping.dimensions.height = simple.shippingHeight if simple.shippingHeight? and simple.shippingHeight isnt ''
+  @shipping.dimensions.width = simple.shippingWidth if simple.shippingWidth? and simple.shippingWidth isnt ''
+  @shipping.dimensions.depth = simple.shippingDepth if simple.shippingDepth? and simple.shippingDepth isnt ''
+  @shipping.weight = simple.shippingWeight if simple.shippingWeight? and simple.shippingWeight isnt ''
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
   has = shipping.weight? and shipping.dimensions? and
