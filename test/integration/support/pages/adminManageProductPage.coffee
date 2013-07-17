@@ -18,7 +18,7 @@ module.exports = class AdminManageProductPage extends Page
       => @getValue "#editProduct #name", (text) -> product.name = text
       => @getValue "#editProduct #price", (text) -> product.price = text
       => @getText "#editProduct #slug", (text) -> product.slug = text
-      => @getValue "#editProduct #picture", (text) -> product.picture = text
+      => @getSrc "#editProduct #showPicture", (text) -> product.picture = text
       => @getValue "#editProduct #tags", (text) -> product.tags = text
       => @getValue "#editProduct #description", (text) -> product.description = text
       => @getValue "#editProduct #height", (text) -> product.dimensions.height = parseInt text
@@ -35,7 +35,6 @@ module.exports = class AdminManageProductPage extends Page
   setFieldsAs: (product, cb) =>
     @type "#name", product.name
     @type "#price", product.price
-    @type "#picture", product.picture
     @type "#tags", product.tags?.join ","
     @type "#description", product.description
     @type "#height", product.dimensions?.height

@@ -51,7 +51,7 @@ describe 'Admin Manage Product page', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs {name:'', price:'', tags:[], description:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
+          page.setFieldsAs {name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
             page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
@@ -80,7 +80,6 @@ describe 'Admin Manage Product page', ->
       page.errorMessagesIn '#editProduct', (errorMsgs) ->
         errorMsgs.name.should.equal 'O nome é obrigatório.'
         errorMsgs.price.should.equal 'O preço é obrigatório.'
-        errorMsgs.picture.should.equal 'A imagem deve ser uma url.'
         errorMsgs.height.should.equal 'A altura deve ser um número.'
         errorMsgs.width.should.equal 'A largura deve ser um número.'
         errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
@@ -127,7 +126,6 @@ describe 'Admin Manage Product page', ->
         return done err if err
         productOnDb.name.should.equal otherProduct.name
         productOnDb.price.should.equal otherProduct.price
-        productOnDb.picture.should.equal otherProduct.picture
         productOnDb.tags.should.be.like otherProduct.tags
         productOnDb.description.should.equal otherProduct.description
         productOnDb.dimensions.height.should.equal otherProduct.dimensions.height

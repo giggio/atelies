@@ -30,7 +30,7 @@ describe 'Admin Create Product page', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, ->
-          page.setFieldsAs {name:'', price:'', picture: 'abc', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'}, ->
+          page.setFieldsAs {name:'', price:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'}, ->
             page.clickUpdateProduct done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
@@ -45,7 +45,6 @@ describe 'Admin Create Product page', ->
       page.errorMessagesIn '#editProduct', (errorMsgs) ->
         errorMsgs.name.should.equal 'O nome é obrigatório.'
         errorMsgs.price.should.equal 'O preço é obrigatório.'
-        errorMsgs.picture.should.equal 'A imagem deve ser uma url.'
         errorMsgs.height.should.equal 'A altura deve ser um número.'
         errorMsgs.width.should.equal 'A largura deve ser um número.'
         errorMsgs.depth.should.equal 'A profundidade deve ser um número.'
@@ -97,7 +96,6 @@ describe 'Admin Create Product page', ->
         productOnDb = productsOnDb[0]
         productOnDb.name.should.equal product.name
         productOnDb.price.should.equal product.price
-        productOnDb.picture.should.equal product.picture
         productOnDb.tags.should.be.like product.tags
         productOnDb.description.should.equal product.description
         productOnDb.dimensions.height.should.equal product.dimensions.height
@@ -129,7 +127,6 @@ describe 'Admin Create Product page', ->
         productOnDb = productsOnDb[0]
         productOnDb.name.should.equal productNoShippingInfo2.name
         productOnDb.price.should.equal productNoShippingInfo2.price
-        productOnDb.picture.should.equal productNoShippingInfo2.picture
         productOnDb.tags.should.be.like productNoShippingInfo2.tags
         productOnDb.description.should.equal productNoShippingInfo2.description
         productOnDb.dimensions.height.should.equal productNoShippingInfo2.dimensions.height
