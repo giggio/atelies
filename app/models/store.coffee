@@ -76,6 +76,9 @@ storeSchema.methods.setPagseguro = (set) ->
     @pmtGateways.pagseguro = undefined
   else
     @pmtGateways.pagseguro = set
+storeSchema.methods.updateFromSimple = (simple) ->
+  for attr in ['name', 'email', 'description', 'homePageDescription', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl', 'autoCalculateShipping', 'homePageImage', 'banner', 'flyer']
+    @[attr] = simple[attr] if simple[attr]? and simple[attr] isnt ''
 
 Store = mongoose.model 'store', storeSchema
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
