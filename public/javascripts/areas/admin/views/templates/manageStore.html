@@ -1,156 +1,158 @@
-<form id="manageStoreBlock">
-  {{#if new}}
-  <h2>Crie sua loja:</h2>
-  {{else}}
-  <h2>Atualize sua loja:</h2>
-  {{/if}}
-  <div class="control-group">
-    <label class="control-label" for="name">Nome:</label>
-    <div class="controls">
-      <input type="text" id="name" name="name" class="span6" data-error-style="tooltip" />
+<div id="manageStoreBlock">
+  <form id="manageStore">
+    {{#if new}}
+    <h2>Crie sua loja:</h2>
+    {{else}}
+    <h2>Atualize sua loja:</h2>
+    {{/if}}
+    <div class="control-group">
+      <label class="control-label" for="name">Nome:</label>
+      <div class="controls">
+        <input type="text" id="name" name="name" class="span6" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="email">Email:</label>
-    <div class="controls">
-      <input type="text" id="email" name="email" class="span6" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="email">Email:</label>
+      <div class="controls">
+        <input type="text" id="email" name="email" class="span6" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  {{#if new}}
-  <div class="control-group">
-    <div class="controls">
-      <input type="checkbox" id="autoCalculateShipping" name="autoCalculateShipping" checked>calcular o frete automaticamente usando o serviço dos correios</input>
+    {{#if new}}
+    <div class="control-group">
+      <div class="controls">
+        <input type="checkbox" id="autoCalculateShipping" name="autoCalculateShipping" checked>calcular o frete automaticamente usando o serviço dos correios</input>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-      <input type="checkbox" id="pagseguro" name="pagseguro" checked>utilizar PagSeguro nas vendas</input>
+    <div class="control-group">
+      <div class="controls">
+        <input type="checkbox" id="pagseguro" name="pagseguro" checked>utilizar PagSeguro nas vendas</input>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="pagseguroEmail">Email do PagSeguro:</label>
-    <div class="controls">
-      <input type="text" id="pagseguroEmail" name="pagseguroEmail" class="span6" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="pagseguroEmail">Email do PagSeguro:</label>
+      <div class="controls">
+        <input type="text" id="pagseguroEmail" name="pagseguroEmail" class="span6" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="pagseguroToken">Token do PagSeguro:</label>
-    <div class="controls">
-      <input type="text" id="pagseguroToken" name="pagseguroToken" class="span6" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="pagseguroToken">Token do PagSeguro:</label>
+      <div class="controls">
+        <input type="text" id="pagseguroToken" name="pagseguroToken" class="span6" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  {{/if}}
-  <div class="control-group">
-    <label>Descrição:</label>
-    <div class="controls">
-      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
+    {{/if}}
+    <div class="control-group">
+      <label>Descrição:</label>
+      <div class="controls">
+        <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label>Descrição da Home Page:</label>
-    <div class="controls">
-      <textarea id="homePageDescription" name="homePageDescription" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
+    <div class="control-group">
+      <label>Descrição da Home Page:</label>
+      <div class="controls">
+        <textarea id="homePageDescription" name="homePageDescription" rows="8" cols="150" data-error-style="tooltip" class="span6"></textarea>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Telefone:</label>
-    <div class="controls">
-      <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="name">Telefone:</label>
+      <div class="controls">
+        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(11) 1234-4567 - ramal xyz" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Cidade:</label>
-    <div class="controls">
-      <input type="text" id="city" name="city" class="span4" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="name">Cidade:</label>
+      <div class="controls">
+        <input type="text" id="city" name="city" class="span4" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Estado:</label>
-    <div class="controls">
-      <select id="state" name="state" class="span1">
-        <option>AC</option> 
-        <option>AL</option>
-        <option>AP</option>
-        <option>AM</option>
-        <option>BA</option>
-        <option>CE</option>
-        <option>DF</option>
-        <option>ES</option>
-        <option>GO</option>
-        <option>MA</option>
-        <option>MT</option>
-        <option>MS</option>
-        <option>MG</option>
-        <option>PR</option>
-        <option>PB</option>
-        <option>PA</option>
-        <option>PE</option>
-        <option>PI</option>
-        <option>RJ</option>
-        <option>RN</option>
-        <option>RS</option>
-        <option>RO</option>
-        <option>RR</option>
-        <option>SC</option>
-        <option>SE</option>
-        <option>SP</option>
-        <option>TO</option>
-      </select>
+    <div class="control-group">
+      <label class="control-label" for="name">Estado:</label>
+      <div class="controls">
+        <select id="state" name="state" class="span1">
+          <option>AC</option> 
+          <option>AL</option>
+          <option>AP</option>
+          <option>AM</option>
+          <option>BA</option>
+          <option>CE</option>
+          <option>DF</option>
+          <option>ES</option>
+          <option>GO</option>
+          <option>MA</option>
+          <option>MT</option>
+          <option>MS</option>
+          <option>MG</option>
+          <option>PR</option>
+          <option>PB</option>
+          <option>PA</option>
+          <option>PE</option>
+          <option>PI</option>
+          <option>RJ</option>
+          <option>RN</option>
+          <option>RS</option>
+          <option>RO</option>
+          <option>RR</option>
+          <option>SC</option>
+          <option>SE</option>
+          <option>SP</option>
+          <option>TO</option>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="zip">CEP:</label>
-    <div class="controls">
-      <input type="text" id="zip" name="zip" class="span3" data-error-style="tooltip" />
+    <div class="control-group">
+      <label class="control-label" for="zip">CEP:</label>
+      <div class="controls">
+        <input type="text" id="zip" name="zip" class="span3" data-error-style="tooltip" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Outro site:</label>
-    <div class="controls">
-      <input type="text" id="otherUrl" name="otherUrl" class="span6" data-error-style="tooltip" placeholder="Digite outro endereço na internet, começando com http://..."/>
+    <div class="control-group">
+      <label class="control-label" for="name">Outro site:</label>
+      <div class="controls">
+        <input type="text" id="otherUrl" name="otherUrl" class="span6" data-error-style="tooltip" placeholder="Digite outro endereço na internet, começando com http://..."/>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja):</label>
-    <div class="controls">
-      <img id="showBanner" /><br />
-      Substitua: <input type="file" id="banner" name="banner" />
+    <div class="control-group">
+      <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja):</label>
+      <div class="controls">
+        <img id="showBanner" /><br />
+        Substitua: <input type="file" id="banner" name="banner" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page):</label>
-    <div class="controls">
-      <img id="showHomePageImage" /><br />
-      Substitua: <input type="file" id="homePageImage" name="homePageImage" />
+    <div class="control-group">
+      <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page):</label>
+      <div class="controls">
+        <img id="showHomePageImage" /><br />
+        Substitua: <input type="file" id="homePageImage" name="homePageImage" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site):</label>
-    <div class="controls">
-      <img id="showFlyer" /><br />
-      Substitua: <input type="file" id="flyer" name="flyer" />
+    <div class="control-group">
+      <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site):</label>
+      <div class="controls">
+        <img id="showFlyer" /><br />
+        Substitua: <input type="file" id="flyer" name="flyer" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Twitter (não coloque novamente twitter.com):</label>
-    <div class="controls">
-      http://twitter.com/<input type="text" id="urlTwitter" name="urlTwitter" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoTwitter" />
+    <div class="control-group">
+      <label class="control-label" for="name">Twitter (não coloque novamente twitter.com):</label>
+      <div class="controls">
+        http://twitter.com/<input type="text" id="urlTwitter" name="urlTwitter" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoTwitter" />
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="name">Facebook (não coloque novamente facebook.com):</label>
-    <div class="controls">
-      http://www.facebook.com/<input type="text" id="urlFacebook" name="urlFacebook" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoFacebook" />
+    <div class="control-group">
+      <label class="control-label" for="name">Facebook (não coloque novamente facebook.com):</label>
+      <div class="controls">
+        http://www.facebook.com/<input type="text" id="urlFacebook" name="urlFacebook" class="span3" data-error-style="tooltip" placeholder="SuaLojaNoFacebook" />
+      </div>
     </div>
-  </div>
-  {{#if new}}
-  <input id="updateStore" type="button" class="btn btn-primary" value="Criar Loja"/>
-  {{else}}
-  <input id="updateStore" type="button" class="btn btn-primary" value="Atualizar Loja"/>
+    {{#if new}}
+    <input id="updateStore" type="button" class="btn btn-primary" value="Criar Loja"/>
+    {{else}}
+    <input id="updateStore" type="button" class="btn btn-primary" value="Atualizar Loja"/>
+  </form>
   {{/if}}
   {{#unless new}}
     {{#if autoCalculateShipping}}
-      <input id="unsetAutoCalculateShipping" type="button" class="btn btn-primary" value="Desligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
+      <input id="unsetAutoCalculateShipping" type="button" class="btn btn-primary footerButton" value="Desligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
       <div id="modalConfirmAutoCalculateShipping" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -168,7 +170,7 @@
       </div>
       <div id="pagseguroOptions"></div>
     {{else}}
-      <input id="setAutoCalculateShipping" type="button" class="btn btn-primary" value="Ligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
+      <input id="setAutoCalculateShipping" type="button" class="btn btn-primary footerButton" value="Ligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
       <div id="modalConfirmAutoCalculateShipping" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -197,4 +199,4 @@
       </div>
     {{/if}}
   {{/unless}}
-</form>
+</div>
