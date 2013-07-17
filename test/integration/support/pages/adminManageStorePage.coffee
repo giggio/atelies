@@ -13,15 +13,12 @@ module.exports = class AdminManageStorePage extends Page
     @type "#manageStoreBlock #email", store.email
     @type "#manageStoreBlock #description", store.description
     @type "#manageStoreBlock #homePageDescription", store.homePageDescription
-    @type "#manageStoreBlock #homePageImage", store.homePageImage
     @type "#manageStoreBlock #urlFacebook", store.urlFacebook
     @type "#manageStoreBlock #urlTwitter", store.urlTwitter
     @type "#manageStoreBlock #phoneNumber", store.phoneNumber
     @type "#manageStoreBlock #city", store.city
     @type "#manageStoreBlock #zip", store.zip
     @type "#manageStoreBlock #otherUrl", store.otherUrl
-    @type "#manageStoreBlock #banner", store.banner
-    @type "#manageStoreBlock #flyer", store.flyer
     store.autoCalculateShipping = true unless store.autoCalculateShipping?
     store.pmtGateways = {} unless store.pmtGateways?
     async.parallel [

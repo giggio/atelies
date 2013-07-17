@@ -44,16 +44,13 @@ describe 'Admin manage store page', ->
         expect(store.email).to.equal otherStore.email
         expect(store.description).to.equal otherStore.description
         expect(store.homePageDescription).to.equal otherStore.homePageDescription
-        expect(store.homePageImage).to.equal otherStore.homePageImage
-        expect(store.urlFacebook).to.equal otherStore.urlFacebook
-        expect(store.urlTwitter).to.equal otherStore.urlTwitter
+        expect(store.urlFacebook).to.be.undefined
+        expect(store.urlTwitter).to.be.undefined
         expect(store.phoneNumber).to.equal otherStore.phoneNumber
         expect(store.city).to.equal otherStore.city
         expect(store.state).to.equal otherStore.state
         expect(store.zip).to.equal otherStore.zip
         expect(store.otherUrl).to.equal otherStore.otherUrl
-        expect(store.banner).to.equal otherStore.banner
-        expect(store.flyer).to.equal otherStore.flyer
         expect(store.autoCalculateShipping).to.equal true
         done()
     it 'kept the store to the user', (done) ->
@@ -79,7 +76,7 @@ describe 'Admin manage store page', ->
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
             page.clickSetAutoCalculateShippingButton ->
-              page.clickConfirmSetAutoCalculateShippingButton done
+              page.clickConfirmSetAutoCalculateShippingButton -> waitSeconds 10, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
@@ -98,7 +95,7 @@ describe 'Admin manage store page', ->
         expect(store.autoCalculateShipping).to.equal false
         done()
 
-  describe 'updates a store to autocalculate shipping if the store has products with shipping info', (done) ->
+  describe 'updates store to autocalculate shipping if the store has products with shipping info', (done) ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -129,7 +126,7 @@ describe 'Admin manage store page', ->
         expect(store.autoCalculateShipping).to.equal true
         done()
 
-  describe 'updates a store to turn off autocalculate shipping', (done) ->
+  describe 'updates the store to turn off autocalculate shipping', (done) ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -160,7 +157,7 @@ describe 'Admin manage store page', ->
         expect(store.autoCalculateShipping).to.equal false
         done()
 
-  describe 'updates a store to use pagseguro', (done) ->
+  describe 'updates to use pagseguro', (done) ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -224,7 +221,7 @@ describe 'Admin manage store page', ->
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
         done()
 
-  describe 'updates a store to do not use pagseguro', ->
+  describe 'updates to do not use pagseguro', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -264,9 +261,7 @@ describe 'Admin manage store page', ->
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), (error) ->
             return done error if error
-            emptyStore.banner = "abc"
             emptyStore.email = "bla"
-            emptyStore.flyer = "mng"
             emptyStore.otherUrl = "def"
             page.setFieldsAs emptyStore, ->
               page.clickUpdateStoreButton done
@@ -284,8 +279,6 @@ describe 'Admin manage store page', ->
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
         msgs.zip.should.equal "Informe o CEP."
-        msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
-        msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
         done()
     it 'did not update the store with wrong info', (done) ->
@@ -297,7 +290,6 @@ describe 'Admin manage store page', ->
         expect(store.email).to.equal exampleStore.email
         expect(store.description).to.equal exampleStore.description
         expect(store.homePageDescription).to.equal exampleStore.homePageDescription
-        expect(store.homePageImage).to.equal exampleStore.homePageImage
         expect(store.urlFacebook).to.equal exampleStore.urlFacebook
         expect(store.urlTwitter).to.equal exampleStore.urlTwitter
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
@@ -305,7 +297,5 @@ describe 'Admin manage store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
-        expect(store.banner).to.equal exampleStore.banner
-        expect(store.flyer).to.equal exampleStore.flyer
         expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         done()

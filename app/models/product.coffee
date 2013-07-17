@@ -50,16 +50,37 @@ productSchema.methods.toSimplerProduct = ->
   url: @url(), slug: @slug
 productSchema.methods.updateFromSimpleProduct = (simple) ->
   for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
-    @[attr] = simple[attr] if simple[attr]? and simple[attr] isnt ''
-  @tags = simple.tags?.split ',' if simple.tags? and simple.tags isnt ''
+    if simple[attr]? and simple[attr] isnt ''
+      @[attr] = simple[attr]
+    else
+      @[attr] = undefined
+  if simple.tags? and simple.tags isnt ''
+    @tags = simple.tags?.split ','
+  else
+    @tags = []
   @dimensions = {} unless @dimensions?
   for attr in ['height', 'width', 'depth']
-    @dimensions[attr] = simple[attr] if simple[attr]? and simple[attr] isnt ''
+    if simple[attr]? and simple[attr] isnt ''
+      @dimensions[attr] = simple[attr]
+    else
+      @dimensions[attr] = undefined
   @shipping = dimensions: {} unless @shipping?
-  @shipping.dimensions.height = simple.shippingHeight if simple.shippingHeight? and simple.shippingHeight isnt ''
-  @shipping.dimensions.width = simple.shippingWidth if simple.shippingWidth? and simple.shippingWidth isnt ''
-  @shipping.dimensions.depth = simple.shippingDepth if simple.shippingDepth? and simple.shippingDepth isnt ''
-  @shipping.weight = simple.shippingWeight if simple.shippingWeight? and simple.shippingWeight isnt ''
+  if simple.shippingHeight? and simple.shippingHeight isnt ''
+    @shipping.dimensions.height = simple.shippingHeight
+  else
+    @shipping.dimensions.height = undefined
+  if simple.shippingWidth? and simple.shippingWidth isnt ''
+    @shipping.dimensions.width = simple.shippingWidth
+  else
+    @shipping.dimensions.width = undefined
+  if simple.shippingDepth? and simple.shippingDepth isnt ''
+    @shipping.dimensions.depth = simple.shippingDepth
+  else
+    @shipping.dimensions.depth = undefined
+  if simple.shippingWeight? and simple.shippingWeight isnt ''
+    @shipping.weight = simple.shippingWeight
+  else
+    @shipping.weight = undefined
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
   has = shipping.weight? and shipping.dimensions? and

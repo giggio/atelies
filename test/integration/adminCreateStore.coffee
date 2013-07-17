@@ -37,7 +37,6 @@ describe 'Admin create store page', ->
         expect(store.email).to.equal exampleStore.email
         expect(store.description).to.equal exampleStore.description
         expect(store.homePageDescription).to.equal exampleStore.homePageDescription
-        expect(store.homePageImage).to.equal exampleStore.homePageImage
         expect(store.urlFacebook).to.equal exampleStore.urlFacebook
         expect(store.urlTwitter).to.equal exampleStore.urlTwitter
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber
@@ -45,8 +44,6 @@ describe 'Admin create store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
-        expect(store.banner).to.equal exampleStore.banner
-        expect(store.flyer).to.equal exampleStore.flyer
         expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         expect(store.pmtGateways.pagseguro.email).to.be.equal exampleStore.pmtGateways.pagseguro.email
         expect(store.pmtGateways.pagseguro.token).to.be.equal exampleStore.pmtGateways.pagseguro.token
@@ -66,10 +63,8 @@ describe 'Admin create store page', ->
         exampleStore = generator.store.empty()
         page.loginFor userSeller._id, ->
           page.visit ->
-            exampleStore.banner = "abc"
             exampleStore.email = "bla"
             exampleStore.zip = ''
-            exampleStore.flyer = "mng"
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore, ->
               page.clickUpdateStoreButton done
@@ -87,8 +82,6 @@ describe 'Admin create store page', ->
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
         msgs.zip.should.equal "Informe o CEP."
-        msgs.banner.should.equal "Informe um link válido para o banner, começando com http ou https."
-        msgs.flyer.should.equal "Informe um link válido para o flyer, começando com http ou https."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
         done()
     it 'did not create a store with missing info', (done) ->
