@@ -53,7 +53,7 @@ define [
       homePageImageVal = $('#homePageImage').val()
       if (typeof bannerVal isnt 'undefined' and bannerVal isnt '') or (typeof flyerVal isnt 'undefined' and flyerVal isnt '') or (typeof homePageImageVal isnt 'undefined' and homePageImageVal isnt '')
         @model.hasFiles = true
-        @model.form = $('#manageStoreBlock')
+        @model.form = $('#manageStore')
       else
         @model.hasFiles = true
         @model.hasFiles = false
