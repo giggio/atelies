@@ -54,3 +54,24 @@ describe 'Store', ->
       token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     store.setPagseguro off
     expect(JSON.stringify(store.pmtGateways.pagseguro)).to.equal undefined
+  it 'updates from simple', ->
+    store = new Store()
+    simple =
+      name: 'a'
+      phoneNumber: 'b'
+      city: 'c'
+      state: 'd'
+      otherUrl: 'e'
+      banner: 'f'
+      pagseguro: true
+      pagseguroEmail: 'pagseguro@a.com'
+      pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+    store.updateFromSimple simple
+    store.name.should.equal simple.name
+    store.phoneNumber.should.equal simple.phoneNumber
+    store.city.should.equal simple.city
+    store.state.should.equal simple.state
+    store.otherUrl.should.equal simple.otherUrl
+    store.banner.should.equal simple.banner
+    #store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
+    #store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'

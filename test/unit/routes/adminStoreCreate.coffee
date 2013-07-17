@@ -6,9 +6,9 @@ describe 'AdminStoreCreateRoute', ->
   routes = null
   before -> routes = new Routes()
   describe 'Access is granted', ->
-    store = res = body = user = null
+    store = res = body = user = req = null
     before ->
-      store = pmtGateways: [], save: (cb) -> cb()
+      store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy()
       user = isSeller: true, verified: true
       user.createStore = -> store
       user.save = (cb) -> cb null, user
@@ -30,12 +30,7 @@ describe 'AdminStoreCreateRoute', ->
     it 'access allowed and return code is correct', ->
       res.json.should.have.been.calledWith 201, store
     it 'store is created correctly', ->
-      store.name.should.equal body.name
-      store.phoneNumber.should.equal body.phoneNumber
-      store.city.should.equal body.city
-      store.state.should.equal body.state
-      store.otherUrl.should.equal body.otherUrl
-      store.banner.should.equal body.banner
+      store.updateFromSimple.should.have.been.calledWith req.body
       store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
       store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     it 'added store to the user', ->

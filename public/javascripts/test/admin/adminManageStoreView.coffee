@@ -30,8 +30,6 @@ define [
         manageStoreView.$("#state").val(exampleStore.state).change()
         manageStoreView.$("#zip").val(exampleStore.zip).change()
         manageStoreView.$("#otherUrl").val(exampleStore.otherUrl).change()
-        manageStoreView.$("#banner").val(exampleStore.banner).change()
-        manageStoreView.$("#flyer").val(exampleStore.flyer).change()
         manageStoreView.$("#autoCalculateShipping").prop('checked', true).change()
         manageStoreView.$("#pagseguro").prop('checked', true).change()
         manageStoreView.$("#pagseguroEmail").val(exampleStore.pagseguroEmail).change()
@@ -50,8 +48,6 @@ define [
         expect(storePassedIn.state).to.equal exampleStore.state
         expect(storePassedIn.zip).to.equal exampleStore.zip
         expect(storePassedIn.otherUrl).to.equal exampleStore.otherUrl
-        expect(storePassedIn.banner).to.equal exampleStore.banner
-        expect(storePassedIn.flyer).to.equal exampleStore.flyer
         expect(storePassedIn.autoCalculateShipping).to.be.true
         expect(storePassedIn.pagseguro).to.be.true
         expect(storePassedIn.pagseguroEmail).to.equal exampleStore.pagseguroEmail
@@ -79,8 +75,6 @@ define [
         goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
         manageStoreView.render()
         manageStoreView.$("#otherUrl").val('abc').change()
-        manageStoreView.$("#banner").val('def').change()
-        manageStoreView.$("#flyer").val('ghi').change()
         $('#updateStore', el).trigger 'click'
       after ->
         ajaxSpy.restore()
@@ -93,8 +87,6 @@ define [
         $("#name ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe o nome da loja.'
         $("#city ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe a cidade.'
         $("#otherUrl ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe um link válido para o outro site, começando com http ou https.'
-        $("#banner ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o banner, começando com http ou https."
-        $("#flyer ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o flyer, começando com http ou https."
 
     describe 'Updating Store', ->
       newStore = stores = null
@@ -123,8 +115,6 @@ define [
           manageStoreView.$("#state").val(newStore.state).change()
           manageStoreView.$("#zip").val(newStore.zip).change()
           manageStoreView.$("#otherUrl").val(newStore.otherUrl).change()
-          manageStoreView.$("#banner").val(newStore.banner).change()
-          manageStoreView.$("#flyer").val(newStore.flyer).change()
           $('#updateStore', el).trigger 'click'
         after ->
           $.ajax.restore()
@@ -139,8 +129,6 @@ define [
           expect(storePassedIn.state).to.equal newStore.state
           expect(storePassedIn.zip).to.equal newStore.zip
           expect(storePassedIn.otherUrl).to.equal newStore.otherUrl
-          expect(storePassedIn.banner).to.equal newStore.banner
-          expect(storePassedIn.flyer).to.equal newStore.flyer
         it 'updates store to stores in the bootstrapped model', ->
           expect(global.adminStoresBootstrapModel.stores[0]).to.be.like newStore
 
@@ -157,8 +145,6 @@ define [
           manageStoreView.$("#name").val('').change()
           manageStoreView.$("#city").val('').change()
           manageStoreView.$("#otherUrl").val('abc').change()
-          manageStoreView.$("#banner").val('def').change()
-          manageStoreView.$("#flyer").val('ghi').change()
           $('#updateStore', el).trigger 'click'
         after ->
           ajaxSpy.restore()
@@ -171,5 +157,3 @@ define [
           $("#name ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe o nome da loja.'
           $("#city ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe a cidade.'
           $("#otherUrl ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe um link válido para o outro site, começando com http ou https.'
-          $("#banner ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o banner, começando com http ou https."
-          $("#flyer ~ .tooltip .tooltip-inner", el).text().should.equal "Informe um link válido para o flyer, começando com http ou https."

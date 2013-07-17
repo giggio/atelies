@@ -21,6 +21,7 @@ describe 'AdminStoreUpdateRoute', ->
             email: 'pagseguro@a.com'
             token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
         save: sinon.stub().yields()
+        updateFromSimple: sinon.spy()
       sinon.stub(Store, 'findById').yields null, store
       user =
         isSeller: true
@@ -37,9 +38,7 @@ describe 'AdminStoreUpdateRoute', ->
     it 'access allowed and return code is correct', ->
       res.send.should.have.been.calledWith 200
     it 'store is updated correctly', ->
-      expect(store[k]).to.be.like v if k isnt 'random' for k, v of exampleStore
-    it "does not try to change the store's slug", ->
-      expect(store.slug).to.be.undefined
+      store.updateFromSimple.should.have.been.calledWith req.body
     it 'store should had been saved', ->
       store.save.should.have.been.called
 
