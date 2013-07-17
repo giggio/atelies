@@ -50,7 +50,7 @@ define [
     _updateProduct: =>
       if @model.isValid true
         pictureVal = $('#picture').val()
-        if typeof val isnt 'undefined' and val isnt ''
+        if typeof pictureVal isnt 'undefined' and pictureVal isnt ''
           @model.hasFiles = true
           @model.form = $('#editProduct')
         else
