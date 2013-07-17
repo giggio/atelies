@@ -29,7 +29,6 @@ class Routes
     store.email = body.email
     store.description = body.description
     store.homePageDescription = body.homePageDescription
-    #store.homePageImage = body.homePageImage
     store.urlFacebook = body.urlFacebook
     store.urlTwitter = body.urlTwitter
     store.phoneNumber = body.phoneNumber
@@ -37,8 +36,6 @@ class Routes
     store.state = body.state
     store.zip = body.zip
     store.otherUrl = body.otherUrl
-    #store.banner = body.banner
-    #store.flyer = body.flyer
     store.autoCalculateShipping = body.autoCalculateShipping
     if body.pagseguro
       store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
@@ -55,12 +52,6 @@ class Routes
               store[field] = fileUrl
               cb()
         actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
-        #actions = []
-        #actions.push (cb) =>
-          #uploader.upload "#{store.slug}/#{req.files.homePageImage.name}", req.files.homePageImage, (err, fileUrl) ->
-          #return cb err
-          #product.homePageImage = fileUrl
-          #cb()
         async.parallel actions, cb
       else
         cb()
@@ -83,7 +74,6 @@ class Routes
       store.email = body.email
       store.description = body.description
       store.homePageDescription = body.homePageDescription
-      store.homePageImage = body.homePageImage
       store.urlFacebook = body.urlFacebook
       store.urlTwitter = body.urlTwitter
       store.phoneNumber = body.phoneNumber
@@ -91,12 +81,26 @@ class Routes
       store.state = body.state
       store.zip = body.zip
       store.otherUrl = body.otherUrl
-      store.banner = body.banner
-      store.flyer = body.flyer
-      store.save (err) ->
-        if err?
-          return res.json 400
-        res.send 200, store
+      saveIf = (cb) =>
+        if req.files?
+          uploader = new FileUploader()
+          createAction = (field) =>
+            (cb) =>
+              return cb() unless req.files[field]?
+              uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+                return cb err if err?
+                store[field] = fileUrl
+                cb()
+          actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+          async.parallel actions, cb
+        else
+          cb()
+      saveIf (err) =>
+        return res.json 400, err if err?
+        store.save (err) ->
+          if err?
+            return res.json 400
+          res.send 200, store
   adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
   adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
   _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
