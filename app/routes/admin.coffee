@@ -142,6 +142,7 @@ class Routes
       if file?
         uploader = new FileUploader()
         uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
+          res.json 400, err if err?
           product.picture = fileUrl
           saveProduct()
       else
