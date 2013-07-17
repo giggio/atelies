@@ -135,18 +135,19 @@ class Routes
       product.updateFromSimpleProduct req.body
       product.storeName = store.name
       product.storeSlug = store.slug
-      saveProduct = =>
+      file = req.files?.picture
+      saveIf = (cb) =>
+        if file?
+          uploader = new FileUploader()
+          uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
+            res.json 400, err if err?
+            product.picture = fileUrl
+            cb()
+        else
+          cb()
+      saveIf =>
         product.save (err) =>
           res.send 201, product.toSimpleProduct()
-      file = req.files?.picture
-      if file?
-        uploader = new FileUploader()
-        uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
-          res.json 400, err if err?
-          product.picture = fileUrl
-          saveProduct()
-      else
-        saveProduct()
   
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug, (err, products) ->
