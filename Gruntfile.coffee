@@ -162,6 +162,7 @@ module.exports = (grunt) ->
                 'epoxy'
                 'caroufredsel'
                 'imagesloaded'
+                'jqform'
                 'backboneConfig'
                 'converters'
                 'jqueryValidationExt'

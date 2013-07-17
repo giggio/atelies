@@ -20,7 +20,7 @@
     "backbone.epoxy": "https://raw.github.com/gmac/backbone.epoxy/4249aa3f361be337c3251a124c6512579f294d16/backbone.epoxy.js",
     "carouFredSel": "git://github.com/gilbitron/carouFredSel.git",
     "imagesloaded": "~2.1.2",
-    "jquery.form": "http://malsup.github.io/jquery.form.js"
+    "jquery-form": "~3.37.0"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

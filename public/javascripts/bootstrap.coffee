@@ -11,7 +11,7 @@ requirejs.config
     epoxy: 'lib/backbone.epoxy/index'
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
-    jqform: 'lib/jquery.form/index'
+    jqform: 'lib/jquery-form/jquery.form'
   shim:
     'handlebars':
       deps: ['jquery']

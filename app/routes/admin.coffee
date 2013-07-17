@@ -46,13 +46,13 @@ class Routes
       else
         cb()
     saveIf (err) =>
-      return res.json 400, err if err?
+      return res.json 400, error: uploadError: err if err?
       store.save (err) ->
-        return res.json 400, err if err?
+        return res.json 400, error: saveError: err if err?
         req.user.save (err) ->
           if err?
             store.remove()
-            return res.json 400
+            return res.json 400, error: userSaveError: err
           res.json 201, store
   
   adminStoreUpdate: (req, res) ->
