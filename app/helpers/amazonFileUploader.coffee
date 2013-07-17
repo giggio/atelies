@@ -6,7 +6,7 @@ module.exports = class AmazonFileUploader
     AWS.config.update accessKeyId: process.env.AWSAccessKeyId, secretAccessKey: process.env.AWSSecretKey, region: "us-east-1"
     @s3 = new AWS.S3()
   upload: (fileName, file, cb) ->
-    fileParams = Bucket: 'atelies', Key: fileName, Body: fs.createReadStream(file.path)
+    fileParams = Bucket: 'atelies', Key: fileName, Body: fs.createReadStream(file.path), ContentType: file.type
     @s3.putObject fileParams, (err, data) =>
       return cb err if err?
       url = "https://s3.amazonaws.com/atelies/#{fileName}"
