@@ -9,6 +9,7 @@ values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 FileUploader    = require '../helpers/amazonFileUploader'
+async           = require 'async'
 
 class Routes
   constructor: (@env) ->
@@ -28,7 +29,7 @@ class Routes
     store.email = body.email
     store.description = body.description
     store.homePageDescription = body.homePageDescription
-    store.homePageImage = body.homePageImage
+    #store.homePageImage = body.homePageImage
     store.urlFacebook = body.urlFacebook
     store.urlTwitter = body.urlTwitter
     store.phoneNumber = body.phoneNumber
@@ -36,20 +37,42 @@ class Routes
     store.state = body.state
     store.zip = body.zip
     store.otherUrl = body.otherUrl
-    store.banner = body.banner
-    store.flyer = body.flyer
+    #store.banner = body.banner
+    #store.flyer = body.flyer
     store.autoCalculateShipping = body.autoCalculateShipping
     if body.pagseguro
       store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
       store.pmtGateways.pagseguro.email = body.pagseguroEmail
       store.pmtGateways.pagseguro.token = body.pagseguroToken
-    store.save (err) ->
+    saveIf = (cb) =>
+      if req.files?
+        uploader = new FileUploader()
+        createAction = (field) =>
+          (cb) =>
+            return cb() unless req.files[field]?
+            uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+              return cb err if err?
+              store[field] = fileUrl
+              cb()
+        actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+        #actions = []
+        #actions.push (cb) =>
+          #uploader.upload "#{store.slug}/#{req.files.homePageImage.name}", req.files.homePageImage, (err, fileUrl) ->
+          #return cb err
+          #product.homePageImage = fileUrl
+          #cb()
+        async.parallel actions, cb
+      else
+        cb()
+    saveIf (err) =>
       return res.json 400, err if err?
-      req.user.save (err) ->
-        if err?
-          store.remove()
-          return res.json 400
-        res.json 201, store
+      store.save (err) ->
+        return res.json 400, err if err?
+        req.user.save (err) ->
+          if err?
+            store.remove()
+            return res.json 400
+          res.json 201, store
   
   adminStoreUpdate: (req, res) ->
     Store.findById req.params.storeId, (err, store) ->

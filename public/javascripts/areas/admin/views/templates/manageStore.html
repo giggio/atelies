@@ -1,4 +1,4 @@
-<div id="manageStoreBlock">
+<form id="manageStoreBlock">
   {{#if new}}
   <h2>Crie sua loja:</h2>
   {{else}}
@@ -67,7 +67,7 @@
   <div class="control-group">
     <label class="control-label" for="name">Estado:</label>
     <div class="controls">
-      <select id="state" class="span1">
+      <select id="state" name="state" class="span1">
         <option>AC</option> 
         <option>AL</option>
         <option>AP</option>
@@ -113,19 +113,22 @@
   <div class="control-group">
     <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja):</label>
     <div class="controls">
-      <input type="text" id="banner" name="banner" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+      <img id="showBanner" /><br />
+      Substitua: <input type="file" id="banner" name="banner" />
     </div>
   </div>
   <div class="control-group">
     <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page):</label>
     <div class="controls">
-      <input type="text" id="homePageImage" name="homePageImage" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+      <img id="showHomePageImage" /><br />
+      Substitua: <input type="file" id="homePageImage" name="homePageImage" />
     </div>
   </div>
   <div class="control-group">
     <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site):</label>
     <div class="controls">
-      <input type="text" id="flyer" name="flyer" class="span6" data-error-style="tooltip" placeholder="Digite o endereço de uma imagem que já está na internet, começando com http://..." />
+      <img id="showFlyer" /><br />
+      Substitua: <input type="file" id="flyer" name="flyer" />
     </div>
   </div>
   <div class="control-group">
@@ -194,4 +197,4 @@
       </div>
     {{/if}}
   {{/unless}}
-</div>
+</form>

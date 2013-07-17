@@ -24,6 +24,9 @@ define [
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
         '#pagseguro':'checked:pagseguro'
+        "#showFlyer": "attr:{src:flyer}"
+        "#showHomePageImage": "attr:{src:homePageImage}"
+        "#showBanner": "attr:{src:banner}"
       unless isnew
         delete @bindings['#autoCalculateShipping']
         delete @bindings['#pagseguro']
@@ -45,6 +48,15 @@ define [
         return true
     _updateStore: =>
       return unless @model.isValid true
+      bannerVal = $('#banner').val()
+      flyerVal = $('#flyer').val()
+      homePageImageVal = $('#homePageImage').val()
+      if (typeof bannerVal isnt 'undefined' and bannerVal isnt '') or (typeof flyerVal isnt 'undefined' and flyerVal isnt '') or (typeof homePageImageVal isnt 'undefined' and homePageImageVal isnt '')
+        @model.hasFiles = true
+        @model.form = $('#manageStoreBlock')
+      else
+        @model.hasFiles = true
+        @model.hasFiles = false
       @model.save @model.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw message:'error when saving'
     _storeCreated: (store) =>
       update = false

@@ -1,7 +1,18 @@
 define [
   'backbone'
+  'jqform'
 ], (Backbone) ->
   class Store extends Backbone.Open.Model
+    sync: (method, model, opt) ->
+      return Backbone.sync.apply @, arguments unless @hasFiles
+      methodMap = create:'POST', update:'PUT', patch:'PATCH', delete:'DELETE', read:'GET'
+      type = methodMap[method]
+      options = type: type, url: @url()
+      options.success = (data, code, xhr) =>
+        opt.success data if opt.success?
+      options.error = (xhr, error, type) ->
+        opt.error error if opt.error?
+      @form.ajaxSubmit options
     initialize: ->
       @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged
     _autoCalculateShippingChanged: ->
@@ -41,12 +52,6 @@ define [
         msg: 'Informe o CEP.'
       otherUrl:
         [{pattern:'url', msg:'Informe um link válido para o outro site, começando com http ou https.'}
-         {required: false}]
-      banner:
-        [{pattern:'url', msg:"Informe um link válido para o banner, começando com http ou https."}
-         {required: false}]
-      flyer:
-        [{pattern:'url', msg:"Informe um link válido para o flyer, começando com http ou https."}
          {required: false}]
       pagseguroEmail:
         [{required: true, msg:'O e-mail é obrigatório.'}
