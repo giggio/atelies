@@ -1,4 +1,4 @@
 define [
-  'backbone'
+  'backboneConfig'
 ], (Backbone) ->
   class Product extends Backbone.Open.Model

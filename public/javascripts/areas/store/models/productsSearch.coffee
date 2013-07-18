@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
 ], (Backbone) ->
   class ProductsSearch extends Backbone.Collection
     initialize: (opt) ->

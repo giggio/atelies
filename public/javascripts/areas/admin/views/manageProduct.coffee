@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   'underscore'
   'text!./templates/manageProduct.html'

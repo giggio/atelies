@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
   './order'
 ], (Backbone, Order) ->
   class Orders extends Backbone.Collection

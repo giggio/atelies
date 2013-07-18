@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'backbone'
+  'backboneConfig'
   '../models/cartItem'
   'text!./templates/cartItem.html'
   'backboneValidation'

@@ -1,7 +1,7 @@
 define [
   'jquery'
   'underscore'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   'text!./templates/_productsSearchResults.html'
 ], ($, _, Backbone, Handlebars, homeProductsTemplate) ->

@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   'text!./templates/admin.html'
 ], ($, Backbone, Handlebars, adminTemplate) ->

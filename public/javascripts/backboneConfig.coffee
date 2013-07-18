@@ -73,3 +73,4 @@ define [
     regex: (value, attr, customValue, model) ->
       r = new RegExp customValue
       r.test value
+  return Backbone

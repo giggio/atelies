@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
 ], (Backbone) ->
   class CartItem extends Backbone.Open.Model
     idAttribute: "_id"

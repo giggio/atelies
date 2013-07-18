@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
   'areas/admin/routes'
 ],
 (Backbone, routes) ->

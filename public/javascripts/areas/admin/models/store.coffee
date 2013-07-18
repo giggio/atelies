@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
   'jqform'
 ], (Backbone) ->
   class Store extends Backbone.Open.Model

@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   'text!./templates/userNotVerified.html'
 ], ($, Backbone, Handlebars, userNotVerifiedTemplate) ->

@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
 ], (Backbone) ->
   class Order extends Backbone.Open.Model
     parse: (resp, opt) ->

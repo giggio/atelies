@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   '../models/storePagseguro'
   'text!./templates/manageStorePagseguro.html'

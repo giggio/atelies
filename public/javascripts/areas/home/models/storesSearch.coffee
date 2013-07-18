@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
   './store'
 ], (Backbone, Store) ->
   class StoresSearch extends Backbone.Collection

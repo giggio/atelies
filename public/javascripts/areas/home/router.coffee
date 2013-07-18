@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
   './routes'
 ],
 (Backbone, routes) ->

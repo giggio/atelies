@@ -1,5 +1,5 @@
 define [
-  'backbone'
+  'backboneConfig'
 ], (Backbone) ->
   class StorePagseguro extends Backbone.Open.Model
     defaults:

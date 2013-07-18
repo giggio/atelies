@@ -1,7 +1,7 @@
 define [
   'jquery'
   'underscore'
-  'backbone'
+  'backboneConfig'
   'handlebars'
   'text!./templates/home.html'
   './homeStores'
