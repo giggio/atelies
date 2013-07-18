@@ -34,5 +34,5 @@ valuesPresent =
     sendMail: values.test?.sendMail?
 console.log "Config values present: #{JSON.stringify valuesPresent}"
 console.log "Config values: #{JSON.stringify values}" if values.debug
-throw new Error("Missing config values.") if values.allValuesPresent() is false and values.debug is off
+throw new Error("Missing config values.") if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
 module.exports = values
