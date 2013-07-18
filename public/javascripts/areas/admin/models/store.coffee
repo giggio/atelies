@@ -15,6 +15,9 @@ define [
       @form.ajaxSubmit options
     initialize: ->
       @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged
+      @bind 'change:pagseguro', @_pagseguroChanged
+    _pagseguroChanged: ->
+      @set 'autoCalculateShipping', true if @get 'pagseguro'
     _autoCalculateShippingChanged: ->
       @set('pagseguro', false) unless @get 'autoCalculateShipping'
     defaults:

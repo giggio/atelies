@@ -27,7 +27,9 @@ define [
         "#showFlyer": "attr:{src:flyer}"
         "#showHomePageImage": "attr:{src:homePageImage}"
         "#showBanner": "attr:{src:banner}"
-      unless isnew
+      if isnew
+        @model.on 'change:pagseguro', => @_pagseguroChanged()
+      else
         delete @bindings['#autoCalculateShipping']
         delete @bindings['#pagseguro']
         delete @bindings['#pagseguroEmail']
