@@ -115,6 +115,7 @@ module.exports = class Page
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
+  isVisible: (selector, cb) -> @eval "return $('#{selector}').is(':visible')", cb #or could use isDiplayed
   parallel: (actions, cb) ->
     flow = webdriver.promise.createFlow (f) =>
       for action in actions

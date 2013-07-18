@@ -57,3 +57,4 @@ module.exports = class AdminManageStorePage extends Page
   clickConfirmUnsetPagseguroButton: (cb) => @eval "$('#confirmUnsetPagseguro').click()", cb
   pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
   pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"
+  storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"

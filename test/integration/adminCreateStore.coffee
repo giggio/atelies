@@ -89,3 +89,27 @@ describe 'Admin create store page', ->
         return done error if error
         expect(stores.length).to.equal 0
         done()
+  describe 'does not create a store with a existing name', (done) ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        userSeller = generator.user.c()
+        userSeller.save()
+        exampleStore = generator.store.a()
+        exampleStore.save()
+        page.loginFor userSeller._id, ->
+          page.visit ->
+            page.setFieldsAs exampleStore, ->
+              page.clickUpdateStoreButton done
+    it 'is at the store create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#createStore"
+        done()
+    it 'does not show store created message', (done) ->
+      page.hasMessage (itDoes) ->
+        itDoes.should.be.false
+        done()
+    it 'shows store name already exists', (done) ->
+      page.storeNameExistsModalVisible (itDoes) ->
+        itDoes.should.be.true
+        done()

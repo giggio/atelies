@@ -57,7 +57,11 @@ define [
       else
         @model.hasFiles = true
         @model.hasFiles = false
-      @model.save @model.attributes, success: (model) => @_storeCreated model, error: (model, xhr, opt) -> console.log 'error';throw message:'error when saving'
+      @model.save @model.attributes,
+        success: (model) => @_storeCreated model
+        error: (model, xhr, opt) ->
+          return $('#nameAlreadyExists').modal() if xhr.status is 409
+          throw message:'error when saving'
     _storeCreated: (store) =>
       update = false
       existingStore = _.findWhere adminStoresBootstrapModel.stores, _id: store.get('_id')
