@@ -13,6 +13,7 @@ exports.start = (cb) ->
   less                = require 'connect-less'
   Postman             = require './models/postman'
   MongoStore          = require('connect-mongo')(express)
+  config              = require './helpers/config'
 
   switch app.get("env")
     when 'development'
@@ -22,9 +23,9 @@ exports.start = (cb) ->
       app.use express.errorHandler()
       app.locals.pretty = on
       everyauth.debug = on
-      if process.env.SEND_MAIL?
+      if config.test.sendMail
         console.log "SENDING MAIL!"
-        Postman.configure process.env.AWSAccessKeyId, process.env.AWSSecretKey
+        Postman.configure config.aws.accessKeyId, config.aws.secretKey
       else
         Postman.dryrun = on
       sessionStore = new express.session.MemoryStore()
@@ -47,9 +48,9 @@ exports.start = (cb) ->
       publicDir = path.join __dirname, '..', "public"
     when "production"
       isProduction = true
-      cookieSecret = process.env.APP_COOKIE_SECRET
-      Postman.configure process.env.AWSAccessKeyId, process.env.AWSSecretKey
-      connStr = process.env.MONGOLAB_URI
+      cookieSecret = config.appCookieSecret
+      Postman.configure config.aws.accessKeyId, config.aws.secretKey
+      connStr = config.connectionString
       sessionStore = new MongoStore url:connStr
       domain = 'atelies.com.br'
       port = 3000
@@ -57,7 +58,7 @@ exports.start = (cb) ->
 
   global.DEBUG = !isProduction
 
-  app.set "port", process.env.PORT or port
+  app.set "port", config.port or port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
   app.set 'domain', domain

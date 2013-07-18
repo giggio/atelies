@@ -3,6 +3,7 @@ everyauth     = require 'everyauth'
 User          = require '../models/user'
 values        = require './values'
 Recaptcha     = require('recaptcha').Recaptcha
+config        = require './config'
 
 exports.configure = (app) ->
   everyauth.password.configure
@@ -23,7 +24,7 @@ exports.configure = (app) ->
         else
           redirectTo: ''
       addRecaptcha = =>
-        recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY
+        recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey
         locals.recaptchaForm = recaptcha.toHTML()
       if req.session.carefulLogin
         addRecaptcha()
@@ -56,7 +57,7 @@ exports.configure = (app) ->
           cb success
       validateCaptcha = (data, cb) =>
         return cb "O valor da imagem não foi informado." unless typeof data.remoteip?
-        recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY, remoteip: data.remoteip, challenge: data.captchaChallenge, response: data.captchaResponse
+        recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, remoteip: data.remoteip, challenge: data.captchaChallenge, response: data.captchaResponse
         recaptcha.verify (success, errorCode) ->
           error = null
           error = "O valor informado para a imagem está errado." unless success
@@ -92,7 +93,7 @@ exports.configure = (app) ->
         @redirect res, '/'
     #performRedirect: (res, location) -> res.redirect location, 302
     registerLocals: (req, res) ->
-      recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY
+      recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey
       states: values.states
       userParams: req.body
       recaptchaForm: recaptcha.toHTML()
@@ -116,7 +117,7 @@ exports.configure = (app) ->
             remoteip:  newUserAttrs.remoteip
             challenge: newUserAttrs.captchaChallenge
             response:  newUserAttrs.captchaResponse
-          recaptcha = new Recaptcha process.env.RECAPTCHA_PUBLIC_KEY, process.env.RECAPTCHA_PRIVATE_KEY, data
+          recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, data
           recaptcha.verify (success, errorCode) ->
             errors.push "Código incorreto." unless success
             cb.fulfill errors
