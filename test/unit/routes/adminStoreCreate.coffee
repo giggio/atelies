@@ -1,13 +1,20 @@
-Routes          = require '../../../app/routes/admin'
+SandboxedModule = require 'sandboxed-module'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminStoreCreateRoute', ->
   routes = null
-  before -> routes = new Routes()
   describe 'Access is granted', ->
     store = res = body = user = req = null
     before ->
+      class StoreStub
+        @nameExists: (name, cb) ->
+          @nameLookedAfter = name
+          setImmediate -> cb null, false
+      Routes = SandboxedModule.require '../../../app/routes/admin',
+        requires:
+          '../models/store': StoreStub
+      routes = new Routes()
       store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy()
       user = isSeller: true, verified: true
       user.createStore = -> store
@@ -39,6 +46,8 @@ describe 'AdminStoreCreateRoute', ->
       user.save.should.have.been.called
 
   describe 'Access is denied', ->
+    Routes = require '../../../app/routes/admin'
+    before -> routes = new Routes()
     it 'denies access if the user isnt a seller and throws', ->
       req = user: {isSeller:false}, loggedIn: true
       expect( -> routes.adminStoreCreate req, null).to.throw AccessDenied
@@ -52,3 +61,44 @@ describe 'AdminStoreCreateRoute', ->
       res = redirect: sinon.spy()
       routes.adminStoreCreate req, res
       res.redirect.should.have.been.calledWith 'account/mustVerifyUser'
+
+  describe "Can't create store with the same name", ->
+    StoreStub = store = res = body = user = req = null
+    before ->
+      class StoreStub
+        @nameExists: (name, cb) ->
+          @nameLookedAfter = name
+          setImmediate -> cb null, true
+      Routes = SandboxedModule.require '../../../app/routes/admin',
+        requires:
+          '../models/store': StoreStub
+      routes = new Routes()
+      store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy()
+      user = isSeller: true, verified: true
+      user.createStore = -> store
+      user.save = (cb) -> cb null, user
+      sinon.spy user, 'createStore'
+      sinon.spy user, 'save'
+      req = loggedIn: true, user: user, body:
+        name: 'Some Name'
+        phoneNumber: 'b'
+        city: 'c'
+        state: 'd'
+        otherUrl: 'e'
+        banner: 'f'
+        pagseguro: true
+        pagseguroEmail: 'pagseguro@a.com'
+        pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+      body = req.body
+      res = json: sinon.spy()
+      routes.adminStoreCreate req, res
+    it 'access allowed and return code is correct', ->
+      res.json.should.have.been.calledWith 409, error: user: "Loja já existe com esse nome."
+    it 'searched store name', ->
+      StoreStub.nameLookedAfter.should.equal 'Some Name'
+    it 'store isnt created', ->
+      store.updateFromSimple.should.not.have.been.called
+    it 'added store to the user', ->
+      user.createStore.should.not.have.been.called
+    it 'saved the user', ->
+      user.save.should.not.have.been.called

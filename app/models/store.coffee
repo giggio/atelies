@@ -84,6 +84,9 @@ storeSchema.methods.updateFromSimple = (simple) ->
       @[attr] = undefined
 
 Store = mongoose.model 'store', storeSchema
+Store.nameExists = (name, cb) ->
+  slug = slug name.toLowerCase(), "_"
+  Store.findBySlug slug, (err, store) -> cb err, store?
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
 Store.findWithProductsBySlug = (slug, cb) ->
   Store.findBySlug slug, (err, store) ->

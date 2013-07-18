@@ -23,37 +23,40 @@ class Routes
       res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple()), user: req.user.toSimpleUser()
 
   adminStoreCreate: (req, res) ->
-    store = req.user.createStore()
     body = req.body
-    store.updateFromSimple body
-    store.autoCalculateShipping = body.autoCalculateShipping
-    if body.pagseguro
-      store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
-      store.pmtGateways.pagseguro.email = body.pagseguroEmail
-      store.pmtGateways.pagseguro.token = body.pagseguroToken
-    saveIf = (cb) =>
-      if req.files?
-        uploader = new FileUploader()
-        createAction = (field) =>
-          (cb) =>
-            return cb() unless req.files[field]?
-            uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
-              return cb err if err?
-              store[field] = fileUrl
-              cb()
-        actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
-        async.parallel actions, cb
-      else
-        cb()
-    saveIf (err) =>
-      return res.json 400, error: uploadError: err if err?
-      store.save (err) ->
-        return res.json 400, error: saveError: err if err?
-        req.user.save (err) ->
-          if err?
-            store.remove()
-            return res.json 400, error: userSaveError: err
-          res.json 201, store
+    name = body.name
+    Store.nameExists name, (err, itExists) ->
+      return res.json 409, error: user: "Loja já existe com esse nome." if itExists
+      store = req.user.createStore()
+      store.updateFromSimple body
+      store.autoCalculateShipping = body.autoCalculateShipping
+      if body.pagseguro
+        store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
+        store.pmtGateways.pagseguro.email = body.pagseguroEmail
+        store.pmtGateways.pagseguro.token = body.pagseguroToken
+      saveIf = (cb) =>
+        if req.files?
+          uploader = new FileUploader()
+          createAction = (field) =>
+            (cb) =>
+              return cb() unless req.files[field]?
+              uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+                return cb err if err?
+                store[field] = fileUrl
+                cb()
+          actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+          async.parallel actions, cb
+        else
+          cb()
+      saveIf (err) =>
+        return res.json 400, error: uploadError: err if err?
+        store.save (err) ->
+          return res.json 400, error: saveError: err if err?
+          req.user.save (err) ->
+            if err?
+              store.remove()
+              return res.json 400, error: userSaveError: err
+            res.json 201, store
   
   adminStoreUpdate: (req, res) ->
     Store.findById req.params.storeId, (err, store) ->
