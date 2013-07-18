@@ -12,11 +12,11 @@ define [
       if hash is "" then 'home' else hash
     initialize: ->
       Backbone.history.start()
-      @logger.log event:'navigation', category:'admin', action: @getHash()
+      @logger.log event:'navigation', category: @logCategory, action: @getHash()
       @_redirectIfRequested()
       Backbone.history.on 'route', (router, route, params) =>
         console.log "navigated to: " + Backbone.history.getFragment()
-        @logger.log event:'navigation', category:'admin', action: @getHash()
+        @logger.log event:'navigation', category: @logCategory, action: @getHash()
     _redirectIfRequested: ->
       if boostrapedRedirect?
         Backbone.history.navigate boostrapedRedirect, trigger: true

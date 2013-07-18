@@ -5,6 +5,7 @@ define [
 (Backbone, routes) ->
   class Router extends Backbone.Open.Router
     _routes: routes
+    logCategory: 'account'
     routes:
       '': routes.home
       'orders': routes.orders

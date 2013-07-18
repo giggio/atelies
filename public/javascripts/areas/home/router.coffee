@@ -4,6 +4,7 @@ define [
 ],
 (Backbone, routes) ->
   class Router extends Backbone.Open.Router
+    logCategory: 'home'
     _routes: routes
     routes:
       '': routes.home
