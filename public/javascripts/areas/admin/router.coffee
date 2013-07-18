@@ -3,7 +3,8 @@ define [
   'areas/admin/routes'
 ],
 (Backbone, routes) ->
-  class Router extends Backbone.Router
+  class Router extends Backbone.Open.Router
+    _routes: routes
     routes:
       '': routes.admin
       'createStore': routes.createStore
@@ -13,5 +14,3 @@ define [
       'createProduct/:storeSlug': routes.createProduct
       'orders': routes.orders
       'orders/:orderId': routes.order
-    initialize: ->
-      Backbone.history.start()

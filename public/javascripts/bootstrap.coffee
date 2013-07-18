@@ -12,6 +12,7 @@ requirejs.config
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
     jqform: 'lib/jquery-form/jquery.form'
+    ga: '//www.google-analytics.com/analytics'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -36,3 +37,8 @@ requirejs.config
     'jqform':
       deps: ['jquery']
       exports: '$.fn.ajaxSubmit'
+    'ga':
+      init: ->
+        window.GoogleAnalyticsObject='ga' if window?
+        return undefined
+      exports: 'ga'

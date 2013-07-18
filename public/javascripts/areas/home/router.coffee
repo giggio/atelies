@@ -3,7 +3,8 @@ define [
   './routes'
 ],
 (Backbone, routes) ->
-  class Router extends Backbone.Router
+  class Router extends Backbone.Open.Router
+    _routes: routes
     routes:
       '': routes.home
       'home': routes.home
@@ -11,5 +12,3 @@ define [
       'closeSearchStore': routes.closeSearchStore
       'searchStores/:searchTerm': routes.searchStore
       'searchProducts/:searchTerm': routes.searchProducts
-    initialize: ->
-      Backbone.history.start()
