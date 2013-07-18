@@ -14,6 +14,7 @@ describe 'AdminStoreUpdateRoute', ->
       exampleStore._id = '9876'
       store =
         _id: '9876'
+        name: exampleStore.name
         zip: '01234-567'
         autoCalculateShipping: true
         pmtGateways:
@@ -70,3 +71,45 @@ describe 'AdminStoreUpdateRoute', ->
       it 'throws if not signed in', ->
         req = loggedIn: false
         expect( -> routes.adminStoreUpdate req, null).to.throw AccessDenied
+
+  describe "Can't update store with the same name", ->
+    exampleStore = store = req = res = body = user = null
+    before ->
+      exampleStore = generator.store.a().toJSON()
+      delete exampleStore.nameKeywords
+      delete exampleStore.slug
+      exampleStore._id = '9876'
+      store =
+        _id: '9876'
+        name: exampleStore.name + 'aaa'
+        zip: '01234-567'
+        autoCalculateShipping: true
+        pmtGateways:
+          pagseguro:
+            email: 'pagseguro@a.com'
+            token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+        save: sinon.stub().yields()
+        updateFromSimple: sinon.spy()
+      sinon.stub(Store, 'findById').yields null, store
+      sinon.stub(Store, 'nameExists').yields null, true
+      user =
+        isSeller: true
+        stores: ['9876']
+        hasStore: -> true
+      params = storeId: '9876'
+      req = loggedIn: true, user: user, params: params, body: exampleStore
+      res = json: sinon.spy()
+      routes.adminStoreUpdate req, res
+    after ->
+      Store.findById.restore()
+      Store.nameExists.restore()
+    it 'looked for correct store', ->
+      Store.findById.should.have.been.calledWith store._id
+    it 'looked for correct name', ->
+      Store.nameExists.should.have.been.calledWith exampleStore.name
+    it 'returned conflict 409', ->
+      res.json.should.have.been.calledWith 409
+    it 'store is updated correctly', ->
+      store.updateFromSimple.should.not.have.been.called
+    it 'store should had been saved', ->
+      store.save.should.not.have.been.called

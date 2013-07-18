@@ -9,8 +9,9 @@ define [
 ], ($, ManageStoreView, Store, Stores) ->
   el = $('<div></div>')
   describe 'ManageStoreView', ->
+    manageStoreView = null
     describe 'Valid Store gets created', ->
-      exampleStore = store = goToStoreManagePageSpy = storePassedIn = null
+      ajaxSpy = exampleStore = store = goToStoreManagePageSpy = storePassedIn = null
       before ->
         exampleStore = generatorc.store.a()
         global.adminStoresBootstrapModel = stores:[]
@@ -19,7 +20,7 @@ define [
         stores = new Stores [store]
         user = verified: true
         manageStoreView = new ManageStoreView el:el, store:store, user: user
-        sinon.stub $, "ajax", (opt) ->
+        ajaxSpy = sinon.stub $, "ajax", (opt) ->
           storePassedIn = JSON.parse opt.data
           opt.success exampleStore
         goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
@@ -36,8 +37,9 @@ define [
         manageStoreView.$("#pagseguroToken").val(exampleStore.pagseguroToken).change()
         $('#updateStore', el).trigger 'click'
       after ->
-        $.ajax.restore()
+        ajaxSpy.restore()
         goToStoreManagePageSpy.restore()
+        manageStoreView.close()
       it 'navigates to store manage page', ->
         expect(goToStoreManagePageSpy).to.have.beenCalled
         expect(goToStoreManagePageSpy.firstCall.args[0].get('slug')).to.equal exampleStore.slug
@@ -77,6 +79,7 @@ define [
         manageStoreView.$("#otherUrl").val('abc').change()
         $('#updateStore', el).trigger 'click'
       after ->
+        manageStoreView.close()
         ajaxSpy.restore()
         goToStoreManagePageSpy.restore()
       it 'does not navigate to store manage page', ->
@@ -89,7 +92,7 @@ define [
         $("#otherUrl ~ .tooltip .tooltip-inner", el).text().should.equal 'Informe um link válido para o outro site, começando com http ou https.'
 
     describe 'Updating Store', ->
-      newStore = stores = null
+      ajaxSpy = newStore = stores = null
       describe 'Valid Store gets updated', ->
         goToStoreManagePageSpy = storePassedIn = null
         store = generatorc.store.a()
@@ -104,7 +107,7 @@ define [
           stores = new Stores [store]
           user = verified: true
           manageStoreView = new ManageStoreView el:el, store:stores.at(0), user:user
-          sinon.stub $, "ajax", (opt) ->
+          ajaxSpy = sinon.stub $, "ajax", (opt) ->
             storePassedIn = JSON.parse opt.data
             opt.success newStore
           goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
@@ -117,7 +120,8 @@ define [
           manageStoreView.$("#otherUrl").val(newStore.otherUrl).change()
           $('#updateStore', el).trigger 'click'
         after ->
-          $.ajax.restore()
+          manageStoreView.close()
+          ajaxSpy.restore()
           goToStoreManagePageSpy.restore()
         it 'navigates to store manage page', ->
           expect(goToStoreManagePageSpy).to.have.beenCalled
@@ -134,10 +138,10 @@ define [
 
       describe 'invalid Store does not get updated', ->
         ajaxSpy = goToStoreManagePageSpy = null
-        store = generatorc.store.a()
         before ->
+          store = generatorc.store.a()
           stores = new Stores [store]
-          user = isVerified: true
+          user = verified: true
           manageStoreView = new ManageStoreView el:el, store:stores.at(0), user:user
           ajaxSpy = sinon.spy $, "ajax"
           goToStoreManagePageSpy = sinon.spy manageStoreView, '_goToStoreManagePage'
@@ -147,6 +151,7 @@ define [
           manageStoreView.$("#otherUrl").val('abc').change()
           $('#updateStore', el).trigger 'click'
         after ->
+          manageStoreView.close()
           ajaxSpy.restore()
           goToStoreManagePageSpy.restore()
         it 'does not navigate to store manage page', ->

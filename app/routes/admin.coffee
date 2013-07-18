@@ -62,27 +62,35 @@ class Routes
     Store.findById req.params.storeId, (err, store) ->
       dealWith err
       throw new AccessDenied() unless req.user.hasStore store
-      store.updateFromSimple req.body
-      saveIf = (cb) =>
-        if req.files?
-          uploader = new FileUploader()
-          createAction = (field) =>
-            (cb) =>
-              return cb() unless req.files[field]?
-              uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
-                return cb err if err?
-                store[field] = fileUrl
-                cb()
-          actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
-          async.parallel actions, cb
+      checkIfNameCanBelongToStore = (cb) ->
+        if store.name isnt req.body.name
+          Store.nameExists req.body.name, (err, itExists) ->
+            return res.json 409, error: user: "Loja já existe com esse nome." if itExists
+            cb()
         else
           cb()
-      saveIf (err) =>
-        return res.json 400, err if err?
-        store.save (err) ->
-          if err?
-            return res.json 400
-          res.send 200, store
+      checkIfNameCanBelongToStore =>
+        store.updateFromSimple req.body
+        saveIf = (cb) =>
+          if req.files?
+            uploader = new FileUploader()
+            createAction = (field) =>
+              (cb) =>
+                return cb() unless req.files[field]?
+                uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+                  return cb err if err?
+                  store[field] = fileUrl
+                  cb()
+            actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+            async.parallel actions, cb
+          else
+            cb()
+        saveIf (err) =>
+          return res.json 400, err if err?
+          store.save (err) ->
+            if err?
+              return res.json 400
+            res.send 200, store
   adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
   adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
   _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
