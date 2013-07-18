@@ -48,8 +48,8 @@ define [
         required: true
         msg: 'Informe a cidade.'
       zip:
-        required: true
-        msg: 'Informe o CEP.'
+        zip: true
+        msg:'Informe o CEP no formato 99999-999.'
       otherUrl:
         [{pattern:'url', msg:'Informe um link válido para o outro site, começando com http ou https.'}
          {required: false}]

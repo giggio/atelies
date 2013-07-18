@@ -28,18 +28,17 @@ exports.cleanDB = (cb) ->
     conn.db.collections (err, cols) ->
       for col in cols
         unless col.collectionName.substring(0,6) is 'system'
-          console.info "dropping #{col.collectionName}" if process.env.DEBUG
+          #console.info "dropping #{col.collectionName}" if process.env.DEBUG
           col.drop()
       conn.close()
       cb()
 
 before (done) ->
   exports.cleanDB (err) ->
-    if err
-      done err
-      return
+    return done err if err?
+    process.env.DEBUG = on
     exports.startServer (err, server) ->
-      done err if err
+      done err if err?
       done()
 
 after ->

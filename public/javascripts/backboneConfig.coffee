@@ -65,3 +65,11 @@ define [
       @off()
       @stopListening()
     catch error
+  _.extend Backbone.Validation.validators,
+    zip: (value, attr, customValue, model) ->
+      unless /^\d{5}-\d{3}$/.test value
+        return "CEP inválido."
+      return undefined
+    regex: (value, attr, customValue, model) ->
+      r = new RegExp customValue
+      r.test value

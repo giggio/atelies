@@ -64,7 +64,7 @@ describe 'Admin create store page', ->
         page.loginFor userSeller._id, ->
           page.visit ->
             exampleStore.email = "bla"
-            exampleStore.zip = ''
+            exampleStore.zip = 'cep'
             exampleStore.otherUrl = "def"
             page.setFieldsAs exampleStore, ->
               page.clickUpdateStoreButton done
@@ -81,7 +81,7 @@ describe 'Admin create store page', ->
         msgs.name.should.equal "Informe o nome da loja."
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
-        msgs.zip.should.equal "Informe o CEP."
+        msgs.zip.should.equal "Informe o CEP no formato 99999-999."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
         done()
     it 'did not create a store with missing info', (done) ->
