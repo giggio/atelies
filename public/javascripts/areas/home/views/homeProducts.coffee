@@ -38,3 +38,17 @@ define [
       $ ->
         $('#products').imagesLoaded
           always: -> setTimeout doCarousel, 200
+        debounce = (wait, immediate, fn) -> _.debounce fn, wait, immediate
+        $('section#app-container').on 'mouseenter', '#carousel .product', ->
+          $('.productInfoBox', @).animate
+            top: '-=50'
+            height: '+=50'
+          , 500, ->
+            $('.storeName,.price', @).show()
+          $('.storeName,.price', @).show()
+        $('section#app-container').on 'mouseleave', '#carousel .product', ->
+          $('.productInfoBox', @).animate
+            top: '+=50'
+            height: '-=50'
+          , 500, ->
+            $('.storeName,.price', @).hide()

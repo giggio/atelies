@@ -139,28 +139,28 @@ section#main {
       display: block;
       overflow: hidden;
     }
-    .storeName {
-      padding-left: 5px;
-      float:left;
-      text-decoration:none;
-      color:white;
-    }
-    .price {
-      padding-right: 5px;
-      float:right;
-      text-decoration:none;
-      color:white;
-    }
     .productInfoBox {
       position: absolute;
-      top: -50+9+150px;
+      top: +50-50+9+150px;
+      height: 0px;
       width: 150px;
-      background-color: black;
+      background-color: white;
       display: block;
-      height: 50px;
       opacity:0.5;
-      /*filter:alpha(opacity=50);*/
-      .name {
+      .storeName, .price {
+        color: black;
+        display: none;
+      }
+      .storeName {
+        padding-left: 5px;
+        float:left;
+        text-decoration:none;
+      }
+      .price {
+        padding-right: 5px;
+        padding-top: 28px;
+        float:right;
+        text-decoration:none;
       }
     }
   }
