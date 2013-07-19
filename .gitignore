@@ -7,3 +7,4 @@ compiledPublic
 *.password
 *.css
 .elasticbeanstalk/
+seed/updateRemote

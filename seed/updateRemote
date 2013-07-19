@@ -1,5 +1,0 @@
-#!/bin/bash
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-coffee -c "${DIR}/basic.coffee"
-mongo --nodb --eval "var server='ds027908.mongolab.com:27908', dbName='heroku_app15830308', user='heroku_app15830308', password='vb27fttd3iie6qpv32p0oihv2';" "${DIR}/basic.js"
