@@ -1,7 +1,8 @@
 define [
   'backbone'
+  'underscore'
   './logger'
-], (Backbone, Logger) ->
+], (Backbone, _, Logger) ->
   class Router extends Backbone.Router
     constructor: ->
       @logger = new Logger()
@@ -12,11 +13,12 @@ define [
       if hash is "" then 'home' else hash
     initialize: ->
       Backbone.history.start()
-      @logger.log event:'navigation', category: @logCategory, action: @getHash()
+      @_log()
       @_redirectIfRequested()
-      Backbone.history.on 'route', (router, route, params) =>
-        console.log "navigated to: " + Backbone.history.getFragment()
-        @logger.log event:'navigation', category: @logCategory, action: @getHash()
+      Backbone.history.on 'route', => @_log()
+    _log: ->
+      console.log "navigated to: " + Backbone.history.getFragment() if console?
+      @logger.log category: 'navigation', action: "#{window.location.pathname}##{@getHash()}", label: @logCategory, field: page: window?.location?.pathname
     _redirectIfRequested: ->
       if boostrapedRedirect?
         Backbone.history.navigate boostrapedRedirect, trigger: true
