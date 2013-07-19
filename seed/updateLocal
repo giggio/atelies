@@ -2,4 +2,4 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 coffee -c "${DIR}/basic.coffee"
-mongo --nodb --eval "var server='localhost', dbName='openstore';" "${DIR}/basic.js"
+mongo --nodb --eval "var server='localhost', dbName='atelies';" "${DIR}/basic.js"
