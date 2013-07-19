@@ -163,6 +163,7 @@ module.exports = (grunt) ->
                 'caroufredsel'
                 'imagesloaded'
                 'jqform'
+                'jqexpander'
                 'backboneConfig'
                 'converters'
                 'jqueryValidationExt'

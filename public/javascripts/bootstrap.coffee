@@ -12,6 +12,7 @@ requirejs.config
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
     jqform: 'lib/jquery-form/jquery.form'
+    jqexpander: 'lib/jquery.expander/jquery.expander'
     ga: '//www.google-analytics.com/analytics'
   shim:
     'handlebars':
@@ -42,3 +43,6 @@ requirejs.config
         window.GoogleAnalyticsObject='ga' if window?
         return undefined
       exports: 'ga'
+    'jqexpander':
+      deps: ['jquery']
+      exports: '$.fn.expander'

@@ -1,8 +1,6 @@
 require ['bootstrap'], ->
   require [
-    './backboneConfig'
-    './loginPopover'
-    './jqueryValidationExt'
+    './baseLibs'
   ], ->
   require ['jquery', 'jqval'], ($) -> $ -> $('.validatable').validate
     highlight: (element) ->

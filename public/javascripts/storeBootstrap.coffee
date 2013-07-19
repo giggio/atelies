@@ -1,7 +1,5 @@
 require ['bootstrap'], ->
   require [
-    './backboneConfig'
-    './loginPopover'
-    './jqueryValidationExt'
+    './baseLibs'
   ], ->
   require ['areas/store/router'], (Router) -> new Router()
