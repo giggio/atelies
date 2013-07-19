@@ -5,8 +5,10 @@ node_js:
 before_script:
 - node_modules/bower/bin/bower install
 after_success:
+- if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then echo "This is a pull request. No deployment will be done."; exit 0; fi
+- if [[ "$TRAVIS_BRANCH" == "production" ]]; then git remote add heroku git@heroku.com:atelies.git; fi
+- if [[ "$TRAVIS_BRANCH" == "master" ]]; then git remote add heroku git@heroku.com:ateliesteste.git; fi
 - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-- git remote add heroku git@heroku.com:atelies.git
 - echo "Host heroku.com" >> ~/.ssh/config
 - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
 - echo "   CheckHostIP no" >> ~/.ssh/config
@@ -14,6 +16,10 @@ after_success:
 - yes | heroku keys:add
 - yes | git push heroku master
 script: node_modules/grunt-cli/bin/grunt travis
+branches:
+  only:
+    - master
+    - production
 env:
   global:
   - secure: ! 'nRhjqK0d3ttsH5d2mt0mODYBgcwSDpLMTi55ga8iawP2f6dshqNTjWrWzgkA
