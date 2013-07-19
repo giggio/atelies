@@ -52,7 +52,7 @@ exports.start = (cb) ->
       Postman.configure config.aws.accessKeyId, config.aws.secretKey
       connStr = config.connectionString
       sessionStore = new MongoStore url:connStr
-      domain = 'atelies.com.br'
+      domain = config.baseDomain
       port = 3000
       publicDir = path.join __dirname, '..', "compiledPublic"
 

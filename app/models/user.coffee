@@ -1,6 +1,7 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
 Store     = require './store'
+config    = require '../helpers/config'
 Postman   = require './postman'
 postman = new Postman()
 
@@ -57,7 +58,7 @@ userSchema.methods.toSimpleUser = ->
   verified: @verified
   isSeller: @isSeller
 userSchema.methods.sendMailConfirmRegistration = (cb) ->
-  registrationLink = "http://www.atelies.com.br/account/verifyUser/#{@_id}"
+  registrationLink = "http://www.#{config.baseDomain}/account/verifyUser/#{@_id}"
   body = "<html>
     <h1>Olá #{@name}!</h1>
     <h2>Bem vindo ao Ateliês!</h2>
