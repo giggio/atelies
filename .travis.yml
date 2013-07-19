@@ -14,7 +14,7 @@ after_success:
 - echo "   CheckHostIP no" >> ~/.ssh/config
 - echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
 - yes | heroku keys:add
-- yes | git push heroku master
+- yes | git push heroku "$TRAVIS_BRANCH":master
 script: node_modules/grunt-cli/bin/grunt travis
 branches:
   only:
