@@ -7,4 +7,10 @@ html
   body
     block layout
     block scriptsFooter
+      if DEBUG
+        script .
+          window.DEBUG = true
+      else
+        script .
+          window.DEBUG = false
 <!--App #{CONFIG.app.name} version #{CONFIG.app.version} running on node #{process.version} on environment #{CONFIG.serverEnvironment} -->

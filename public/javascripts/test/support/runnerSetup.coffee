@@ -1,6 +1,6 @@
 require '../../../../test/support/_specHelper'
 global.requirejs = require "requirejs"
-global.testing = true
+global.DEBUG = true
 os = require 'os'
 path = require 'path'
 
