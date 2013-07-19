@@ -1,7 +1,7 @@
 mongoose    = require 'mongoose'
 app         = require '../../../app/app'
 
-exports.localMongoDB = "mongodb://localhost/openstoretest"
+exports.localMongoDB = "mongodb://localhost/ateliesteste"
 
 exports.startServer = (cb) ->
   app.start (server) ->

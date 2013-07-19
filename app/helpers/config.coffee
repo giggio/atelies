@@ -1,3 +1,9 @@
+unless process.env.NODE_ENV is 'production'
+  process.env.BASE_DOMAIN = 'localhost.com'
+  process.env.AWS_IMAGES_BUCKET = "ateliesteste"
+  process.env.AWS_REGION = "us-east-1"
+  process.env.APP_COOKIE_SECRET = 'somesecret'
+
 values =
   appCookieSecret: process.env.APP_COOKIE_SECRET
   connectionString: process.env.MONGOLAB_URI
