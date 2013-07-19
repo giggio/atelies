@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test'
 global.DEBUG = true
+global.CONFIG = require '../../app/helpers/config'
 require '../../app/helpers/languageExtensions'
 require '../../app/globals'
 require './_addLibsHelper'
