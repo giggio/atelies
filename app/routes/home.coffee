@@ -42,6 +42,10 @@ class Routes
   terms: (req, res) -> res.render 'terms'
 
   faq: (req, res) -> res.render 'faq'
+
+  technology: (req, res) -> res.render 'technology'
+
+  iWantToBuy: (req, res) -> res.render 'iWantToBuy'
   
   storesSearch: (req, res) ->
     Store.searchByName req.params.searchTerm, (err, stores) ->
