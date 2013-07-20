@@ -40,7 +40,8 @@ class Routes
           createAction = (field) =>
             (cb) =>
               return cb() unless req.files[field]?
-              uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+              onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
+              uploader.upload onlineName, req.files[field], (err, fileUrl) ->
                 return cb err if err?
                 store[field] = fileUrl
                 cb()
@@ -77,10 +78,17 @@ class Routes
             createAction = (field) =>
               (cb) =>
                 return cb() unless req.files[field]?
-                uploader.upload "#{store.slug}/#{req.files[field].name}", req.files[field], (err, fileUrl) ->
+                onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
+                uploader.upload onlineName, req.files[field], (err, fileUrl) ->
                   return cb err if err?
-                  store[field] = fileUrl
-                  cb()
+                  deleteIf = (cbDelete) =>
+                    if store[field]?
+                      uploader.delete store[field], (err) => cbDelete()
+                    else
+                      cbDelete()
+                  deleteIf =>
+                    store[field] = fileUrl
+                    cb()
             actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
             async.parallel actions, cb
           else
@@ -128,9 +136,14 @@ class Routes
         file = req.files?.picture
         if file?
           uploader = new FileUploader()
-          uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
-            uploader.delete product.picture, (err) ->
-              product.picture = fileUrl
+          onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
+          uploader.upload onlineName, file, (err, fileUrl) ->
+            originalPicture = product.picture
+            product.picture = fileUrl
+            if originalPicture
+              uploader.delete originalPicture, (err) ->
+                saveProduct()
+            else
               saveProduct()
         else
           saveProduct()
@@ -156,7 +169,8 @@ class Routes
       saveIf = (cb) =>
         if file?
           uploader = new FileUploader()
-          uploader.upload "#{req.params.storeSlug}/#{file.name}", file, (err, fileUrl) ->
+          onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
+          uploader.upload onlineName, file, (err, fileUrl) ->
             res.json 400, err if err?
             product.picture = fileUrl
             cb()

@@ -77,7 +77,7 @@ storeSchema.methods.setPagseguro = (set) ->
   else
     @pmtGateways.pagseguro = set
 storeSchema.methods.updateFromSimple = (simple) ->
-  for attr in ['name', 'email', 'description', 'homePageDescription', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl', 'autoCalculateShipping', 'homePageImage', 'banner', 'flyer']
+  for attr in ['name', 'email', 'description', 'homePageDescription', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl', 'autoCalculateShipping']
     if simple[attr]? and simple[attr] isnt ''
       @[attr] = simple[attr]
     else

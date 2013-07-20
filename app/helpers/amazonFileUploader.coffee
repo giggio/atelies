@@ -1,6 +1,7 @@
 AWS         = require 'aws-sdk'
 fs          = require 'fs'
 config      = require './config'
+path        = require 'path'
 
 module.exports = class AmazonFileUploader
   constructor: ->
@@ -17,3 +18,8 @@ module.exports = class AmazonFileUploader
     key = fileName.replace "https://s3.amazonaws.com/#{@bucket}/", ""
     fileParams = Bucket: @bucket, Key: key
     @s3.deleteObject fileParams, (err, data) => cb err
+
+  randomName: (folder, file) ->
+    rand = -> Math.random() * Math.pow(10, 17)
+    ext = path.extname file
+    "#{folder}/#{rand()}#{rand()}#{ext}"

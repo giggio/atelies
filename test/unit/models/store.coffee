@@ -72,6 +72,5 @@ describe 'Store', ->
     store.city.should.equal simple.city
     store.state.should.equal simple.state
     store.otherUrl.should.equal simple.otherUrl
-    store.banner.should.equal simple.banner
     #store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
     #store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'

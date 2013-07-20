@@ -37,7 +37,6 @@ describe 'Product', ->
     product = new Product()
     product.updateFromSimpleProduct simpleProduct
     product.name.should.equal simpleProduct.name
-    product.picture.should.equal simpleProduct.picture
     product.price.should.equal simpleProduct.price
     product.tags.should.be.like simpleProduct.tags.split ','
     product.description.should.equal simpleProduct.description

@@ -49,7 +49,7 @@ productSchema.methods.toSimplerProduct = ->
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), slug: @slug
 productSchema.methods.updateFromSimpleProduct = (simple) ->
-  for attr in ['name', 'picture', 'price', 'description', 'weight', 'hasInventory', 'inventory']
+  for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
     if simple[attr]? and simple[attr] isnt ''
       @[attr] = simple[attr]
     else
