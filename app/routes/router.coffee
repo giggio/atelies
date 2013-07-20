@@ -24,6 +24,9 @@ exports.route = (app) ->
   app.get     "/faq",                                                       home.faq
   app.get     "/technology",                                                home.technology
   app.get     "/iWantToBuy",                                                home.iWantToBuy
+  app.get     "/iWantToSell",                                               home.iWantToSell
+  app.get     "/contribute",                                                home.contribute
+  app.get     "/donating",                                                  home.donating
   #home search
   app.get     "/stores/search/:searchTerm",                                 home.storesSearch
   app.get     "/products/search/:searchTerm",                               home.productsSearch

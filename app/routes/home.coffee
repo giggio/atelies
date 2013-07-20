@@ -46,6 +46,12 @@ class Routes
   technology: (req, res) -> res.render 'technology'
 
   iWantToBuy: (req, res) -> res.render 'iWantToBuy'
+
+  iWantToSell: (req, res) -> res.render 'iWantToSell'
+
+  contribute: (req, res) -> res.render 'contribute'
+
+  donating: (req, res) -> res.render 'donating'
   
   storesSearch: (req, res) ->
     Store.searchByName req.params.searchTerm, (err, stores) ->

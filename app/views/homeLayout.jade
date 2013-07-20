@@ -26,42 +26,32 @@ append layout
         footer
           .container
             .row
-              .span6
-                .page-header
-                  h2 Sobre o Ateliês
-                p
-                  |  Ateliês é um novo conceito de conexão entre o artista e seu cliente.
-                  |  Disponibilizamos um canal totalmente livre, sem fins lucrativos, taxa de adesão, mensalidade ou cobrança de porcentagem sobre suas vendas, porquê queremos ver a comunidade ligada às artes unida e auto organizada.
-                  |  Sim, este espaço é um sonho que se realiza. Seja protagonista desta nova história, temos várias ações que envolvem a divulgação e manutenção deste portal que precisam da sua participação, Junte-se a uma equipe, partilhe ideias, participe e divulgue eventos na sua área, realize um workshop, seja colunista em nosso blog, introduza novas ferramentas no site, contribua com material para nossa fan page, enfim, seja parte desse universo.
-                h3 Contato
-                strong Email
-                p: a(href="contato@atelies.com.br") contato@atelies.com.br
-              //-.span3
-                //-.page-header
-                  //-h2 Produtos
-                //-ul
-                  //-li: a Categorias
-                  //-li: a Tags
-                  //-li: a Busca lojas
-                  //-li: a Busca produtos
-              .span3
-                .page-header
-                  h2 Está comprando?
-                ul
-                  li: a(href="/account#orders") Meus pedidos
-                  li: a(href="/IWantToBuy") Quero comprar
-                  li: a(href="/faq#whybuyhere") Porque comprar aqui?
-              .span3
-                .page-header
-                  h2 Tenha uma loja
-                ul
-                  li: a(href="faq") Perguntas frequentes
-                  li: a(href="faq#gettingpaid") Pagamentos como preferir
-                  li: a(href="faq#howitoworks") Como funciona?
-                  li: a(href="faq#howmuch") Quanto custa?
-                  li: a(href="faq#howcanihelp") Como posso ajudar?
+              .span5
+                .featured O Ateliês quer ver a comunidade ligada às artes unida e auto organizada<br /> Seja protagonista dessa nova história
+                ul.ideas
+                  li: a(href="/contribute") Junte-se a nossa equipe
+                  li: a(href="/contribute") Partilhe ideias
+                  li: a(href="/contribute") Divulgue eventos na sua área
+                  li: a(href="/contribute") Seja colunista em nosso blog
+                  li: a(href="/contribute") Contribua com material para nossa fanpage
+                  li: a(href="/contribute") Introduza nossas ferramentas no site
+                .donation
+                  a(href="/donating").money $
+                  a(href="/donating").accepting Aceitamos doações
+              .span7
+                .featured Loja virtual hospedada no portal ideal:<br />
+                  | Sem intermediários entre você e o cliente<br />
+                  | Site sem fins lucrativos <br />
+                  | Sem taxas de adesão e manutenção
+                .securityNotice O Ateliês é protegido por criptografia SSL, a mesma usada nos bancos
+                img.pagseguro(src='/images/pagsegFooter.png')
+                .links
+                  a.link(href="/about") Sobre
+                  a.link(href="/IWantToBuy") Quero Comprar
+                  a.link(href="/IWantToSell") Quero vender
+                  a.link(href="/faq") Perguntas frequentes
 
-            p.text-center
+            .lastFooter
               &copy; 2013 - Ateliês
               &nbsp;|&nbsp;
               a(href="/terms") Termos de uso

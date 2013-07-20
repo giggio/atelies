@@ -27,6 +27,14 @@
 @largeScreenMinWidth: 981px;
 @smallScreen: ~"(max-width: @{smallScreenMaxWidth})";
 @largeScreen: ~"(min-width: @{largeScreenMinWidth})";
+@font-face {
+  font-family: summertime;
+  src: url("../fonts/summertime/Summerti.eot")
+}
+@font-face {
+  font-family: summertime;
+  src: url("../fonts/summertime/Summerti.ttf")
+}
 .relative {
   position: relative;
 }
@@ -192,26 +200,68 @@ section#main {
   }
 }
 footer {
-  background-color: @colorShade12;
+  background-color: @colorShade10;
   color: @colorShade2;
   padding-top: 20px;
   padding-bottom: 4px;
   margin: 0 -20px 0 -20px;
-  ul {
+  .featured {
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  ul.ideas {
     margin: 0;
     padding: 0;
     li {
-      border-bottom: 1px solid #404040;
+      text-align: center;
+      background-color: white;
       list-style: none outside none;
-      padding: 10px 0;
-      a{
-        color: @colorShade1;
-      }
-      a:hover{
-        color: white;
-        text-decoration: none;
+      height: 21px;
+      margin-bottom: 5px;
+      padding-top: 7px;
+      a {
+        font-family: summertime;
+        font-size: 30px;
+        color: @colorShade10;
       }
     }
+  }
+  .donation {
+    font-family: summertime;
+    margin-top: 15px;
+    background-color: white;
+    color: @colorShade10;
+    font-size: 60px;
+    height: 50px;
+    padding-top: 20px;
+    .accepting {
+      padding-left: 20px;
+      color: @colorShade10;
+    }
+    .money {
+      padding-left: 10px;
+      color: @colorShade11;
+      font-size: 124px;
+      bottom: -5px;
+      position: relative;
+    }
+  }
+  img.pagseguro {
+    padding-bottom: 20px;
+  }
+  .links {
+    text-align: center;
+    a.link {
+      font-size: 20px;
+      margin-right: 10px;
+      color: @colorShade2;
+    }
+  }
+  .securityNotice {
+    font-size: 16px;
+    text-align: center;
   }
 }
 section#app-container {
@@ -312,4 +362,8 @@ section#app-container {
   .question {
     font-weight: bold;
   }
+}
+.lastFooter {
+  margin-top: 30px;
+  text-align: center;
 }
