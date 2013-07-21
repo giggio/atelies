@@ -3,6 +3,7 @@
 
 [![Build Status](https://travis-ci.org/giggio/atelies.png)](https://travis-ci.org/giggio/atelies)
 [![Coverage Status](https://coveralls.io/repos/giggio/atelies/badge.png)](https://coveralls.io/r/giggio/atelies)
+[![Dependencies](https://gemnasium.com/giggio/atelies.png)](https://gemnasium.com/giggio/atelies)
 
 This is still a learning project. It will not be forever.
 
