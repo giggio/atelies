@@ -1,10 +1,11 @@
 nodemailer = require 'nodemailer'
 module.exports = class Postman
   @configure = (id, secret) ->
-    @smtp = nodemailer.createTransport "SES",
-      AWSAccessKeyID: id
-      AWSSecretKey: secret
-    @running = true
+    unless @dryrun
+      @smtp = nodemailer.createTransport "SES",
+        AWSAccessKeyID: id
+        AWSSecretKey: secret
+      @running = true
   @stop = -> @smtp.close() if @running
 
   @dryrun = off
