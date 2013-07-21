@@ -120,5 +120,7 @@ Product.getShippingWeightAndDimensions = (ids, cb) ->
   Product.find '_id': '$in': ids, '_id shipping', (err, products) ->
     cb err if err?
     cb null, products
+Product.pictureDimension = '600x600'
+Product.pictureThumbDimension = '150x150'
 
 module.exports = Product

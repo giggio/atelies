@@ -112,21 +112,21 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja):</label>
+      <label class="control-label" for="name">Imagem do banner (imagem que fica na parte de cima da loja, visível em todas as páginas da loja, esta imagem não será redimensionada, use do tamanho que preferir, recomendamos 1200x300):</label>
       <div class="controls">
         <img id="showBanner" /><br />
         Substitua: <input type="file" id="banner" name="banner" />
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page):</label>
+      <label class="control-label" for="name">Imagem da Home Page (imagem que fica acima dos produtos na home page da loja, só visível na home page, deve ter no mínimo 600x400 e será redimensionada para esses valores se for maior):</label>
       <div class="controls">
         <img id="showHomePageImage" /><br />
         Substitua: <input type="file" id="homePageImage" name="homePageImage" />
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site):</label>
+      <label class="control-label" for="name">Imagem do flyer (imagem que é exibida na home page do site, deve ter no mínimo 350x350 e será redimensionada para esses valores se for maior):</label>
       <div class="controls">
         <img id="showFlyer" /><br />
         Substitua: <input type="file" id="flyer" name="flyer" />
@@ -206,6 +206,18 @@
     </div>
     <div class="modal-body">
       <p>Outra loja já possui esse nome. Escolha um nome diferente.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+    </div>
+  </div>
+  <div id="sizeIsIncorrect" class="modal fade hide">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Não foi possível salvar</h3>
+    </div>
+    <div class="modal-body">
+      <p class="errorMsg">O tamanho de alguma das imagens está muito pequeno. Verifique e corrija.</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>

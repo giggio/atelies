@@ -37,20 +37,22 @@ class Routes
       saveIf = (cb) =>
         if req.files?
           uploader = new FileUploader()
-          createAction = (field) =>
+          createAction = (field, dimensionResize) =>
             (cb) =>
               return cb() unless req.files[field]?
               onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
-              uploader.upload onlineName, req.files[field], (err, fileUrl) ->
+              uploader.upload onlineName, req.files[field], dimensionResize, (err, fileUrl) ->
                 return cb err if err?
                 store[field] = fileUrl
                 cb()
-          actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+          actions = [ createAction('homePageImage', Store.homePageImageDimension), createAction('banner'), createAction('flyer', Store.flyerDimension) ]
           async.parallel actions, cb
         else
           cb()
       saveIf (err) =>
-        return res.json 400, error: uploadError: err if err?
+        if err?
+          return res.json 422, err if err.smallerThan?
+          return res.json 400, error: uploadError: err
         store.save (err) ->
           return res.json 400, error: saveError: err if err?
           req.user.save (err) ->
@@ -75,11 +77,11 @@ class Routes
         saveIf = (cb) =>
           if req.files?
             uploader = new FileUploader()
-            createAction = (field) =>
+            createAction = (field, dimensionResize) =>
               (cb) =>
                 return cb() unless req.files[field]?
                 onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
-                uploader.upload onlineName, req.files[field], (err, fileUrl) ->
+                uploader.upload onlineName, req.files[field], dimensionResize, (err, fileUrl) ->
                   return cb err if err?
                   deleteIf = (cbDelete) =>
                     if store[field]?
@@ -89,12 +91,14 @@ class Routes
                   deleteIf =>
                     store[field] = fileUrl
                     cb()
-            actions = [ createAction('homePageImage'), createAction('banner'), createAction('flyer') ]
+            actions = [ createAction('homePageImage', Store.homePageImageDimension), createAction('banner'), createAction('flyer', Store.flyerDimension) ]
             async.parallel actions, cb
           else
             cb()
         saveIf (err) =>
-          return res.json 400, err if err?
+          if err?
+            return res.json 422, err if err.smallerThan?
+            return res.json 400, error: uploadError: err
           store.save (err) ->
             if err?
               return res.json 400
@@ -137,25 +141,21 @@ class Routes
         if file?
           uploader = new FileUploader()
           onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
-          uploader.upload onlineName, file, (err, fileUrl) ->
-            originalPicture = product.picture
-            product.picture = fileUrl
-            if originalPicture
-              uploader.delete originalPicture, (err) ->
+          uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
+            return res.json 422, err if err?.smallerThan?
+            return res.json 400, err if err?
+            thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
+            uploader.upload thumbOnlineName, file, Product.pictureThumbDimension, (err, thumbUrl) ->
+              return res.json 400, err if err?
+              originalPicture = product.picture
+              product.picture = fileUrl
+              if originalPicture
+                uploader.delete originalPicture, (err) ->
+                  saveProduct()
+              else
                 saveProduct()
-            else
-              saveProduct()
         else
           saveProduct()
-  
-  adminProductDelete: (req, res) ->
-    Product.findById req.params.productId, (err, product) ->
-      dealWith err
-      Store.findBySlug product.storeSlug, (err, store) ->
-        dealWith err
-        throw new AccessDenied() unless req.user.hasStore store
-        product.remove (err) ->
-          res.send 204
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) ->
@@ -170,16 +170,29 @@ class Routes
         if file?
           uploader = new FileUploader()
           onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
-          uploader.upload onlineName, file, (err, fileUrl) ->
-            res.json 400, err if err?
-            product.picture = fileUrl
-            cb()
+          uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
+            return res.json 422, err if err?.smallerThan?
+            return res.json 400, err if err?
+            thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
+            uploader.upload thumbOnlineName, file, Product.pictureThumbDimension, (err, thumbUrl) ->
+              return res.json 400, err if err?
+              product.picture = fileUrl
+              cb()
         else
           cb()
       saveIf =>
         product.save (err) =>
           res.send 201, product.toSimpleProduct()
   
+  adminProductDelete: (req, res) ->
+    Product.findById req.params.productId, (err, product) ->
+      dealWith err
+      Store.findBySlug product.storeSlug, (err, store) ->
+        dealWith err
+        throw new AccessDenied() unless req.user.hasStore store
+        product.remove (err) ->
+          res.send 204
+
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug, (err, products) ->
       dealWith err

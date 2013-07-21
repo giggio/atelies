@@ -63,6 +63,9 @@ define [
         success: (model) => @_storeCreated model
         error: (model, xhr, opt) ->
           return $('#nameAlreadyExists').modal() if xhr.status is 409
+          if xhr.status is 422
+            $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
+            return $('#sizeIsIncorrect').modal()
           throw message:'error when saving'
     _storeCreated: (store) =>
       update = false

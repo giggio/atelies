@@ -56,7 +56,13 @@ define [
         else
           @model.hasFiles = true
           @model.hasFiles = false
-        @model.save @model.attributes, success: @_productUpdated, error: (model, xhr, options) -> console.log xhr
+        @model.save @model.attributes,
+          success: @_productUpdated
+          error: (model, xhr, options) ->
+            if xhr.status is 422
+              $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
+              return $('#sizeIsIncorrect').modal()
+            console.log xhr
     _deleteProduct: =>
       @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>

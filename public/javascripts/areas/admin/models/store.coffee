@@ -11,7 +11,7 @@ define [
       options.success = (data, code, xhr) =>
         opt.success data if opt.success?
       options.error = (xhr, error, type) ->
-        opt.error error if opt.error?
+        opt.error xhr if opt.error?
       @form.ajaxSubmit options
     initialize: ->
       @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged

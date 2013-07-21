@@ -120,5 +120,8 @@ Store.searchByName = (searchTerm, cb) ->
   Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
     return cb err if err
     cb null, stores
+Store.homePageImageDimension = '600x400'
+Store.flyerDimension = '350x350'
+#Store.bannerDimension = '1200x300'
 
 module.exports = Store
