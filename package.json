@@ -67,6 +67,8 @@
     "selenium-webdriver": "~2.33.0",
     "chromedriver": "~2.0.1",
     "grunt-express-server": "~0.4.x",
-    "chai": "~1.7.2"
+    "chai": "~1.7.2",
+    "grunt-nodemon": "0.0.8",
+    "grunt-concurrent": "~0.3.0"
   }
 }

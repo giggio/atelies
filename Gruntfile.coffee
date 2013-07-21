@@ -44,27 +44,41 @@ module.exports = (grunt) ->
           level: 'ignore'
 
     watch:
-      server:
-        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'compileAndStartServer' ]
-        options:
-          nospawn: true
-          livereload: true
-      coffee:
+      compile:
         files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
         tasks: [ 'compile' ]
         options:
           nospawn: true
+      compileAndTest:
+        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
+        tasks: [ 'compileAndTest' ]
+        options:
+          nospawn: true
 
     express:
-      dev:
-        options:
-          script: 'server.js'
       prod:
         options:
           script: 'server.js'
           node_env: 'production'
           background: false
+
+    nodemon:
+      dev:
+        options:
+          file: 'server.js'
+          watchedExtensions: ['js']
+          watchedFolders: ['app']
+          debug: true
+          delayTime: 2
+          #env:
+            #PORT: '8181'
+          cwd: __dirname
+
+    concurrent:
+      devServer:
+        tasks: [ 'watch:compileAndTest', 'nodemon:dev' ]
+        options:
+          logConcurrentOutput: true
 
     mochacov:
       options:
@@ -209,6 +223,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-notify'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
+  grunt.loadNpmTasks 'grunt-nodemon'
+  grunt.loadNpmTasks 'grunt-concurrent'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -235,27 +251,15 @@ module.exports = (grunt) ->
 
   #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
-  grunt.registerTask 'server', [ 'express:dev' ]
-  grunt.registerTask 'server:prod', [ 'express:prod' ]
-  grunt.registerTask 'server:watch', [ 'compileAndStartServer', 'watch:server' ]
-  grunt.registerTask 'server:watch:prod', [ 'compileAndStartServer:production', 'watch:server' ]
-  grunt.registerTask 'compileAndStartServer', (env) ->
+  grunt.registerTask 'server', [ 'express:prod' ]
+  grunt.registerTask 'compileAndTest', (env) ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
       tasks.push 'test:client'
       grunt.log.writeln "Running #{'client'.blue} unit tests"
-    if grunt.config(['server', 'src']).length isnt 0
+    if grunt.config(['server', 'src']).length isnt 0 or grunt.config(['tests', 'src']).length isnt 0
       tasks.push 'test:unit'
-      if env is 'production'
-        grunt.log.writeln "Running in #{'PRODUCTION'.red} environment"
-        tasks.push 'express:prod'
-      else
-        grunt.log.writeln "Running in #{'dev'.blue} environment"
-        tasks.push 'express:dev'
-      grunt.log.writeln 'Compiling and starting server'
       grunt.log.writeln "Running #{'server'.blue} unit tests"
-    else
-      grunt.log.writeln "Compiling and #{'NOT'.red} starting server"
     grunt.task.run tasks
   grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
   grunt.registerTask 'test:travis', [ 'mochacov:travis_server_unit_coverage', 'mochacov:travis_client_unit_coverage' ]
@@ -268,4 +272,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage' ]
-  grunt.registerTask 'default', ['server:watch']
+  grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
