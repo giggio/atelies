@@ -1,6 +1,7 @@
 mongoose  = require 'mongoose'
 slug      = require '../helpers/slug'
 _         = require 'underscore'
+path      = require 'path'
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true
@@ -33,8 +34,14 @@ productSchema.path('name').set (val) ->
   val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
+productSchema.methods.pictureThumb = ->
+  return undefined unless @picture?
+  ext = path.extname @picture
+  dir = path.dirname @picture
+  name = path.basename @picture, ext
+  "#{dir}/#{name}_thumb150x150#{ext}"
 productSchema.methods.toSimpleProduct = ->
-  _id: @_id, name: @name, picture: @picture, price: @price,
+  _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), tags: if @tags? then @tags.join ', ' else ''
   manageUrl: @manageUrl(), slug: @slug
@@ -45,7 +52,7 @@ productSchema.methods.toSimpleProduct = ->
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
 productSchema.methods.toSimplerProduct = ->
-  _id: @_id, name: @name, picture: @picture, price: @price,
+  _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), slug: @slug
 productSchema.methods.updateFromSimpleProduct = (simple) ->

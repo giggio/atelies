@@ -30,7 +30,7 @@ define [
     it 'links to the product page on the product name on product 1', ->
       expect($("#product1 a", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'displays the picture for product 1', ->
-      expect($("#product1_picture img", el).attr('src')).to.equal product1.picture
+      expect($("#product1_picture img", el).attr('src')).to.equal product1.pictureThumb
     it 'links to the product page on the picture on product 1', ->
       expect($("#product1_picture", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
     it 'shows stores', ->

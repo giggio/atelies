@@ -7,6 +7,7 @@ define ->
         name: 'prod 1'
         slug: 'prod_1'
         picture: 'http://c.jpg'
+        pictureThumb: 'http://c_thumb.jpg'
         price: 3.43
         storeName: 'store 1'
         storeSlug: 'store_1'
@@ -28,6 +29,7 @@ define ->
         name: 'prod 2'
         slug: 'prod_2'
         picture: 'http://d.jpg'
+        pictureThumb: 'http://d_thumb.jpg'
         price: 4.56
         storeName: 'store 1'
         storeSlug: 'store_1'
@@ -47,6 +49,7 @@ define ->
         name: 'name 3'
         slug: 'name_3'
         picture: 'http://lorempixel.com/150/150/cats'
+        pictureThumb: 'http://lorempixel.com/150/150/cats_thumb'
         price: 33.33
         storeName: 'store 2'
         storeSlug: 'store_2'

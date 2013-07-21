@@ -19,8 +19,8 @@
     {{#each products}}
     <div id="product{{_id}}" data-id="{{_id}}" class="product span2">
       <a href="#manageProduct/{{manageUrl}}" class="link">
-        {{#if picture}}
-        <img src="{{picture}}" alt="{{name}}" />
+        {{#if pictureThumb}}
+        <img src="{{pictureThumb}}" alt="{{name}}" />
         {{else}}
         <img src="http://dummyimage.com/300x450/000/fff&text=%3F" alt="{{name}}"/>
         {{/if}}
