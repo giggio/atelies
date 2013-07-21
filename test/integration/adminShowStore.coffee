@@ -28,7 +28,7 @@ describe 'Admin Show Store page', ->
       products = page.products()
       products.length.should.equal 2
       products[0].name.should.equal product1.name
-      products[0].picture.should.equal product1.picture
+      products[0].picture.should.equal product1.picture + "_thumb150x150"
     it 'shows store name', ->
       page.storeName().should.equal store.name
     it 'allows to create new product', ->

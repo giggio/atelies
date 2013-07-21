@@ -17,7 +17,7 @@ module.exports = class HomePage extends Page
     product = {}
     actions = [
       (cb) => @getAttribute "#product#{_id}", "data-id", (t) -> product._id = t;cb()
-      (cb) => @getText "#product#{_id}_storeName", (t) -> product.storeName = t;cb()
+      (cb) => @getInnerHtml "#product#{_id} .storeName", (t) -> product.storeName = t;cb()
       (cb) => @getAttribute "#product#{_id}_picture img", "src", (t) -> product.picture = t;cb()
       (cb) => @getAttribute "#product#{_id}_picture", "href", (t) -> product.slug = t;cb()
     ]

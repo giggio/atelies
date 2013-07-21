@@ -12,7 +12,7 @@ before ->
     .usingServer('http://localhost:9515')
     #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
     .build()
-  Page.driver.manage().timeouts().implicitlyWait 1000
+  Page.driver.manage().timeouts().implicitlyWait 2000
 after (done) ->
   Page.driver.quit().then ->
     chromedriver.stop()
@@ -161,3 +161,5 @@ module.exports = class Page
       else
         clear()
   refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
+  getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
+  getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb

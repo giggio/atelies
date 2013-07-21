@@ -26,7 +26,7 @@ describe 'Home page', ->
     page.product product1._id, (p) ->
       p._id.should.equal product1._id.toString()
       p.storeName.should.equal product1.storeName
-      p.picture.should.equal product1.picture
+      p.picture.should.equal product1.picture + "_thumb150x150"
       p.slug.endsWith(product1.slug).should.be.true
       done()
   it 'shows stores', (done) ->
