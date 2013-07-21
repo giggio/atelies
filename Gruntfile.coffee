@@ -76,7 +76,7 @@ module.exports = (grunt) ->
 
     concurrent:
       devServer:
-        tasks: [ 'watch:compileAndTest', 'nodemon:dev' ]
+        tasks: [ 'watch:compileAndTest', 'nodemon:dev', 'nodeInspector' ]
         options:
           logConcurrentOutput: true
 
@@ -215,6 +215,12 @@ module.exports = (grunt) ->
             }
           ]
 
+    shell:
+      nodeInspector:
+        command: 'node-inspector'
+        options:
+          stdout: true
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -225,6 +231,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-concurrent'
+  grunt.loadNpmTasks 'grunt-shell'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -252,6 +259,10 @@ module.exports = (grunt) ->
   #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:prod' ]
+  grunt.registerTask 'nodeInspector', [ 'shell:nodeInspector' ]
+  #grunt.registerTask 'nodeInspector', ->
+    #grunt.util.spawn
+      #cmd: 'node-inspector'
   grunt.registerTask 'compileAndTest', (env) ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0

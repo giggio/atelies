@@ -1610,6 +1610,42 @@
         }
       }
     },
+    "grunt-concurrent": {
+      "version": "0.3.0",
+      "from": "grunt-concurrent@",
+      "resolved": "https://registry.npmjs.org/grunt-concurrent/-/grunt-concurrent-0.3.0.tgz",
+      "dependencies": {
+        "lpad": {
+          "version": "0.1.0",
+          "from": "lpad@~0.1.0",
+          "resolved": "https://registry.npmjs.org/lpad/-/lpad-0.1.0.tgz"
+        }
+      }
+    },
+    "grunt-nodemon": {
+      "version": "0.0.8",
+      "from": "grunt-nodemon@",
+      "resolved": "https://registry.npmjs.org/grunt-nodemon/-/grunt-nodemon-0.0.8.tgz",
+      "dependencies": {
+        "nodemon": {
+          "version": "0.7.8",
+          "from": "nodemon@~0.7.8",
+          "resolved": "https://registry.npmjs.org/nodemon/-/nodemon-0.7.8.tgz"
+        }
+      }
+    },
+    "grunt-shell": {
+      "version": "0.3.1",
+      "from": "grunt-shell@",
+      "resolved": "https://registry.npmjs.org/grunt-shell/-/grunt-shell-0.3.1.tgz",
+      "dependencies": {
+        "stripcolorcodes": {
+          "version": "0.1.0",
+          "from": "stripcolorcodes@~0.1.0",
+          "resolved": "https://registry.npmjs.org/stripcolorcodes/-/stripcolorcodes-0.1.0.tgz"
+        }
+      }
+    },
     "grunt-notify": {
       "version": "0.2.3",
       "from": "grunt-notify@",
