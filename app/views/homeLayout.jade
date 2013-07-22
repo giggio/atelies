@@ -7,7 +7,10 @@ append layout
         img.beta(src="/images/beta.png")
       #site-banner.row(style="margin-bottom: 20px")
         .span4
-          a(href="/"): img(src="/images/ateliesLogo.png")
+          if (CONFIG.serverEnvironment != 'production')
+            a(href="/"): img(src="/images/ateliesLogoDev.png")
+          else
+            a(href="/"): img(src="/images/ateliesLogoTeste.png")
         .span6
           h3.nameHeader shopping virtual de artes e afins
         .span2
