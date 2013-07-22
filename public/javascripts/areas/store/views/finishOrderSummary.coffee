@@ -40,6 +40,7 @@ define [
         viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
       @$el.html context viewModel
     finishOrder: ->
+      $("#finishOrder").prop "disabled", on
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
       orders = new Orders storeId: @store._id
       success = (model, response, opt) =>
@@ -48,7 +49,9 @@ define [
           window.location = response.redirect
         else
           Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
-      error = (model, xhr, opt) => console.error "Erro ao salvar #{xhr}"
+      error = (model, xhr, opt) =>
+        console.error "Erro ao salvar #{xhr}"
+        $("#finishOrder").prop "disabled", off
       order = items: items
       order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping
       order = new Order order
