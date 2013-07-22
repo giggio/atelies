@@ -7,7 +7,7 @@ append layout
         img.beta(src="/images/beta.png")
       #site-banner.row(style="margin-bottom: 20px")
         .span4
-          if (CONFIG.serverEnvironment != 'production')
+          if (CONFIG.serverEnvironment == 'production')
             a(href="/"): img(src="/images/ateliesLogoDev.png")
           else
             a(href="/"): img(src="/images/ateliesLogoTeste.png")
