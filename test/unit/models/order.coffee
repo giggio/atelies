@@ -23,7 +23,7 @@ describe 'Order', ->
       item2 = product: p2, quantity: 2
       items = [ item1, item2 ]
       shippingCost = 1
-      Order.create user, store, items, shippingCost, (o) ->
+      Order.create user, store, items, shippingCost, 'directSell', (o) ->
         order = o
         done()
     it 'assigned customer', ->
@@ -51,3 +51,5 @@ describe 'Order', ->
       item2.quantity.should.equal 2
       item2.product.should.equal p2._id
       item2.totalPrice.should.equal p2.price * 2
+    it 'created a direct sell order', ->
+      order.paymentType.should.equal 'directSell'

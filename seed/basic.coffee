@@ -370,4 +370,5 @@ db.orders.insert
   orderDate: new Date(2013, 0, 1)
   customer: user1._id
   deliveryAddress: user1.deliveryAddress
+  paymentType: 'directSell'
 db.orders.ensureIndex { customer: 1 }

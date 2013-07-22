@@ -18,11 +18,12 @@ orderSchema = new mongoose.Schema
   orderDate:                  type: Date, required: true, default: Date.now
   customer:                   type: mongoose.Schema.Types.ObjectId, ref: 'user'
   deliveryAddress:
-    street:         String
-    street2:        String
-    city:           String
-    state:          String
-    zip:            String
+    street:                   type: String, required: true
+    street2:                  type: String, required: true
+    city:                     type: String, required: true
+    state:                    type: String, required: true
+    zip:                      type: String, required: true
+  paymentType:                type: String, required: true
 
 orderSchema.methods.toSimpleOrder = ->
   items = _.map @items, (i) ->
@@ -46,7 +47,7 @@ orderSchema.methods.sendMailAfterPurchase = (cb) ->
       </html>"
     postman.send @store, @customer, "Pedido realizado", body, cb
 Order = mongoose.model 'order', orderSchema
-Order.create = (user, store, items, shippingCost, cb) ->
+Order.create = (user, store, items, shippingCost, paymentType, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items
     item = product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity, name: i.product.name
@@ -54,6 +55,7 @@ Order.create = (user, store, items, shippingCost, cb) ->
   order.totalProductsPrice = _.chain(order.items).map((i)->i.totalPrice).reduce(((p, i) -> p+i), 0).value()
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
+  order.paymentType = paymentType
   process.nextTick -> cb order
 Order.getSimpleByUser = (user, cb) ->
   Order.find(customer: user).populate('store', 'name slug').exec (err, orders) ->

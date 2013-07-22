@@ -55,7 +55,7 @@ class Routes
       async.parallel getItems, (errors, items) =>
         return res.json 400, errors if errors?
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
-          Order.create user, store, items, shippingCost, (order) =>
+          Order.create user, store, items, shippingCost, 'directSell', (order) =>
             order.save (err, order) =>
               return res.json 400, err if err?
               for item in items

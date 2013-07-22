@@ -273,6 +273,7 @@ exports.generator =
       orderDate: new Date(2013, 0, 1)
       customer: exports.generator.user.d()
       deliveryAddress: exports.generator.user.d().deliveryAddress
+      paymentType: 'directSell'
     b: -> new Order
       store: exports.generator.store.a()
       items: [
@@ -288,3 +289,4 @@ exports.generator =
       orderDate: new Date(2013, 0, 5)
       customer: exports.generator.user.d()
       deliveryAddress: exports.generator.user.d().deliveryAddress
+      paymentType: 'directSell'

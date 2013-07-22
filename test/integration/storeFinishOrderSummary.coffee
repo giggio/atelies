@@ -99,6 +99,7 @@ describe 'Store Finish Order: Summary', ->
         order.totalProductsPrice.should.equal product3.price + product1.price
         order.totalSaleAmount.should.equal order.totalProductsPrice
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()
+        order.paymentType.should.equal 'directSell'
         p3 = order.items[0]
         p3.product.toString().should.equal product3._id.toString()
         p3.price.should.equal product3.price
