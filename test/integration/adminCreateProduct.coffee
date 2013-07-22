@@ -24,7 +24,6 @@ describe 'Admin Create Product page', ->
         userSeller.stores.push store, store2
         userSeller.save()
         done()
-  after (done) -> page.closeBrowser done
 
   describe "can't create invalid product", ->
     before (done) ->
@@ -61,7 +60,7 @@ describe 'Admin Create Product page', ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, ->
           page.setFieldsAs productNoShippingInfo, ->
-            page.clickUpdateProduct done
+            page.clickUpdateProduct -> waitSeconds 1, done #hasToWaitForElementsToRerender
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
@@ -77,6 +76,28 @@ describe 'Admin Create Product page', ->
         errorMsgs.shippingWidth.should.equal 'A largura de postagem é obrigatória.'
         errorMsgs.shippingDepth.should.equal 'A profundidade de postagem é obrigatória.'
         errorMsgs.shippingWeight.should.equal 'O peso de postagem é obrigatório.'
+        done()
+
+  describe 'a product which states it has inventory should inform how many items it has on inventory when creating the product', ->
+    before (done) ->
+      productNoInventory = generator.product.a()
+      productNoInventory.inventory = ''
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, ->
+          page.setFieldsAs productNoInventory, ->
+            page.clickUpdateProduct done
+    it 'is at the product create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
+        done()
+    it 'did not create the product', (done) ->
+      Product.find (err, products) ->
+        return done err if err
+        products.should.be.empty
+        done()
+    it 'shows error messages', (done) ->
+      page.errorMessagesIn '#editProduct', (errorMsgs) ->
+        errorMsgs.inventory.should.equal 'O estoque é obrigatório quando o produto terá estoque.'
         done()
 
   describe 'create product', ->

@@ -2,6 +2,7 @@ webdriver       = require 'selenium-webdriver'
 chromedriver    = require 'chromedriver'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
+async           = require 'async'
 
 webdriver.WebElement::type = (text) ->
   @clear().then => @sendKeys text if text?
@@ -40,13 +41,14 @@ module.exports = class Page
   errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
   errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) ->
     errorMsgs = {}
-    flow = webdriver.promise.createFlow (f) =>
+    actions =
       for el in els
-        do (el) ->
-          f.execute =>
-            el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
-              el.getText().then (text) -> errorMsgs[id] = text
-    flow.then (-> cb(errorMsgs)), cb
+        do (el) -> (cb2) =>
+          el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
+            el.getText().then (text) ->
+              errorMsgs[id] = text
+              cb2()
+    async.parallel actions, -> cb(errorMsgs)
   findElement: (selector) -> if typeof selector is 'string' then @driver.findElement(webdriver.By.css(selector)) else selector
   findElements: (selector, cb) ->
     find = @driver.findElements(webdriver.By.css(selector))

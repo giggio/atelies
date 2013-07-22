@@ -1,8 +1,14 @@
 define [
+  'underscore'
   'backboneConfig'
   'jqform'
-], (Backbone) ->
+], (_, Backbone) ->
   class Product extends Backbone.Open.Model
+    initialize: ->
+      @bind 'change:hasInventory', @_hasInventoryChanged
+    _hasInventoryChanged: ->
+      @validation.inventory[0].required = @get 'hasInventory'
+      @validate()
     sync: (method, model, opt) ->
       return Backbone.sync.apply @, arguments unless @hasFiles
       methodMap = create:'POST', update:'PUT', patch:'PATCH', delete:'DELETE', read:'GET'
@@ -63,5 +69,5 @@ define [
         [{required: true, msg: 'O peso de postagem é obrigatório.'}
          {range:[0,30], msg: 'O peso deve ser um número entre 0 e 30.'}]
       inventory:
-        [{pattern:'digits', msg: 'O estoque deve ser um número.'}
-        {required: false}]
+        [{required: true, msg: 'O estoque é obrigatório quando o produto terá estoque.'}
+         {pattern:'digits', msg: 'O estoque deve ser um número.'}]
