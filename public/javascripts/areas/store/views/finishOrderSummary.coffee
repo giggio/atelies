@@ -43,9 +43,10 @@ define [
       $("#finishOrder").prop "disabled", on
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity
       orders = new Orders storeId: @store._id
+      paymentType = @cart.paymentTypeSelected().type
       success = (model, response, opt) =>
         @cart.clear()
-        if @store.pagseguro
+        if @store.pagseguro and paymentType is 'pagseguro'
           window.location = response.redirect
         else
           Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
@@ -54,6 +55,7 @@ define [
         $("#finishOrder").prop "disabled", off
       order = items: items
       order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping
+      order.paymentType = paymentType
       order = new Order order
       orders.add order
       order.save order.attributes, error: error, success: success

@@ -11,7 +11,7 @@ define [
   class CartView extends Backbone.View
     events:
       'click #clearCart':'clear'
-      'click #finishOrder':'finishOrder'
+      'click #finishOrderCart':'finishOrder'
     template: cartTemplate
     initialize: (opt) =>
       @store = opt.store

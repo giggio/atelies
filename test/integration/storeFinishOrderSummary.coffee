@@ -61,7 +61,7 @@ describe 'Store Finish Order: Summary', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/summary"
         done()
 
-  describe 'completing the payment with manual shipping calculation and products with and without inventory', ->
+  describe 'completing the payment with products with and without inventory and manual shipping calculation', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -124,4 +124,55 @@ describe 'Store Finish Order: Summary', ->
     it 'should be at order completed page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store2.slug}#finishOrder/orderFinished"
+        done()
+
+  describe 'completing the payment with manual shipping calculation', ->
+    before (done) ->
+      cleanDB (error) ->
+        return done error if error
+        store = generator.store.a()
+        store.save()
+        product1 = generator.product.a()
+        product1.save()
+        p1Inventory = product1.inventory
+        user1 = generator.user.d()
+        user1.save()
+        page.clearLocalStorage ->
+          page.loginFor user1._id, ->
+            storeProductPage.visit 'store_1', 'name_1', ->
+              storeProductPage.purchaseItem ->
+                storeCartPage.clickFinishOrder ->
+                  storeFinishOrderShippingPage.clickSedexOption ->
+                    storeFinishOrderShippingPage.clickContinue ->
+                      storeFinishOrderPaymentPage.clickSelectDirectPayment ->
+                        storeFinishOrderPaymentPage.clickSelectPaymentType ->
+                          page.clickCompleteOrder ->
+                            waitSeconds 5, done
+    it 'should have stored a new order on db with direct payment', (done) ->
+      Order.find (err, orders) ->
+        throw err if err
+        orders.length.should.equal 1
+        order = orders[0]
+        order.customer.toString().should.equal user1._id.toString()
+        order.store.toString().should.equal store._id.toString()
+        order.items.length.should.equal 1
+        order.shippingCost.should.equal 18.9
+        order.totalProductsPrice.should.equal product1.price
+        order.totalSaleAmount.should.equal order.totalProductsPrice + order.shippingCost
+        order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()
+        order.paymentType.should.equal 'directSell'
+        p1 = order.items[0]
+        p1.product.toString().should.equal product1._id.toString()
+        p1.price.should.equal product1.price
+        p1.quantity.should.equal 1
+        p1.totalPrice.should.equal product1.price
+        done()
+    it 'subtracted one item from the inventory of the product', (done) ->
+      Product.findById product1._id, (err, p1) ->
+        throw err if err
+        p1.inventory.should.equal p1Inventory - 1
+        done()
+    it 'should be at order completed page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/orderFinished"
         done()

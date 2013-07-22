@@ -11,6 +11,7 @@ describe 'Admin orders page', ->
       store = generator.store.a()
       store.save()
       user = generator.user.a()
+      user.deliveryAddress = generator.user.d().deliveryAddress
       user.save()
       product1 = generator.product.a()
       product1.save()
@@ -18,11 +19,13 @@ describe 'Admin orders page', ->
       product2.save()
       order1 = generator.order.a()
       order1.customer = user
+      order1.deliveryAddress = user.deliveryAddress
       order1.store = store
       order1.items[0].product = product1
       order1.save()
       order2 = generator.order.b()
       order2.customer = user
+      order2.deliveryAddress = user.deliveryAddress
       order2.store = store
       order2.items[0].product = product1
       order2.save()

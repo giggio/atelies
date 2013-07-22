@@ -55,21 +55,23 @@ class Routes
       async.parallel getItems, (errors, items) =>
         return res.json 400, errors if errors?
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
-          Order.create user, store, items, shippingCost, 'directSell', (order) =>
+          paymentType = req.body.paymentType
+          Order.create user, store, items, shippingCost, paymentType, (order) =>
             order.save (err, order) =>
               return res.json 400, err if err?
               for item in items
                 p = item.product
                 p.inventory -= item.quantity if p.hasInventory
                 p.save()
-              if store.pagseguro()
+              if store.pagseguro() and paymentType is 'pagseguro'
                 @_sendToPagseguro store, order, user, (err, pagseguroCode) =>
                   return res.json 400, err if err?
                   res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroCode}"
               else
                 order.sendMailAfterPurchase (error, mailResponse) ->
                   console.log "Error sending mail: #{error}" if error?
-                  res.json 201, order.toSimpleOrder()
+                  simpleOrder = order.toSimpleOrder()
+                  res.json 201, simpleOrder
 
   _sendToPagseguro: (store, order, user, cb) ->
     pag = new pagseguro store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token

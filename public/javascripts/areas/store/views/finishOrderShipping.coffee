@@ -11,7 +11,7 @@ define [
 ], ($, _, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView, converters) ->
   class CartView extends Backbone.View
     events:
-      'click #finishOrder':'finishOrder'
+      'click #finishOrderShipping':'finishOrder'
       'click [name=shippingOptions]':'_shippingOptionSelected'
     template: finishOrderShippingTemplate
     initialize: (opt) =>
@@ -42,7 +42,7 @@ define [
     _calculateShippingCosts: ->
       unless @store.autoCalculateShipping
         @cart.setManualShipping()
-        $('#finishOrder', @$el).removeAttr 'disabled'
+        $('#finishOrderShipping', @$el).removeAttr 'disabled'
         return
       if @cart.shippingSelected()
         @shippingOptions = $.extend true, [], @cart.shippingOptions()
@@ -51,7 +51,7 @@ define [
         selectedType = @cart.shippingOptionSelected().type
         @show()
         $("#shippingOptions_#{selectedType}", @$el).prop 'checked', true
-        $('#finishOrder', @$el).removeAttr 'disabled'
+        $('#finishOrderShipping', @$el).removeAttr 'disabled'
         return
       data = items: _.map(@cart.items(), (i) -> _id: i._id, quantity: i.quantity)
       $.ajax
@@ -68,4 +68,4 @@ define [
     _shippingOptionSelected: ->
       shippingType = $('[name=shippingOptions]:checked', @$el).attr('value')
       @cart.chooseShippingOption shippingType
-      $('#finishOrder', @$el).removeAttr 'disabled'
+      $('#finishOrderShipping', @$el).removeAttr 'disabled'

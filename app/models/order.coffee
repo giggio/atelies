@@ -19,7 +19,7 @@ orderSchema = new mongoose.Schema
   customer:                   type: mongoose.Schema.Types.ObjectId, ref: 'user'
   deliveryAddress:
     street:                   type: String, required: true
-    street2:                  type: String, required: true
+    street2:                  String
     city:                     type: String, required: true
     state:                    type: String, required: true
     zip:                      type: String, required: true
@@ -37,6 +37,7 @@ orderSchema.methods.toSimpleOrder = ->
   totalSaleAmount: @totalSaleAmount
   orderDate: @orderDate
   items: items
+  paymentType: @paymentType
 orderSchema.methods.sendMailAfterPurchase = (cb) ->
   @populate 'store customer', =>
     body = "<html>

@@ -21,7 +21,7 @@ describe 'Account order detail page', ->
         { product: product2, quantity: 2 }
       ]
       shippingCost = 1
-      Order.create user, store, items, shippingCost, (order) ->
+      Order.create user, store, items, shippingCost, 'directSell', (order) ->
         order1 = order
         order.orderDate = new Date(2013,0,1)
         order1.save()

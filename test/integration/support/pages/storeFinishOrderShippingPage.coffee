@@ -15,7 +15,7 @@ module.exports = class StoreCartPage extends Page
     async.parallel actions, ->
       #print address
       cb address
-  clickContinue: @::pressButton.partial '#finishOrder'
+  clickContinue: @::pressButton.partial '#finishOrderShipping'
   clickSedexOption: (cb) ->
     @waitForSelector '#shippingOptions_sedex', =>
       @pressButton '#shippingOptions_sedex', cb
@@ -31,6 +31,6 @@ module.exports = class StoreCartPage extends Page
             getData.push => @getValue el, (t) => option.value = t
         @parallel getData, -> cb(options: options)
         undefined
-  finishOrderButtonIsEnabled: @::getIsEnabled.partial '#finishOrder'
+  finishOrderButtonIsEnabled: @::getIsEnabled.partial '#finishOrderShipping'
   manualShippingCalculationMessage: @::getTextIfExists.partial '#manualShippingCalculationMessage'
   shippingInfoExists: @::hasElement.partial '#shippingInfo'

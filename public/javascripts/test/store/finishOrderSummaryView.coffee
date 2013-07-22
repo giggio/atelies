@@ -68,7 +68,7 @@ define [
         $("#totalProductsPrice", el).text().should.equal 'R$ 10,00'
         $("#totalSaleAmount", el).text().should.equal 'R$ 10,00'
 
-    describe 'Finishing order', ->
+    describe 'Finishing order with pagseguro', ->
       item = item2 = ajaxSpy = historySpy = dataPosted = orderPosted = null
       after -> view.close()
       before ->
@@ -101,6 +101,7 @@ define [
         dataPosted.url.should.equal "/orders/#{store1._id}"
         dataPosted.type.should.equal "POST"
       it 'posted the correct order', ->
+        orderPosted.paymentType.should.equal 'pagseguro'
         items = orderPosted.items
         items.length.should.equal 2
         postedItem1 = items[0]
@@ -132,7 +133,7 @@ define [
           { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
         ]
         cart.chooseShippingOption 'pac'
-        cart.choosePaymentType type:'pagseguro', name:'PagSeguro'
+        cart.choosePaymentType type:'directSell', name:'Pagamento direto ao fornecedor'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store2, user: user, cart: cart
@@ -150,6 +151,7 @@ define [
         dataPosted.url.should.equal "/orders/#{store2._id}"
         dataPosted.type.should.equal "POST"
       it 'posted the correct order', ->
+        orderPosted.paymentType.should.equal 'directSell'
         items = orderPosted.items
         items.length.should.equal 2
         postedItem1 = items[0]

@@ -2,7 +2,9 @@ Page          = require './seleniumPage'
 
 module.exports = class StoreFinishOrderPaymentPage extends Page
   visit: (storeSlug, cb) => super "#{storeSlug}#finishOrder/payment", cb
-  clickSelectDirectPayment: @::pressButton.partial '#directSell'
+  clickSelectDirectPayment: (cb) ->
+    @waitForSelector '#directSell', =>
+      @pressButton '#directSell', cb
   clickSelectPaymentType: @::pressButton.partial '#selectPaymentType'
   paymentTypes: (cb) ->
     options = []
