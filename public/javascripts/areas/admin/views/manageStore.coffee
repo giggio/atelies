@@ -50,6 +50,7 @@ define [
         return true
     _updateStore: =>
       return unless @model.isValid true
+      $("#updateStore").prop "disabled", on
       bannerVal = $('#banner').val()
       flyerVal = $('#flyer').val()
       homePageImageVal = $('#homePageImage').val()
@@ -62,6 +63,7 @@ define [
       @model.save @model.attributes,
         success: (model) => @_storeCreated model
         error: (model, xhr, opt) ->
+          $("#updateStore").prop "disabled", off
           return $('#nameAlreadyExists').modal() if xhr.status is 409
           if xhr.status is 422
             $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
@@ -83,6 +85,8 @@ define [
     _confirmSetAutoCalculateShipping: -> @_setAutoCalculateShipping on
     _confirmUnsetAutoCalculateShipping: -> @_setAutoCalculateShipping off
     _setAutoCalculateShipping: (set) ->
+      $("#confirmSetAutoCalculateShipping").prop "disabled", on
+      $("#confirmUnsetAutoCalculateShipping").prop "disabled", on
       url = "/admin/store/#{@model.get('_id')}/setAutoCalculateShipping"
       url += if set then "On" else "Off"
       $.ajax
@@ -92,6 +96,8 @@ define [
           return console.log error, xhr if xhr.status isnt 409
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
           $('#modalCannotAutoCalculateShipping', @el).modal 'show'
+          $("#confirmSetAutoCalculateShipping").prop "disabled", off
+          $("#confirmUnsetAutoCalculateShipping").prop "disabled", off
         success: (data, text, xhr) =>
           @model.set 'autoCalculateShipping', set
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'

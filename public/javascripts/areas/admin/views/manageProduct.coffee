@@ -49,6 +49,7 @@ define [
       #@model.bind 'validated:invalid', (model, errors) -> print errors
     _updateProduct: =>
       if @model.isValid true
+        $("#updateProduct").prop "disabled", on
         pictureVal = $('#picture').val()
         if typeof pictureVal isnt 'undefined' and pictureVal isnt ''
           @model.hasFiles = true
@@ -59,6 +60,7 @@ define [
         @model.save @model.attributes,
           success: @_productUpdated
           error: (model, xhr, options) ->
+            $("#updateProduct").prop "disabled", off
             if xhr.status is 422
               $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
               return $('#sizeIsIncorrect').modal()

@@ -31,12 +31,16 @@ define [
           return console.log error, xhr if xhr.status isnt 409
           $('#modalConfirmPagseguro', @el).modal 'hide'
           $('#modalCannotPagseguro', @el).modal 'show'
+          $("#confirmSetPagseguro").prop "disabled", off
+          $("#confirmUnsetPagseguro").prop "disabled", off
         success: (data, text, xhr) =>
           @model.set 'pagseguro', set
           $('#modalConfirmPagseguro', @el).modal 'hide'
           @trigger 'changed', pagseguro:set
       if set
         return unless @model.isValid true
+        $("#confirmSetPagseguro").prop "disabled", on
+        $("#confirmUnsetPagseguro").prop "disabled", on
         opt.url += "On"
         opt.data =
           email: $("#pagseguroEmail", @el).val()
