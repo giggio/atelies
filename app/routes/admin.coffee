@@ -80,17 +80,14 @@ class Routes
             createAction = (field, dimensionResize) =>
               (cb) =>
                 return cb() unless req.files[field]?
-                onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
+                if store[field]?
+                  onlineName = uploader.getFileNameFromFullName store[field]
+                else
+                  onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
                 uploader.upload onlineName, req.files[field], dimensionResize, (err, fileUrl) ->
                   return cb err if err?
-                  deleteIf = (cbDelete) =>
-                    if store[field]?
-                      uploader.delete store[field], (err) => cbDelete()
-                    else
-                      cbDelete()
-                  deleteIf =>
-                    store[field] = fileUrl
-                    cb()
+                  store[field] = fileUrl
+                  cb()
             actions = [ createAction('homePageImage', Store.homePageImageDimension), createAction('banner'), createAction('flyer', Store.flyerDimension) ]
             async.parallel actions, cb
           else
@@ -140,7 +137,10 @@ class Routes
         file = req.files?.picture
         if file?
           uploader = new FileUploader()
-          onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
+          if product.picture?
+            onlineName = uploader.getFileNameFromFullName product.picture
+          else
+            onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
           uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
             return res.json 422, err if err?.smallerThan?
             return res.json 400, err if err?
@@ -149,11 +149,7 @@ class Routes
               return res.json 400, err if err?
               originalPicture = product.picture
               product.picture = fileUrl
-              if originalPicture
-                uploader.delete originalPicture, (err) ->
-                  saveProduct()
-              else
-                saveProduct()
+              saveProduct()
         else
           saveProduct()
   

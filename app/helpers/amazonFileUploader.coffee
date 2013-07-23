@@ -27,6 +27,9 @@ module.exports = class AmazonFileUploader
     key = fileName.replace "https://s3.amazonaws.com/#{@bucket}/", ""
     fileParams = Bucket: @bucket, Key: key
     @s3.deleteObject fileParams, (err, data) => cb err
+  getFileNameFromFullName: (fileName) ->
+    key = fileName.replace "https://s3.amazonaws.com/#{@bucket}/", ""
+    key
   randomName: (folder, file) ->
     rand = -> Math.random() * Math.pow(10, 18)
     ext = path.extname file
