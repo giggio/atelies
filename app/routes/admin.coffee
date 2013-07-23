@@ -10,6 +10,7 @@ correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 FileUploader    = require '../helpers/amazonFileUploader'
 async           = require 'async'
+ProductUploader = require '../models/productUploader'
 
 class Routes
   constructor: (@env) ->
@@ -126,58 +127,35 @@ class Routes
 
   adminProductUpdate: (req, res) ->
     Product.findById req.params.productId, (err, product) ->
-      dealWith err
+      return res.json 400, err if err?
       Store.findBySlug product.storeSlug, (err, store) ->
-        dealWith err
+        return res.json 400, err if err?
         throw new AccessDenied() unless req.user.hasStore store
         product.updateFromSimpleProduct req.body
-        saveProduct = =>
+        uploader = new ProductUploader()
+        uploader.upload product, req.files?.picture, (err, fileUrl) =>
+          return res.json 422, err if err?.smallerThan?
+          return res.json 400, err if err?
+          product.picture = fileUrl
           product.save (err) ->
-            res.send 204
-        file = req.files?.picture
-        if file?
-          uploader = new FileUploader()
-          if product.picture?
-            onlineName = uploader.getFileNameFromFullName product.picture
-          else
-            onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
-          uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
-            return res.json 422, err if err?.smallerThan?
             return res.json 400, err if err?
-            thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
-            uploader.upload thumbOnlineName, file, Product.pictureThumbDimension, (err, thumbUrl) ->
-              return res.json 400, err if err?
-              originalPicture = product.picture
-              product.picture = fileUrl
-              saveProduct()
-        else
-          saveProduct()
+            res.send 204
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) ->
-      dealWith err
+      return res.json 400, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       product = new Product()
-      product.updateFromSimpleProduct req.body
       product.storeName = store.name
       product.storeSlug = store.slug
-      file = req.files?.picture
-      saveIf = (cb) =>
-        if file?
-          uploader = new FileUploader()
-          onlineName = uploader.randomName "#{req.params.storeSlug}/products", file.name
-          uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
-            return res.json 422, err if err?.smallerThan?
-            return res.json 400, err if err?
-            thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
-            uploader.upload thumbOnlineName, file, Product.pictureThumbDimension, (err, thumbUrl) ->
-              return res.json 400, err if err?
-              product.picture = fileUrl
-              cb()
-        else
-          cb()
-      saveIf =>
+      product.updateFromSimpleProduct req.body
+      uploader = new ProductUploader()
+      uploader.upload product, req.files?.picture, (err, fileUrl) =>
+        return res.json 422, err if err?.smallerThan?
+        return res.json 400, err if err?
+        product.picture = fileUrl
         product.save (err) =>
+          return res.json 400, err if err?
           res.send 201, product.toSimpleProduct()
   
   adminProductDelete: (req, res) ->
