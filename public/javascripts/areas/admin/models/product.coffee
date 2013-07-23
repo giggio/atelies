@@ -8,7 +8,7 @@ define [
       @bind 'change:hasInventory', @_hasInventoryChanged
     _hasInventoryChanged: ->
       @validation.inventory[0].required = @get 'hasInventory'
-      @validate()
+      @validate() if @validate?
     sync: (method, model, opt) ->
       return Backbone.sync.apply @, arguments unless @hasFiles
       methodMap = create:'POST', update:'PUT', patch:'PATCH', delete:'DELETE', read:'GET'
@@ -36,7 +36,7 @@ define [
       shippingDepth:undefined
       shippingWeight:undefined
       inventory:undefined
-      hasInventory:true
+      hasInventory:false
     validation:
       name:
         required:true
@@ -69,5 +69,5 @@ define [
         [{required: true, msg: 'O peso de postagem é obrigatório.'}
          {range:[0,30], msg: 'O peso deve ser um número entre 0 e 30.'}]
       inventory:
-        [{required: true, msg: 'O estoque é obrigatório quando o produto terá estoque.'}
+        [{required: false, msg: 'O estoque é obrigatório quando o produto terá estoque.'}
          {pattern:'digits', msg: 'O estoque deve ser um número.'}]
