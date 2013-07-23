@@ -8,9 +8,8 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
-FileUploader    = require '../helpers/amazonFileUploader'
-async           = require 'async'
 ProductUploader = require '../models/productUploader'
+StoreUploader   = require '../models/storeUploader'
 
 class Routes
   constructor: (@env) ->
@@ -30,30 +29,16 @@ class Routes
       return res.json 409, error: user: "Loja já existe com esse nome." if itExists
       store = req.user.createStore()
       store.updateFromSimple body
-      store.autoCalculateShipping = body.autoCalculateShipping
-      if body.pagseguro
-        store.pmtGateways.pagseguro = {} unless store.pmtGateways.pagseguro?
-        store.pmtGateways.pagseguro.email = body.pagseguroEmail
-        store.pmtGateways.pagseguro.token = body.pagseguroToken
-      saveIf = (cb) =>
-        if req.files?
-          uploader = new FileUploader()
-          createAction = (field, dimensionResize) =>
-            (cb) =>
-              return cb() unless req.files[field]?
-              onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
-              uploader.upload onlineName, req.files[field], dimensionResize, (err, fileUrl) ->
-                return cb err if err?
-                store[field] = fileUrl
-                cb()
-          actions = [ createAction('homePageImage', Store.homePageImageDimension), createAction('banner'), createAction('flyer', Store.flyerDimension) ]
-          async.parallel actions, cb
-        else
-          cb()
-      saveIf (err) =>
+      store.autoCalculateShipping = if body.autoCalculateShipping? then !!body.autoCalculateShipping else false
+      if body.pagseguro is on then store.setPagseguro email: body.pagseguroEmail, token: body.pagseguroToken
+      uploader = new StoreUploader store
+      imageFields = homePageImage: Store.homePageImageDimension, banner: null, flyer: Store.flyerDimension
+      uploader.upload req.files, imageFields, (err, fileUrls) =>
         if err?
           return res.json 422, err if err.smallerThan?
           return res.json 400, error: uploadError: err
+        for field, fileUrl of fileUrls
+          store[field] = fileUrl if fileUrl?
         store.save (err) ->
           return res.json 400, error: saveError: err if err?
           req.user.save (err) ->
@@ -75,31 +60,16 @@ class Routes
           cb()
       checkIfNameCanBelongToStore =>
         store.updateFromSimple req.body
-        saveIf = (cb) =>
-          if req.files?
-            uploader = new FileUploader()
-            createAction = (field, dimensionResize) =>
-              (cb) =>
-                return cb() unless req.files[field]?
-                if store[field]?
-                  onlineName = uploader.getFileNameFromFullName store[field]
-                else
-                  onlineName = uploader.randomName "#{store.slug}/store", req.files[field].name
-                uploader.upload onlineName, req.files[field], dimensionResize, (err, fileUrl) ->
-                  return cb err if err?
-                  store[field] = fileUrl
-                  cb()
-            actions = [ createAction('homePageImage', Store.homePageImageDimension), createAction('banner'), createAction('flyer', Store.flyerDimension) ]
-            async.parallel actions, cb
-          else
-            cb()
-        saveIf (err) =>
+        uploader = new StoreUploader store
+        imageFields = homePageImage: Store.homePageImageDimension, banner: null, flyer: Store.flyerDimension
+        uploader.upload req.files, imageFields, (err, fileUrls) =>
           if err?
             return res.json 422, err if err.smallerThan?
             return res.json 400, error: uploadError: err
+          for field, fileUrl of fileUrls
+            store[field] = fileUrl if fileUrl?
           store.save (err) ->
-            if err?
-              return res.json 400
+            return res.json 400 if err?
             res.send 200, store
   adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
   adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
@@ -142,15 +112,15 @@ class Routes
       @_productUpdate req, res, product
 
   _productUpdate: (req, res, product) ->
-      product.updateFromSimpleProduct req.body
-      uploader = new ProductUploader()
-      uploader.upload product, req.files?.picture, (err, fileUrl) =>
-        return res.json 422, err if err?.smallerThan?
+    product.updateFromSimpleProduct req.body
+    uploader = new ProductUploader()
+    uploader.upload product, req.files?.picture, (err, fileUrl) =>
+      return res.json 422, err if err?.smallerThan?
+      return res.json 400, err if err?
+      product.picture = fileUrl if fileUrl?
+      product.save (err) =>
         return res.json 400, err if err?
-        product.picture = fileUrl if fileUrl?
-        product.save (err) =>
-          return res.json 400, err if err?
-          res.send 201, product.toSimpleProduct()
+        res.send 201, product.toSimpleProduct()
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) ->
