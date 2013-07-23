@@ -27,6 +27,12 @@ storeSchema = new mongoose.Schema
       token:              String
   random:                 type: Number, required: true, default: Math.random()
 
+storeSchema.methods.createProduct = ->
+  product = new Product()
+  product.storeName = @name
+  product.storeSlug = @slug
+  product
+
 storeSchema.methods.toSimple = ->
   store =
     _id: @_id

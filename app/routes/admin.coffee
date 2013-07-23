@@ -126,34 +126,28 @@ class Routes
         res.send 204
 
   adminProductUpdate: (req, res) ->
-    Product.findById req.params.productId, (err, product) ->
-      return res.json 400, err if err?
-      Store.findBySlug product.storeSlug, (err, store) ->
-        return res.json 400, err if err?
-        throw new AccessDenied() unless req.user.hasStore store
-        product.updateFromSimpleProduct req.body
-        uploader = new ProductUploader()
-        uploader.upload product, req.files?.picture, (err, fileUrl) =>
-          return res.json 422, err if err?.smallerThan?
-          return res.json 400, err if err?
-          product.picture = fileUrl
-          product.save (err) ->
-            return res.json 400, err if err?
-            res.send 204
-  
-  adminProductCreate: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) ->
+    Store.findBySlug req.params.storeSlug, (err, store) =>
       return res.json 400, err if err?
       throw new AccessDenied() unless req.user.hasStore store
-      product = new Product()
-      product.storeName = store.name
-      product.storeSlug = store.slug
+      Product.findById req.params.productId, (err, product) =>
+        return res.json 400, err if err?
+        return res.json 400 if product.storeSlug isnt store.slug
+        @_productUpdate req, res, product
+  
+  adminProductCreate: (req, res) ->
+    Store.findBySlug req.params.storeSlug, (err, store) =>
+      return res.json 400, err if err?
+      throw new AccessDenied() unless req.user.hasStore store
+      product = store.createProduct()
+      @_productUpdate req, res, product
+
+  _productUpdate: (req, res, product) ->
       product.updateFromSimpleProduct req.body
       uploader = new ProductUploader()
       uploader.upload product, req.files?.picture, (err, fileUrl) =>
         return res.json 422, err if err?.smallerThan?
         return res.json 400, err if err?
-        product.picture = fileUrl
+        product.picture = fileUrl if fileUrl?
         product.save (err) =>
           return res.json 400, err if err?
           res.send 201, product.toSimpleProduct()
