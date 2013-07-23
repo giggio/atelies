@@ -13,14 +13,15 @@ describe 'AdminProductUpdateRoute', ->
         save: sinon.stub().yields null, product
         storeSlug: 'some_store'
         updateFromSimpleProduct: sinon.spy()
-      store = _id: 9876
+        toSimpleProduct: ->
+      store = _id: 9876, slug: product.storeSlug
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
         isSeller: true
         stores: [9876]
         hasStore: -> true
-      params = productId: '1234'
+      params = productId: '1234', storeSlug: store.slug
       req = loggedIn: true, user: user, params: params, body: {}
       body = req.body
       res = send: sinon.spy()

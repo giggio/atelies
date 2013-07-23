@@ -15,7 +15,7 @@ describe 'AdminStoreCreateRoute', ->
         requires:
           '../models/store': StoreStub
       routes = new Routes()
-      store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy()
+      store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy(), setPagseguro: sinon.spy()
       user = isSeller: true, verified: true
       user.createStore = -> store
       user.save = (cb) -> cb null, user
@@ -38,8 +38,8 @@ describe 'AdminStoreCreateRoute', ->
       res.json.should.have.been.calledWith 201, store
     it 'store is created correctly', ->
       store.updateFromSimple.should.have.been.calledWith req.body
-      store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
-      store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+    it 'saved pagseguro', ->
+      store.setPagseguro.should.have.been.calledWith email: 'pagseguro@a.com', token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     it 'added store to the user', ->
       user.createStore.should.have.been.called
     it 'saved the user', ->

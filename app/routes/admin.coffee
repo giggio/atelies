@@ -118,9 +118,13 @@ class Routes
       return res.json 422, err if err?.smallerThan?
       return res.json 400, err if err?
       product.picture = fileUrl if fileUrl?
+      isNew = product.isNew
       product.save (err) =>
         return res.json 400, err if err?
-        res.send 201, product.toSimpleProduct()
+        if isNew
+          res.json 201, product.toSimpleProduct()
+        else
+          res.send 204
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) ->

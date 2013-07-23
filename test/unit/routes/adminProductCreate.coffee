@@ -8,7 +8,7 @@ describe 'AdminProductCreateRoute', ->
     simpleProduct = toSimpleProductStub = ProductStub = saveStub = updateFromSimpleProductSpy = product = store = req = res = body = user = null
     before ->
       simpleProduct = {}
-      store = _id: 9876, slug: 'some_store', name: 'Some Store'
+      store = _id: 9876, slug: 'some_store', name: 'Some Store', createProduct: -> new ProductStub()
       saveStub = sinon.stub().yields null, product
       updateFromSimpleProductSpy = sinon.spy()
       toSimpleProductStub = sinon.stub().returns simpleProduct
@@ -21,6 +21,7 @@ describe 'AdminProductCreateRoute', ->
         storeSlug: store.slug
         updateFromSimpleProduct: updateFromSimpleProductSpy
         toSimpleProduct: toSimpleProductStub
+        isNew: true
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
         isSeller: true
@@ -30,7 +31,7 @@ describe 'AdminProductCreateRoute', ->
       req = loggedIn: true, user: user, params: params, body:
         storeSlug: store.slug
       body = req.body
-      res = send: sinon.spy()
+      res = json: sinon.spy()
       Routes = SandboxedModule.require '../../../app/routes/admin',
         requires:
           '../models/product': ProductStub
@@ -44,12 +45,9 @@ describe 'AdminProductCreateRoute', ->
     it 'looked for correct store', ->
       Store.findBySlug.should.have.been.calledWith store.slug
     it 'access allowed and return code is correct', ->
-      res.send.should.have.been.calledWith 201, simpleProduct
+      res.json.should.have.been.calledWith 201, simpleProduct
     it 'product is updated correctly', ->
       updateFromSimpleProductSpy.should.have.been.calledWith req.body
-    it "sets the product's store", ->
-      product.storeName.should.equal store.name
-      product.storeSlug.should.equal store.slug
     it 'product should had been saved', ->
       saveStub.should.have.been.called
 
