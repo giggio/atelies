@@ -34,6 +34,8 @@ define [
     @store: (storeSlug) =>
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
       @_findProducts storeSlug, (err, products) ->
+        if err?
+          return Dialog.showError viewsManager.$el, "Não foi possível carregar os produtos da loja. Tente novamente mais tarde."
         storeView = new StoreView store: store, products: products
         viewsManager.show storeView
     @manageProduct: (storeSlug, productId) =>
@@ -64,13 +66,17 @@ define [
         product.unbind 'sync', callBackWhenChanged
         cb product
       product.bind 'sync', callBackWhenChanged
-      product.fetch()
+      product.fetch
+        error: (model, res, opt) ->
+          Dialog.showError viewsManager.$el, "Não foi possível carregar o produto. Tente novamente mais tarde."
     @orders: ->
       orders = new Orders()
       orders.fetch
         success: ->
           ordersView = new OrdersView orders: orders.toJSON()
           viewsManager.show ordersView
+        error: (col, res, opt) ->
+          Dialog.showError viewsManager.$el, "Não foi possível carregar os pedidos. Tente novamente mais tarde."
     @order: (_id) ->
       order = new Order _id: _id
       orders = new Orders [order]
@@ -79,4 +85,4 @@ define [
           orderView = new OrderView order: order.toJSON()
           viewsManager.show orderView
         error: (order, res, opt) ->
-          console.log 'error loading order'
+          Dialog.showError viewsManager.$el, "Não foi possível carregar o pedido. Tente novamente mais tarde."

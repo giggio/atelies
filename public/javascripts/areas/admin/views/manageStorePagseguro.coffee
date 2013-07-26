@@ -27,8 +27,9 @@ define [
       opt =
         url: "/admin/store/#{@storeId}/setPagSeguro"
         type: 'PUT'
-        error: (xhr, text, error) ->
-          return console.log error, xhr if xhr.status isnt 409
+        error: (xhr, text, error) =>
+          if xhr.status isnt 409
+            return @showDialogError "Não foi possível alterar o PagSeguro. Tente novamente mais tarde."
           $('#modalConfirmPagseguro', @el).modal 'hide'
           $('#modalCannotPagseguro', @el).modal 'show'
           $("#confirmSetPagseguro").prop "disabled", off

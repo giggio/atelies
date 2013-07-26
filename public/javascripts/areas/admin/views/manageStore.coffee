@@ -62,13 +62,13 @@ define [
         @model.hasFiles = false
       @model.save @model.attributes,
         success: (model) => @_storeCreated model
-        error: (model, xhr, opt) ->
+        error: (model, xhr, opt) =>
           $("#updateStore").prop "disabled", off
           return $('#nameAlreadyExists').modal() if xhr.status is 409
           if xhr.status is 422
             $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
             return $('#sizeIsIncorrect').modal()
-          throw message:'error when saving'
+          @showDialogError "Não foi possível salvar a loja. Tente novamente mais tarde."
     _storeCreated: (store) =>
       update = false
       existingStore = _.findWhere adminStoresBootstrapModel.stores, _id: store.get('_id')
@@ -92,8 +92,9 @@ define [
       $.ajax
         url: url
         type: 'PUT'
-        error: (xhr, text, error) ->
-          return console.log error, xhr if xhr.status isnt 409
+        error: (xhr, text, error) =>
+          if xhr.status isnt 409
+            return @showDialogError "Não foi possível alterar o cálculo automático de frete. Tente novamente mais tarde."
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
           $('#modalCannotAutoCalculateShipping', @el).modal 'show'
           $("#confirmSetAutoCalculateShipping").prop "disabled", off

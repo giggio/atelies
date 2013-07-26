@@ -13,3 +13,5 @@ define [
       $.extend true, bindings, extension
     showDialog: (message, title, modalId, closeMsg) ->
       Dialog.show @$el, message, title, modalId, closeMsg
+    showDialogError: (message, modalId, closeMsg) ->
+      Dialog.showError @$el, message, modalId, closeMsg

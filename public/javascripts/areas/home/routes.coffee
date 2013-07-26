@@ -4,7 +4,8 @@ define [
   './views/home'
   './models/storesSearch'
   './models/productsSearch'
-],($, viewsManager, HomeView, StoresSearch, ProductsSearch) ->
+  '../shared/views/dialog'
+],($, viewsManager, HomeView, StoresSearch, ProductsSearch, Dialog) ->
   class Routes
     viewsManager.$el = $ "#app-container"
     @home: =>
@@ -23,9 +24,13 @@ define [
       storesSearch.fetch
         reset:true
         success: => @homeView.showStoresSearchResults searchTerm, storesSearch.toJSON()
+        error: (col, res, opt) ->
+          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
     @searchProducts: (searchTerm) =>
       @home() unless @homeView?
       productsSearch = new ProductsSearch searchTerm:searchTerm
       productsSearch.fetch
         reset:true
         success: => @homeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
+        error: (col, res, opt) ->
+          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."

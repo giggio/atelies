@@ -59,12 +59,12 @@ define [
           @model.hasFiles = false
         @model.save @model.attributes,
           success: @_productUpdated
-          error: (model, xhr, options) ->
+          error: (model, xhr, options) =>
             $("#updateProduct").prop "disabled", off
             if xhr.status is 422
               $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
               return $('#sizeIsIncorrect').modal()
-            console.log xhr
+            @showDialogError "Não foi possível salvar o produto. Tente novamente mais tarde."
     _deleteProduct: =>
       @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
     _productUpdated: =>
