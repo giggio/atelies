@@ -50,7 +50,7 @@ db.products.insert
   name: 'name 1'
   nameKeywords: ['name', '1']
   slug: 'name_1'
-  picture: 'http://lorempixel.com/300/450/cats/1'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/171326565789058800912925501121208000.jpg'
   price: 11.1
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -75,7 +75,7 @@ db.products.insert
   name: 'name 2'
   nameKeywords: ['name', '2']
   slug: 'name_2'
-  picture: 'http://lorempixel.com/300/450/cats/2'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/537971107754856300194540178403258340.jpg'
   price: 22.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -99,7 +99,7 @@ db.products.insert
   name: 'name 3'
   nameKeywords: ['name', '3']
   slug: 'name_3'
-  picture: 'http://lorempixel.com/300/450/cats/3'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/697575170779600800359621327370405200.jpg'
   price: 33.33
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -122,7 +122,7 @@ db.products.insert
   name: 'name 4'
   nameKeywords: ['name', '4']
   slug: 'name_4'
-  picture: 'http://lorempixel.com/300/450/cats/4'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/69368822034448380358378419186919940.jpg'
   price: 42.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -146,7 +146,7 @@ db.products.insert
   name: 'name 5'
   nameKeywords: ['name', '5']
   slug: 'name_5'
-  picture: 'http://lorempixel.com/300/450/cats/5'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/306489950977265860824955702992156200.jpg'
   price: 52.2
   storeName: 'store 2'
   storeSlug: 'store_2'
@@ -170,7 +170,7 @@ db.products.insert
   name: 'name 6'
   nameKeywords: ['name', '6']
   slug: 'name_6'
-  picture: 'http://lorempixel.com/300/450/cats/6'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/581893865950405600315305696800351170.jpg'
   price: 62.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -194,7 +194,7 @@ db.products.insert
   name: 'Some Fancier Name 7'
   nameKeywords: ['some', 'fancier', 'name', '7']
   slug: 'some_fancier_name_7'
-  picture: 'http://lorempixel.com/300/450/cats/7'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/497979291947558500646980655146762800.jpg'
   price: 72.2
   storeName: 'store 1'
   storeSlug: 'store_1'
@@ -221,7 +221,7 @@ for i in [8..25]
     name: "Name #{i}"
     nameKeywords: ['name', i.toString()]
     slug: "name_#{i}"
-    picture: "http://lorempixel.com/300/450/cats/#{pictureId}"
+    picture: "https://s3.amazonaws.com/ateliesteste/store_1/products/119340668199583890867460034321993600.jpg"
     price: 62.2
     storeName: 'store 1'
     storeSlug: 'store_1'
@@ -251,7 +251,7 @@ db.stores.insert
   email: 'a@a.com'
   description: "Store Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
   homePageDescription: "HP Store Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
-  homePageImage: 'http://lorempixel.com/400/400/nightlife/1'
+  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_1/store/808719296241179100238743254682049150.jpg'
   urlFacebook: 'fbstore1'
   urlTwitter: 'twstore1'
   phoneNumber: '(11) 98745-7894'
@@ -259,7 +259,8 @@ db.stores.insert
   state: "SP"
   zip: "01234-567"
   otherUrl: 'http://myotherurl.com'
-  banner: 'http://lorempixel.com/1200/300/cats/1'
+  banner: 'https://s3.amazonaws.com/ateliesteste/store_1/store/6432062247768044242338555399328480.jpg'
+  flyer: 'https://s3.amazonaws.com/ateliesteste/store_1/store/236652196617797020858783057425171200.jpg'
   autoCalculateShipping: true
   pmtGateways:
     pagseguro:
@@ -276,7 +277,7 @@ db.stores.insert
   email: 'b@a.com'
   description: "Store Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
   homePageDescription: "HP Store Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
-  homePageImage: 'http://lorempixel.com/400/400/nightlife/2'
+  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_2/store/309018768602982140848002398153767000.jpg'
   urlFacebook: 'fbstore2'
   urlTwitter: 'twstore2'
   phoneNumber: '(85) 7788-1111'
@@ -284,7 +285,8 @@ db.stores.insert
   state: "CE"
   zip: "04365-000"
   otherUrl: 'http://someotherurl.com'
-  flyer: 'http://lorempixel.com/350/400/nightlife/2'
+  banner: 'https://s3.amazonaws.com/ateliesteste/store_1/store/6432062247768044242338555399328480.jpg'
+  flyer: 'https://s3.amazonaws.com/ateliesteste/store_2/store/503898129332810600307476012269035000.jpg'
   autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
@@ -297,7 +299,7 @@ db.stores.insert
   email: 'c@a.com'
   description: "Store Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer Ispecialista im mé intende tudis nuam golada, vinho, uiski, carirí, rum da jamaikis, só num pode ser mijis. Adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat."
   homePageDescription: "HP Store Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer Ispecialista im mé intende tudis nuam golada, vinho, uiski, carirí, rum da jamaikis, só num pode ser mijis. Adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat."
-  homePageImage: 'http://lorempixel.com/400/400/nightlife/3'
+  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_3/store/396625304594635970890163169475272300.jpg'
   urlFacebook: 'fbstore3'
   urlTwitter: 'twstore3'
   phoneNumber: '(77) 9999-9999'
@@ -305,7 +307,8 @@ db.stores.insert
   state: "AM"
   zip: "04234-567"
   otherUrl: 'http://idontownthisstore.com'
-  flyer: 'http://lorempixel.com/350/400/nightlife/3'
+  banner: 'https://s3.amazonaws.com/ateliesteste/store_3/store/759137748274952200984912005718797400.jpg'
+  flyer: 'https://s3.amazonaws.com/ateliesteste/store_3/store/519919875310733900163886155933141700.jpg'
   autoCalculateShipping: true
   pmtGateways: {}
   random: Math.random()
@@ -316,7 +319,7 @@ db.stores.insert
   email: 'd@a.com'
   description: "Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
   homePageDescription: "HP Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
-  homePageImage: 'http://lorempixel.com/400/400/nightlife/4'
+  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_4/store/465055665234103800952865870436653400.jpg'
   urlFacebook: 'fbsomefancyname'
   urlTwitter: 'twsomefancyname'
   phoneNumber: '(37) 9999-9999'
@@ -324,7 +327,8 @@ db.stores.insert
   state: "MS"
   zip: "04334-567"
   otherUrl: 'http://somestorefromms.com'
-  flyer: 'http://lorempixel.com/350/400/nightlife/4'
+  banner: 'https://s3.amazonaws.com/ateliesteste/store_4/store/977493978571146800762570540187880400.jpg'
+  flyer: 'https://s3.amazonaws.com/ateliesteste/store_4/store/186986845219507800735144682228565200.jpg'
   autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
@@ -338,7 +342,7 @@ for i in [4..15]
     email: "a#{i}@a.com"
     description: "Store#{i} Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
     homePageDescription: "HP Store#{i} Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
-    homePageImage: "http://lorempixel.com/400/400/nightlife/4#{i}"
+    homePageImage: "https://s3.amazonaws.com/ateliesteste/store_5/store/802396552870050000798405606066808000.jpg"
     urlFacebook: "fbstore#{i}"
     urlTwitter: "twstore#{i}"
     phoneNumber: "(#{i}) 98745-7894"
@@ -346,8 +350,8 @@ for i in [4..15]
     state: "SP"
     zip: "01234-667"
     otherUrl: 'http://myotherurl.com'
-    banner: "http://lorempixel.com/1200/250/cats/#{pictureId}"
-    flyer: "http://lorempixel.com/350/400/nightlife/#{pictureId}"
+    banner: "https://s3.amazonaws.com/ateliesteste/store_5/store/67713805800303820043159248307347300.jpg"
+    flyer: "https://s3.amazonaws.com/ateliesteste/store_5/store/866178757045418000837425043340772400.jpg"
     autoCalculateShipping: false
     pmtGateways: {}
     random: Math.random()
