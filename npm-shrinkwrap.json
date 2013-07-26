@@ -1,6 +1,6 @@
 {
   "name": "atelies",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "dependencies": {
     "express": {
       "version": "3.1.2",
@@ -1558,6 +1558,11 @@
         }
       }
     },
+    "marked": {
+      "version": "0.2.9",
+      "from": "marked@",
+      "resolved": "https://registry.npmjs.org/marked/-/marked-0.2.9.tgz"
+    },
     "amdefine": {
       "version": "0.0.5",
       "from": "amdefine@"
@@ -1634,18 +1639,6 @@
         }
       }
     },
-    "grunt-shell": {
-      "version": "0.3.1",
-      "from": "grunt-shell@",
-      "resolved": "https://registry.npmjs.org/grunt-shell/-/grunt-shell-0.3.1.tgz",
-      "dependencies": {
-        "stripcolorcodes": {
-          "version": "0.1.0",
-          "from": "stripcolorcodes@~0.1.0",
-          "resolved": "https://registry.npmjs.org/stripcolorcodes/-/stripcolorcodes-0.1.0.tgz"
-        }
-      }
-    },
     "grunt-notify": {
       "version": "0.2.3",
       "from": "grunt-notify@",
@@ -1667,6 +1660,18 @@
         "growl": {
           "version": "1.7.0",
           "from": "growl@~1.7.0"
+        }
+      }
+    },
+    "grunt-shell": {
+      "version": "0.3.1",
+      "from": "grunt-shell@",
+      "resolved": "https://registry.npmjs.org/grunt-shell/-/grunt-shell-0.3.1.tgz",
+      "dependencies": {
+        "stripcolorcodes": {
+          "version": "0.1.0",
+          "from": "stripcolorcodes@~0.1.0",
+          "resolved": "https://registry.npmjs.org/stripcolorcodes/-/stripcolorcodes-0.1.0.tgz"
         }
       }
     },
