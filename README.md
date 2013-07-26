@@ -26,7 +26,8 @@ I will probably start some blog posts (see blog address below) and will republis
 
 ## Issues and ideas
 
-* Check the Github backlog: [https://github.com/giggio/atelies/issues](https://github.com/giggio/atelies/issues)
+* Suggestions should go to the user voice site: [https://atelies.uservoice.com](https://atelies.uservoice.com)
+* You can also check the Github backlog: [https://github.com/giggio/atelies/issues](https://github.com/giggio/atelies/issues)
 
 ## Maintainers
 
