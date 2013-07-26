@@ -8,7 +8,7 @@ define [
   './homeProducts'
   './homeProductsSearchResults'
 ], ($, _, Backbone, Handlebars, homeTemplate, StoresView, ProductsView, ProductsSearchResultsView) ->
-  class HomeView extends Backbone.View
+  class HomeView extends Backbone.Open.View
     events:
       'click #doSearch':'_doSearch'
     template: homeTemplate
