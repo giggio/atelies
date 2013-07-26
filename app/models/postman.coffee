@@ -21,17 +21,7 @@ module.exports = class Postman
       html: body
       generateTextFromHTML: true
       forceEmbeddedImages: true
-    console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
+    #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
     Postman.smtp.sendMail mail, cb
 
   sendFromContact: @::send.partial {name:'Ateliês', email:'contato@atelies.com.br'}
-
-#Postman.configure "contato@atelies.com.br", "somepass"
-#p = new Postman()
-#p.send {name: "Atelies", email: "contato@atelies.com.br"}, {name: "Giovanni", email:"giggio@giggio.net"}, "Hello2", "<b>Hello world 2</b>"
-#p.send {name: "Atelies", email: "contato@atelies.com.br"}, {name: "Giovanni", email:"giggio@giggio.net"}, "Hello", "<b>Hello world</b>", (error, response) =>
-  #if error?
-    #console.log error
-  #else
-    #console.log "Message sent: #{response.message}"
-  #Postman.smtp.close()

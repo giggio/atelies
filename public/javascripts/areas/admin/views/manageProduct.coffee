@@ -66,7 +66,11 @@ define [
               return $('#sizeIsIncorrect').modal()
             @showDialogError "Não foi possível salvar o produto. Tente novamente mais tarde."
     _deleteProduct: =>
-      @model.destroy wait:true, success: @_productDeleted, error: (model, xhr, options) -> console.log xhr
+      @model.destroy
+        wait:true
+        success: @_productDeleted
+        error: (model, xhr, options) =>
+          @showDialogError "Não foi possível excluir o produto. Tente novamente mais tarde."
     _productUpdated: =>
       Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
     _productDeleted: =>

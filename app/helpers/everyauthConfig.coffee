@@ -32,7 +32,7 @@ exports.configure = (app) ->
         return
       else if req.body.email?
         User.findByEmail req.body.email, (error, user) ->
-          cb error if error?
+          return cb error if error?
           if user?.carefulLogin()
             req.session.carefulLogin = true
             addRecaptcha()
@@ -140,7 +140,6 @@ exports.configure = (app) ->
       user.setPassword password
       user.save (error, user) ->
         user.sendMailConfirmRegistration (error, mailResponse) ->
-          console.log "Error sending mail: #{error}" if error?
           cb.fulfill(if error? then [error] else user)
       cb
 
