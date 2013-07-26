@@ -6,7 +6,7 @@ define [
   'text!./templates/product.html'
   '../models/cart'
 ], ($, Backbone, Handlebars, Products, productTemplate, Cart) ->
-  class ProductView extends Backbone.View
+  class ProductView extends Backbone.Open.View
     template: productTemplate
     initialize: (opt) ->
       @store = opt.store

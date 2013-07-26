@@ -6,7 +6,7 @@ define [
   'text!./templates/store.html'
   '../models/products'
 ], ($, Backbone, Handlebars, _, storeTemplate, Products) ->
-  class StoreView extends Backbone.View
+  class StoreView extends Backbone.Open.View
     @justCreated: false
     @justUpdated: false
     template: storeTemplate

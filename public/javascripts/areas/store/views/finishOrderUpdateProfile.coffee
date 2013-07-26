@@ -7,7 +7,7 @@ define [
   'text!./templates/finishOrderUpdateProfile.html'
   './cartItem'
 ], ($, Backbone, Handlebars, Products, Cart, finishOrderUpdateProfileTemplate, CartItemView) ->
-  class CartView extends Backbone.View
+  class CartView extends Backbone.Open.View
     template: finishOrderUpdateProfileTemplate
     initialize: (opt) =>
       @user = opt.user

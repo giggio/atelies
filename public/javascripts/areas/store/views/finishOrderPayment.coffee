@@ -10,7 +10,7 @@ define [
   './cartItem'
   '../../../converters'
 ], ($, _, Backbone, Handlebars, Products, Cart, Orders, finishOrderPaymentTemplate, CartItemView, converters) ->
-  class FinishOrderPayment extends Backbone.View
+  class FinishOrderPayment extends Backbone.Open.View
     events:
       'click #selectPaymentType':'_selectPaymentType'
     template: finishOrderPaymentTemplate

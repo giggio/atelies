@@ -4,7 +4,7 @@ define [
   'handlebars'
   'text!./templates/finishOrderOrderFinished.html'
 ], ($, Backbone, Handlebars, finishOrderOrderFinishedTemplate) ->
-  class FinishOrderOrderFinishedView extends Backbone.View
+  class FinishOrderOrderFinishedView extends Backbone.Open.View
     template: finishOrderOrderFinishedTemplate
     render: =>
       context = Handlebars.compile @template

@@ -4,7 +4,7 @@ define [
   'handlebars'
   'text!./templates/admin.html'
 ], ($, Backbone, Handlebars, adminTemplate) ->
-  class AdminView extends Backbone.View
+  class AdminView extends Backbone.Open.View
     events:
       'click #createStore': -> Backbone.history.navigate 'createStore', true
     template: adminTemplate

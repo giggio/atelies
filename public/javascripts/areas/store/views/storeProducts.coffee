@@ -5,7 +5,7 @@ define [
   'handlebars'
   'text!./templates/_storeProducts.html'
 ], ($, _, Backbone, Handlebars, homeProductsTemplate) ->
-  class HomeProductsView extends Backbone.View
+  class HomeProductsView extends Backbone.Open.View
     template: homeProductsTemplate
     initialize: (opt) ->
       @products = opt.products

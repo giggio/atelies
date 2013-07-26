@@ -8,7 +8,7 @@ define [
   './cartItem'
   '../../../converters'
 ], ($, Backbone, Handlebars, Products, Cart, cartTemplate, CartItemView, converters) ->
-  class CartView extends Backbone.View
+  class CartView extends Backbone.Open.View
     events:
       'click #clearCart':'clear'
       'click #finishOrderCart':'finishOrder'

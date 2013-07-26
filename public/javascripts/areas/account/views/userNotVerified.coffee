@@ -4,7 +4,7 @@ define [
   'handlebars'
   'text!./templates/userNotVerified.html'
 ], ($, Backbone, Handlebars, userNotVerifiedTemplate) ->
-  class UserNotVerifiedView extends Backbone.View
+  class UserNotVerifiedView extends Backbone.Open.View
     template: userNotVerifiedTemplate
     initialize: (opt) ->
       @user = opt.user

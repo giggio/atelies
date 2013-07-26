@@ -6,7 +6,7 @@ define [
   '../models/productsHome'
   'text!./templates/_homeProductsSearchResults.html'
 ], ($, _, Backbone, Handlebars, ProductsHome, homeProductsTemplate) ->
-  class HomeProductsView extends Backbone.View
+  class HomeProductsView extends Backbone.Open.View
     template: homeProductsTemplate
     initialize: (opt) ->
       @products = opt.products

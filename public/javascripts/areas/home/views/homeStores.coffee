@@ -8,7 +8,7 @@ define [
   'caroufredsel'
   'imagesloaded'
 ], ($, _, Backbone, Handlebars, ProductsHome, homeStoresTemplate) ->
-  class HomeStoresView extends Backbone.View
+  class HomeStoresView extends Backbone.Open.View
     template: homeStoresTemplate
     initialize: (opt) ->
       @stores = opt.stores

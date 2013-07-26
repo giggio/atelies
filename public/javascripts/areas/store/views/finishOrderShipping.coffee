@@ -9,7 +9,7 @@ define [
   './cartItem'
   '../../../converters'
 ], ($, _, Backbone, Handlebars, Products, Cart, finishOrderShippingTemplate, CartItemView, converters) ->
-  class CartView extends Backbone.View
+  class CartView extends Backbone.Open.View
     events:
       'click #finishOrderShipping':'finishOrder'
       'click [name=shippingOptions]':'_shippingOptionSelected'

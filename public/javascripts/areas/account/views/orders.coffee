@@ -6,7 +6,7 @@ define [
   'text!./templates/orders.html'
   '../../../converters'
 ], ($, _, Backbone, Handlebars, ordersTemplate, converters) ->
-  class OrdersView extends Backbone.View
+  class OrdersView extends Backbone.Open.View
     template: ordersTemplate
     initialize: (opt) ->
       @user = opt.user

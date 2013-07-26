@@ -4,7 +4,7 @@ define [
   'handlebars'
   'text!./templates/account.html'
 ], ($, Backbone, Handlebars, accountTemplate) ->
-  class AccountView extends Backbone.View
+  class AccountView extends Backbone.Open.View
     template: accountTemplate
     initialize: (opt) ->
       @user = opt.user
