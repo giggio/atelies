@@ -60,8 +60,9 @@ class Routes
       if succeeded
         res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
-        user.save (error, user) ->
-          return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ]
+        user.save (err, user) ->
+          if err?
+            return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ]
           res.redirect 'account/passwordChanged'
       else
         res.render 'changePassword', errors: [ 'Senha inválida.' ]
