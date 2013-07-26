@@ -6,7 +6,8 @@ define [
   './views/order'
   './views/userNotVerified'
   './models/orders'
-],($, viewsManager, AccountView, OrdersView, OrderView, UserNotVerifiedView, Orders) ->
+  '../shared/views/dialog'
+],($, viewsManager, AccountView, OrdersView, OrderView, UserNotVerifiedView, Orders, Dialog) ->
   class Routes extends Backbone.Open.Routes
     constructor: ->
       viewsManager.$el = $ '#app-container > .account'
@@ -29,7 +30,8 @@ define [
           orderView = new OrderView user: user, order: order
           viewsManager.show orderView
         error: (col, res, opt) ->
-          console.log 'error loading orders'
+          Dialog.showError viewsManager.$el, "Não foi possível carregar o pedido. Tente novamente mais tarde."
+          Backbone.history.navigate "orders"
     userNotVerified: ->
       user = accountBootstrapModel.user
       userNotVerifiedView = new UserNotVerifiedView user: user

@@ -11,5 +11,5 @@ define [
         name = $(el).attr 'id'
         bindings["##{name}"] = "value:#{name}"
       $.extend true, bindings, extension
-    showDialog: (title, message, modalId, closeMsg) ->
-      Dialog.show @$el, title, message, modalId, closeMsg
+    showDialog: (message, title, modalId, closeMsg) ->
+      Dialog.show @$el, message, title, modalId, closeMsg
