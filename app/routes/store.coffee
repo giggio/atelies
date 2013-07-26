@@ -22,7 +22,7 @@ class Routes
     subdomain = @_getSubdomain @domain, req.host.toLowerCase()
     return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
     Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
-      dealWith err
+      return res.send 400 if err?
       return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
       user =
@@ -39,14 +39,14 @@ class Routes
 
   product: (req, res) ->
     Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->
-      dealWith err
+      return res.send 400 if err?
       return res.send 404 if product is null
       res.json product.toSimpleProduct()
   
   orderCreate: (req, res) ->
     user = req.user
     Store.findById req.params.storeId, (err, store) =>
-      dealWith err
+      return res.send 400 if err?
       getItems = for item in req.body.items
         do (item) ->
           (cb) =>
@@ -65,11 +65,11 @@ class Routes
                 p.save()
               if store.pagseguro() and paymentType is 'pagseguro'
                 @_sendToPagseguro store, order, user, (err, pagseguroCode) =>
-                  return res.json 400, err if err?
+                  return res.send 400 if err?
                   res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroCode}"
               else
                 order.sendMailAfterPurchase (error, mailResponse) ->
-                  console.log "Error sending mail: #{error}" if error?
+                  return res.send 400 if err?
                   simpleOrder = order.toSimpleOrder()
                   res.json 201, simpleOrder
 
@@ -176,6 +176,7 @@ class Routes
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
         callbacks = 0
+        errors = 0
         for p in products
           do (p) ->
             if p.hasShippingInfo()
@@ -192,7 +193,7 @@ class Routes
               callbacks++
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                dealWith err
+                errors++ if err?
                 pac.cost += delivery.GrandTotal * quantity
                 #pac.cost = 0.01
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
@@ -200,11 +201,12 @@ class Routes
               deliverySpecs.serviceType = 'sedex'
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                dealWith err
+                errors++ if err?
                 sedex.cost += delivery.GrandTotal * quantity
                 sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
         ready = ->
           if callbacks is 0
+            return cb "Erro ao obter custo de postagem" if errors > 0
             cb null, shippingOptions
           else
             setImmediate ready
@@ -212,7 +214,7 @@ class Routes
   
   productsSearch: (req, res) ->
     Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) ->
-      dealWith err
+      return res.send 400 if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
 

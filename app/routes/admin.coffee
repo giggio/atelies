@@ -49,7 +49,7 @@ class Routes
   
   adminStoreUpdate: (req, res) ->
     Store.findById req.params.storeId, (err, store) ->
-      dealWith err
+      return res.send 400 if err?
       throw new AccessDenied() unless req.user.hasStore store
       checkIfNameCanBelongToStore = (cb) ->
         if store.name isnt req.body.name
@@ -75,7 +75,7 @@ class Routes
   adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
   _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
     Store.findById req.params.storeId, (err, store) ->
-      dealWith err
+      return res.send 400 if err?
       throw new AccessDenied() unless req.user.hasStore store
       store.setAutoCalculateShipping autoCalculateShipping, (set) ->
         if set
@@ -88,7 +88,7 @@ class Routes
   adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, email: req.body.email, token: req.body.token
   _adminStoreUpdateSetPagseguro: (req, res, set) ->
     Store.findById req.params.storeId, (err, store) ->
-      dealWith err
+      return res.send 400 if err?
       throw new AccessDenied() unless req.user.hasStore store
       store.setPagseguro set
       store.save (err) ->
@@ -128,22 +128,22 @@ class Routes
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) ->
-      dealWith err
+      return res.send 400 if err?
       Store.findBySlug product.storeSlug, (err, store) ->
-        dealWith err
+        return res.send 400 if err?
         throw new AccessDenied() unless req.user.hasStore store
         product.remove (err) ->
           res.send 204
 
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug, (err, products) ->
-      dealWith err
+      return res.send 400 if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
   
   storeProduct: (req, res) ->
     Product.findById req.params.productId, (err, product) ->
-      dealWith err
+      return res.send 400 if err?
       if product?
         res.json product.toSimpleProduct()
       else

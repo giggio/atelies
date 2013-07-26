@@ -55,12 +55,13 @@ class Routes
     user = req.user
     email = user.email.toLowerCase()
     user.verifyPassword req.body.password, (error, succeeded) ->
-      dealWith error
+      if error?
+        return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ]
       if succeeded
         res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (error, user) ->
-          dealWith error
+          return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ]
           res.redirect 'account/passwordChanged'
       else
         res.render 'changePassword', errors: [ 'Senha inválida.' ]

@@ -20,10 +20,10 @@ class Routes
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res
       Product.findRandom 24, (err, products) =>
-        dealWith err
+        return res.send 400 if err?
         viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
         Store.findRandomForHome 12, (err, stores) ->
-          dealWith err
+          return res.send 400 if err?
           stores = self._multiplesOf 4, stores
           viewModelStores = _.map stores, (s) -> s.toSimpler()
           res.render "index", products: viewModelProducts, stores: viewModelStores
@@ -55,12 +55,12 @@ class Routes
   
   storesSearch: (req, res) ->
     Store.searchByName req.params.searchTerm, (err, stores) ->
-      dealWith err
+      return res.send 400 if err?
       res.json stores
   
   productsSearch: (req, res) ->
     Product.searchByName req.params.searchTerm, (err, products) ->
-      dealWith err
+      return res.send 400 if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
 
