@@ -51,7 +51,7 @@ define [
         else
           Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
       error = (model, xhr, opt) =>
-        console.error "Erro ao salvar #{xhr}"
+        @showDialogError "Não foi possível fazer o pedido. Tente novamente mais tarde."
         $("#finishOrder").prop "disabled", off
       order = items: items
       order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping

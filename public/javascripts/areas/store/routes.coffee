@@ -13,7 +13,8 @@ define [
   './models/store'
   './models/cart'
   './models/productsSearch'
-],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch) ->
+  '../shared/views/dialog'
+],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch, Dialog) ->
   class Routes extends Backbone.Open.Routes
     constructor: ->
       viewsManager.$el = $ '#app-container > .store'
@@ -31,6 +32,8 @@ define [
           product = products.first()
           productView = new ProductView store: store, product: product
           viewsManager.show productView
+        error: (col, res, opt) =>
+          Dialog.showError viewsManager.$el, "Não foi possível obter os produtos. Tente novamente mais tarde."
     cart: ->
       store = storeBootstrapModel.store
       cartView = new CartView store: store
@@ -67,4 +70,6 @@ define [
       productsSearch.fetch
         reset:true
         success: => @storeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
+        error: (col, res, opt) =>
+          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
   new Routes()

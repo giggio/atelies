@@ -58,7 +58,8 @@ define [
         url: "/shipping/#{@store.slug}"
         data: data
         type: 'POST'
-        error: (xhr, text, error) -> console.log error
+        error: (xhr, text, error) =>
+          @showDialogError "Não foi possível calcular o frete. Tente novamente mais tarde."
         success: (data, text, xhr) =>
           @cart.setShippingOptions data
           @shippingOptions = $.extend true, [], data
