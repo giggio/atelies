@@ -6,6 +6,12 @@ append scriptsFooter
 append content
   .container
     h2 Cadastro
+    .alert
+      strong Atenção! 
+      | O Ateliês ainda está em desenvolvimento. Ele não está pronto (ele está quase pronto). Qualquer cadastro realizado nesse momento será perdido no futuro.
+      | Caso queira saber mais sobre o Ateliês entre em contato conosco em contato@atelies.com.br, ou via 
+      a(href="https://www.facebook.com/Atelies") Facebook. 
+      | Obrigado pela paciência, em breve teremos mais informações. Fique ligado!
     if (everyauth.loggedIn)
       h3 Usuário já logado.
     else
