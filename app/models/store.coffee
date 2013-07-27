@@ -71,12 +71,13 @@ storeSchema.path('name').set (val) ->
 storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
   unless val
     @autoCalculateShipping = false
-    setImmediate => cb true
+    setImmediate => cb null, true
     return
   Product.findByStoreSlug @slug, (err, products) =>
+    return cb err if err?
     productWithMissingInfo = _.find products, (p) -> p.hasShippingInfo() is false
     @autoCalculateShipping = true unless productWithMissingInfo?
-    cb not productWithMissingInfo?
+    cb null, not productWithMissingInfo?
 storeSchema.methods.setPagseguro = (set) ->
   if typeof set is 'boolean' and set is false
     @pmtGateways.pagseguro = undefined
@@ -96,17 +97,17 @@ Store.nameExists = (name, cb) ->
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
 Store.findWithProductsBySlug = (slug, cb) ->
   Store.findBySlug slug, (err, store) ->
-    return cb err if err
+    return cb err if err?
     return cb(null, null) if store is null
     Product.findByStoreSlug slug, (err, products) ->
-      return cb err if err
+      return cb err if err?
       cb null, store, products
 Store.findWithProductsById = (_id, cb) ->
   Store.findById _id, (err, store) ->
-    return cb err if err
+    return cb err if err?
     return cb(null, null) if store is null
     Product.findByStoreSlug store.slug, (err, products) ->
-      return cb err if err
+      return cb err if err?
       cb null, store, products
 Store.findRandomForHome = (howMany, cb) ->
   random = Math.random()
@@ -124,7 +125,7 @@ Store.findRandomForHome = (howMany, cb) ->
 
 Store.searchByName = (searchTerm, cb) ->
   Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
-    return cb err if err
+    return cb err if err?
     cb null, stores
 Store.homePageImageDimension = '600x400'
 Store.flyerDimension = '350x350'

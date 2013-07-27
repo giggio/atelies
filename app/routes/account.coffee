@@ -76,6 +76,7 @@ class Routes
   account: (req, res) ->
     user = req.user
     Order.getSimpleByUser user, (err, orders) ->
+      return res.send 400 if err?
       res.render 'account', user: user.toSimpleUser(), orders: orders
 
   order: (req, res) ->
@@ -86,8 +87,10 @@ class Routes
 
   verifyUser: (req, res) ->
     User.findById req.params._id, (err, user) ->
+      return res.send 400 if err?
       user.verified = true
       user.save (err, user) ->
+        return res.send 400 if err?
         res.redirect 'account/verified'
 
   verified: (req, res) -> res.render 'accountVerified'

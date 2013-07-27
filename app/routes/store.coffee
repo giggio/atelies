@@ -35,6 +35,7 @@ class Routes
         req.session.recentOrder = null
       res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) ->
         #console.log html
+        return res.send 400 if err?
         res.send html
 
   product: (req, res) ->
@@ -53,7 +54,7 @@ class Routes
             Product.findById item._id, (err, product) =>
               cb err, product: product, quantity: item.quantity
       async.parallel getItems, (errors, items) =>
-        return res.json 400, errors if errors?
+        return res.send 400 if errors?
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
           paymentType = req.body.paymentType
           Order.create user, store, items, shippingCost, paymentType, (order) =>
@@ -102,10 +103,13 @@ class Routes
 
   pagseguroStatusChanged: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) ->
+      return res.send 400 if err?
       notificationId = req.body.notificationCode
       @_getSalestatusFromPagseguroNotificationId notificationId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId, saleStatus) ->
         Order.findById orderId, (err, order) =>
+          return res.send 400 if err?
           order.updateStatus saleStatus, (err) =>
+            return res.send 400 if err?
             res.send 200
   _getSalestatusFromPagseguroNotificationId: (notificationId, email, token, cb) ->
     url = "https://ws.pagseguro.uol.com.br/v2/transactions/notifications/#{notificationId}?email=#{email}&token=#{token}"
@@ -128,14 +132,18 @@ class Routes
         cb null, orderId, saleStatus
   pagseguroReturnFromPayment: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
+      return res.send 400 if err?
       psTransactionId = req.query.transactionId
       @_getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) =>
         return res.redirect "/error?msg=#{err}" if err?
         Order.findById orderId, (err, order) =>
-          order.sendMailAfterPurchase (error, mailResponse) =>
-            console.log "Error sending mail: #{error}" if error?
+          return res.send 400 if err?
+          order.sendMailAfterPurchase (err, mailResponse) =>
+            return res.send 400 if err?
+            #console.log "Error sending mail: #{error}" if err?
             req.session.recentOrder = order.toSimpleOrder()
             order.populate 'store', 'slug', (err) ->
+              return res.send 400 if err?
               res.redirect "/#{order.store.slug}#finishOrder/orderFinished"
 
   _getOrderIdFromPagseguroTransactionId: (transactionId, email, token, cb) ->

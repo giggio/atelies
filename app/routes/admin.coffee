@@ -20,6 +20,7 @@ class Routes
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
     req.user.populate 'stores', (err, user) ->
+      return res.send 400 if err?
       res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple()), user: req.user.toSimpleUser()
 
   adminStoreCreate: (req, res) ->
@@ -77,7 +78,8 @@ class Routes
     Store.findById req.params.storeId, (err, store) ->
       return res.send 400 if err?
       throw new AccessDenied() unless req.user.hasStore store
-      store.setAutoCalculateShipping autoCalculateShipping, (set) ->
+      store.setAutoCalculateShipping autoCalculateShipping, (err, set) ->
+        return res.send 400 if err?
         if set
           store.save (err) ->
             return res.json 400 if err?
