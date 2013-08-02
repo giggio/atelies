@@ -60,6 +60,7 @@ module.exports = (grunt) ->
         options:
           script: 'server.js'
           node_env: 'production'
+          port: process.env.PORT
           background: false
 
     nodemon:
