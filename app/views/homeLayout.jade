@@ -4,19 +4,19 @@ append layout
   block header
     section#main.container
       .relative
-        img.beta(src="/images/beta.png")
+        img.beta(src="#{STATIC_PATH}/images/beta.png")
       #site-banner.row(style="margin-bottom: 20px")
         .span4
           if (CONFIG.serverEnvironment == 'production')
-            a(href="/"): img(src="/images/ateliesLogoDev.png")
+            a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogoDev.png")
           else
-            a(href="/"): img(src="/images/ateliesLogoTeste.png")
+            a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogoTeste.png")
         .span6
           h3.nameHeader shopping virtual de artes e afins
         .span2
           ul.pull-right.social
-            li: a(href="https://www.facebook.com/Atelies", target="_blank"): img.img-circle(src="/images/facebook.png")
-            li: a(href="https://twitter.com/ateliescombr", target="_blank"): img.img-circle(src="/images/twitter.png")
+            li: a(href="https://www.facebook.com/Atelies", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
+            li: a(href="https://twitter.com/ateliescombr", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
       .navbar
         .navbar-inner
           .container
@@ -48,7 +48,7 @@ append layout
                   | Sem taxas de adesão e manutenção
                 .securityNotice O Ateliês é protegido por criptografia SSL, a mesma usada nos bancos
                 #pagseguro
-                  img.pagseguro(src='/images/pagsegFooter.png')
+                  img.pagseguro(src='#{STATIC_PATH}/images/pagsegFooter.png')
                 .links
                   a.link(href="/about") Sobre
                   a.link(href="/IWantToBuy") Quero Comprar

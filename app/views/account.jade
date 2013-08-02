@@ -6,7 +6,7 @@ append scriptsFooter
       user:!{JSON.stringify(user)},
       orders:!{JSON.stringify(orders)}
     };
-  script(src='/javascripts/lib/requirejs/require.js', data-main='/javascripts/bootstrap.js')
+  script(src='#{STATIC_PATH}/javascripts/lib/requirejs/require.js', data-main='#{STATIC_PATH}/javascripts/bootstrap.js')
   script.
     require(['accountBootstrap']);
 

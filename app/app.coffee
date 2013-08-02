@@ -45,6 +45,7 @@ exports.start = (cb) ->
 
   global.DEBUG = !config.isProduction
   global.CONFIG = config
+  global.STATIC_PATH = config.staticPath
   app.set "port", config.port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
@@ -56,7 +57,7 @@ exports.start = (cb) ->
   app.use express.cookieParser config.appCookieSecret
   app.use express.session secret: config.appCookieSecret, store:sessionStore
   app.use less src: publicDir, debug: false, compress: config.isProduction
-  app.use express.static publicDir
+  app.use config.staticPath, express.static publicDir
   everyauthConfig.configure app
   app.use everyauth.middleware()
   mongoose.connect config.connectionString
