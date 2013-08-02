@@ -32,6 +32,7 @@ exports.route = (app) ->
   app.get     "/products/search/:searchTerm",                               home.productsSearch
   #account
   app.get     "/account",                                                   account.account
+  app.get     "/account/registered",                                        account.registered
   app.get     "/account/mustVerifyUser",                                    account.mustVerifyUser
   app.get     "/account/verifyUser/:_id",                                   account.verifyUser
   app.get     "/account/verified",                                          account.verified

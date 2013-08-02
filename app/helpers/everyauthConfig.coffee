@@ -12,7 +12,7 @@ exports.configure = (app) ->
     getLoginPath: "/account/login"
     postLoginPath: "/account/login"
     loginSuccessRedirect: "/"
-    registerSuccessRedirect: "/"
+    registerSuccessRedirect: "/account/registered"
     getRegisterPath: "/account/register"
     postRegisterPath: "/account/register"
     registerView: path.join app.get('views'), "register.jade"

@@ -97,6 +97,8 @@ class Routes
 
   mustVerifyUser: (req, res) -> res.render 'accountMustVerifyUser'
 
+  registered: (req, res) -> res.render 'accountRegistered'
+
 _.extend Routes::, RouteFunctions::
 
 module.exports = Routes

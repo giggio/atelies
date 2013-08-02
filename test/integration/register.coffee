@@ -36,8 +36,8 @@ describe 'Register', ->
         page.clickRegisterButton done
     it 'does not show the register failed message', ->
       expect(page.errors()).to.equal ''
-    it 'is at the home page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/"
+    it 'is at the registered welcome page', ->
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/registered"
     it 'does not show login link', ->
       expect(page.loginLinkExists()).to.be.false
     it 'shows logout link', ->
