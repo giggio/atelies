@@ -222,6 +222,14 @@ module.exports = (grunt) ->
         options:
           stdout: true
 
+    less:
+      production:
+        options:
+          yuicompress: true
+          report: 'min'
+        files:
+          "compiledPublic/stylesheets/style.css": "compiledPublic/stylesheets/style.less"
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -233,6 +241,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-shell'
+  grunt.loadNpmTasks 'grunt-contrib-less'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -283,5 +292,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
-  grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage' ]
+  grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
