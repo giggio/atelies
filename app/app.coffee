@@ -58,7 +58,7 @@ exports.start = (cb) ->
   app.use express.session secret: config.appCookieSecret, store:sessionStore
   if app.get("env") isnt 'production'
     app.use less src: publicDir, debug: false, compress: config.isProduction
-  app.use config.staticPath, express.static publicDir
+    app.use config.staticPath, express.static publicDir
   everyauthConfig.configure app
   app.use everyauth.middleware()
   mongoose.connect config.connectionString
