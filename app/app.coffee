@@ -50,7 +50,7 @@ exports.start = (cb) ->
   app.set "view engine", "jade"
   app.set 'domain', config.baseDomain
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
-  app.use express.compress() if config.isProduction
+  #app.use express.compress() if config.isProduction #turned off as amazon already does this
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser config.appCookieSecret
