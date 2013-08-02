@@ -19,7 +19,6 @@ exports.start = (cb) ->
     config.isProduction = true
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
     sessionStore = new MongoStore url:config.connectionString
-    config.port ||= 3000
     publicDir = path.join __dirname, '..', "compiledPublic"
   else
     config.isProduction = false

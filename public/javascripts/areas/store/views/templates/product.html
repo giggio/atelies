@@ -3,14 +3,11 @@
     <img id="picture" src="{{product.picture}}" alt="{{product.name}}" />
     <div class="nameHolder">
       <h2><span id="name">{{product.name}}</span>
-      {{#each product.tags}}
-        <span class="label tag">{{this}}</span>
-      {{/each}}
     </h2>
     </div>
+    <div id="description">{{product.description}}</div>
     <h3>R$ <span id="price">{{product.price}}</span></h3>
     <button class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem" {{#unless canPurchase}}disabled{{/unless}}><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</button>
-    <div id="description">{{product.description}}</div>
     <div id="dimensions">
       <div>Altura: <span id="height">{{product.height}}</span>cms</div>
       <div>Largura: <span id="width">{{product.width}}</span>cms</div>
@@ -23,6 +20,12 @@
       {{else}}
       <div><span id="inventory">Feito sob encomenda</span></div>
       {{/if}}
+    </div>
+    <div id="tags">
+      Tags:
+      {{#each product.tags}}
+        <span class="label tag">{{this}}</span>
+      {{/each}}
     </div>
   </div>
   <div id="askAQuestion">

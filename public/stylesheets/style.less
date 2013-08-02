@@ -3,7 +3,7 @@
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
 @iconSpritePath: "../javascripts/lib/bootstrap/img/glyphicons-halflings.png";
 @iconWhiteSpritePath: "../javascripts/lib/bootstrap/img/glyphicons-halflings-white.png";
-@linkColor:lighten(@orange, 15%);
+@linkColor:lighten(@orange, 0%);
 @btnWarningBackground: lighten(@pink, 15%);
 @btnWarningBackgroundHighlight: @pink;
 @minWidthPC: 981px;
@@ -248,8 +248,12 @@ footer {
       position: relative;
     }
   }
-  img.pagseguro {
-    padding-bottom: 20px;
+  #pagseguro {
+    text-align: center;
+    img.pagseguro {
+      padding-bottom: 20px;
+      max-width: 80%;
+    }
   }
   .links {
     text-align: center;
