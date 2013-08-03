@@ -64,6 +64,7 @@ exports.start = (cb) ->
   app.use '/account/login', redirectUnlessSecure
   app.use '/account/register', redirectUnlessSecure
   app.use '/account/changePassword', redirectUnlessSecure
+  app.enable 'trust proxy'
 
   everyauthConfig.configure app
   app.use everyauth.middleware()
