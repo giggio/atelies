@@ -55,7 +55,8 @@ class Routes
               cb err, product: product, quantity: item.quantity
       async.parallel getItems, (errors, items) =>
         return res.send 400 if errors?
-        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (error, shippingCost) =>
+        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (err, shippingCost) =>
+          return res.json 400, err if err?
           paymentType = req.body.paymentType
           Order.create user, store, items, shippingCost, paymentType, (order) =>
             order.save (err, order) =>
@@ -160,8 +161,8 @@ class Routes
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
     if store.autoCalculateShipping
-      @_calculateShipping store.slug, data, user, (error, shippingOptions) ->
-        cb error if error?
+      @_calculateShipping store.slug, data, user, (err, shippingOptions) ->
+        return cb err if err?
         shippingOption = _.findWhere shippingOptions, type: shippingType
         shippingCost = shippingOption.cost
         cb null, shippingCost
@@ -169,8 +170,8 @@ class Routes
       setImmediate -> cb null, 0
 
   calculateShipping: (req, res) ->
-    @_calculateShipping req.params.storeSlug, req.body, req.user, (error, shippingOptions) ->
-      return res.send 500, error: "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." if error
+    @_calculateShipping req.params.storeSlug, req.body, req.user, (err, shippingOptions) ->
+      return res.json 400, err if err?
       res.json shippingOptions
 
   _calculateShipping: (storeSlug, data, user, cb) ->
@@ -180,11 +181,12 @@ class Routes
     sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
     shippingOptions = [ pac, sedex ]
     Store.findBySlug storeSlug, (err, store) ->
-      cb "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
+      return cb err if err?
+      return cb "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
         callbacks = 0
-        errors = 0
+        errors = []
         for p in products
           do (p) ->
             if p.hasShippingInfo()
@@ -201,7 +203,7 @@ class Routes
               callbacks++
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                return errors++ if err?
+                return errors.push(err) if err?
                 pac.cost += delivery.GrandTotal * quantity
                 #pac.cost = 0.01
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
@@ -209,12 +211,12 @@ class Routes
               deliverySpecs.serviceType = 'sedex'
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                return errors++ if err?
+                return errors.push(err) if err?
                 sedex.cost += delivery.GrandTotal * quantity
                 sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
         ready = ->
           if callbacks is 0
-            return cb "Erro ao obter custo de postagem" if errors > 0
+            return cb "Erro ao obter custo de postagem.#{errors}" if errors.length > 0
             cb null, shippingOptions
           else
             setImmediate ready
