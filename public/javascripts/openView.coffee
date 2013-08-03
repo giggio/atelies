@@ -5,6 +5,9 @@ define [
   'epoxy'
 ], (Backbone, Handlebars, Dialog) ->
   class OpenView extends Backbone.Epoxy.View
+    constructor: (opt) ->
+      @staticPath = if opt?.staticPath? then opt.staticPath else staticPath
+      Backbone.Epoxy.View.apply @, arguments
     initializeBindings: (extension = {}) ->
       bindings = {}
       for el in $("input[id][type!='button'][type!='checkbox'][type!='file'],textarea[id],select[id]", @el)

@@ -17,7 +17,7 @@ define [
       context = Handlebars.compile @template
       @pagseguro = opt.pagseguro
       @storeId = opt.storeId
-      @$el.html context pagseguro: @pagseguro
+      @$el.html context pagseguro: @pagseguro, staticPath: @staticPath
       @bindings = @initializeBindings()
       Validation.bind @
       #@model.bind 'validated:invalid', (model, errors) -> console.log errors

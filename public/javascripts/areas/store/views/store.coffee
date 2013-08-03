@@ -14,7 +14,7 @@ define [
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
-      @$el.html context store: @store
+      @$el.html context store: @store, staticPath: @staticPath
       @productsView = new ProductsView products:@products
       @$('#productsPlaceHolder').html @productsView.el
     showProductsSearchResults: (searchTerm, products) ->

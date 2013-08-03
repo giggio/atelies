@@ -20,7 +20,7 @@ define [
       return if @_redirectIfUserNotSatisfied()
       context = Handlebars.compile @template
       isnew = @model.id? is false
-      @$el.html context new: isnew, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro')
+      @$el.html context new: isnew, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro'), staticPath: @staticPath
       @bindings = @initializeBindings
         '#autoCalculateShipping':'checked:autoCalculateShipping'
         '#pagseguro':'checked:pagseguro'

@@ -2,10 +2,10 @@
   <img id="homePageImage"  src="{{store.homePageImage}}" />
   <div id="homePageDescription">{{store.homePageDescription}}</div>
   {{#if store.urlFacebook}}
-  <a id="urlFacebook" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook"><img class="img-circle" src="/images/facebook.png" /></a>
+  <a id="urlFacebook" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook"><img class="img-circle" src="{{staticPath}}/images/facebook.png" /></a>
   {{/if}}
   {{#if store.urlTwitter}}
-  <a id="urlTwitter" href="//twitter.com/{{store.urlTwitter}}" title="{{store.name}} no Twitter"><img class="img-circle" src="/images/twitter.png" /></a>
+  <a id="urlTwitter" href="//twitter.com/{{store.urlTwitter}}" title="{{store.name}} no Twitter"><img class="img-circle" src="{{staticPath}}/images/twitter.png" /></a>
   {{/if}}
   {{#if store.otherUrl}}
   <div>

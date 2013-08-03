@@ -4,6 +4,8 @@ html
     title="Ateliês - shopping virtual de artes e afins"
     link(rel='stylesheet', href='#{STATIC_PATH}/stylesheets/style.css')
     include includes/shims
+    script.
+      var staticPath = '!{STATIC_PATH}';
     block head
   body
     block layout
