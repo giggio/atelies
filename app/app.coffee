@@ -61,10 +61,9 @@ exports.start = (cb) ->
   if app.get("env") isnt 'production'
     app.use less src: publicDir, debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
-  else
-    app.use '/account/login', redirectUnlessSecure
-    app.use '/account/register', redirectUnlessSecure
-    app.use '/account/changePassword', redirectUnlessSecure
+  app.use '/account/login', redirectUnlessSecure
+  app.use '/account/register', redirectUnlessSecure
+  app.use '/account/changePassword', redirectUnlessSecure
 
   everyauthConfig.configure app
   app.use everyauth.middleware()

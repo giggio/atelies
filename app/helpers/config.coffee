@@ -29,7 +29,7 @@ values =
     version: pkgInfo.version
     name: pkgInfo.name
   staticPath: process.env.STATIC_PATH
-values.secureUrl = if values.serverEnvironment is 'production' then "https://#{values.baseDomain}" else ""
+values.secureUrl = if values.serverEnvironment is 'production' then "https://www.#{values.baseDomain}" else ""
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and

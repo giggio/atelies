@@ -58,7 +58,7 @@ userSchema.methods.toSimpleUser = ->
   verified: @verified
   isSeller: @isSeller
 userSchema.methods.sendMailConfirmRegistration = (cb) ->
-  registrationLink = "http://www.#{config.baseDomain}/account/verifyUser/#{@_id}"
+  registrationLink = "#{config.secureUrl}/account/verifyUser/#{@_id}"
   body = "<html>
     <h1>Olá #{@name}!</h1>
     <h2>Bem vindo ao Ateliês!</h2>
