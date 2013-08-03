@@ -5,6 +5,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.AWS_REGION = "us-east-1"
   process.env.APP_COOKIE_SECRET = 'somesecret'
   process.env.SERVER_ENVIRONMENT = 'dev'
+  process.env.STATIC_PATH = '/static'
 
 values =
   appCookieSecret: process.env.APP_COOKIE_SECRET
@@ -27,11 +28,12 @@ values =
   app:
     version: pkgInfo.version
     name: pkgInfo.name
-  staticPath: '/static'
+  staticPath: process.env.STATIC_PATH
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and
-    @recaptcha? and @recaptcha?.publicKey? and @recaptcha?.privateKey and @baseDomain? and @serverEnvironment?
+    @recaptcha? and @recaptcha?.publicKey? and @recaptcha?.privateKey and @baseDomain? and @serverEnvironment? and
+    @staticPath?
 valuesPresent =
   appCookieSecret: values.appCookieSecret?
   connectionString: values.connectionString?
@@ -50,6 +52,7 @@ valuesPresent =
     sendMail: values.test?.sendMail?
   baseDomain: values.baseDomain?
   serverEnvironment: values.serverEnvironment?
+  staticPath: values.staticPath?
 console.log "Config values present: #{JSON.stringify valuesPresent}"
 console.log "Config values: #{JSON.stringify values}"
 throw new Error("Missing config values.") if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
