@@ -16,7 +16,7 @@ define [
     showStores: ->
       context = Handlebars.compile @template
       storeGroups = @_groupStores @stores
-      @$el.html context storeGroups: storeGroups
+      @$el.html context storeGroups: storeGroups, hasStores: @stores.length > 0
     _groupStores: (stores) ->
       _.reduce stores, (groups, store) ->
         if groups.length is 0 or _.last(groups).stores.length is 4 then groups.push stores:[]
