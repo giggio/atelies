@@ -13,10 +13,10 @@
           li: a#logout(href="/account/logout") Sair
     else
       li: a#loginPop.pop(href="#") Entrar
-      li: a(href='/account/register') Cadastre-se
+      li: a(href='#{secureUrl}/account/register') Cadastre-se
   #loginPop-head.hide Faça seu login
   #loginPop-content.hide
-    form#popupLoginForm(action='/account/login', method='post')
+    form#popupLoginForm(action='#{secureUrl}/account/login', method='post')
       div
         div E-mail:
         input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.")

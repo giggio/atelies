@@ -22,7 +22,7 @@ append content
             incorrect_try_again : "Incorreto, tente novamente.",
           theme: 'clean'
           lang: 'pt'
-      form#loginForm.validatable.form-horizontal(action='/account/login#{redirectTo}', method='post')
+      form#loginForm.validatable.form-horizontal(action='#{secureUrl}/account/login#{redirectTo}', method='post')
         h2 Login
         if ('undefined' !== typeof errors && errors.length)
           ul#errors

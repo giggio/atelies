@@ -33,7 +33,7 @@ append content
             incorrect_try_again : "Incorreto, tente novamente.",
           theme: 'clean'
           lang: 'pt'
-      form#registerForm.validatable.form-horizontal(action='/account/register', method='post')
+      form#registerForm.validatable.form-horizontal(action='#{secureUrl}/account/register', method='post')
         .control-group
           label.control-label Nome:
           .controls

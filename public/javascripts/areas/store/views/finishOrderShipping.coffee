@@ -30,7 +30,10 @@ define [
       Backbone.history.navigate 'finishOrder/payment', trigger: true
     _redirectIfUserNotSatisfied: ->
       if @user is undefined
-        window.location = "/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
+        if DEBUG
+          window.location = "/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
+        else
+          window.location = "https://#{window.location.host}/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
         return true
       unless @user.verified
         window.location = "/account#userNotVerified"

@@ -1,6 +1,7 @@
 _               = require 'underscore'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
+config          = require '../helpers/config'
 
 class Functions
   _auth: ->
@@ -8,7 +9,7 @@ class Functions
       do (fn) =>
         original = @[fn]
         @[fn] = (req, res) ->
-          return res.redirect "/account/login?redirectTo=#{req.originalUrl}" unless req.loggedIn
+          return res.redirect "#{config.secureUrl}/account/login?redirectTo=#{req.originalUrl}" unless req.loggedIn
           original.apply @, arguments
 
   _authSeller: ->

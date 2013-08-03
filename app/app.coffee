@@ -14,6 +14,7 @@ exports.start = (cb) ->
   Postman             = require './models/postman'
   MongoStore          = require('connect-mongo')(express)
   config              = require './helpers/config'
+  redirectUnlessSecure= require './helpers/middleware/redirectUnlessSecure'
 
   if app.get("env") is 'production'
     config.isProduction = true
@@ -46,6 +47,7 @@ exports.start = (cb) ->
   global.DEBUG = !config.isProduction
   global.CONFIG = config
   global.STATIC_PATH = config.staticPath
+  app.locals.secureUrl = config.secureUrl
   app.set "port", config.port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
@@ -59,6 +61,11 @@ exports.start = (cb) ->
   if app.get("env") isnt 'production'
     app.use less src: publicDir, debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
+  else
+    app.use '/account/login', redirectUnlessSecure
+    app.use '/account/register', redirectUnlessSecure
+    app.use '/account/changePassword', redirectUnlessSecure
+
   everyauthConfig.configure app
   app.use everyauth.middleware()
   mongoose.connect config.connectionString
