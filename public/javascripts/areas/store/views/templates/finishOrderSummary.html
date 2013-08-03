@@ -97,13 +97,19 @@
 
     <div class="span4">
       <h4>Dados de pagamento</h4>
-      <span id="paymentType">{{paymentType}}</span></span>
+      <span id="paymentType">{{paymentType.name}}</span></span>
     </div>
   </div>
+  {{#if directSell}}
+  <div id="redirMsg">
+    Ao clicar no botão de concluir a compra o vendedor será notificado e entrará em contato com você para acertar o pagamento.
+  </div>
+  {{else}}
   <div id="redirMsg">
     Ao clicar no botão de concluir a compra você será redirecionado ao nosso parceiro, onde fará o pagamento. <br />
     Posteriormente você será redirecionado de volta.
   </div>
+  {{/if}}
   <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
   <a href="#finishOrder/payment" id="goBackToPayment" class="btn btn-primary">Voltar</a>
   <button id="finishOrder" class="btn btn-primary">Concluir a compra</button>

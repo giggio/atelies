@@ -34,7 +34,7 @@ define [
         productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
-      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: @hasAutoCalculatedShipping, paymentType: @cart.paymentTypeSelected().name
+      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: @hasAutoCalculatedShipping, paymentType: @cart.paymentTypeSelected(), directSell: @cart.paymentTypeSelected().type is 'directSell'
       if @hasAutoCalculatedShipping
         viewModel.shippingOption = @cart.shippingOptionSelected()
         viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
