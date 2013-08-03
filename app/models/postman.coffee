@@ -15,12 +15,14 @@ module.exports = class Postman
       console.log "NOT sending mail, dry run"
       return cb()
     mail =
-      from: "'#{from.name}' <#{from.email}>"
+      from: "'#{from.name}' <contato@atelies.com.br>"
       to: "'#{to.name}' <#{to.email}>"
       subject: subject
       html: body
       generateTextFromHTML: true
       forceEmbeddedImages: true
+    if from.email isnt 'contato@atelies.com.br'
+      mail.replyTo = "'#{from.name}' <#{from.email}>"
     #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
     Postman.smtp.sendMail mail, cb
 
