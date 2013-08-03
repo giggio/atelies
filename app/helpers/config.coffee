@@ -54,7 +54,8 @@ valuesPresent =
   baseDomain: values.baseDomain?
   serverEnvironment: values.serverEnvironment?
   staticPath: values.staticPath?
-console.log "Config values present: #{JSON.stringify valuesPresent}"
-console.log "Config values: #{JSON.stringify values}"
+unless values.environment is 'test'
+  console.log "Config values present: #{JSON.stringify valuesPresent}"
+  console.log "Config values: #{JSON.stringify values}"
 throw new Error("Missing config values.") if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
 module.exports = values
