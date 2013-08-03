@@ -1,3 +1,4 @@
+{{#if hasProducts}}
 <div id="productsSearchResults">
   {{#each productGroups}}
   <div class="row-fluid productsRow">
@@ -9,3 +10,8 @@
   </div>
   {{/each}}
 </div>
+{{else}}
+<div id="productsNotFound" class="alert">
+  <strong>Nenhum produto encontrado.</strong> A busca encontra somente palavras completas. Busque novamente!
+</div>
+{{/if}}

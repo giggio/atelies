@@ -14,7 +14,7 @@ define [
     showProducts: ->
       context = Handlebars.compile @template
       productGroups = @_groupProducts @products
-      @$el.html context productGroups: productGroups
+      @$el.html context productGroups: productGroups, hasProducts: @products.length > 0
     _groupProducts: (products) ->
       _.reduce products, (groups, product) ->
         if groups.length is 0 or _.last(groups).products.length is 6 then groups.push products:[]
