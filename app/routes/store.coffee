@@ -201,7 +201,7 @@ class Routes
               callbacks++
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                errors++ if err?
+                return errors++ if err?
                 pac.cost += delivery.GrandTotal * quantity
                 #pac.cost = 0.01
                 pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
@@ -209,7 +209,7 @@ class Routes
               deliverySpecs.serviceType = 'sedex'
               correios.getPrice deliverySpecs, (err, delivery) ->
                 callbacks--
-                errors++ if err?
+                return errors++ if err?
                 sedex.cost += delivery.GrandTotal * quantity
                 sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
         ready = ->
