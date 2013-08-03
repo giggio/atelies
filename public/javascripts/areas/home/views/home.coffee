@@ -11,6 +11,7 @@ define [
   class HomeView extends Backbone.Open.View
     events:
       'click #doSearch':'_doSearch'
+      'keypress #storeSearchTerm':'_searchTermPressed'
     template: homeTemplate
     initialize: (opt) ->
       @products = opt.products
@@ -26,6 +27,7 @@ define [
     closeSearchStore: ->
       @$('#searchStores').hide('fade')
       Backbone.history.navigate ""
+    _searchTermPressed: (e) -> @_doSearch() if e.keyCode is 13
     _doSearch: ->
       searchTerm = @$('#storeSearchTerm').val()
       return if searchTerm is ''
