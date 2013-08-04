@@ -180,3 +180,15 @@ define [
       cart.addItem item
       cart.setManualShipping()
       cart.totalSaleAmount().should.equal 22.2
+    it 'when quantity is set the shipping options are reset', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1
+      cart.addItem item
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+      ]
+      cart.chooseShippingOption 'pac'
+      item.setQuantity 3
+      cart.shippingCalculated().should.be.false
+      cart.shippingSelected().should.be.false

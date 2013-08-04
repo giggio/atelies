@@ -28,8 +28,6 @@ define ['underscore'], (_) ->
     save: =>
       localStorage.setItem "cartItems#{@storeSlug}", JSON.stringify @_items
     addItem: (item) =>
-      @_shippingOptions = undefined
-      @_shippingOptionSelected = undefined
       if existingItem = _.findWhere @_items, { _id: item._id }
         item = existingItem
         item.setQuantity item.quantity + 1
@@ -39,7 +37,10 @@ define ['underscore'], (_) ->
         @_items.push item
       @save()
     _constructItem: (item) ->
+      cart = @
       item.setQuantity = (q) ->
+        cart._shippingOptions = undefined
+        cart._shippingOptionSelected = undefined
         @quantity = q
         @totalPrice = @quantity * @price
     clear: =>
