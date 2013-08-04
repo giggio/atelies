@@ -71,8 +71,9 @@ module.exports = (grunt) ->
           watchedFolders: ['app']
           debug: true
           delayTime: 2
-          #env:
-            #PORT: '8181'
+          env:
+            NODE_ENV: 'development'
+            PORT: 3000
           cwd: __dirname
 
     concurrent:

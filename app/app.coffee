@@ -28,20 +28,16 @@ exports.start = (cb) ->
     sessionStore = new express.session.MemoryStore()
     publicDir = path.join __dirname, '..', "public"
     if app.get("env") is 'development'
-      config.connectionString = "mongodb://localhost/atelies"
       app.use express.logger "dev"
       everyauth.debug = on
-      config.port ||= 3000
       if config.test.sendMail
         console.log "SENDING MAIL!"
         Postman.configure config.aws.accessKeyId, config.aws.secretKey
       else
         Postman.dryrun = on
     if app.get("env") is 'test'
-      config.connectionString = "mongodb://localhost/ateliesteste"
       #app.use express.logger "dev"
       #everyauth.debug = on
-      config.port ||= 8000
       Postman.dryrun = on
 
   global.DEBUG = !config.isProduction

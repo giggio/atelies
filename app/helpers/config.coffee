@@ -6,6 +6,15 @@ unless process.env.NODE_ENV is 'production'
   process.env.APP_COOKIE_SECRET = 'somesecret'
   process.env.SERVER_ENVIRONMENT = 'dev'
   process.env.STATIC_PATH = '/static'
+  process.env.RECAPTCHA_PUBLIC_KEY = '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
+  process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
+switch process.env.NODE_ENV
+  when 'development'
+    process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
+    process.env.PORT = 3000 unless process.env.PORT?
+  when 'test'
+    process.env.MONGOLAB_URI = "mongodb://localhost/ateliesteste"
+    process.env.PORT = 8000 unless process.env.PORT?
 
 values =
   appCookieSecret: process.env.APP_COOKIE_SECRET
