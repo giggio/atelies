@@ -68,7 +68,10 @@ exports.start = (cb) ->
 
   everyauthConfig.configure app
   app.use everyauth.middleware()
-  mongoose.connect config.connectionString
+  connOptions =
+    server: socketOptions: keepAlive: 1
+    replset: socketOptions: keepAlive: 1
+  mongoose.connect config.connectionString, connOptions
   mongoose.connection.on 'error', dealWith
 
   router.route app
