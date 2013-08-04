@@ -1,16 +1,17 @@
-$ = require 'jquery'
-Page = require './page'
+Page          = require './seleniumPage'
+async         = require 'async'
 
 module.exports = class AdminHomePage extends Page
   url: 'admin'
-  createStoreText: => @browser.query("#createStore").value
-  rows: => @browser.queryAll('#stores .store')
-  storesQuantity: =>
-    rows = @rows()
-    if rows? then rows.length else 0
-  stores: =>
-    rows = @rows()
-    stores = []
-    for row in rows
-      stores.push url: $('a', row).attr 'href'
-    stores
+  createStoreText: @::getValue.partial "#createStore"
+  rows: @::findElements.partial '#stores .store'
+  storesQuantity: (cb) ->
+    @rows (rows) =>
+      cb if rows? then rows.length else 0
+  stores: (cb) ->
+    @rows (rows) =>
+      actions = []
+      for row in rows
+        do (row) =>
+          actions.push (cb) => @getAttributeIn row, 'a', 'href', (href) -> cb null, url:href
+      async.parallel actions, (err, stores) -> cb stores
