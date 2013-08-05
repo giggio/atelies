@@ -48,7 +48,13 @@
     "recaptcha": "~1.2.0",
     "gm": "~1.10.0",
     "marked": "~0.2.9",
-    "grunt-contrib-less": "~0.6.4"
+    "grunt-contrib-less": "~0.6.4",
+    "grunt-contrib-watch": "~0.4.x",
+    "grunt-mocha-cov": "0.0.x",
+    "grunt-express-server": "~0.4.x",
+    "grunt-nodemon": "0.0.8",
+    "grunt-concurrent": "~0.3.0",
+    "grunt-shell": "~0.3.1"
   },
   "devDependencies": {
     "jsdom": "*",
@@ -56,7 +62,6 @@
     "underscore.string": "~2.3.x",
     "node-localstorage": "~0.3.x",
     "htmlparser2": "~3.0.x",
-    "html5": "~0.3.x",
     "mocha": "~1.9.x",
     "sinon": "~1.7.x",
     "sinon-chai": "~2.4.x",
@@ -64,18 +69,10 @@
     "chai-fuzzy": "~1.2.x",
     "amdefine": "0.0.x",
     "sandboxed-module": "~0.2.x",
-    "grunt-contrib-watch": "~0.4.x",
-    "grunt-mocha-cov": "0.0.x",
-    "blanket": "~1.1.x",
     "mocha-lcov-reporter": "0.0.x",
-    "grunt-notify": "~0.2.x",
     "zombie": "~2.0.0-alpha19",
     "selenium-webdriver": "~2.33.0",
     "chromedriver": "~2.0.1",
-    "grunt-express-server": "~0.4.x",
-    "chai": "~1.7.2",
-    "grunt-nodemon": "0.0.8",
-    "grunt-concurrent": "~0.3.0",
-    "grunt-shell": "~0.3.1"
+    "chai": "~1.7.2"
   }
 }
