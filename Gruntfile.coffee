@@ -292,6 +292,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:integration', ['mochacov:server_integration']
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
+  grunt.registerTask 'compile:server', [ 'coffee:base', 'coffee:server' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
