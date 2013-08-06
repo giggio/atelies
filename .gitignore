@@ -8,3 +8,4 @@ compiledPublic
 *.css
 .elasticbeanstalk/
 seed/*
+.uploadPublicFiles

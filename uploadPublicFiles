@@ -1,0 +1,41 @@
+#!/bin/bash
+
+echo $(date) starting...
+
+echo $(date) Create dirs
+if [[ ! -d .uploadPublicFiles ]]; then mkdir .uploadPublicFiles && mkdir .uploadPublicFiles/log; fi
+
+echo $(date) Clone s3cmd
+if [[ ! -d .uploadPublicFiles/s3cmd ]]; then (git clone https://github.com/s3tools/s3cmd.git .uploadPublicFiles/s3cmd > .uploadPublicFiles/log/cloneS3cmd.log && git --git-dir=.uploadPublicFiles/s3cmd/.git checkout 9ee3bdd320c8 >> .uploadPublicFiles/log/cloneS3cmd.log ) fi
+
+echo $(date) Grunt install
+grunt install > .uploadPublicFiles/log/gruntInstall.log
+
+echo $(date) Copy config key
+if [[ ! -e .uploadPublicFiles/.s3cfg ]]; then
+  cp .s3cfg .uploadPublicFiles/.s3cfg
+  #writeConfigKey:
+  sed -i "s/AWS_SECRET_KEY/$AWS_SECRET_KEY/" .uploadPublicFiles/.s3cfg
+  #writeConfigSecret:
+  sed -i "s/AWS_ACCESS_KEY_ID/$AWS_ACCESS_KEY_ID/" .uploadPublicFiles/.s3cfg
+fi
+
+echo $(date) Gzip
+gzip -r --best compiledPublic > .uploadPublicFiles/log/gzipCompiledPublic.log
+
+echo $(date) Rename
+find compiledPublic -type f -name '*.gz' | while read filename; do mv -v "${filename}" "`echo "${filename}" | sed -e 's/\.gz$//'`"; done > .uploadPublicFiles/log/rename.log
+
+echo $(date) Upload stylesheets
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/stylesheets s3://ateliesStatic/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg > .uploadPublicFiles/log/uploadToS3.log
+
+echo $(date) Upload js
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/javascripts s3://ateliesStatic/ --exclude=compiledPublic/javascripts/lib/*.* --exclude=**/*.coffee --exclude=compiledPublic/javascripts/test/*.* --include=compiledPublic/javascripts/lib/requirejs/require.js --include=compiledPublic/javascripts/lib/bootstrap/img/*.*  --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+
+echo $(date) Upload images
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/images s3://ateliesStatic/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+
+echo $(date) Upload fonts
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/fonts s3://ateliesStatic/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+
+echo $(date) Done!
