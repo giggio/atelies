@@ -26,7 +26,7 @@ productSchema = new mongoose.Schema
     weight:         Number
   hasInventory:   Boolean
   inventory:      Number
-  random:         type: Number, required: true, default: Math.random()
+  random:         type: Number, required: true, default: -> Math.random()
 
 productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '

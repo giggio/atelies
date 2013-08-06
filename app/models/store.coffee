@@ -25,7 +25,7 @@ storeSchema = new mongoose.Schema
     pagseguro:
       email:              String
       token:              String
-  random:                 type: Number, required: true, default: Math.random()
+  random:                 type: Number, required: true, default: -> Math.random()
 
 storeSchema.methods.createProduct = ->
   product = new Product()
