@@ -62,7 +62,7 @@ define [
           error: (model, xhr, options) =>
             $("#updateProduct").prop "disabled", off
             if xhr.status is 422
-              $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
+              $('#sizeIsIncorrect .errorMsg', @$el).text JSON.parse(xhr.responseText).smallerThan
               return $('#sizeIsIncorrect').modal()
             @showDialogError "Não foi possível salvar o produto. Tente novamente mais tarde."
     _deleteProduct: =>

@@ -66,7 +66,7 @@ define [
           $("#updateStore").prop "disabled", off
           return $('#nameAlreadyExists').modal() if xhr.status is 409
           if xhr.status is 422
-            $('#sizeIsIncorrect .errorMsg', @$el).text xhr.responseJSON.smallerThan
+            $('#sizeIsIncorrect .errorMsg', @$el).text JSON.parse(xhr.responseText).smallerThan
             return $('#sizeIsIncorrect').modal()
           @showDialogError "Não foi possível salvar a loja. Tente novamente mais tarde."
     _storeCreated: (store) =>
