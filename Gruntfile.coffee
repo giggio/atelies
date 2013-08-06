@@ -140,6 +140,7 @@ module.exports = (grunt) ->
         options:
           target: 'public/javascripts/lib'
           copy: false
+          verbose: true
 
     requirejs:
       singlefile:#do not use, just an example, the multipackage uses a shared component
