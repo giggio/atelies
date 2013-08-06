@@ -271,9 +271,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:prod' ]
   grunt.registerTask 'nodeInspector', [ 'shell:nodeInspector' ]
-  #grunt.registerTask 'nodeInspector', ->
-    #grunt.util.spawn
-      #cmd: 'node-inspector'
   grunt.registerTask 'compileAndTest', (env) ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
@@ -294,5 +291,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'compile:server', [ 'coffee:base', 'coffee:server' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
+  grunt.registerTask 'heroku', ->
+    home = process.env.HOME
+    if home?.substr(0,11) is "/tmp/build_" #trying to identify heroku
+      grunt.task.run [ 'install' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
