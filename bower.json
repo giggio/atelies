@@ -21,7 +21,8 @@
     "carouFredSel": "git://github.com/gilbitron/carouFredSel.git",
     "imagesloaded": "~2.1.2",
     "jquery-form": "~3.37.0",
-    "jquery.expander": "~1.4.5"
+    "jquery.expander": "~1.4.5",
+    "showdown": "~0.3.1"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

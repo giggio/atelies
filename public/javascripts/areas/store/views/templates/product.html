@@ -5,7 +5,7 @@
       <h2><span id="name">{{product.name}}</span>
     </h2>
     </div>
-    <div id="description">{{product.description}}</div>
+    <div id="description">{{{description}}}</div>
     <h3>R$ <span id="price">{{product.price}}</span></h3>
     <button class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem" {{#unless canPurchase}}disabled{{/unless}}><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</button>
     <div id="dimensions">

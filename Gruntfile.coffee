@@ -174,6 +174,7 @@ module.exports = (grunt) ->
                 'handlebars'
                 'text'
                 'twitterBootstrap'
+                'showdown'
                 'backboneValidation'
                 'epoxy'
                 'caroufredsel'

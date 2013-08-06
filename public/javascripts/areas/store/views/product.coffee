@@ -2,13 +2,15 @@ define [
   'jquery'
   'backboneConfig'
   'handlebars'
+  'showdown'
   '../models/products'
   'text!./templates/product.html'
   '../models/cart'
-], ($, Backbone, Handlebars, Products, productTemplate, Cart) ->
+], ($, Backbone, Handlebars, Showdown, Products, productTemplate, Cart) ->
   class ProductView extends Backbone.Open.View
     template: productTemplate
     initialize: (opt) ->
+      @markdown = new Showdown.converter()
       @store = opt.store
       @product = opt.product
       if @product?.get('hasInventory')
@@ -29,4 +31,5 @@ define [
       @delegateEvents()
       attr = @product.attributes
       attr.tags = attr.tags.split(', ')
-      @$el.html context product: attr, store: @store, canPurchase: @canPurchase
+      description = @markdown.makeHtml attr.description
+      @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description

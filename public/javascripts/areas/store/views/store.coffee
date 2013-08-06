@@ -2,19 +2,22 @@ define [
   'jquery'
   'backboneConfig'
   'handlebars'
+  'showdown'
   './storeProducts'
   'text!./templates/store.html'
   './productsSearchResults'
-], ($, Backbone, Handlebars, ProductsView, storeTemplate, ProductsSearchResultsView) ->
+], ($, Backbone, Handlebars, Showdown, ProductsView, storeTemplate, ProductsSearchResultsView) ->
   class StoreView extends Backbone.Open.View
     template: storeTemplate
     initialize: (opt) ->
       @store = opt.store
       @products = opt.products
+      @markdown = new Showdown.converter()
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
-      @$el.html context store: @store, staticPath: @staticPath
+      homePageDescription = @markdown.makeHtml @store.homePageDescription
+      @$el.html context store: @store, staticPath: @staticPath, homePageDescription: homePageDescription
       @productsView = new ProductsView products:@products
       @$('#productsPlaceHolder').html @productsView.el
     showProductsSearchResults: (searchTerm, products) ->
