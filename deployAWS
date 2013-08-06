@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $( dirname "${BASH_SOURCE[0]}" )
+
+git aws.push --environment atelies-production
+./uploadPublicFiles
