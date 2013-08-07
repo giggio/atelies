@@ -10,17 +10,25 @@ describe 'Home page', ->
       return done error if error?
       product1 = generator.product.b()
       product2 = generator.product.c()
+      for i in [0..9]
+        p = generator.product.a()
+        p.name+=i
+        p.save()
       product1.save()
       product2.save()
       store1 = generator.store.a()
       store2 = generator.store.b()
       store1.save()
       store2.save()
+      for i in [0..9]
+        s = generator.store.a()
+        s.name+=i
+        s.save()
       whenServerLoaded ->
         page.visit done
-  it 'has two products', (done) ->
+  it 'has twelve products', (done) ->
     page.productsLength (l) ->
-      l.should.equal 2
+      l.should.equal 12
       done()
   it 'shows product 1', (done) ->
     page.product product1._id, (p) ->
@@ -31,7 +39,7 @@ describe 'Home page', ->
       done()
   it 'shows stores', (done) ->
     page.storesLength (l) ->
-      l.should.equal 2
+      l.should.equal 12
       done()
   it 'links picture to store 1', (done) ->
     page.storeLink store1._id, (href) ->

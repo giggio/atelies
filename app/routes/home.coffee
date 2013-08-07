@@ -13,28 +13,20 @@ class Routes
   constructor: (@env) ->
   
   index: (domain) ->
-    self = @
     route = (req, res) =>
       subdomain = @_getSubdomain domain, req.host.toLowerCase()
       if subdomain?
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res
-      Product.findRandom 24, (err, products) =>
+      Product.findRandom 12, (err, products) =>
         return res.send 400 if err?
         viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
         Store.findRandomForHome 12, (err, stores) ->
           return res.send 400 if err?
-          stores = self._multiplesOf 4, stores
           viewModelStores = _.map stores, (s) -> s.toSimpler()
           res.render "index", products: viewModelProducts, stores: viewModelStores
     route
 
-  _multiplesOf: (n, array) ->
-    length = array.length
-    return array if length < n
-    mod = length % n
-    array[mod..length]
-  
   blank: (req, res) -> res.render 'blank'
 
   about: (req, res) -> res.render 'about'
