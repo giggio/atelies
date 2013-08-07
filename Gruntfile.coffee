@@ -224,6 +224,12 @@ module.exports = (grunt) ->
         command: 'node-inspector'
         options:
           stdout: true
+      herokuInstallMissingPackagesForDeploy:
+        command: '<%= npmPath %> install grunt-bower-task grunt-contrib-requirejs grunt-contrib-less grunt-coffeelint && <%= nodePath %> node_modules/grunt-cli/bin/grunt install'
+        options:
+          stdout: true
+          stderr: true
+          failOnError: true
 
     less:
       production:
@@ -295,6 +301,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'heroku', ->
     home = process.env.HOME
     if home?.substr(0,11) is "/tmp/build_" #trying to identify heroku
-      grunt.task.run [ 'install' ]
+      nodePath = process.execPath
+      grunt.config ['nodePath'], nodePath
+      npmPath = nodePath.substr(0, nodePath.length - 4) + 'npm'
+      grunt.config ['npmPath'], npmPath
+      grunt.task.run [ 'shell:herokuInstallMissingPackagesForDeploy' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
