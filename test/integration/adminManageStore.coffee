@@ -301,7 +301,7 @@ describe 'Admin manage store page', ->
         expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         done()
 
-  describe.skip 'updating a store keeps products connected to store', (done) ->
+  describe 'updating a store keeps products connected to store', (done) ->
     otherName = otherSlug = null
     before (done) ->
       otherName = "My Super Cool Store"
@@ -330,13 +330,13 @@ describe 'Admin manage store page', ->
         return done error if error
         stores.length.should.equal 1
         store = stores[0]
-        expect(store.name).to.equal otherName
-        expect(store.slug).to.equal otherSlug
+        store.name.should.equal otherName
+        store.slug.should.equal otherSlug
         done()
     it 'updated the product name and slug', (done) ->
       Product.find (error, products) ->
         return done error if error?
         products.length.should.equal 1
         product = products[0]
-        expect(product.storeSlug).to.equal otherSlug
+        product.storeSlug.should.to.equal otherSlug
         done()

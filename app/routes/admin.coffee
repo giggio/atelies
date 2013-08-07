@@ -30,6 +30,7 @@ class Routes
       return res.json 409, error: user: "Loja já existe com esse nome." if itExists
       store = req.user.createStore()
       store.updateFromSimple body
+      store.name = body.name
       store.autoCalculateShipping = if body.autoCalculateShipping? then !!body.autoCalculateShipping else false
       if body.pagseguro is on then store.setPagseguro email: body.pagseguroEmail, token: body.pagseguroToken
       uploader = new StoreUploader store
@@ -56,7 +57,9 @@ class Routes
         if store.name isnt req.body.name
           Store.nameExists req.body.name, (err, itExists) ->
             return res.json 409, error: user: "Loja já existe com esse nome." if itExists
-            cb()
+            store.updateName req.body.name, (err) =>
+              return res.json 400, err if err?
+              cb()
         else
           cb()
       checkIfNameCanBelongToStore =>
