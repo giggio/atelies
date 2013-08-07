@@ -44,6 +44,7 @@ db.users.insert
   loginError: 0
   verified: true
 user1 = db.users.findOne email:'d@a.com'
+db.users.ensureIndex { email: 1 }
 
 db.products.remove()
 db.products.insert
@@ -243,6 +244,7 @@ for i in [8..25]
     random: Math.random()
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
 db.products.ensureIndex { nameKeywords: 1 }
+db.products.ensureIndex { slug: 1 }
 db.stores.remove()
 db.stores.insert
   name: 'Store 1'
@@ -357,6 +359,7 @@ for i in [4..15]
     random: Math.random()
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
+db.stores.ensureIndex { slug: 1 }
 db.users.save userSeller
 db.orders.remove()
 db.orders.insert
