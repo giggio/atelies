@@ -66,5 +66,14 @@ valuesPresent =
 unless values.environment is 'test'
   console.log "Config values present: #{JSON.stringify valuesPresent}"
   console.log "Config values: #{JSON.stringify values}"
-throw new Error("Missing config values.") if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
+if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
+  missing = []
+  checkValues = (o) ->
+    for k, v of o
+      if typeof v is 'object'
+        checkValues v
+      else
+        missing.push k unless v
+  checkValues valuesPresent
+  throw new Error("Missing config values: #{missing.join()}.")
 module.exports = values
