@@ -1,5 +1,6 @@
 require './support/_specHelper'
 Store                     = require '../../app/models/store'
+Product                   = require '../../app/models/product'
 User                      = require '../../app/models/user'
 AdminManageStorePage      = require './support/pages/adminManageStorePage'
 
@@ -298,4 +299,44 @@ describe 'Admin manage store page', ->
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
+        done()
+
+  describe.skip 'updating a store keeps products connected to store', (done) ->
+    otherName = otherSlug = null
+    before (done) ->
+      otherName = "My Super Cool Store"
+      otherSlug = "my_super_cool_store"
+      cleanDB (error) ->
+        return done error if error
+        exampleStore = generator.store.a()
+        exampleStore.save()
+        product = generator.product.a()
+        product.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+        otherStore = generator.store.d().toJSON()
+        delete otherStore.autoCalculateShipping
+        page.loginFor userSeller._id, ->
+          page.visit exampleStore._id.toString(), ->
+            page.setName otherName
+            page.clickUpdateStoreButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{otherSlug}"
+        done()
+    it 'updated the store name and slug', (done) ->
+      Store.find (error, stores) ->
+        return done error if error
+        stores.length.should.equal 1
+        store = stores[0]
+        expect(store.name).to.equal otherName
+        expect(store.slug).to.equal otherSlug
+        done()
+    it 'updated the product name and slug', (done) ->
+      Product.find (error, products) ->
+        return done error if error?
+        products.length.should.equal 1
+        product = products[0]
+        expect(product.storeSlug).to.equal otherSlug
         done()

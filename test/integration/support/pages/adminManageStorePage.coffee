@@ -58,3 +58,4 @@ module.exports = class AdminManageStorePage extends Page
   pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
   pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"
   storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"
+  setName: (name) => @type "#manageStoreBlock #name", name
