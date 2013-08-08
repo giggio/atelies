@@ -67,7 +67,6 @@ describe 'Store', ->
       pagseguroEmail: 'pagseguro@a.com'
       pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
     store.updateFromSimple simple
-    store.name.should.equal simple.name
     store.phoneNumber.should.equal simple.phoneNumber
     store.city.should.equal simple.city
     store.state.should.equal simple.state
