@@ -55,7 +55,7 @@ exports.start = (cb) ->
   app.use express.methodOverride()
   app.use express.cookieParser config.appCookieSecret
   app.use express.session secret: config.appCookieSecret, store:sessionStore
-  if app.get("env") isnt 'production' or config.serverEnvironment is 'staging'
+  if app.get("env") isnt 'production'
     app.use less src: publicDir, debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
   app.enable 'trust proxy'
