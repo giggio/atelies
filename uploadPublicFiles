@@ -11,7 +11,7 @@ if [ "$AWS_ACCESS_KEY_ID" = '' ]; then
 fi
 if [ "$AWS_STATIC_IMAGES_BUCKET" = '' ]; then
   echo Missing environment variable AWS_STATIC_IMAGES_BUCKET
-  exit 12
+  exit 13
 fi
 
 echo $(date) Create dirs
@@ -24,13 +24,14 @@ echo $(date) Grunt install
 grunt install > .uploadPublicFiles/log/gruntInstall.log
 
 echo $(date) Copy config key
-if [[ ! -e .uploadPublicFiles/.s3cfg ]]; then
-  cp .s3cfg .uploadPublicFiles/.s3cfg
-  #writeConfigKey:
-  sed -i "s/AWS_SECRET_KEY/$AWS_SECRET_KEY/" .uploadPublicFiles/.s3cfg
-  #writeConfigSecret:
-  sed -i "s/AWS_ACCESS_KEY_ID/$AWS_ACCESS_KEY_ID/" .uploadPublicFiles/.s3cfg
+if [[ -e .uploadPublicFiles/.s3cfg ]]; then
+  rm .uploadPublicFiles/.s3cfg
 fi
+cp .s3cfg .uploadPublicFiles/.s3cfg
+#writeConfigKey:
+sed -i "s/AWS_SECRET_KEY/$AWS_SECRET_KEY/" .uploadPublicFiles/.s3cfg
+#writeConfigSecret:
+sed -i "s/AWS_ACCESS_KEY_ID/$AWS_ACCESS_KEY_ID/" .uploadPublicFiles/.s3cfg
 
 echo $(date) Gzip
 gzip -r --best compiledPublic > .uploadPublicFiles/log/gzipCompiledPublic.log
