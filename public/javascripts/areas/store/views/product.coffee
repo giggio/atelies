@@ -31,5 +31,6 @@ define [
       @delegateEvents()
       attr = @product.attributes
       attr.tags = attr.tags.split(', ')
-      description = @markdown.makeHtml attr.description
+      if attr.description?
+        description = @markdown.makeHtml attr.description
       @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description
