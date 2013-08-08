@@ -3,6 +3,7 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
+- npm install bower
 - node_modules/bower/bin/bower install
 after_success:
 - if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then echo "This is a pull request. No deployment will be done."; exit 0; fi
