@@ -49,6 +49,7 @@ exports.start = (cb) ->
   app.set "view engine", "jade"
   app.set 'domain', config.baseDomain
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
+  app.use redirectUnlessSecure
   #app.use express.compress() if config.isProduction #turned off as amazon already does this
   app.use express.bodyParser()
   app.use express.methodOverride()
@@ -57,9 +58,6 @@ exports.start = (cb) ->
   if app.get("env") isnt 'production' or config.serverEnvironment is 'staging'
     app.use less src: publicDir, debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
-  app.use '/account/login', redirectUnlessSecure
-  app.use '/account/register', redirectUnlessSecure
-  app.use '/account/changePassword', redirectUnlessSecure
   app.enable 'trust proxy'
 
   everyauthConfig.configure app
