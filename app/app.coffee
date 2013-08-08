@@ -20,7 +20,7 @@ exports.start = (cb) ->
     config.isProduction = true
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
     sessionStore = new MongoStore url:config.connectionString
-    publicDir = path.join __dirname, '..', "compiledPublic"
+    publicDir = path.join __dirname, '..', "public"
   else
     config.isProduction = false
     app.use express.errorHandler()
