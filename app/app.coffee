@@ -49,6 +49,7 @@ exports.start = (cb) ->
   app.set "view engine", "jade"
   app.set 'domain', config.baseDomain
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
+  app.enable 'trust proxy'
   app.use redirectUnlessSecure
   #app.use express.compress() if config.isProduction #turned off as amazon already does this
   app.use express.bodyParser()
@@ -58,7 +59,6 @@ exports.start = (cb) ->
   if app.get("env") isnt 'production'
     app.use less src: publicDir, debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
-  app.enable 'trust proxy'
 
   everyauthConfig.configure app
   app.use everyauth.middleware()
