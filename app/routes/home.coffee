@@ -56,9 +56,6 @@ class Routes
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
 
-  isHealthy: (req, res) ->
-    res.send 200
-
 _.extend Routes::, RouteFunctions::
 
 module.exports = Routes

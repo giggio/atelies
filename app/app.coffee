@@ -15,6 +15,7 @@ exports.start = (cb) ->
   MongoStore          = require('connect-mongo')(express)
   config              = require './helpers/config'
   redirectUnlessSecure= require './helpers/middleware/redirectUnlessSecure'
+  healthCheck         = require './helpers/middleware/healthCheck'
 
   if app.get("env") is 'production'
     config.isProduction = true
@@ -49,6 +50,7 @@ exports.start = (cb) ->
   app.set "view engine", "jade"
   app.set 'domain', config.baseDomain
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
+  app.use "/isHealthy", healthCheck
   app.enable 'trust proxy'
   app.use redirectUnlessSecure
   #app.use express.compress() if config.isProduction #turned off as amazon already does this
