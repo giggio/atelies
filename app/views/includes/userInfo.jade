@@ -15,6 +15,7 @@
       li: a#loginPop.pop(href="#") Entrar
       li: a(href='#{secureUrl}/account/register') Cadastre-se
   #loginPop-head.hide Faça seu login
+    button.close(type="button") ×
   #loginPop-content.hide
     form#popupLoginForm(action='#{secureUrl}/account/login', method='post')
       div
