@@ -5,7 +5,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.AWS_REGION = "us-east-1"
   process.env.APP_COOKIE_SECRET = 'somesecret'
   process.env.SERVER_ENVIRONMENT = 'dev'
-  process.env.STATIC_PATH = '/static'
+  process.env.STATIC_PATH = '/public'
   process.env.RECAPTCHA_PUBLIC_KEY = '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
   process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
 switch process.env.NODE_ENV

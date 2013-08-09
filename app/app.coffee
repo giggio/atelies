@@ -10,7 +10,6 @@ exports.start = (cb) ->
   app                 = express()
   everyauthConfig     = require './helpers/everyauthConfig'
   router              = require './routes/router'
-  less                = require 'connect-less'
   Postman             = require './models/postman'
   MongoStore          = require('connect-mongo')(express)
   config              = require './helpers/config'
@@ -59,7 +58,8 @@ exports.start = (cb) ->
   app.use express.cookieParser config.appCookieSecret
   app.use express.session secret: config.appCookieSecret, store:sessionStore
   if app.get("env") isnt 'production'
-    app.use less src: publicDir, debug: false, compress: config.isProduction
+    less = require 'connect-less'
+    app.use less src: path.join(publicDir, '..'), debug: false, compress: config.isProduction
     app.use config.staticPath, express.static publicDir
 
   everyauthConfig.configure app
