@@ -99,6 +99,19 @@ class Routes
 
   registered: (req, res) -> res.render 'accountRegistered'
 
+  forgotPasswordShow: (req, res) -> res.render 'forgotPassword'
+
+  forgotPassword: (req, res) ->
+    return res.render 'forgotPassword' unless req.body.email?
+    User.findByEmail req.body.email, (err, user) ->
+      return res.render 'forgotPassword', error: 'Usuário não encontrado.' if err? or !user?
+      user.sendMailPasswordReset (err, mailResponse) ->
+        return res.render 'forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.' if err?
+        user.save()
+        res.redirect '/account/passwordResetSent'
+
+  passwordResetSent: (req, res) -> res.render 'passwordResetSent'
+
   resetPasswordShow: (req, res) -> res.render 'resetPassword'
 
   resetPassword: (req, res) ->

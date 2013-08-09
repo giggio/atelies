@@ -3,7 +3,7 @@ User     = require '../../app/models/user'
 bcrypt   = require 'bcrypt'
 AccountResetPasswordPage = require './support/pages/accountResetPasswordPage'
 
-describe 'Change Password', ->
+describe 'Reset Password', ->
   user = page = null
   before (done) -> whenServerLoaded done
 

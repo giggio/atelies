@@ -22,7 +22,9 @@ userSchema = new mongoose.Schema
   verified:         type: Boolean, default: false
   resetKey:         Number
 
-userSchema.methods.createResetKey = -> @resetKey = Math.random() * Math.pow(10, 18)
+userSchema.methods.createResetKey = ->
+  return @resetKey if @resetKey?
+  @resetKey = Math.random() * Math.pow(10, 18)
 userSchema.methods.createStore = ->
   store = new Store()
   @stores.push store
@@ -69,14 +71,38 @@ userSchema.methods.sendMailConfirmRegistration = (cb) ->
       Recebemos um registro de novo usuário no Ateliês indicando este e-mail (#{@email}). Gostaríamos de confirmar que ele é mesmo seu!
     </div>
     <div>
-      Clique <a href='#{registrationLink}'>aqui</a> para confirmar seu registro. Ou copie e cole o texto abaixo:</br>
+      Clique <a href='#{registrationLink}'>aqui</a> para confirmar seu registro. Ou copie e cole o texto abaixo:<br />
       #{registrationLink}
     </div>
     <div>
       Caso você não tenha se registrado basta nos comunicar em contato@atelies.com.br que excluiremos o usuário.
     </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>
+      Bem vindo!<br />
+      Equipe Ateliês
+    </div>
     </html>"
   postman.sendFromContact @, "Bem vindo ao Ateliês", body, cb
+userSchema.methods.sendMailPasswordReset = (cb) ->
+  resetLink = "#{config.secureUrl}/account/resetPassword?_id=#{@_id}&resetKey=#{@createResetKey()}"
+  body = "<html>
+    <h1>Olá #{@name}!</h1>
+    <div>
+      Você parece ter esquecido sua senha. Para trocá-la clique <a href='#{resetLink}'>aqui</a>. Ou copie e cole o texto abaixo:<br />
+      #{resetLink}
+    </div>
+    <div>
+      Se você não solitou a troca de senha simplesmente ignore esse e-mail.
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>
+      Equipe Ateliês
+    </div>
+    </html>"
+  postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body, cb
   
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb
