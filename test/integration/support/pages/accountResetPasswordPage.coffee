@@ -7,3 +7,4 @@ module.exports = class AccountResetPasswordPage extends Page
   setFieldsAs: (v) =>
     @type "#passwordVerify", v.passwordVerify
     @type "#newPassword", v.newPassword
+  errorMsg: @::getText.partial '#error'

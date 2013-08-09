@@ -104,7 +104,7 @@ class Routes
   resetPassword: (req, res) ->
     User.findById req.query._id, (err, user) ->
       return res.render 'resetPassword', error:err if err?
-      return res.render 'resetPassword' unless user?.resetKey?
+      return res.render 'resetPassword', error: 'Não foi possível trocar a senha.' unless user?.resetKey?
       if user.resetKey.toString() is req.query.resetKey
         return res.render 'resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
@@ -112,7 +112,7 @@ class Routes
           return res.render 'resetPassword', error: 'Não foi possível trocar a senha. Erro ao salvar o usuário.' if err?
           res.redirect 'account/passwordChanged'
       else
-        return res.render 'resetPassword', error:'Usuário não solicitou troca de senha'
+        return res.render 'resetPassword', error: 'Não foi possível trocar a senha.'
 
 _.extend Routes::, RouteFunctions::
 
