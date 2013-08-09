@@ -58,7 +58,7 @@ class Routes
       if error?
         return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ]
       if succeeded
-        res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[!@#$%^&*-]){1}).{10,}$/.test req.body.newPassword
+        return res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (err, user) ->
           if err?
