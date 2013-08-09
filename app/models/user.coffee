@@ -20,7 +20,9 @@ userSchema = new mongoose.Schema
   phoneNumber:      String
   loginError:       Number
   verified:         type: Boolean, default: false
+  resetKey:         Number
 
+userSchema.methods.createResetKey = -> @resetKey = Math.random() * Math.pow(10, 18)
 userSchema.methods.createStore = ->
   store = new Store()
   @stores.push store
@@ -49,6 +51,7 @@ userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10
   @passwordHash = bcrypt.hashSync password, salt
+  @resetKey = undefined
 userSchema.methods.toSimpleUser = ->
   _id: @_id
   name: @name

@@ -43,6 +43,8 @@ exports.route = (app) ->
   app.get     "/account/updateProfile",                                     account.updateProfileShow
   app.post    "/account/updateProfile",                                     account.updateProfile
   app.get     "/account/profileUpdated",                                    account.profileUpdated
+  app.get     "/account/resetPassword",                                     account.resetPasswordShow
+  app.post    "/account/resetPassword",                                     account.resetPassword
   app.get     "/notseller",                                                 account.notSeller
   #admin
   app.get     "/admin",                                                     admin.admin

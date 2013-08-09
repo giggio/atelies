@@ -11,7 +11,7 @@ RouteFunctions  = require './routeFunctions'
 
 class Routes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'passwordChanged', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account'
+    @_auth 'changePasswordShow', 'changePassword', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account'
 
   updateProfileShow: (req, res) ->
     user = req.user
@@ -98,6 +98,21 @@ class Routes
   mustVerifyUser: (req, res) -> res.render 'accountMustVerifyUser'
 
   registered: (req, res) -> res.render 'accountRegistered'
+
+  resetPasswordShow: (req, res) -> res.render 'resetPassword'
+
+  resetPassword: (req, res) ->
+    User.findById req.query._id, (err, user) ->
+      return res.render 'resetPassword', error:err if err?
+      return res.render 'resetPassword' unless user?.resetKey?
+      if user.resetKey.toString() is req.query.resetKey
+        return res.render 'resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
+        user.setPassword req.body.newPassword
+        user.save (err, user) ->
+          return res.render 'resetPassword', error: 'Não foi possível trocar a senha. Erro ao salvar o usuário.' if err?
+          res.redirect 'account/passwordChanged'
+      else
+        return res.render 'resetPassword', error:'Usuário não solicitou troca de senha'
 
 _.extend Routes::, RouteFunctions::
 
