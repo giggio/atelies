@@ -24,10 +24,10 @@ browser code and is has tests all over it. The code quality is good, and it will
 
 I will probably start some blog posts (see blog address below) and will republish them here. Nothing so far.
 
-## Issues and ideas
+## Issues, task board and ideas
 
+* The task board is at [Huboard](http://huboard.com/giggio/atelies/board). You can also check the [Github backlog](https://github.com/giggio/atelies/issues) directly.
 * Suggestions should go to the user voice site: [https://atelies.uservoice.com](https://atelies.uservoice.com)
-* You can also check the Github backlog: [https://github.com/giggio/atelies/issues](https://github.com/giggio/atelies/issues)
 
 ## Maintainers
 
