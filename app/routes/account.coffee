@@ -19,6 +19,12 @@ class Routes
       return res.send 400 if err?
       res.render 'account', user: user.toSimpleUser(), orders: orders
 
+  resendConfirmationEmail: (req, res) ->
+    user = req.user
+    user.sendMailConfirmRegistration (err, mailResponse) ->
+      res.json 400, err if err?
+      res.send 200
+
   updateProfileShow: (req, res) ->
     user = req.user
     redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""

@@ -257,6 +257,17 @@ exports.generator =
         verified: true
       user.password = 'abc'
       user
+    e: ->
+      user = new User
+        email: 'e@a.com'
+        passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+        name: 'Some E Guy'
+        isSeller: false
+        stores: []
+        loginError: 0
+        verified: false
+      user.password = 'abc'
+      user
   order:
     a: -> new Order
       store: exports.generator.store.a()

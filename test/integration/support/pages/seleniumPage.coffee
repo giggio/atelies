@@ -165,3 +165,14 @@ module.exports = class Page
   refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
   getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
   getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb
+  getDialogMsg: (cb) ->
+    @waitForSelector '#dialogMsg', =>
+      @getText '#dialogMsg', cb
+  getDialogTitle: (cb) ->
+    @waitForSelector '#dialogTitle', =>
+      @getText '#dialogTitle', cb
+  getDialogTexts: (cb) ->
+    @waitForSelector '#dialogTitle', =>
+      @getText '.dialogMsg', (dialogMsg) =>
+        @getText '#dialogTitle', (dialogTitle) =>
+          cb dialogMsg: dialogMsg, dialogTitle: dialogTitle

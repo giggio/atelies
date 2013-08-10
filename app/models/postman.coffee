@@ -8,12 +8,16 @@ module.exports = class Postman
       @running = true
   @stop = -> @smtp.close() if @running
 
-  @dryrun = off
+  @classProperty 'dryrun',
+    get: =>
+      @_dryrun = off unless @_dryrun?
+      @_dryrun
+    set: (val) =>
+      @_dryrun = val
+      if val
+        @sentMails = []
 
   send: (from, to, subject, body, cb = (->)) ->
-    if Postman.dryrun
-      console.log "NOT sending mail, dry run"
-      return cb()
     mail =
       from: "'#{from.name}' <contato@atelies.com.br>"
       to: "'#{to.name}' <#{to.email}>"
@@ -23,7 +27,12 @@ module.exports = class Postman
       forceEmbeddedImages: true
     if from.email isnt 'contato@atelies.com.br'
       mail.replyTo = "'#{from.name}' <#{from.email}>"
-    #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
-    Postman.smtp.sendMail mail, cb
+    if Postman.dryrun
+      console.log "NOT sending mail, dry run"
+      Postman.sentMails.push mail
+      cb()
+    else
+      #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
+      Postman.smtp.sendMail mail, cb
 
   sendFromContact: @::send.partial {name:'Ateliês', email:'contato@atelies.com.br'}

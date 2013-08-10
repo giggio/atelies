@@ -1,5 +1,7 @@
 Function::property = (prop, desc) ->
   Object.defineProperty @::, prop, desc
+Function::classProperty = (prop, desc) ->
+  Object.defineProperty @, prop, desc
 Function::partial = ->
   fn = @
   partiallyAppliedArgs = Array::slice.call arguments
