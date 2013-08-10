@@ -13,6 +13,12 @@ class Routes
   constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account'
 
+  account: (req, res) ->
+    user = req.user
+    Order.getSimpleByUser user, (err, orders) ->
+      return res.send 400 if err?
+      res.render 'account', user: user.toSimpleUser(), orders: orders
+
   updateProfileShow: (req, res) ->
     user = req.user
     redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
@@ -73,12 +79,6 @@ class Routes
   notSeller: (req, res) -> res.render 'notseller'
 
   
-  account: (req, res) ->
-    user = req.user
-    Order.getSimpleByUser user, (err, orders) ->
-      return res.send 400 if err?
-      res.render 'account', user: user.toSimpleUser(), orders: orders
-
   order: (req, res) ->
     user = req.user
     Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) ->

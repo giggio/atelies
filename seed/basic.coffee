@@ -43,6 +43,14 @@ db.users.insert
   phoneNumber: '+55 (11) 98765-4321'
   loginError: 0
   verified: true
+db.users.insert
+  email: 'e@a.com'
+  passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+  name: 'Some E Guy'
+  isSeller: false
+  stores: []
+  loginError: 0
+  verified: false
 user1 = db.users.findOne email:'d@a.com'
 db.users.ensureIndex { email: 1 }
 

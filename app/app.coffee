@@ -19,13 +19,11 @@ exports.start = (cb) ->
   if app.get("env") is 'production'
     config.isProduction = true
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
-    sessionStore = new MongoStore url:config.connectionString
     publicDir = path.join __dirname, '..', "public"
   else
     config.isProduction = false
     app.use express.errorHandler()
     app.locals.pretty = on
-    sessionStore = new express.session.MemoryStore()
     publicDir = path.join __dirname, '..', "public"
     if app.get("env") is 'development'
       app.use express.logger "dev"
@@ -40,6 +38,7 @@ exports.start = (cb) ->
       #everyauth.debug = on
       Postman.dryrun = on
 
+  sessionStore = new MongoStore url:config.connectionString
   global.DEBUG = !config.isProduction
   global.CONFIG = config
   global.STATIC_PATH = config.staticPath
