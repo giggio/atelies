@@ -339,4 +339,5 @@ describe 'Admin manage store page', ->
         products.length.should.equal 1
         product = products[0]
         product.storeSlug.should.to.equal otherSlug
+        product.storeName.should.to.equal otherName
         done()

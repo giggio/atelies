@@ -97,6 +97,7 @@ storeSchema.methods.updateName = (name, cb) ->
     return cb err if err?
     for p in products
       p.storeSlug = @slug
+      p.storeName = name
       p.save()
     cb()
 Store = mongoose.model 'store', storeSchema
