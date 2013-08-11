@@ -24,7 +24,10 @@
         {{else}}
         <img src="http://dummyimage.com/300x450/000/fff&text=%3F" alt="{{name}}"/>
         {{/if}}
-        <span class="name">{{name}}</span>
+        <div class="productInfoBox">
+          <span id="product{{_id}}_name" class="name">{{name}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
       </a>
     </div>
     {{/each}}

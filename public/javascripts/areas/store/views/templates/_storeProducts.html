@@ -3,7 +3,13 @@
   <div class="row-fluid productsRow">
     {{#each products}}
     <div id="product{{_id}}" data-id="{{_id}}" class="product span2">
-      <a href="#{{slug}}" class="link"><img src="{{pictureThumb}}" /></a>
+      <a href="#{{slug}}" class="link">
+        <img src="{{pictureThumb}}" />
+        <div class="productInfoBox">
+          <span id="product{{_id}}_name" class="name">{{name}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
+      </a>
     </div>
     {{/each}}
   </div>

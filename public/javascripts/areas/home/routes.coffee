@@ -7,7 +7,7 @@ define [
   '../shared/views/dialog'
 ],($, viewsManager, HomeView, StoresSearch, ProductsSearch, Dialog) ->
   class Routes
-    viewsManager.$el = $ "#app-container"
+    viewsManager.$el = $ "#app-container > .home"
     @home: =>
       @homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel
       viewsManager.show @homeView
