@@ -16,15 +16,12 @@ exports.start = (cb) ->
   redirectUnlessSecure= require './helpers/middleware/redirectUnlessSecure'
   healthCheck         = require './helpers/middleware/healthCheck'
 
-  if app.get("env") is 'production'
-    config.isProduction = true
+  sessionStore = new MongoStore url:config.connectionString
+  if config.isProduction
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
-    publicDir = path.join __dirname, '..', "public"
   else
-    config.isProduction = false
     app.use express.errorHandler()
     app.locals.pretty = on
-    publicDir = path.join __dirname, '..', "public"
     if app.get("env") is 'development'
       app.use express.logger "dev"
       everyauth.debug = on
@@ -34,11 +31,12 @@ exports.start = (cb) ->
       else
         Postman.dryrun = on
     if app.get("env") is 'test'
+      sessionStore = new express.session.MemoryStore()
       #app.use express.logger "dev"
       #everyauth.debug = on
       Postman.dryrun = on
 
-  sessionStore = new MongoStore url:config.connectionString
+  publicDir = path.join __dirname, '..', "public"
   global.DEBUG = !config.isProduction
   global.CONFIG = config
   global.STATIC_PATH = config.staticPath

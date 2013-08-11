@@ -21,6 +21,7 @@ values =
   connectionString: process.env.MONGOLAB_URI
   port: process.env.PORT
   environment: process.env.NODE_ENV
+  isProduction: process.env.NODE_ENV is 'production'
   debug: process.env.DEBUG? and process.env.DEBUG
   aws:
     accessKeyId: process.env.AWS_ACCESS_KEY_ID
