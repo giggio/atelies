@@ -2,7 +2,7 @@ ImageManipulation = require '../../app/helpers/imageManipulation'
 path = require 'path'
 im = require('gm').subClass imageMagick: true
 
-describe 'Account order detail page', ->
+describe 'Image Manipulation', ->
   fileName500x500 = fileName500x700 = fileName700x500 = fileName700x700 = imageManipulation = newFilePath = fileName = null
   before =>
     imageManipulation = new ImageManipulation()
