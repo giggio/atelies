@@ -20,8 +20,9 @@ define [
       viewsManager.$el = $ '#app-container > .store'
     home: ->
       store = storeBootstrapModel.store
+      user = storeBootstrapModel.user
       products = storeBootstrapModel.products
-      @storeView = new StoreView store: store, products: products
+      @storeView = new StoreView store: store, products: products, user: user
       viewsManager.show @storeView
     product: (slug) ->
       store = storeBootstrapModel.store

@@ -21,7 +21,9 @@ class Routes
     return res.redirect 'notseller' unless req.user.isSeller
     req.user.populate 'stores', (err, user) ->
       return res.send 400 if err?
-      res.render 'admin', stores: _.map(user.stores, (s) -> s.toSimple()), user: req.user.toSimpleUser()
+      stores = _.map user.stores, (s) -> s.toSimple()
+      req.user.toSimpleUser (user) ->
+        res.render 'admin', stores: stores, user: user
 
   adminStoreCreate: (req, res) ->
     body = req.body

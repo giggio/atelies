@@ -54,14 +54,22 @@ userSchema.methods.setPassword = (password) ->
   salt = bcrypt.genSaltSync 10
   @passwordHash = bcrypt.hashSync password, salt
   @resetKey = undefined
-userSchema.methods.toSimpleUser = ->
-  _id: @_id
-  name: @name
-  email: @email
-  deliveryAddress: @deliveryAddress
-  phoneNumber: @phoneNumber
-  verified: @verified
-  isSeller: @isSeller
+userSchema.methods.toSimpleUser = (cb) ->
+  user =
+    _id: @_id
+    name: @name
+    email: @email
+    deliveryAddress: @deliveryAddress
+    phoneNumber: @phoneNumber
+    verified: @verified
+    isSeller: @isSeller
+  if @isSeller
+    @populate 'stores', 'slug', =>
+      user.stores = _.pluck @stores, 'slug'
+      cb user
+  else
+    setImmediate cb user
+
 userSchema.methods.sendMailConfirmRegistration = (cb) ->
   registrationLink = "#{config.secureUrl}/account/verifyUser/#{@_id}"
   body = "<html>

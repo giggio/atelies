@@ -17,7 +17,8 @@ class Routes
     user = req.user
     Order.getSimpleByUser user, (err, orders) ->
       return res.send 400 if err?
-      res.render 'account', user: user.toSimpleUser(), orders: orders
+      user.toSimpleUser (user) ->
+        res.render 'account', user: user, orders: orders
 
   resendConfirmationEmail: (req, res) ->
     user = req.user

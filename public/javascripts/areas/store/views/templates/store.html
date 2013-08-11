@@ -1,5 +1,10 @@
 <div id="storeHeader">
   <img id="homePageImage"  src="{{store.homePageImage}}" />
+  {{#if userOwned}}
+  <p>
+    <a class="btn btn-primary" href="/admin#store/{{store.slug}}">Editar sua loja</a>
+  </p>
+  {{/if}}
   <div id="homePageDescription">{{{homePageDescription}}}</div>
   {{#if store.urlFacebook}}
   <a id="urlFacebook" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook" target="_blank"><img class="img-circle" src="{{staticPath}}/images/facebook.png" /></a>

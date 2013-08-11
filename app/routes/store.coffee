@@ -25,18 +25,19 @@ class Routes
       return res.send 400 if err?
       return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-      user =
+      getUser = (cb) ->
         if req.user?
-          req.user.toSimpleUser()
+          req.user.toSimpleUser (user) -> cb user
         else
-          undefined
-      if req.session.recentOrder?
-        order = req.session.recentOrder
-        req.session.recentOrder = null
-      res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) ->
-        #console.log html
-        return res.send 400 if err?
-        res.send html
+          cb undefined
+      getUser (user) ->
+        if req.session.recentOrder?
+          order = req.session.recentOrder
+          req.session.recentOrder = null
+        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) ->
+          #console.log html
+          return res.send 400 if err?
+          res.send html
 
   product: (req, res) ->
     Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->
