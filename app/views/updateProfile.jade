@@ -6,6 +6,12 @@ append scriptsFooter
 append content
   .container
     h2 Atualize seu cadastro
+    if facebookRegistration
+      .alert.alert-success
+        button.close(data-dismiss="alert") &times;
+        strong Usuário criado com sucesso.
+        | &nbsp; Agora você sempre poderá se logar utilizando o Facebook. Se preferir também pode criar uma senha para não depender apenas do Facebook.
+        | &nbsp; Aproveite para atualizar seu cadastro abaixo!
     if ('undefined' !== typeof errors && errors.length)
       ul#errors
         - each error in errors

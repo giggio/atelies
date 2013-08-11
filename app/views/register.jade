@@ -2,97 +2,105 @@ extends homeLayout
 append scriptsFooter
   script(src='#{STATIC_PATH}/javascripts/lib/requirejs/require.js', data-main='#{STATIC_PATH}/javascripts/bootstrap.js')
   script.
-    require(['loginBootstrap']);
+    require(['registerBootstrap']);
 append content
   .container
-    h2 Cadastro
-    .alert
-      :markdown
-        **Atenção!**
-        O Ateliês está em *em soft opening*.
-        Isso quer dizer que já estamos funcionando, mas ainda estamos verificando se tudo funciona direitinho.
-        Caso queira nos ajudar e dar feedback e sugestões entre em contato conosco em contato@atelies.com.br,
-        ou via [Facebook](https://www.facebook.com/Atelies).
-        Temos ainda uma página de sugestões no [UserVoice](https://atelies.uservoice.com).  
-        **Bem vindo!**
-    if (everyauth.loggedIn)
-      h3 Usuário já logado.
-    else
-      if ('undefined' !== typeof errors && errors.length)
-        ul#errors
-          - each error in errors
-            li.error= error
-      :coffeescript
-        window.RecaptchaOptions =
-          custom_translations:
-            instructions_visual : "Escreva as duas palavras:",
-            instructions_audio : "Escreva o que ouviu:",
-            play_again : "Toque de novo",
-            cant_hear_this : "Baixar em MP3",
-            visual_challenge : "Desafio visual",
-            audio_challenge : "Desafio auditivo",
-            refresh_btn : "Novo desafio"
-            help_btn : "Ajuda",
-            incorrect_try_again : "Incorreto, tente novamente.",
-          theme: 'clean'
-          lang: 'pt'
-      form#registerForm.validatable.form-horizontal(action='#{secureUrl}/account/register', method='post')
-        .control-group
-          label.control-label Nome:
-          .controls
-            input#name.span4(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.", maxlength="50")
-        .control-group
-          label.control-label Email:
-          .controls
-            input#email.span4(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com", maxlength="50")
-        .control-group
-          .controls
-            label
-              input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
-              | registrar-se como vendedor
-        .control-group
-          label.control-label Senha (8 caracteres, no mínimo uma letra e um número:
-          .controls
-            input#password.span4(type='password', name=everyauth.password.passwordFormFieldName, class="required strongPassword", title="Informe uma senha correta.", maxlength="50")
-        .control-group
-          label.control-label Confirme sua senha:
-          .controls
-            input#passwordVerify.span4(type='password', name='passwordVerify', title="A senha não confere.", matches="password", maxlength="50")
-        p.formText Os dados de endereço são opcionais no registro, mas são obrigatórios para completar uma compra. Você não precisa preenchê-los agora, mas precisará preenchê-los antes de fechar sua primeira compra.
-        .control-group
-          label.control-label Endereço:
-          .controls
-            input#deliveryStreet.span6(type='text', name="deliveryStreet", value=userParams.deliveryStreet, title="Informe sua rua.", maxlength="50")
-        .control-group
-          label.control-label Endereço (complemento):
-          .controls
-            input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=userParams.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
-        .control-group
-          label.control-label Cidade:
-          .controls
-            input#deliveryCity.span4(type='text', name="deliveryCity", value=userParams.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
-        .control-group
-          label.control-label Estado:
-          .controls
-            select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
-              each state in states
-                option(value=state, selected=state===userParams.deliveryState)= state
-        .control-group
-          label.control-label CEP:
-          .controls
-            input#deliveryZIP.zip(type='text', name="deliveryZIP", value=userParams.deliveryZIP, title="Informe o CEP no formato 99999-999.", placeholder="01234-567", maxlength="9")
-        .control-group
-          label.control-label Telefone:
-          .controls
-            input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
-        .control-group
-          .controls
-            != recaptchaForm
-        .control-group
-          .controls
-            label
-              input#termsOfUse.required(type='checkbox', name="termsOfUse", title="Você precisa aceitar os termos de uso.")
-              | Aceito os <a href="/terms">termos de uso</a>
-        .control-group
-          .controls
-            input#register(type='submit',class='btn btn-primary', value='Cadastre-se')
+    section#app-container
+      #registerSection
+        h2 Cadastro
+        .alert
+          :markdown
+            **Atenção!**
+            O Ateliês está em *em soft opening*.
+            Isso quer dizer que já estamos funcionando, mas ainda estamos verificando se tudo funciona direitinho.
+            Caso queira nos ajudar e dar feedback e sugestões entre em contato conosco em contato@atelies.com.br,
+            ou via [Facebook](https://www.facebook.com/Atelies).
+            Temos ainda uma página de sugestões no [UserVoice](https://atelies.uservoice.com).  
+            **Bem vindo!**
+        if (everyauth.loggedIn)
+          h3 Usuário já logado.
+        else
+          if ('undefined' !== typeof errors && errors.length)
+            ul#errors
+              - each error in errors
+                li.error= error
+          :coffeescript
+            window.RecaptchaOptions =
+              custom_translations:
+                instructions_visual : "Escreva as duas palavras:",
+                instructions_audio : "Escreva o que ouviu:",
+                play_again : "Toque de novo",
+                cant_hear_this : "Baixar em MP3",
+                visual_challenge : "Desafio visual",
+                audio_challenge : "Desafio auditivo",
+                refresh_btn : "Novo desafio"
+                help_btn : "Ajuda",
+                incorrect_try_again : "Incorreto, tente novamente.",
+              theme: 'clean'
+              lang: 'pt'
+
+          #howToRegister
+            a.btn.btn-primary(href='/auth/facebook') Cadastre-se utilizando o Facebook
+            span &nbsp; ou &nbsp;
+            button#manualEntry.btn.btn-danger Preencha os dados de cadastro
+
+          form#registerForm.validatable.form-horizontal.hide(action='#{secureUrl}/account/register', method='post')
+            .control-group
+              label.control-label Nome:
+              .controls
+                input#name.span4(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.", maxlength="50")
+            .control-group
+              label.control-label Email:
+              .controls
+                input#email.span4(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com", maxlength="50")
+            .control-group
+              .controls
+                label
+                  input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
+                  | registrar-se como vendedor
+            .control-group
+              label.control-label Senha (8 caracteres, no mínimo uma letra e um número:
+              .controls
+                input#password.span4(type='password', name=everyauth.password.passwordFormFieldName, class="required strongPassword", title="Informe uma senha correta.", maxlength="50")
+            .control-group
+              label.control-label Confirme sua senha:
+              .controls
+                input#passwordVerify.span4(type='password', name='passwordVerify', title="A senha não confere.", matches="password", maxlength="50")
+            p.formText Os dados de endereço são opcionais no registro, mas são obrigatórios para completar uma compra. Você não precisa preenchê-los agora, mas precisará preenchê-los antes de fechar sua primeira compra.
+            .control-group
+              label.control-label Endereço:
+              .controls
+                input#deliveryStreet.span6(type='text', name="deliveryStreet", value=userParams.deliveryStreet, title="Informe sua rua.", maxlength="50")
+            .control-group
+              label.control-label Endereço (complemento):
+              .controls
+                input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=userParams.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
+            .control-group
+              label.control-label Cidade:
+              .controls
+                input#deliveryCity.span4(type='text', name="deliveryCity", value=userParams.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
+            .control-group
+              label.control-label Estado:
+              .controls
+                select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
+                  each state in states
+                    option(value=state, selected=state===userParams.deliveryState)= state
+            .control-group
+              label.control-label CEP:
+              .controls
+                input#deliveryZIP.zip(type='text', name="deliveryZIP", value=userParams.deliveryZIP, title="Informe o CEP no formato 99999-999.", placeholder="01234-567", maxlength="9")
+            .control-group
+              label.control-label Telefone:
+              .controls
+                input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
+            .control-group
+              .controls
+                != recaptchaForm
+            .control-group
+              .controls
+                label
+                  input#termsOfUse.required(type='checkbox', name="termsOfUse", title="Você precisa aceitar os termos de uso.")
+                  | Aceito os <a href="/terms">termos de uso</a>
+            .control-group
+              .controls
+                input#register(type='submit',class='btn btn-primary', value='Cadastre-se')

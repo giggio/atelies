@@ -6,6 +6,26 @@ Recaptcha     = require('recaptcha').Recaptcha
 config        = require './config'
 
 exports.configure = (app) ->
+  everyauth.facebook.configure
+    appId: '618886944811863'
+    appSecret: '0cd3ee557fd385e31fdd065616347e1d'
+    scope: 'email'
+    fields: 'id,name,email'
+    handleAuthCallbackError: (req, res) ->
+      res.render 'facebookAuthCallbackError'
+    findOrCreateUser: (session, accessToken, accessTokExtra, fbUserMetadata) ->
+      cb = @Promise()
+      #fbUserMetadata is { id: 'string of numbers', name: 'string', email: 'string of email' }
+      user = new User
+        name: fbUserMetadata.name
+        email: fbUserMetadata.email.toLowerCase()
+        facebookId: fbUserMetadata.id
+        verified: true
+      user.save (error, user) ->
+        user.sendMailConfirmRegistration (error, mailResponse) ->
+          cb.fulfill user
+      cb
+    redirectPath: '/account/updateProfile?facebookRegistration'
   everyauth.password.configure
     logoutPath: '/account/logout'
     loginWith: "email"

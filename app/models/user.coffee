@@ -8,7 +8,8 @@ postman = new Postman()
 userSchema = new mongoose.Schema
   name:             type: String, required: true
   email:            type: String, required: true
-  passwordHash:     type: String, required: true
+  passwordHash:     String
+  facebookId:       String
   isSeller:         type: Boolean, default: false
   stores:           [{type: mongoose.Schema.Types.ObjectId, ref: 'store'}]
   deliveryAddress:

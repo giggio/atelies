@@ -38,7 +38,7 @@ class Routes
       deliveryZIP: user.deliveryAddress.zip
       phoneNumber: user.phoneNumber
       isSeller: user.isSeller
-    , states: values.states, redirectTo: redirectTo
+    , states: values.states, redirectTo: redirectTo, facebookRegistration: req.query.facebookRegistration?
 
   updateProfile: (req, res) ->
     user = req.user
