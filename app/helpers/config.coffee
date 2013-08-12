@@ -8,6 +8,8 @@ unless process.env.NODE_ENV is 'production'
   process.env.STATIC_PATH = '/public'
   process.env.RECAPTCHA_PUBLIC_KEY = '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
   process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
+  process.env.FB_APP_ID = '618886944811863'
+  process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d'
 switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
@@ -39,6 +41,9 @@ values =
     version: pkgInfo.version
     name: pkgInfo.name
   staticPath: process.env.STATIC_PATH
+  facebook:
+    appId: process.env.FB_APP_ID
+    appSecret: process.env.FB_APP_SECRET
 values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else ""
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and

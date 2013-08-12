@@ -49,6 +49,7 @@ exports.route = (app) ->
   app.get     "/account/resetPassword",                                     account.resetPasswordShow
   app.post    "/account/resetPassword",                                     account.resetPassword
   app.post    "/account/resendConfirmationEmail",                           account.resendConfirmationEmail
+  app.get     "/account/afterFacebookLogin",                                account.afterFacebookLogin
   app.get     "/notseller",                                                 account.notSeller
   #admin
   app.get     "/admin",                                                     admin.admin

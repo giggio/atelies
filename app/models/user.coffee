@@ -115,5 +115,6 @@ userSchema.methods.sendMailPasswordReset = (cb) ->
   
 User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb
+User.findByFacebookId = (facebookId, cb) -> User.findOne facebookId: facebookId, cb
 
 module.exports = User

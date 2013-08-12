@@ -53,6 +53,7 @@ db.users.insert
   verified: false
 user1 = db.users.findOne email:'d@a.com'
 db.users.ensureIndex { email: 1 }
+db.users.ensureIndex { facebookId: 1 }
 
 db.products.remove()
 db.products.insert

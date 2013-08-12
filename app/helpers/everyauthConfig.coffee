@@ -7,8 +7,8 @@ config        = require './config'
 
 exports.configure = (app) ->
   everyauth.facebook.configure
-    appId: '618886944811863'
-    appSecret: '0cd3ee557fd385e31fdd065616347e1d'
+    appId: config.facebook.appId
+    appSecret: config.facebook.appSecret
     scope: 'email'
     fields: 'id,name,email'
     handleAuthCallbackError: (req, res) ->
@@ -16,16 +16,26 @@ exports.configure = (app) ->
     findOrCreateUser: (session, accessToken, accessTokExtra, fbUserMetadata) ->
       cb = @Promise()
       #fbUserMetadata is { id: 'string of numbers', name: 'string', email: 'string of email' }
-      user = new User
-        name: fbUserMetadata.name
-        email: fbUserMetadata.email.toLowerCase()
-        facebookId: fbUserMetadata.id
-        verified: true
-      user.save (error, user) ->
-        user.sendMailConfirmRegistration (error, mailResponse) ->
-          cb.fulfill user
+      User.findByFacebookId fbUserMetadata.id, (err, user) ->
+        if user?
+          session.existingUserLogin = true
+          return cb.fulfill user
+        User.findByEmail fbUserMetadata.email.toLowerCase(), (err, user) ->
+          if user?
+            session.existingUserLogin = true
+            user.facebookId = fbUserMetadata.id
+            user.verified = true
+            user.save()
+            return cb.fulfill user
+          user = new User
+            name: fbUserMetadata.name
+            email: fbUserMetadata.email.toLowerCase()
+            facebookId: fbUserMetadata.id
+            verified: true
+          user.save (error, user) ->
+            cb.fulfill user
       cb
-    redirectPath: '/account/updateProfile?facebookRegistration'
+    redirectPath: '/account/afterFacebookLogin'
   everyauth.password.configure
     logoutPath: '/account/logout'
     loginWith: "email"

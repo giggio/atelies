@@ -19,12 +19,13 @@
     button.close(type="button") ×
   #loginPop-content.hide
     form#popupLoginForm(action='#{secureUrl}/account/login', method='post')
+      a.facebookLogin(href='/auth/facebook')
+        img(src="#{STATIC_PATH}/images/fblogin.png")
+        span Login com Facebook
       div
-        div E-mail:
-        input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.")
+        input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.", placeholder="E-mail")
       div
-        div Senha:
-        input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.")
+        input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", placeholder="Senha")
       div
         input(type='submit', class='btn btn-primary', value='Entrar')
         &nbsp;

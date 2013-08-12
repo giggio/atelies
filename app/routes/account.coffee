@@ -40,6 +40,10 @@ class Routes
       isSeller: user.isSeller
     , states: values.states, redirectTo: redirectTo, facebookRegistration: req.query.facebookRegistration?
 
+  afterFacebookLogin: (req, res) ->
+    path = if req.session.existingUserLogin then '/#home' else '/account/updateProfile?facebookRegistration'
+    res.redirect path
+
   updateProfile: (req, res) ->
     user = req.user
     body = req.body
