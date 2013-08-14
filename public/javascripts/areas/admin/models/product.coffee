@@ -45,16 +45,16 @@ define [
         [{required: true, msg: 'O preço é obrigatório.'}
          {pattern:'number', msg: 'O preço deve ser um número.'}]
       height:
-        [{pattern:'digits', msg: 'A altura deve ser um número.'}
+        [{pattern:'number', msg: 'A altura deve ser um número.'}
          {required: false}]
       width:
-        [{pattern:'digits', msg: 'A largura deve ser um número.'}
+        [{pattern:'number', msg: 'A largura deve ser um número.'}
          {required: false}]
       depth:
-        [{pattern:'digits', msg: 'A profundidade deve ser um número.'}
+        [{pattern:'number', msg: 'A profundidade deve ser um número.'}
          {required: false}]
       weight:
-        [{pattern:'digits', msg: 'O peso deve ser um número.'}
+        [{pattern:'number', msg: 'O peso deve ser um número.'}
          {required: false}]
       shippingHeight:
         [{required: true, msg: 'A altura de postagem é obrigatória.'}

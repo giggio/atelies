@@ -18,13 +18,13 @@ exports.generator =
         height: 11
         width: 12
         depth: 17
-      weight: 4
+      weight: 4.1
       shipping:
         dimensions:
           height: 12
           width: 13
           depth: 18
-        weight: 4
+        weight: 4.2
       hasInventory: true
       inventory: 30
     b: -> new Product

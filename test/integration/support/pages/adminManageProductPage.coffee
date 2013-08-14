@@ -24,11 +24,11 @@ module.exports = class AdminManageProductPage extends Page
       => @getValue "#editProduct #height", (text) -> product.dimensions.height = parseInt text
       => @getValue "#editProduct #width", (text) -> product.dimensions.width = parseInt text
       => @getValue "#editProduct #depth", (text) -> product.dimensions.depth = parseInt text
-      => @getValue "#editProduct #weight", (text) -> product.weight = parseInt text
+      => @getValue "#editProduct #weight", (text) -> product.weight = parseFloat text
       => @getValue "#editProduct #shippingHeight", (text) -> product.shipping.dimensions.height = parseInt text
       => @getValue "#editProduct #shippingWidth", (text) -> product.shipping.dimensions.width = parseInt text
       => @getValue "#editProduct #shippingDepth", (text) -> product.shipping.dimensions.depth = parseInt text
-      => @getValue "#editProduct #shippingWeight", (text) -> product.shipping.weight = parseInt text
+      => @getValue "#editProduct #shippingWeight", (text) -> product.shipping.weight = parseFloat text
       => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
       => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
     ], (-> cb(product))
