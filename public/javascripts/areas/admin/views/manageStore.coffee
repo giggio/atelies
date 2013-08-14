@@ -3,10 +3,11 @@ define [
   'backboneConfig'
   'handlebars'
   'text!./templates/manageStore.html'
+  'text!./templates/validationErrors.html'
   './store'
   './manageStorePagseguro'
   'backboneValidation'
-], ($, Backbone, Handlebars, manageStoreTemplate, StoreView, ManageStorePagseguroView, Validation) ->
+], ($, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, Validation) ->
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
@@ -43,7 +44,14 @@ define [
           @model.set 'pagseguro', opt.pagseguro
           @_storeCreated @model
       Validation.bind @
-      #@model.bind 'validated:invalid', (model, errors) -> console.log errors
+      validationErrorsEl = $('#validationErrors', @$el)
+      valContext = Handlebars.compile validationErrorsTemplate
+      @model.bind 'validated', (isValid, model, errors) =>
+        if isValid
+          validationErrorsEl.hide()
+        else
+          validationErrorsEl.html valContext errors:errors
+          validationErrorsEl.show()
     _redirectIfUserNotSatisfied: ->
       unless @user.verified
         window.location = "/account#userNotVerified"

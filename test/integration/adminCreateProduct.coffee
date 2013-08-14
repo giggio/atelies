@@ -131,7 +131,7 @@ describe 'Admin Create Product page', ->
         productOnDb.inventory.should.equal product.inventory
         done()
 
-  describe 'create product with no shipping info on a store that does not have auto calculated shipping', ->
+  describe 'create a product with no shipping info on a store that does not have auto calculated shipping', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store2.slug, ->

@@ -1,7 +1,7 @@
-<h2>Editando o produto <span class="name" /></h2>
+<h2>Editando o produto <span class="name"></span></h2>
 <form id="editProduct">
-  <div id="_id_holder">Id:<span id="_id" name="_id"></span></div>
-  <div id="slug_holder">Slug:<span id="slug" name="slug"></span></div>
+  <div id="_id_holder">Id:<span id="_id"></span></div>
+  <div id="slug_holder">Slug:<span id="slug"></span></div>
   <div class="control-group">
     <label class="control-label" for="name">Nome:</label>
     <div class="controls">
@@ -94,8 +94,9 @@
       <input type="text" id="inventory" name="inventory" data-error-style="tooltip" />
     </div>
   </div>
-  <input type="button" id="updateProduct" class="btn btn-primary" value="Atualizar" />
-  <input type="button" id="deleteProduct" class="btn btn-danger" value="Excluir" data-toggle="modal" data-target="#confirmDeleteModal" />
+  <div id="validationErrors"></div>
+  <input id="updateProduct" type="button" class="btn btn-primary" value="Atualizar" />
+  <input id="deleteProduct" type="button" class="btn btn-danger" value="Excluir" data-toggle="modal" data-target="#confirmDeleteModal" />
 </form>
 <div id="confirmDeleteModal" class="modal hide fade">
   <div class="modal-header">

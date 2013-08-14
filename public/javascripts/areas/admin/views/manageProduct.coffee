@@ -4,10 +4,11 @@ define [
   'handlebars'
   'underscore'
   'text!./templates/manageProduct.html'
+  'text!./templates/validationErrors.html'
   '../models/product'
   '../models/products'
   'backboneValidation'
-], ($, Backbone, Handlebars, _, manageProductTemplate, Product, Products, Validation) ->
+], ($, Backbone, Handlebars, _, manageProductTemplate, validationErrorsTemplate, Product, Products, Validation) ->
   class ManageProductView extends Backbone.Open.View
     events:
       'click #updateProduct':'_updateProduct'
@@ -46,7 +47,15 @@ define [
           required.required = false
           v.push digits, required
       Validation.bind @
-      #@model.bind 'validated:invalid', (model, errors) -> print errors
+      validationErrorsEl = $('#validationErrors', @$el)
+      valContext = Handlebars.compile validationErrorsTemplate
+      @model.bind 'validated', (isValid, model, errors) =>
+        if isValid
+          validationErrorsEl.empty()
+          validationErrorsEl.hide()
+        else
+          validationErrorsEl.html valContext errors:errors
+          validationErrorsEl.show()
     _updateProduct: =>
       if @model.isValid true
         $("#updateProduct").prop "disabled", on
@@ -55,7 +64,6 @@ define [
           @model.hasFiles = true
           @model.form = $('#editProduct')
         else
-          @model.hasFiles = true
           @model.hasFiles = false
         @model.save @model.attributes,
           success: @_productUpdated

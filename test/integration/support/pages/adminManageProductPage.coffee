@@ -47,7 +47,7 @@ module.exports = class AdminManageProductPage extends Page
     @type "#shippingWeight", product.shipping?.weight
     if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
     @type "#inventory", product.inventory
-    cb()
-  clickUpdateProduct: (cb) => @pressButton "#updateProduct", cb
+    @eval "document.getElementById('inventory').blur()", cb
+  clickUpdateProduct: (cb) => @pressButton "#editProduct #updateProduct", cb
   clickDeleteProduct: (cb) => @pressButton "#deleteProduct", cb
   clickConfirmDeleteProduct: (cb) => @eval "$('#confirmDeleteProduct').click()", cb
