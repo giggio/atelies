@@ -18,7 +18,8 @@ define [
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
-      homePageDescription = @markdown.makeHtml @store.homePageDescription
+      if @store.homePageDescription
+        homePageDescription = @markdown.makeHtml @store.homePageDescription
       userOwned = @user?.isSeller and _.contains @user.stores, @store.slug
       @$el.html context store: @store, staticPath: @staticPath, homePageDescription: homePageDescription, userOwned: userOwned
       @productsView = new ProductsView products:@products
