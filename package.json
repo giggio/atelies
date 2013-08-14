@@ -32,7 +32,7 @@
     "bcrypt": "~0.7.x",
     "mongoose": "~3.7.x",
     "everyauth": "~0.4.x",
-    "correios": "git://github.com/giggio/correios.js.git",
+    "correios": "0.0.4",
     "nodemailer": "~0.4.4",
     "async": "~0.2.9",
     "pagseguro": "0.0.4",
