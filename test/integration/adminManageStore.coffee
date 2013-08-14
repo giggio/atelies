@@ -26,10 +26,6 @@ describe 'Admin manage store page', ->
           page.visit exampleStore._id.toString(), ->
             page.setFieldsAs otherStore, ->
               page.clickUpdateStoreButton done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
-        done()
     it 'shows store updated message', (done) ->
       page.message (msg) ->
         msg.endsWith("Loja atualizada com sucesso").should.be.true
@@ -58,6 +54,10 @@ describe 'Admin manage store page', ->
       User.findById userSeller.id, (err, user) ->
         return done err if err
         user.stores.length.should.equal 1
+        done()
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
         done()
 
   describe 'does not update a store to autocalculate shipping if the store has products without shipping info', (done) ->

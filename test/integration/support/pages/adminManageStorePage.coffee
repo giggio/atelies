@@ -9,19 +9,8 @@ module.exports = class AdminManageStorePage extends Page
       cb = storeId
       super "admin#createStore", cb
   setFieldsAs: (store, cb) =>
-    @type "#manageStoreBlock #name", store.name
-    @type "#manageStoreBlock #email", store.email
-    @type "#manageStoreBlock #description", store.description
-    @type "#manageStoreBlock #homePageDescription", store.homePageDescription
-    @type "#manageStoreBlock #urlFacebook", store.urlFacebook
-    @type "#manageStoreBlock #urlTwitter", store.urlTwitter
-    @type "#manageStoreBlock #phoneNumber", store.phoneNumber
-    @type "#manageStoreBlock #city", store.city
-    @type "#manageStoreBlock #zip", store.zip
-    @type "#manageStoreBlock #otherUrl", store.otherUrl
-    store.autoCalculateShipping = true unless store.autoCalculateShipping?
-    store.pmtGateways = {} unless store.pmtGateways?
     async.parallel [
+      (pcb) => @select "#manageStoreBlock #state", store.state, pcb
       (pcb) => @hasElement "#manageStoreBlock #autoCalculateShipping", (itHas) =>
         if itHas
           @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, pcb
@@ -38,8 +27,20 @@ module.exports = class AdminManageStorePage extends Page
             @uncheck "#manageStoreBlock #pagseguro", pcb
         else
           pcb()
-      (pcb) => @select "#manageStoreBlock #state", store.state, pcb
-    ], cb
+    ], =>
+      @type "#manageStoreBlock #name", store.name
+      @type "#manageStoreBlock #email", store.email
+      @type "#manageStoreBlock #description", store.description
+      @type "#manageStoreBlock #homePageDescription", store.homePageDescription
+      @type "#manageStoreBlock #urlFacebook", store.urlFacebook
+      @type "#manageStoreBlock #urlTwitter", store.urlTwitter
+      @type "#manageStoreBlock #phoneNumber", store.phoneNumber
+      @type "#manageStoreBlock #city", store.city
+      @type "#manageStoreBlock #zip", store.zip
+      @type "#manageStoreBlock #otherUrl", store.otherUrl
+      store.autoCalculateShipping = true unless store.autoCalculateShipping?
+      store.pmtGateways = {} unless store.pmtGateways?
+      cb()
   setPagseguroValuesAs: (val, cb) ->
     @eval "$('#manageStoreBlock #pagseguroEmail').val('#{val.email}').change()", =>
       @eval "$('#manageStoreBlock #pagseguroToken').val('#{val.token}').change()", cb
