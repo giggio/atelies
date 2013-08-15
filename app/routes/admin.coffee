@@ -2,6 +2,7 @@ Product         = require '../models/product'
 User            = require '../models/user'
 Store           = require '../models/store'
 Order           = require '../models/order'
+Err             = require '../models/error'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
@@ -16,11 +17,22 @@ class Routes
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
+
+  handleError: (req, res, err, errToReturn, json=true) ->
+    if typeof errToReturn is 'boolean'
+      [errToReturn, json]=[json, errToReturn]
+    json = true if errToReturn?
+    Err.create 'account', false, req, err
+    if json
+      errToReturn = err unless errToReturn?
+      res.json 400, errToReturn
+    else
+      res.send 400
   
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
-    req.user.populate 'stores', (err, user) ->
-      return res.send 400 if err?
+    req.user.populate 'stores', (err, user) =>
+      return @handleError req, res, err, false if err?
       stores = _.map user.stores, (s) -> s.toSimple()
       req.user.toSimpleUser (user) ->
         res.render 'admin', stores: stores, user: user
@@ -28,7 +40,7 @@ class Routes
   adminStoreCreate: (req, res) ->
     body = req.body
     name = body.name
-    Store.nameExists name, (err, itExists) ->
+    Store.nameExists name, (err, itExists) =>
       return res.json 409, error: user: "Loja já existe com esse nome." if itExists
       store = req.user.createStore()
       store.updateFromSimple body
@@ -40,27 +52,27 @@ class Routes
       uploader.upload req.files, imageFields, (err, fileUrls) =>
         if err?
           return res.json 422, err if err.smallerThan?
-          return res.json 400, error: uploadError: err
+          return @handleError req, res, err, error: uploadError: err
         for field, fileUrl of fileUrls
           store[field] = fileUrl if fileUrl?
         store.save (err) ->
-          return res.json 400, error: saveError: err if err?
-          req.user.save (err) ->
+          return @handleError req, res, err, error: saveError: err if err?
+          req.user.save (err) =>
             if err?
               store.remove()
-              return res.json 400, error: userSaveError: err
+              return @handleError req, res, err, userSaveError: err
             res.json 201, store
   
   adminStoreUpdate: (req, res) ->
-    Store.findById req.params.storeId, (err, store) ->
-      return res.send 400 if err?
+    Store.findById req.params.storeId, (err, store) =>
+      return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
-      checkIfNameCanBelongToStore = (cb) ->
+      checkIfNameCanBelongToStore = (cb) =>
         if store.name isnt req.body.name
-          Store.nameExists req.body.name, (err, itExists) ->
+          Store.nameExists req.body.name, (err, itExists) =>
             return res.json 409, error: user: "Loja já existe com esse nome." if itExists
             store.updateName req.body.name, (err) =>
-              return res.json 400, err if err?
+              return @handleError req, res, err if err?
               cb()
         else
           cb()
@@ -71,49 +83,49 @@ class Routes
         uploader.upload req.files, imageFields, (err, fileUrls) =>
           if err?
             return res.json 422, err if err.smallerThan?
-            return res.json 400, error: uploadError: err
+            return @handleError req, res, err, error: uploadError: err
           for field, fileUrl of fileUrls
             store[field] = fileUrl if fileUrl?
-          store.save (err) ->
-            return res.json 400 if err?
+          store.save (err) =>
+            return @handleError req, res, err if err?
             res.send 200, store
   adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
   adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
   _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
-    Store.findById req.params.storeId, (err, store) ->
-      return res.send 400 if err?
+    Store.findById req.params.storeId, (err, store) =>
+      return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
-      store.setAutoCalculateShipping autoCalculateShipping, (err, set) ->
-        return res.send 400 if err?
+      store.setAutoCalculateShipping autoCalculateShipping, (err, set) =>
+        return @handleError req, res, err if err?
         if set
-          store.save (err) ->
-            return res.json 400 if err?
+          store.save (err) =>
+            return @handleError req, res, err if err?
             res.send 204
         else
           res.send 409
   adminStoreUpdateSetPagseguroOff: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, off
   adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, email: req.body.email, token: req.body.token
   _adminStoreUpdateSetPagseguro: (req, res, set) ->
-    Store.findById req.params.storeId, (err, store) ->
-      return res.send 400 if err?
+    Store.findById req.params.storeId, (err, store) =>
+      return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       store.setPagseguro set
-      store.save (err) ->
-        return res.json 400 if err?
+      store.save (err) =>
+        return @handleError req, res, err if err?
         res.send 204
 
   adminProductUpdate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
-      return res.json 400, err if err?
+      return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       Product.findById req.params.productId, (err, product) =>
-        return res.json 400, err if err?
-        return res.json 400 if product.storeSlug isnt store.slug
+        return @handleError req, res, err if err?
+        return @handleError req, res, new Error() if product.storeSlug isnt store.slug
         @_productUpdate req, res, product
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
-      return res.json 400, err if err?
+      return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       product = store.createProduct()
       @_productUpdate req, res, product
@@ -123,34 +135,34 @@ class Routes
     uploader = new ProductUploader()
     uploader.upload product, req.files?.picture, (err, fileUrl) =>
       return res.json 422, err if err?.smallerThan?
-      return res.json 400, err if err?
+      return @handleError req, res, err if err?
       product.picture = fileUrl if fileUrl?
       isNew = product.isNew
       product.save (err) =>
-        return res.json 400, err if err?
+        return @handleError req, res, err if err?
         if isNew
           res.json 201, product.toSimpleProduct()
         else
           res.send 204
   
   adminProductDelete: (req, res) ->
-    Product.findById req.params.productId, (err, product) ->
-      return res.send 400 if err?
-      Store.findBySlug product.storeSlug, (err, store) ->
-        return res.send 400 if err?
+    Product.findById req.params.productId, (err, product) =>
+      return @handleError req, res, err if err?
+      Store.findBySlug product.storeSlug, (err, store) =>
+        return @handleError req, res, err if err?
         throw new AccessDenied() unless req.user.hasStore store
         product.remove (err) ->
           res.send 204
 
   storeProducts: (req, res) ->
-    Product.findByStoreSlug req.params.storeSlug, (err, products) ->
-      return res.send 400 if err?
+    Product.findByStoreSlug req.params.storeSlug, (err, products) =>
+      return @handleError req, res, err if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
   
   storeProduct: (req, res) ->
-    Product.findById req.params.productId, (err, product) ->
-      return res.send 400 if err?
+    Product.findById req.params.productId, (err, product) =>
+      return @handleError req, res, err if err?
       if product?
         res.json product.toSimpleProduct()
       else
@@ -158,13 +170,13 @@ class Routes
 
   orders: (req, res) ->
     user = req.user
-    Order.getSimpleByStores user.stores, (err, orders) ->
-      return res.json 400, err if err?
+    Order.getSimpleByStores user.stores, (err, orders) =>
+      return @handleError req, res, err if err?
       res.json orders
 
   order: (req, res) ->
-    Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) ->
-      return res.json 400, err if err?
+    Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) =>
+      return @handleError req, res, err if err?
       res.json order
   
 _.extend Routes::, RouteFunctions::
