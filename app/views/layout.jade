@@ -8,6 +8,7 @@ html
       var staticPath = '!{STATIC_PATH}';
     block head
   body
+    #overlay.hide: #loading
     block layout
     block scriptsFooter
       if DEBUG
