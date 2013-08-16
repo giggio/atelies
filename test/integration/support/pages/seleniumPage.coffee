@@ -37,8 +37,14 @@ module.exports = class Page
         else
           cb() if cb?
   closeBrowser: (cb) -> cb() if cb?
-  errorMessageFor: (field, cb) -> @getText "##{field} ~ .tooltip .tooltip-inner", cb
-  errorMessageForSelector: (selector, cb) -> @getText "#{selector} ~ .tooltip .tooltip-inner", cb
+  errorMessageFor: (field, cb) -> @errorMessageForSelector "##{field}", cb
+  errorMessageForSelector: (selector, cb) ->
+    @findElements"#{selector} ~ .tooltip .tooltip-inner", (els) =>
+      if els?.length > 0
+        el = els[0]
+      else
+        return cb null
+      @getText el, cb
   errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) ->
     errorMsgs = {}
     actions =
