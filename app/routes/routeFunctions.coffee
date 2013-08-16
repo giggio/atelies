@@ -2,8 +2,9 @@ _               = require 'underscore'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 config          = require '../helpers/config'
+Err             = require '../models/error'
 
-class Functions
+module.exports = class RouteFunctions
   _auth: ->
     for fn in arguments
       do (fn) =>
@@ -33,6 +34,14 @@ class Functions
     if host isnt domain and host isnt "www.#{domain}"
       subdomain = host.replace ".#{domain}", ''
     subdomain
-  
 
-module.exports = Functions
+  _handleError: (area, req, res, err, errToReturn, json=true) ->
+    if typeof errToReturn is 'boolean'
+      [errToReturn, json]=[json, errToReturn]
+    json = true if errToReturn?
+    Err.create area, false, req, err
+    if json
+      errToReturn = err unless errToReturn?
+      res.json 400, errToReturn
+    else
+      res.send 400

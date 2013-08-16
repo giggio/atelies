@@ -2,7 +2,6 @@ Product         = require '../models/product'
 User            = require '../models/user'
 Store           = require '../models/store'
 Order           = require '../models/order'
-Err             = require '../models/error'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
@@ -12,22 +11,15 @@ RouteFunctions  = require './routeFunctions'
 ProductUploader = require '../models/productUploader'
 StoreUploader   = require '../models/storeUploader'
 
-class Routes
+module.exports = class Routes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
+  _.extend @::, RouteFunctions::
 
-  handleError: (req, res, err, errToReturn, json=true) ->
-    if typeof errToReturn is 'boolean'
-      [errToReturn, json]=[json, errToReturn]
-    json = true if errToReturn?
-    Err.create 'account', false, req, err
-    if json
-      errToReturn = err unless errToReturn?
-      res.json 400, errToReturn
-    else
-      res.send 400
+
+  handleError: @::_handleError.partial 'admin'
   
   admin: (req, res) ->
     return res.redirect 'notseller' unless req.user.isSeller
@@ -178,7 +170,3 @@ class Routes
     Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) =>
       return @handleError req, res, err if err?
       res.json order
-  
-_.extend Routes::, RouteFunctions::
-
-module.exports = Routes
