@@ -4,7 +4,9 @@ async         = require 'async'
 module.exports = class HomePage extends Page
   url: ''
   clickSearchStores: @::pressButton.partial ".searchStores"
-  searchStoresText: @::type.partial "#storeSearchTerm"
+  searchStoresText: (text, cb) ->
+    @wait (=> @getIsClickable('#storeSearchTerm', (itIs) => itIs)), 2000, =>
+      @type "#storeSearchTerm", text, cb
   clickDoSearchStores: @::pressButton.partial "#doSearch"
   searchProductsText: @::type.partial "#productSearchTerm"
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"

@@ -4,17 +4,18 @@ async         = require 'async'
 module.exports = class StoreCartPage extends Page
   visit: (storeSlug, cb) => super "#{storeSlug}#finishOrder/shipping", cb
   address: (cb) ->
-    address = {}
-    actions = [
-      (cb) => @getText "#deliveryAddress #street", (t) -> address.street = t;cb()
-      (cb) => @getText "#deliveryAddress #street2", (t) -> address.street2 = t;cb()
-      (cb) => @getText "#deliveryAddress #city", (t) -> address.city = t;cb()
-      (cb) => @getText "#deliveryAddress #state", (t) -> address.state = t;cb()
-      (cb) => @getText "#deliveryAddress #zip", (t) -> address.zip = t;cb()
-    ]
-    async.parallel actions, ->
-      #print address
-      cb address
+    @waitForSelectorClickable '#deliveryAddress #street', =>
+      address = {}
+      actions = [
+        (cb) => @getText "#deliveryAddress #street", (t) -> address.street = t;cb()
+        (cb) => @getText "#deliveryAddress #street2", (t) -> address.street2 = t;cb()
+        (cb) => @getText "#deliveryAddress #city", (t) -> address.city = t;cb()
+        (cb) => @getText "#deliveryAddress #state", (t) -> address.state = t;cb()
+        (cb) => @getText "#deliveryAddress #zip", (t) -> address.zip = t;cb()
+      ]
+      async.parallel actions, ->
+        #print address
+        cb address
   clickContinue: @::pressButton.partial '#finishOrderShipping'
   clickSedexOption: (cb) ->
     @waitForSelector '#shippingOptions_sedex', =>

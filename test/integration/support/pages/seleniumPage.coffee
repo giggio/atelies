@@ -4,9 +4,6 @@ connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 async           = require 'async'
 
-webdriver.WebElement::type = (text) ->
-  @clear().then => @sendKeys text if text?
-
 before ->
   chromedriver.start()
   Page.driver = new webdriver.Builder()
@@ -39,7 +36,7 @@ module.exports = class Page
   closeBrowser: (cb) -> cb() if cb?
   errorMessageFor: (field, cb) -> @errorMessageForSelector "##{field}", cb
   errorMessageForSelector: (selector, cb) ->
-    @findElements"#{selector} ~ .tooltip .tooltip-inner", (els) =>
+    @findElements "#{selector} ~ .tooltip .tooltip-inner", (els) =>
       if els?.length > 0
         el = els[0]
       else
@@ -69,7 +66,11 @@ module.exports = class Page
     el = if typeof selector is 'string' then @findElement(selector) else selector
     el.findElements(webdriver.By.css(childrenSelector)).then cb
   clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
-  type: (selector, text) -> @findElement(selector).type text
+  type: (selector, text, cb) ->
+    @findElement(selector).then (el) =>
+      el.clear().then =>
+        el.sendKeys text if text?
+        cb() if cb?
   select: (selector, text, cb) ->
     return setImmediate cb if text is ''
     @findElement(selector).findElements(webdriver.By.tagName('option')).then (els) ->
@@ -117,6 +118,9 @@ module.exports = class Page
     el.getAttribute(attribute).then cb
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
+  getIsClickable: (selector, cb) ->
+    @isVisible selector, =>
+      @getIsEnabled selector, cb
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
@@ -131,6 +135,7 @@ module.exports = class Page
       undefined
     flow.then cb, cb
   waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
+  waitForSelectorClickable: (selector, cb) -> @wait (=> @getIsClickable(selector, (itIs) -> itIs)), 3000, cb
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
   wait: (fn, timeout, cb) ->
     @driver.wait fn, timeout
@@ -172,13 +177,13 @@ module.exports = class Page
   getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
   getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb
   getDialogMsg: (cb) ->
-    @waitForSelector '#dialogMsg', =>
+    @waitForSelectorClickable '#dialogMsg', =>
       @getText '#dialogMsg', cb
   getDialogTitle: (cb) ->
-    @waitForSelector '#dialogTitle', =>
+    @waitForSelectorClickable '#dialogTitle', =>
       @getText '#dialogTitle', cb
   getDialogTexts: (cb) ->
-    @waitForSelector '#dialogTitle', =>
+    @waitForSelectorClickable '#dialogTitle', =>
       @getText '.dialogMsg', (dialogMsg) =>
         @getText '#dialogTitle', (dialogTitle) =>
           cb dialogMsg: dialogMsg, dialogTitle: dialogTitle

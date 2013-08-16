@@ -23,8 +23,8 @@ describe 'Home Search Store', ->
       whenServerLoaded ->
         page.visit ->
           page.clickSearchStores ->
-            page.searchStoresText 'very'
-            page.clickDoSearchStores done
+            page.searchStoresText 'very', ->
+              page.clickDoSearchStores done
   it 'shows stores', (done) ->
     page.storesLength (l) ->
       l.should.equal 1
