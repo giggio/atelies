@@ -9,8 +9,13 @@ values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 
-class Routes
+module.exports = class HomeRoutes
   constructor: (@env) ->
+  _.extend @::, RouteFunctions::
+
+  handleError: @::_handleError.partial 'admin'
+
+  logError: @::_logError.partial 'admin'
   
   index: (domain) ->
     route = (req, res) =>
@@ -19,10 +24,10 @@ class Routes
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res
       Product.findRandom 12, (err, products) =>
-        return res.send 400 if err?
+        return @handleError req, res, err, false if err?
         viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-        Store.findRandomForHome 12, (err, stores) ->
-          return res.send 400 if err?
+        Store.findRandomForHome 12, (err, stores) =>
+          return @handleError req, res, err, false if err?
           viewModelStores = _.map stores, (s) -> s.toSimpler()
           res.render "index", products: viewModelProducts, stores: viewModelStores
     route
@@ -46,16 +51,12 @@ class Routes
   donating: (req, res) -> res.render 'donating'
   
   storesSearch: (req, res) ->
-    Store.searchByName req.params.searchTerm, (err, stores) ->
-      return res.send 400 if err?
+    Store.searchByName req.params.searchTerm, (err, stores) =>
+      return @handleError req, res, err if err?
       res.json stores
   
   productsSearch: (req, res) ->
-    Product.searchByName req.params.searchTerm, (err, products) ->
-      return res.send 400 if err?
+    Product.searchByName req.params.searchTerm, (err, products) =>
+      return @handleError req, res, err if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
-
-_.extend Routes::, RouteFunctions::
-
-module.exports = Routes

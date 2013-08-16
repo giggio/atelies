@@ -9,21 +9,26 @@ values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 
-class Routes
+module.exports = class AccountRoutes
   constructor: (@env) ->
     @_auth 'changePasswordShow', 'changePassword', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account'
+  _.extend @::, RouteFunctions::
+
+  handleError: @::_handleError.partial 'admin'
+
+  logError: @::_logError.partial 'admin'
 
   account: (req, res) ->
     user = req.user
-    Order.getSimpleByUser user, (err, orders) ->
-      return res.send 400 if err?
+    Order.getSimpleByUser user, (err, orders) =>
+      return @handleError req, res, err, false if err?
       user.toSimpleUser (user) ->
         res.render 'account', user: user, orders: orders
 
   resendConfirmationEmail: (req, res) ->
     user = req.user
-    user.sendMailConfirmRegistration (err, mailResponse) ->
-      res.json 400, err if err?
+    user.sendMailConfirmRegistration (err, mailResponse) =>
+      return @handleError req, res, err if err?
       res.send 200
 
   updateProfileShow: (req, res) ->
@@ -55,12 +60,10 @@ class Routes
     user.deliveryAddress.zip = body.deliveryZIP
     user.phoneNumber = body.phoneNumber
     user.isSeller = true if body.isSeller
-    user.save (error, user) =>
-      if error?
-        res.render 'updateProfile', errors: error.errors, user: body, states: values.states
-      else
-        redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
-        res.redirect "account/profileUpdated#{redirectTo}"
+    user.save (err, user) =>
+      return res.render 'updateProfile', errors: error.errors, user: body, states: values.states if err?
+      redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
+      res.redirect "account/profileUpdated#{redirectTo}"
 
   profileUpdated: (req, res) ->
     res.render 'profileUpdated', redirectTo: req.query.redirectTo
@@ -71,15 +74,13 @@ class Routes
   changePassword: (req, res) ->
     user = req.user
     email = user.email.toLowerCase()
-    user.verifyPassword req.body.password, (error, succeeded) ->
-      if error?
-        return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ]
+    user.verifyPassword req.body.password, (err, succeeded) ->
+      return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ] if err?
       if succeeded
         return res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (err, user) ->
-          if err?
-            return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ]
+          return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ] if err?
           res.redirect 'account/passwordChanged'
       else
         res.render 'changePassword', errors: [ 'Senha inválida.' ]
@@ -92,16 +93,16 @@ class Routes
   
   order: (req, res) ->
     user = req.user
-    Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) ->
-      return res.json 400, err if err?
+    Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) =>
+      return @handleError req, res, err if err?
       res.json orders
 
   verifyUser: (req, res) ->
-    User.findById req.params._id, (err, user) ->
-      return res.send 400 if err?
+    User.findById req.params._id, (err, user) =>
+      return @handleError req, res, err if err?
       user.verified = true
-      user.save (err, user) ->
-        return res.send 400 if err?
+      user.save (err, user) =>
+        return @handleError req, res, err if err?
         res.redirect 'account/verified'
 
   verified: (req, res) -> res.render 'accountVerified'
@@ -114,9 +115,11 @@ class Routes
 
   forgotPassword: (req, res) ->
     return res.render 'forgotPassword' unless req.body.email?
-    User.findByEmail req.body.email, (err, user) ->
-      return res.render 'forgotPassword', error: 'Usuário não encontrado.' if err? or !user?
-      user.sendMailPasswordReset (err, mailResponse) ->
+    User.findByEmail req.body.email, (err, user) =>
+      return @handleError req, res, err, false if err?
+      return res.render 'forgotPassword', error: 'Usuário não encontrado.' if !user?
+      user.sendMailPasswordReset (err, mailResponse) =>
+        @logError req, err if err?
         return res.render 'forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.' if err?
         user.save()
         res.redirect '/account/passwordResetSent'
@@ -126,18 +129,14 @@ class Routes
   resetPasswordShow: (req, res) -> res.render 'resetPassword'
 
   resetPassword: (req, res) ->
-    User.findById req.query._id, (err, user) ->
-      return res.render 'resetPassword', error:err if err?
+    User.findById req.query._id, (err, user) =>
+      return @handleError req, res, err, false if err?
       return res.render 'resetPassword', error: 'Não foi possível trocar a senha.' unless user?.resetKey?
       if user.resetKey.toString() is req.query.resetKey
         return res.render 'resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
-        user.save (err, user) ->
-          return res.render 'resetPassword', error: 'Não foi possível trocar a senha. Erro ao salvar o usuário.' if err?
+        user.save (err, user) =>
+          return @handleError req, res, err, false if err?
           res.redirect 'account/passwordChanged'
       else
         return res.render 'resetPassword', error: 'Não foi possível trocar a senha.'
-
-_.extend Routes::, RouteFunctions::
-
-module.exports = Routes

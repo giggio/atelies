@@ -11,13 +11,12 @@ RouteFunctions  = require './routeFunctions'
 ProductUploader = require '../models/productUploader'
 StoreUploader   = require '../models/storeUploader'
 
-module.exports = class Routes
+module.exports = class AdminRoutes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
     @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
   _.extend @::, RouteFunctions::
-
 
   handleError: @::_handleError.partial 'admin'
   

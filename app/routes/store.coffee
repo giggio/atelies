@@ -13,19 +13,24 @@ pagseguro       = require 'pagseguro'
 parseXml        = require('xml2js').parseString
 request         = require 'request'
 
-class Routes
+module.exports = class StoreRoutes
   constructor: (@env, @domain) ->
     @_auth 'orderCreate', 'calculateShipping'
     @_authVerified 'orderCreate'
+  _.extend @::, RouteFunctions::
+
+  handleError: @::_handleError.partial 'admin'
+
+  logError: @::_logError.partial 'admin'
   
   store: (req, res) ->
     subdomain = @_getSubdomain @domain, req.host.toLowerCase()
     return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
-    Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) ->
-      return res.send 400 if err?
+    Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) =>
+      return @handleError req, res, err, false if err?
       return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-      getUser = (cb) ->
+      getUser = (cb) =>
         if req.user?
           req.user.toSimpleUser (user) -> cb user
         else
@@ -34,45 +39,44 @@ class Routes
         if req.session.recentOrder?
           order = req.session.recentOrder
           req.session.recentOrder = null
-        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) ->
-          #console.log html
-          return res.send 400 if err?
+        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) =>
+          return @handleError req, res, err, false if err?
           res.send html
 
   product: (req, res) ->
-    Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) ->
-      return res.send 400 if err?
+    Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) =>
+      return @handleError req, res, err if err?
       return res.send 404 if product is null
       res.json product.toSimpleProduct()
   
   orderCreate: (req, res) ->
     user = req.user
     Store.findById req.params.storeId, (err, store) =>
-      return res.send 400 if err?
+      return @handleError req, res, err if err?
       getItems = for item in req.body.items
         do (item) ->
           (cb) =>
             Product.findById item._id, (err, product) =>
               cb err, product: product, quantity: item.quantity
       async.parallel getItems, (errors, items) =>
-        return res.send 400 if errors?
+        return @handleError req, res, err if err?
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (err, shippingCost) =>
-          return res.json 400, err if err?
+          return @handleError req, res, err if err?
           paymentType = req.body.paymentType
           Order.create user, store, items, shippingCost, paymentType, (order) =>
             order.save (err, order) =>
-              return res.json 400, err if err?
+              return @handleError req, res, err if err?
               for item in items
                 p = item.product
                 p.inventory -= item.quantity if p.hasInventory
                 p.save()
               if store.pagseguro() and paymentType is 'pagseguro'
                 @_sendToPagseguro store, order, user, (err, pagseguroCode) =>
-                  return res.send 400 if err?
+                  return @handleError req, res, err if err?
                   res.json 201, order: order.toSimpleOrder(), redirect: "https://pagseguro.uol.com.br/v2/checkout/payment.html?code=#{pagseguroCode}"
               else
-                order.sendMailAfterPurchase (error, mailResponse) ->
-                  return res.send 400 if err?
+                order.sendMailAfterPurchase (err, mailResponse) =>
+                  return @handleError req, res, err if err?
                   simpleOrder = order.toSimpleOrder()
                   res.json 201, simpleOrder
 
@@ -104,24 +108,26 @@ class Routes
         cb null, pagseguroResult.checkout.code
 
   pagseguroStatusChanged: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) ->
-      return res.send 400 if err?
+    Store.findBySlug req.params.storeSlug, (err, store) =>
+      return @handleError req, res, err if err?
       notificationId = req.body.notificationCode
       @_getSalestatusFromPagseguroNotificationId notificationId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId, saleStatus) ->
         Order.findById orderId, (err, order) =>
-          return res.send 400 if err?
+          return @handleError req, res, err if err?
           order.updateStatus saleStatus, (err) =>
-            return res.send 400 if err?
+            return @handleError req, res, err if err?
             res.send 200
   _getSalestatusFromPagseguroNotificationId: (notificationId, email, token, cb) ->
     url = "https://ws.pagseguro.uol.com.br/v2/transactions/notifications/#{notificationId}?email=#{email}&token=#{token}"
-    request url, (error, response, body) ->
-      return cb error if error?
+    request url, (err, response, body) ->
+      return cb err if err?
       if response.statusCode isnt 200
-        return parseXml body, {explicitArray: false}, (error, errorResult) ->
+        return parseXml body, {explicitArray: false}, (err, errorResult) ->
+          return cb err if err?
           errorMsg = errorResult.errors.error.message
           cb new Error "Not a 200 status code response. Error: #{errorMsg}"
-      parseXml body, (error, psTransaction) ->
+      parseXml body, (err, psTransaction) ->
+        return cb err if err?
         orderId = psTransaction.transaction.reference
         saleStatus = switch psTransaction.transaction.status
           when 1 then 'waitingPayment'
@@ -134,29 +140,30 @@ class Routes
         cb null, orderId, saleStatus
   pagseguroReturnFromPayment: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
-      return res.send 400 if err?
+      return @handleError req, res, err, false if err?
       psTransactionId = req.query.transactionId
       @_getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) =>
-        return res.redirect "/error?msg=#{err}" if err?
+        return @handleError req, res, err, false if err?
         Order.findById orderId, (err, order) =>
-          return res.send 400 if err?
+          return @handleError req, res, err, false if err?
           order.sendMailAfterPurchase (err, mailResponse) =>
-            return res.send 400 if err?
-            #console.log "Error sending mail: #{error}" if err?
+            return @handleError req, res, err, false if err?
             req.session.recentOrder = order.toSimpleOrder()
-            order.populate 'store', 'slug', (err) ->
-              return res.send 400 if err?
+            order.populate 'store', 'slug', (err) =>
+              return @handleError req, res, err, false if err?
               res.redirect "/#{order.store.slug}#finishOrder/orderFinished"
 
   _getOrderIdFromPagseguroTransactionId: (transactionId, email, token, cb) ->
     url = "https://ws.pagseguro.uol.com.br/v2/transactions/#{transactionId}?email=#{email}&token=#{token}"
-    request url, (error, response, body) ->
-      return cb error if error?
+    request url, (err, response, body) ->
+      return cb err if err?
       if response.statusCode isnt 200
-        return parseXml body, {explicitArray: false}, (error, errorResult) ->
+        return parseXml body, {explicitArray: false}, (err, errorResult) ->
+          return cb new Error "Not a 200 status code response. Error parsing xml, body was #{body}, error was #{JSON.stringify(err)}." if err?
           errorMsg = errorResult.errors.error.message
           cb new Error "Not a 200 status code response. Error: #{errorMsg}"
-      parseXml body, (error, psTransaction) ->
+      parseXml body, (err, psTransaction) ->
+        return cb err if err?
         orderId = psTransaction.transaction.reference
         cb null, orderId
 
@@ -171,8 +178,8 @@ class Routes
       setImmediate -> cb null, 0
 
   calculateShipping: (req, res) ->
-    @_calculateShipping req.params.storeSlug, req.body, req.user, (err, shippingOptions) ->
-      return res.json 400, err if err?
+    @_calculateShipping req.params.storeSlug, req.body, req.user, (err, shippingOptions) =>
+      return @handleError req, res, err if err?
       res.json shippingOptions
 
   _calculateShipping: (storeSlug, data, user, cb) ->
@@ -224,11 +231,7 @@ class Routes
         ready()
   
   productsSearch: (req, res) ->
-    Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) ->
-      return res.send 400 if err?
+    Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) =>
+      return @handleError req, res, err if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
-
-_.extend Routes::, RouteFunctions::
-
-module.exports = Routes
