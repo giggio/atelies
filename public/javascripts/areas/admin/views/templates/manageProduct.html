@@ -5,13 +5,13 @@
   <div class="control-group">
     <label class="control-label" for="name">Nome:</label>
     <div class="controls">
-      <input type="text" id="name" name="name" data-error-style="tooltip" />
+      <input type="text" id="name" name="name" class="input-xxlarge" data-error-style="tooltip" />
     </div>
   </div>
   <div class="control-group">
-    <label>Preço:</label>
+    <label>Preço (utilizar ponto para separar os centavos):</label>
     <div class="controls">
-      <input type="text" id="price" name="price" data-error-style="tooltip" />
+      <input type="text" id="price" name="price" class="input-small" data-error-style="tooltip" placeholder="exemplo: 54.50" />
     </div>
   </div>
   <div class="control-group">
@@ -22,65 +22,45 @@
     </div>
   </div>
   <div class="control-group">
-    <label>Tags:</label>
+    <label>Tags (separe as tags com vírgula):</label>
     <div class="controls">
-      <input type="text" id="tags" name="tags" data-error-style="tooltip" />
+      <input type="text" class="input-xxlarge" id="tags" name="tags" data-error-style="tooltip" placeholder="exemplo: prateleira, ursinho, decoração" />
     </div>
   </div>
   <div class="control-group">
     <label>Descrição:</label>
     <div class="controls">
-      <textarea id="description" name="description" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+      <textarea id="description" name="description" class="input-xxlarge" rows="8" cols="150" data-error-style="tooltip" ></textarea>
     </div>
   </div>
   <label>Dimensões:</label>
   <div class="control-group">
-    <label>Altura (em centímetros):</label>
+    <label>Altura, largura e profundidade (em centímetros):</label>
     <div class="controls">
-      <input type="text" id="height" name="height" data-error-style="tooltip" />
+      <input type="text" id="height" name="height" class="input-mini" data-error-style="tooltip" placeholder="altura" /> x
+      <input type="text" id="width" name="width" class="input-mini" data-error-style="tooltip" placeholder="largura" /> x
+      <input type="text" id="depth" name="depth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
     </div>
   </div>
   <div class="control-group">
-    <label>Largura (em centímetros):</label>
+    <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
     <div class="controls">
-      <input type="text" id="width" name="width" data-error-style="tooltip" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label>Profundidade (em centímetros):</label>
-    <div class="controls">
-      <input type="text" id="depth" name="depth" data-error-style="tooltip" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label>Peso (em quilos):</label>
-    <div class="controls">
-      <input type="text" id="weight" name="weight" data-error-style="tooltip" />
+      <input type="text" id="weight" name="weight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 1.24" />
     </div>
   </div>
   <label>Dimensões para postagem (se não for informado o frete não poderá ser calculado e a venda deverá ser fechada diretamente, ou o frete informado posteriormente, o que deixará todo o processo mais lento):</label>
   <div class="control-group">
-    <label>Altura (em centímetros):</label>
+    <label>Altura, largura e profundidade (em centímetros):</label>
     <div class="controls">
-      <input type="text" id="shippingHeight" name="shippingHeight" data-error-style="tooltip" />
+      <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
+      <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
+      <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
     </div>
   </div>
   <div class="control-group">
-    <label>Largura (em centímetros):</label>
+    <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
     <div class="controls">
-      <input type="text" id="shippingWidth" name="shippingWidth" data-error-style="tooltip" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label>Profundidade (em centímetros):</label>
-    <div class="controls">
-      <input type="text" id="shippingDepth" name="shippingDepth" data-error-style="tooltip" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label>Peso (em quilos):</label>
-    <div class="controls">
-      <input type="text" id="shippingWeight" name="shippingWeight" data-error-style="tooltip" />
+      <input type="text" id="shippingWeight" name="shippingWeight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 0.20" />
     </div>
   </div>
   <div class="control-group">
@@ -91,7 +71,7 @@
     </div>
     <label>Estoque:</label>
     <div class="controls">
-      <input type="text" id="inventory" name="inventory" data-error-style="tooltip" />
+      <input type="text" id="inventory" name="inventory" class="input-mini" data-error-style="tooltip" />
     </div>
   </div>
   <div id="validationErrors"></div>
