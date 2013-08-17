@@ -102,11 +102,11 @@ productSchema.methods.hasShippingInfo = ->
 Product = mongoose.model 'product', productSchema
 Product.findRandom = (howMany, cb) ->
   random = Math.random()
-  Product.find({random:$gte:random}).sort('random').limit(howMany).exec (err, products) ->
+  Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany).exec (err, products) ->
     return cb err if err?
     if products.length < howMany
       difference = products.length - howMany
-      Product.find().sort('random').limit(difference).exec (err, newProducts) ->
+      Product.find(picture: /./).sort('random').limit(difference).exec (err, newProducts) ->
         return cb err if err?
         cb null, products.concat newProducts
     else
