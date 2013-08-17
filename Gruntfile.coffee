@@ -185,6 +185,7 @@ module.exports = (grunt) ->
                 'backboneConfig'
                 'baseLibs'
                 'converters'
+                'errorLogger'
                 'jqueryValidationExt'
                 'logger'
                 'loginPopover'

@@ -1,5 +1,6 @@
 define [
   'jquery'
+  'underscore'
   '../../viewsManager'
   './views/store'
   './views/product'
@@ -14,8 +15,9 @@ define [
   './models/cart'
   './models/productsSearch'
   '../shared/views/dialog'
-],($, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch, Dialog) ->
+],($, _, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch, Dialog) ->
   class Routes extends Backbone.Open.Routes
+    area: 'store'
     constructor: ->
       viewsManager.$el = $ '#app-container > .store'
     home: ->
@@ -33,7 +35,8 @@ define [
           product = products.first()
           productView = new ProductView store: store, product: product
           viewsManager.show productView
-        error: (col, res, opt) =>
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível obter os produtos. Tente novamente mais tarde."
     cart: ->
       store = storeBootstrapModel.store
@@ -71,6 +74,8 @@ define [
       productsSearch.fetch
         reset:true
         success: => @storeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
-        error: (col, res, opt) =>
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
-  new Routes()
+
+  _.bindAll new Routes()

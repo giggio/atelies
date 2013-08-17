@@ -8,6 +8,7 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
+Err             = require '../models/error'
 
 module.exports = class HomeRoutes
   constructor: (@env) ->
@@ -60,3 +61,9 @@ module.exports = class HomeRoutes
       return @handleError req, res, err if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
+
+  errorCreate: (req, res) ->
+    err = req.body
+    err.user = req.user
+    Err.createClient err
+    res.send 200

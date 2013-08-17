@@ -186,7 +186,7 @@ define [
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-          opt.error()
+          opt.error status:400
         historySpy = sinon.spy Backbone.history, "navigate"
         view.render()
         $("#finishOrder", el).click()

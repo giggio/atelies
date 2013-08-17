@@ -71,6 +71,7 @@ define [
       @model.save @model.attributes,
         success: (model) => @_storeCreated model
         error: (model, xhr, opt) =>
+          @logXhrError 'admin', xhr
           $("#updateStore").prop "disabled", off
           return $('#nameAlreadyExists').modal() if xhr.status is 409
           if xhr.status is 422
@@ -101,6 +102,7 @@ define [
         url: url
         type: 'PUT'
         error: (xhr, text, error) =>
+          @logXhrError 'admin', xhr
           if xhr.status isnt 409
             return @showDialogError "Não foi possível alterar o cálculo automático de frete. Tente novamente mais tarde."
           $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'

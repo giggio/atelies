@@ -1,9 +1,11 @@
 define [
+  'jquery'
   'backbone'
   'handlebars'
   'areas/shared/views/dialog'
+  './errorLogger'
   'epoxy'
-], (Backbone, Handlebars, Dialog) ->
+], ($, Backbone, Handlebars, Dialog, ErrorLogger) ->
   class OpenView extends Backbone.Epoxy.View
     constructor: (opt) ->
       @staticPath = if opt?.staticPath? then opt.staticPath else staticPath
@@ -18,3 +20,7 @@ define [
       Dialog.show @$el, message, title, modalId, closeMsg
     showDialogError: (message, modalId, closeMsg) ->
       Dialog.showError @$el, message, modalId, closeMsg
+    logXhrError: (area, xhr, otherInfo) ->
+      @logError area, xhr.responseText, otherInfo if xhr.status is 400
+    logError: (area, message, otherInfo) ->
+      ErrorLogger.logError area, message, '', '', otherInfo

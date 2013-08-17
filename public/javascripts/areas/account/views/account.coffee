@@ -24,5 +24,6 @@ define [
           Se não receber solicite o e-mail novamente.
           Se não receber entre em contato com contato@atelies.com.br para que possamos auxiliá-lo.", "E-mail enviado"
       jqxhr.error =>
+        @logError 'account', 'Error sending confirmation e-mail'
         @showDialogError 'Não foi possível reenviar o e-mail de confirmação. Tente novamente mais tarde. Se o problema
           persistir envie um e-mail contato@atelies.com.br.'

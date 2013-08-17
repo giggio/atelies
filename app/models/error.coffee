@@ -4,8 +4,8 @@ _         = require 'underscore'
 errorSchema = new mongoose.Schema
   message:                    type: String, required: true
   stack:                      type: String, required: true
-  path:                       type: String, required: true
-  verb:                       type: String, required: true
+  path:                       String
+  verb:                       String
   date:                       type: Date, required: true, default: Date.now
   client:                     type: Boolean, required: true, default: false #client js, or server js
   module:                     type: String, required: true #admin, account, store, home
@@ -13,6 +13,11 @@ errorSchema = new mongoose.Schema
   otherInfo:                  String
 
 ErrorModel = mongoose.model 'error', errorSchema
+ErrorModel.createClient = (err) ->
+  err.client = true
+  error = new ErrorModel err
+  error.save()
+  error
 ErrorModel.create = (module, client, req, err, otherInfo) ->
   if err instanceof Error
     message = err.message
@@ -25,7 +30,7 @@ ErrorModel.create = (module, client, req, err, otherInfo) ->
     stack: stack
     path: req.originalUrl
     verb: req.method
-    client: client
+    client: false
     module: module
     user: req.user
     otherInfo: otherInfo

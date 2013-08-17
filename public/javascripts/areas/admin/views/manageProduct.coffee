@@ -68,6 +68,7 @@ define [
         @model.save @model.attributes,
           success: @_productUpdated
           error: (model, xhr, options) =>
+            @logXhrError 'admin', xhr
             $("#updateProduct").prop "disabled", off
             if xhr.status is 422
               $('#sizeIsIncorrect .errorMsg', @$el).text JSON.parse(xhr.responseText).smallerThan
@@ -79,6 +80,7 @@ define [
         success: @_productDeleted
         error: (model, xhr, options) =>
           @showDialogError "Não foi possível excluir o produto. Tente novamente mais tarde."
+          @logXhrError 'admin', xhr
     _productUpdated: =>
       Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
     _productDeleted: =>

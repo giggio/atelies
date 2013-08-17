@@ -62,6 +62,7 @@ define [
         data: data
         type: 'POST'
         error: (xhr, text, error) =>
+          @logXhrError 'store', xhr
           @showDialogError "Não foi possível calcular o frete. Tente novamente mais tarde."
         success: (data, text, xhr) =>
           @cart.setShippingOptions data

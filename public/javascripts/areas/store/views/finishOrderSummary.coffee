@@ -51,6 +51,7 @@ define [
         else
           Backbone.history.navigate 'finishOrder/orderFinished', trigger: true
       error = (model, xhr, opt) =>
+        @logXhrError 'store', xhr
         @showDialogError "Não foi possível fazer o pedido. Tente novamente mais tarde."
         $("#finishOrder").prop "disabled", off
       order = items: items

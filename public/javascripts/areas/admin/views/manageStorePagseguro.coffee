@@ -28,6 +28,7 @@ define [
         url: "/admin/store/#{@storeId}/setPagSeguro"
         type: 'PUT'
         error: (xhr, text, error) =>
+          @logXhrError 'admin', xhr
           if xhr.status isnt 409
             return @showDialogError "Não foi possível alterar o PagSeguro. Tente novamente mais tarde."
           $('#modalConfirmPagseguro', @el).modal 'hide'

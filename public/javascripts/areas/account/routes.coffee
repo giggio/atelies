@@ -1,5 +1,6 @@
 define [
   'jquery'
+  'underscore'
   '../../viewsManager'
   './views/account'
   './views/orders'
@@ -7,8 +8,9 @@ define [
   './views/userNotVerified'
   './models/orders'
   '../shared/views/dialog'
-],($, viewsManager, AccountView, OrdersView, OrderView, UserNotVerifiedView, Orders, Dialog) ->
+],($, _, viewsManager, AccountView, OrdersView, OrderView, UserNotVerifiedView, Orders, Dialog) ->
   class Routes extends Backbone.Open.Routes
+    area: 'account'
     constructor: ->
       viewsManager.$el = $ '#app-container > .account'
     home: ->
@@ -29,7 +31,8 @@ define [
           order = orders.at(0).toJSON()
           orderView = new OrderView user: user, order: order
           viewsManager.show orderView
-        error: (col, res, opt) ->
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível carregar o pedido. Tente novamente mais tarde."
           Backbone.history.navigate "orders"
     userNotVerified: ->
@@ -37,4 +40,4 @@ define [
       userNotVerifiedView = new UserNotVerifiedView user: user
       viewsManager.show userNotVerifiedView
 
-  new Routes()
+  _.bindAll new Routes()
