@@ -18,7 +18,7 @@ ErrorModel.createClient = (err) ->
   error = new ErrorModel err
   error.save()
   error
-ErrorModel.create = (module, client, req, err, otherInfo) ->
+ErrorModel.createServer = (module, req, err, otherInfo) ->
   if err instanceof Error
     message = err.message
     stack = new Error().stack + "\nOriginal Error Stack:\n" + err.stack

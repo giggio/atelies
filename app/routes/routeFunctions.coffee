@@ -46,4 +46,4 @@ module.exports = class RouteFunctions
     else
       res.send 400
   _logError: (area, req, err) ->
-    Err.create area, false, req, err
+    Err.createServer area, req, err
