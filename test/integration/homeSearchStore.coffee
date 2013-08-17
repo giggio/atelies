@@ -17,16 +17,22 @@ describe 'Home Search Store', ->
       store1 = generator.store.a()
       store2 = generator.store.b()
       store3 = generator.store.d()
+      store4 = generator.store.e()
       store1.save()
       store2.save()
       store3.save()
+      store4.save()
       whenServerLoaded ->
         page.visit ->
           page.clickSearchStores ->
             page.searchStoresText 'very', ->
               page.clickDoSearchStores done
-  it 'shows stores', (done) ->
+  it 'shows stores with flyers', (done) ->
     page.storesLength (l) ->
+      l.should.equal 1
+      done()
+  it 'shows stores without flyers in a simple list', (done) ->
+    page.storesWithoutFlyersLength (l) ->
       l.should.equal 1
       done()
   it 'links picture to store 1', (done) ->

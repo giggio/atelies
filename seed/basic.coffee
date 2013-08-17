@@ -343,6 +343,25 @@ db.stores.insert
   autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
+db.stores.insert
+  name: 'Some Other Fancy Name'
+  nameKeywords: ['some', 'other', 'fancy', 'name']
+  slug: 'some_other_fancy_name'
+  email: 'e@a.com'
+  description: "A Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
+  homePageDescription: "IHP Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
+  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_4/store/465055665234103800952865870436653400.jpg'
+  urlFacebook: 'fbsomeotherfancyname'
+  urlTwitter: 'twsomeotherfancyname'
+  phoneNumber: '(47) 9999-9999'
+  city: "Campo Grande"
+  state: "MS"
+  zip: "04334-567"
+  otherUrl: 'http://somestorefromms.com'
+  banner: 'https://s3.amazonaws.com/ateliesteste/store_4/store/977493978571146800762570540187880400.jpg'
+  autoCalculateShipping: false
+  pmtGateways: {}
+  random: Math.random()
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0

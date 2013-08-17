@@ -10,6 +10,7 @@ module.exports = class HomePage extends Page
   clickDoSearchStores: @::pressButton.partial "#doSearch"
   searchProductsText: @::type.partial "#productSearchTerm"
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
+  storesWithoutFlyersLength: (cb) -> @findElements '#storesWithoutFlyer .storeWithoutFlyer', (els) -> cb els.length
   storesLength: (cb) -> @findElements '#stores .store', (els) -> cb els.length
   storeLink: (_id, cb) -> @getAttribute "#store#{_id} .link", 'href', cb
   searchProductsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length

@@ -188,6 +188,23 @@ exports.generator =
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
       autoCalculateShipping: false
       pmtGateways: {}
+    e: -> new Store
+      name: 'My Other Very Nice Store'
+      slug: 'my_other_very_nice_store'
+      phoneNumber: '(66) 9999-9999'
+      email: 'e@a.com'
+      description: "Uma Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
+      homePageDescription: "IHP Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
+      homePageImage: 'http://lorempixel.com/400/400/nightlife/5'
+      urlFacebook: ''
+      urlTwitter: ''
+      city: "Cuiaba"
+      state: "MT"
+      zip: "05334-567"
+      otherUrl: 'http://asomestoreinms.com'
+      banner: 'http://lorempixel.com/800/150/cats/5'
+      autoCalculateShipping: false
+      pmtGateways: {}
     empty: -> new Store
       name: ''
       slug: ''

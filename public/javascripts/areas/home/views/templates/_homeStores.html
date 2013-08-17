@@ -1,15 +1,27 @@
 {{#if hasStores}}
-<div id="stores">
-  {{#each storeGroups}}
-  <div class="row-fluid storesRow">
-    {{#each stores}}
-    <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
-      <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+  {{#if hasStoresWithFlyer}}
+  <div id="stores">
+    {{#each storeGroups}}
+    <div class="row-fluid storesRow">
+      {{#each stores}}
+      <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
+        <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+      </div>
+      {{/each}}
     </div>
     {{/each}}
   </div>
-  {{/each}}
-</div>
+  {{/if}}
+  {{#if hasStoreWithoutFlyer}}
+  <h4>Lojas sem foto:</h4>
+  <div id="storesWithoutFlyer">
+    <ul>
+      {{#each storesWithoutFlyer}}
+      <li class="storeWithoutFlyer"><a href="{{slug}}">{{name}}</a></li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
 {{else}}
 <div id="storesNotFound" class="alert">
   <strong>Nenhuma loja encontrada.</strong> A busca encontra somente palavras completas. Busque novamente!

@@ -15,8 +15,10 @@ define [
       @showStores()
     showStores: ->
       context = Handlebars.compile @template
-      storeGroups = @_groupStores @stores
-      @$el.html context storeGroups: storeGroups, hasStores: @stores.length > 0
+      storesWithFlyer = _.filter @stores, (store) -> store.flyer? and /./.test store.flyer
+      storesWithoutFlyer = _.filter @stores, (store) -> !store.flyer? or store.flyer is ''
+      storeGroups = @_groupStores storesWithFlyer
+      @$el.html context hasStores: @stores.length > 0, storeGroups: storeGroups, hasStoresWithFlyer: storesWithFlyer.length > 0, storesWithoutFlyer: storesWithoutFlyer, hasStoreWithoutFlyer: storesWithoutFlyer.length > 0
     _groupStores: (stores) ->
       _.reduce stores, (groups, store) ->
         if groups.length is 0 or _.last(groups).stores.length is 4 then groups.push stores:[]
