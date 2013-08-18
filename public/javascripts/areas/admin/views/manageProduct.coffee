@@ -28,6 +28,7 @@ define [
         "#width": "value:integerOr(width)"
         "#depth": "value:integerOr(depth)"
         "#weight": "value:decimalOr(weight)"
+        "#shippingCharge": "checked:shippingCharge"
         "#shippingHeight": "value:integerOr(shippingHeight)"
         "#shippingWidth": "value:integerOr(shippingWidth)"
         "#shippingDepth": "value:integerOr(shippingDepth)"

@@ -39,6 +39,7 @@ describe 'Admin Manage Product page', ->
         aproduct.dimensions.width.should.equal product.dimensions.width
         aproduct.dimensions.depth.should.equal product.dimensions.depth
         aproduct.weight.should.equal product.weight
+        aproduct.shipping.charge.should.equal product.shipping.charge
         aproduct.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         aproduct.shipping.dimensions.width.should.equal product.shipping.dimensions.width
         aproduct.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
@@ -69,6 +70,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.charge.should.equal product.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
         productOnDb.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
@@ -132,6 +134,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal otherProduct.dimensions.width
         productOnDb.dimensions.depth.should.equal otherProduct.dimensions.depth
         productOnDb.weight.should.equal otherProduct.weight
+        productOnDb.shipping.charge.should.equal otherProduct.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal otherProduct.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal otherProduct.shipping.dimensions.width
         productOnDb.shipping.dimensions.depth.should.equal otherProduct.shipping.dimensions.depth

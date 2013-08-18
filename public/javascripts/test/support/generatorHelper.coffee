@@ -18,6 +18,7 @@ define ->
         width: 20
         depth: 30
         weight: 40
+        shippingCharge: true
         shippingHeight: 11
         shippingWidth: 21
         shippingDepth: 31
@@ -40,6 +41,7 @@ define ->
         width: 60
         depth: 70
         weight: 80
+        shippingCharge: false
         shippingHeight: 51
         shippingWidth: 61
         shippingDepth: 71
@@ -59,6 +61,7 @@ define ->
         width: 20
         depth: 21
         weight: 5
+        shippingCharge: true
         shippingHeight: 20
         shippingWidth: 21
         shippingDepth: 22

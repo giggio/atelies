@@ -123,6 +123,7 @@ describe 'Admin Create Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.charge.should.equal product.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
         productOnDb.shipping.dimensions.depth.should.equal product.shipping.dimensions.depth
@@ -154,6 +155,7 @@ describe 'Admin Create Product page', ->
         productOnDb.dimensions.width.should.equal productNoShippingInfo2.dimensions.width
         productOnDb.dimensions.depth.should.equal productNoShippingInfo2.dimensions.depth
         productOnDb.weight.should.equal productNoShippingInfo2.weight
+        expect(productOnDb.shipping.charge).to.equal false
         expect(productOnDb.shipping.dimensions.height).to.be.undefined
         expect(productOnDb.shipping.dimensions.width).to.be.undefined
         expect(productOnDb.shipping.dimensions.depth).to.be.undefined

@@ -19,11 +19,12 @@ productSchema = new mongoose.Schema
     depth:        Number
   weight:         Number
   shipping:
+    charge:       Boolean
     dimensions:
-      height:       Number
-      width:        Number
-      depth:        Number
-    weight:         Number
+      height:     Number
+      width:      Number
+      depth:      Number
+    weight:       Number
   hasInventory:   Boolean
   inventory:      Number
   random:         type: Number, required: true, default: -> Math.random()
@@ -48,6 +49,7 @@ productSchema.methods.toSimpleProduct = ->
   description: @description,
   height: @dimensions?.height, width: @dimensions?.width, depth: @dimensions?.depth
   weight: @weight
+  shippingCharge: @shipping?.charge
   shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
@@ -89,6 +91,7 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
     @shipping.weight = simple.shippingWeight
   else
     @shipping.weight = undefined
+  @shipping.charge = !!simple.shippingCharge
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
   has = shipping.weight? and shipping.dimensions? and

@@ -124,6 +124,7 @@ module.exports = class Page
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  pressButtonAndWait: (selector, cb) -> @pressButton selector, => @waitForAjax cb
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
@@ -134,6 +135,7 @@ module.exports = class Page
         do (action) -> f.execute action
       undefined
     flow.then cb, cb
+  waitForAjax: (cb) -> @wait (=> @eval('return $.active;', (active) -> active is 0)), 5000, cb
   waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
   waitForSelectorClickable: (selector, cb) -> @wait (=> @getIsClickable(selector, (itIs) -> itIs)), 3000, cb
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb

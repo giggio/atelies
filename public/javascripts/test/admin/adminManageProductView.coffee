@@ -38,6 +38,7 @@ define [
           expect($("#width", el).val()).to.equal product.width.toString()
           expect($("#depth", el).val()).to.equal product.depth.toString()
           expect($("#weight", el).val()).to.equal product.weight.toString()
+          expect($("#shippingCharge", el).prop('checked')).to.equal product.shippingCharge
           expect($("#shippingHeight", el).val()).to.equal product.shippingHeight.toString()
           expect($("#shippingWidth", el).val()).to.equal product.shippingWidth.toString()
           expect($("#shippingDepth", el).val()).to.equal product.shippingDepth.toString()
@@ -67,6 +68,7 @@ define [
           $("#width", el).val(updatedProduct.width).change()
           $("#depth", el).val(updatedProduct.depth).change()
           $("#weight", el).val(updatedProduct.weight).change()
+          $("#shippingCharge", el).prop('checked', updatedProduct.shippingCharge).change()
           $("#shippingHeight", el).val(updatedProduct.shippingHeight).change()
           $("#shippingWidth", el).val(updatedProduct.shippingWidth).change()
           $("#shippingDepth", el).val(updatedProduct.shippingDepth).change()
@@ -88,6 +90,7 @@ define [
           expect(productPosted.width).to.equal updatedProduct.width
           expect(productPosted.depth).to.equal updatedProduct.depth
           expect(productPosted.weight).to.equal updatedProduct.weight
+          expect(productPosted.shippingCharge).to.equal updatedProduct.shippingCharge
           expect(productPosted.shippingHeight).to.equal updatedProduct.shippingHeight
           expect(productPosted.shippingWidth).to.equal updatedProduct.shippingWidth
           expect(productPosted.shippingDepth).to.equal updatedProduct.shippingDepth
@@ -162,6 +165,7 @@ define [
           $("#width", el).val(newproduct.width).change()
           $("#depth", el).val(newproduct.depth).change()
           $("#weight", el).val(newproduct.weight).change()
+          $("#shippingCharge", el).prop('checked', newproduct.shippingCharge).change()
           $("#shippingHeight", el).val(newproduct.shippingHeight).change()
           $("#shippingWidth", el).val(newproduct.shippingWidth).change()
           $("#shippingDepth", el).val(newproduct.shippingDepth).change()
@@ -183,6 +187,7 @@ define [
           expect(productPosted.width).to.equal product.width
           expect(productPosted.depth).to.equal product.depth
           expect(productPosted.weight).to.equal product.weight
+          expect(productPosted.shippingCharge).to.equal product.shippingCharge
           expect(productPosted.shippingHeight).to.equal product.shippingHeight
           expect(productPosted.shippingWidth).to.equal product.shippingWidth
           expect(productPosted.shippingDepth).to.equal product.shippingDepth

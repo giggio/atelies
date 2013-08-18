@@ -31,6 +31,7 @@ define [
       width:undefined
       depth:undefined
       weight:undefined
+      shippingCharge:undefined
       shippingHeight:undefined
       shippingWidth:undefined
       shippingDepth:undefined

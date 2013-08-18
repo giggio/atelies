@@ -72,6 +72,7 @@ db.products.insert
     depth: 17
   weight: 4
   shipping:
+    charge: true
     dimensions:
       height: 12
       width: 13
@@ -97,6 +98,7 @@ db.products.insert
     depth: 17
   weight: 8
   shipping:
+    charge: false
     dimensions:
       height: 16
       width: 17
@@ -121,6 +123,7 @@ db.products.insert
     depth:21
   weight: 5
   shipping:
+    charge: true
     dimensions:
       height: 20
       width: 21
@@ -144,6 +147,7 @@ db.products.insert
     depth: 21
   weight: 12
   shipping:
+    charge: true
     dimensions:
       height: 20
       width: 21
@@ -168,6 +172,7 @@ db.products.insert
     depth: 21
   weight: 12
   shipping:
+    charge: true
     dimensions:
       height: 20
       width: 21
@@ -192,6 +197,7 @@ db.products.insert
     depth: 110
   weight: 120
   shipping:
+    charge: true
     dimensions:
       height: 91
       width: 101
@@ -216,6 +222,7 @@ db.products.insert
     depth: 17
   weight: 12
   shipping:
+    charge: true
     dimensions:
       height: 16
       width: 17
@@ -243,6 +250,7 @@ for i in [8..25]
       depth: 18
     weight: 13
     shipping:
+      charge: true
       dimensions:
         height: 17
         width: 18

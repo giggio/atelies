@@ -20,6 +20,7 @@ exports.generator =
         depth: 17
       weight: 4.1
       shipping:
+        charge: true
         dimensions:
           height: 12
           width: 13
@@ -42,6 +43,7 @@ exports.generator =
         depth: 17
       weight: 8
       shipping:
+        charge: false
         dimensions:
           height: 16
           width: 17
@@ -64,6 +66,7 @@ exports.generator =
         depth: 21
       weight: 5
       shipping:
+        charge: true
         dimensions:
           height: 20
           width: 21
@@ -85,6 +88,7 @@ exports.generator =
         depth: 210
       weight: 220
       shipping:
+        charge: true
         dimensions:
           height: 291
           width: 201
@@ -107,6 +111,7 @@ exports.generator =
         depth: 21
       weight: 12
       shipping:
+        charge: true
         dimensions:
           height: 20
           width: 21
