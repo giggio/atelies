@@ -76,8 +76,9 @@ storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
   Product.findByStoreSlug @slug, (err, products) =>
     return cb err if err?
     productWithMissingInfo = _.find products, (p) -> p.hasShippingInfo() is false
-    @autoCalculateShipping = true unless productWithMissingInfo?
-    cb null, not productWithMissingInfo?
+    hasProductWithMissingInfo = productWithMissingInfo?
+    @autoCalculateShipping = true unless hasProductWithMissingInfo
+    cb null, not hasProductWithMissingInfo
 storeSchema.methods.setPagseguro = (set) ->
   if typeof set is 'boolean' and set is false
     @pmtGateways.pagseguro = undefined

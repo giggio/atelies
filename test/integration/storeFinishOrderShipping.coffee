@@ -63,6 +63,24 @@ describe 'Store Finish Order: Shipping', ->
         expect(m).to.be.null
         done()
 
+  describe 'product without shipping charge', ->
+    before (done) ->
+      page.clearLocalStorage ->
+        page.loginFor user1._id, ->
+          storeProductPage.visit 'store_1', 'name_2', ->
+            storeProductPage.purchaseItem ->
+              storeCartPage.clickFinishOrder done
+    it 'should show calculated shipping', (done) ->
+      page.shippingInfo (s) ->
+        s.options.length.should.equal 2
+        s.options[0].text.should.equal "3 dia(s) - PAC - R$ 0,00"
+        s.options[1].text.should.equal "1 dia(s) - Sedex - R$ 0,00"
+        done()
+    it 'does not show message about shipping manual calculation', (done) ->
+      page.manualShippingCalculationMessage (m) ->
+        expect(m).to.be.null
+        done()
+
   describe 'not logged in user', (done) ->
     before (done) ->
       page.clearCookies ->

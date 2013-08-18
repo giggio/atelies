@@ -189,3 +189,4 @@ module.exports = class Page
       @getText '.dialogMsg', (dialogMsg) =>
         @getText '#dialogTitle', (dialogTitle) =>
           cb dialogMsg: dialogMsg, dialogTitle: dialogTitle
+  getParent: (el) -> el.findElement(webdriver.By.xpath('..'))

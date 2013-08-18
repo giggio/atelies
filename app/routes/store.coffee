@@ -193,42 +193,31 @@ module.exports = class StoreRoutes
       return cb "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
-        callbacks = 0
-        errors = []
+        getShippingPrices = []
         for p in products
           do (p) ->
             if p.hasShippingInfo()
               shipping = p.shipping
               quantity = parseInt _.findWhere(data.items, _id: p._id.toString()).quantity
-              deliverySpecs =
-                serviceType: 'pac'
-                from: storeZip
-                to: userZip
-                weight: shipping.weight
-                height: shipping.dimensions.height
-                width: shipping.dimensions.width
-                length: shipping.dimensions.depth
-              callbacks++
-              correios.getPrice deliverySpecs, (err, delivery) ->
-                callbacks--
-                return errors.push(err) if err?
-                pac.cost += delivery.GrandTotal * quantity
-                #pac.cost = 0.01
-                pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
-              callbacks++
-              deliverySpecs.serviceType = 'sedex'
-              correios.getPrice deliverySpecs, (err, delivery) ->
-                callbacks--
-                return errors.push(err) if err?
-                sedex.cost += delivery.GrandTotal * quantity
-                sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
-        ready = ->
-          if callbacks is 0
-            return cb "Erro ao obter custo de postagem.#{errors}" if errors.length > 0
-            cb null, shippingOptions
-          else
-            setImmediate ready
-        ready()
+              getShippingPrices.push (cb) =>
+                deliverySpecs = serviceType: 'pac', from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
+                correios.getPrice deliverySpecs, (err, delivery) ->
+                  #console.log "got price for pac with specs #{JSON.stringify deliverySpecs}, with response #{JSON.stringify delivery}"
+                  return cb err if err?
+                  pac.cost += delivery.GrandTotal * quantity if p.shipping.charge
+                  pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
+                cb()
+              getShippingPrices.push (cb) =>
+                deliverySpecs = serviceType: 'sedex', from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
+                correios.getPrice deliverySpecs, (err, delivery) ->
+                  #console.log "got price for sedex with specs #{JSON.stringify deliverySpecs}, with response #{JSON.stringify delivery}"
+                  return cb err if err?
+                  sedex.cost += delivery.GrandTotal * quantity if p.shipping.charge
+                  sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
+                  cb()
+        async.parallel getShippingPrices, (err) ->
+          return cb "Erro ao obter custo de postagem.\n#{err}" if err?
+          cb null, shippingOptions
   
   productsSearch: (req, res) ->
     Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) =>

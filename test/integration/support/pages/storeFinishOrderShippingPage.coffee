@@ -29,7 +29,9 @@ module.exports = class StoreCartPage extends Page
           do (el) =>
             option = {}
             options.push option
-            getData.push => @getValue el, (t) => option.value = t
+            getData.push =>
+              @getValue el, (t) => option.value = t
+              @getText @getParent(el), (t) => option.text = t
         @parallel getData, -> cb(options: options)
         undefined
   finishOrderButtonIsEnabled: @::getIsEnabled.partial '#finishOrderShipping'

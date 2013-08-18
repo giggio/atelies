@@ -44,10 +44,10 @@ describe 'Store Finish Order: Summary', ->
                           storeFinishOrderPaymentPage.clickSelectPaymentType done
     it 'should show summary of sale', (done) ->
       page.summaryOfSale (s) ->
-        s.shippingCost.should.equal 'R$ 46,40'
+        s.shippingCost.should.equal 'R$ 20,10'
         s.productsInfo.should.equal '2 produtos'
         s.totalProductsPrice.should.equal 'R$ 33,30'
-        s.totalSaleAmount.should.equal 'R$ 79,70'
+        s.totalSaleAmount.should.equal 'R$ 53,40'
         a = s.address
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
