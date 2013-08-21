@@ -5,7 +5,7 @@ User                        = require '../../app/models/user'
 AdminManageProductPage      = require './support/pages/adminManageProductPage'
 
 describe 'Admin Create Product page', ->
-  page = product = productNoShippingInfo = productNoShippingInfo2 = store = store2 = userSeller = null
+  page = product = productNoShippingInfo = productNoShippingInfo2 = store = userSeller = null
   before (done) ->
     page = new AdminManageProductPage()
     cleanDB (error) ->
@@ -13,15 +13,17 @@ describe 'Admin Create Product page', ->
       whenServerLoaded ->
         product = generator.product.a()
         productNoShippingInfo = product.toJSON()
+        productNoShippingInfo.shipping.applies = true
+        productNoShippingInfo.shipping.dimensions.height = ''
+        productNoShippingInfo.shipping.dimensions.width = ''
+        productNoShippingInfo.shipping.dimensions.depth = ''
+        productNoShippingInfo.shipping.weight = ''
         productNoShippingInfo2 = generator.product.b().toJSON()
-        delete productNoShippingInfo.shipping
-        delete productNoShippingInfo2.shipping
+        productNoShippingInfo2.shipping.applies = false
         store = generator.store.a()
         store.save()
-        store2 = generator.store.b()
-        store2.save()
         userSeller = generator.user.c()
-        userSeller.stores.push store, store2
+        userSeller.stores.push store
         userSeller.save()
         done()
 
@@ -29,7 +31,7 @@ describe 'Admin Create Product page', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, ->
-          page.setFieldsAs {name:'', price:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'}, ->
+          page.setFieldsAs {name:'', price:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'}, ->
             page.clickUpdateProduct done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
@@ -53,29 +55,6 @@ describe 'Admin Create Product page', ->
         errorMsgs.shippingDepth.should.equal 'A profundidade deve ser um número entre 16 e 105.'
         errorMsgs.shippingWeight.should.equal 'O peso deve ser um número entre 0 e 30.'
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
-        done()
-
-  describe 'new product on store with auto calculated shipping demands shipping info', ->
-    before (done) ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs productNoShippingInfo, ->
-            page.clickUpdateProduct -> waitSeconds 1, done #hasToWaitForElementsToRerender
-    it 'is at the product create page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
-        done()
-    it 'did not create the product', (done) ->
-      Product.find (err, products) ->
-        return done err if err
-        products.should.be.empty
-        done()
-    it 'shows error messages', (done) ->
-      page.errorMessagesIn '#editProduct', (errorMsgs) ->
-        errorMsgs.shippingHeight.should.equal 'A altura de postagem é obrigatória.'
-        errorMsgs.shippingWidth.should.equal 'A largura de postagem é obrigatória.'
-        errorMsgs.shippingDepth.should.equal 'A profundidade de postagem é obrigatória.'
-        errorMsgs.shippingWeight.should.equal 'O peso de postagem é obrigatório.'
         done()
 
   describe 'a product which states it has inventory should inform how many items it has on inventory when creating the product', ->
@@ -123,6 +102,7 @@ describe 'Admin Create Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.applies.should.equal product.shipping.applies
         productOnDb.shipping.charge.should.equal product.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
@@ -132,15 +112,15 @@ describe 'Admin Create Product page', ->
         productOnDb.inventory.should.equal product.inventory
         done()
 
-  describe 'create a product with no shipping info on a store that does not have auto calculated shipping', ->
+  describe 'create a product with no shipping info if product is not posted', ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store2.slug, ->
+        page.visit store.slug, ->
           page.setFieldsAs productNoShippingInfo2, ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{store2.slug}"
+        url.should.equal "http://localhost:8000/admin#store/#{store.slug}"
         done()
     it 'created the product', (done) ->
       Product.find name: productNoShippingInfo2.name, (err, productsOnDb) ->
@@ -155,11 +135,7 @@ describe 'Admin Create Product page', ->
         productOnDb.dimensions.width.should.equal productNoShippingInfo2.dimensions.width
         productOnDb.dimensions.depth.should.equal productNoShippingInfo2.dimensions.depth
         productOnDb.weight.should.equal productNoShippingInfo2.weight
-        expect(productOnDb.shipping.charge).to.equal false
-        expect(productOnDb.shipping.dimensions.height).to.be.undefined
-        expect(productOnDb.shipping.dimensions.width).to.be.undefined
-        expect(productOnDb.shipping.dimensions.depth).to.be.undefined
-        expect(productOnDb.shipping.weight).to.be.undefined
+        expect(productOnDb.shipping.applies).to.equal false
         productOnDb.hasInventory.should.equal productNoShippingInfo2.hasInventory
         productOnDb.inventory.should.equal productNoShippingInfo2.inventory
         done()

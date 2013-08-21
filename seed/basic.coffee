@@ -72,6 +72,7 @@ db.products.insert
     depth: 17
   weight: 4
   shipping:
+    applies: true
     charge: true
     dimensions:
       height: 12
@@ -98,6 +99,7 @@ db.products.insert
     depth: 17
   weight: 8
   shipping:
+    applies: true
     charge: false
     dimensions:
       height: 16
@@ -123,6 +125,7 @@ db.products.insert
     depth:21
   weight: 5
   shipping:
+    applies: true
     charge: true
     dimensions:
       height: 20
@@ -147,6 +150,7 @@ db.products.insert
     depth: 21
   weight: 12
   shipping:
+    applies: true
     charge: true
     dimensions:
       height: 20
@@ -172,6 +176,7 @@ db.products.insert
     depth: 21
   weight: 12
   shipping:
+    applies: true
     charge: true
     dimensions:
       height: 20
@@ -197,6 +202,7 @@ db.products.insert
     depth: 110
   weight: 120
   shipping:
+    applies: true
     charge: true
     dimensions:
       height: 91
@@ -222,7 +228,34 @@ db.products.insert
     depth: 17
   weight: 12
   shipping:
+    applies: true
     charge: true
+    dimensions:
+      height: 16
+      width: 17
+      depth: 18
+    weight: 13
+  hasInventory: true
+  inventory: 130
+  random: Math.random()
+db.products.insert
+  name: 'Some Fancier Name 8'
+  nameKeywords: ['some', 'fancier', 'name', '8']
+  slug: 'some_fancier_name_8'
+  picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/497979291947558500646980655146762800.jpg'
+  price: 82.2
+  storeName: 'store 1'
+  storeSlug: 'store_1'
+  tags: ['mno', 'pqr']
+  description: "Ather Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
+  dimensions:
+    height: 15
+    width: 16
+    depth: 17
+  weight: 12
+  shipping:
+    applies: false
+    charge: false
     dimensions:
       height: 16
       width: 17
@@ -250,6 +283,7 @@ for i in [8..25]
       depth: 18
     weight: 13
     shipping:
+      applies: true
       charge: true
       dimensions:
         height: 17

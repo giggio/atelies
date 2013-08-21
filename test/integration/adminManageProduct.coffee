@@ -39,6 +39,7 @@ describe 'Admin Manage Product page', ->
         aproduct.dimensions.width.should.equal product.dimensions.width
         aproduct.dimensions.depth.should.equal product.dimensions.depth
         aproduct.weight.should.equal product.weight
+        aproduct.shipping.applies.should.equal product.shipping.applies
         aproduct.shipping.charge.should.equal product.shipping.charge
         aproduct.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         aproduct.shipping.dimensions.width.should.equal product.shipping.dimensions.width
@@ -52,7 +53,7 @@ describe 'Admin Manage Product page', ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs {name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
+          page.setFieldsAs {name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
             page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
@@ -70,6 +71,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal product.dimensions.width
         productOnDb.dimensions.depth.should.equal product.dimensions.depth
         productOnDb.weight.should.equal product.weight
+        productOnDb.shipping.applies.should.equal product.shipping.applies
         productOnDb.shipping.charge.should.equal product.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal product.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal product.shipping.dimensions.width
@@ -93,11 +95,11 @@ describe 'Admin Manage Product page', ->
         errorMsgs.inventory.should.equal 'O estoque deve ser um número.'
         done()
 
-  describe "can't delete shipping info on a product that is in a store that auto calculates shipping", ->
+  describe "can't delete shipping info on a product that will be posted", ->
     before (done) ->
       page.loginFor userSeller._id, ->
         page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs {}, ->
+          page.setFieldsAs shipping: applies: true, ->
             page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
@@ -134,6 +136,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.dimensions.width.should.equal otherProduct.dimensions.width
         productOnDb.dimensions.depth.should.equal otherProduct.dimensions.depth
         productOnDb.weight.should.equal otherProduct.weight
+        productOnDb.shipping.applies.should.equal otherProduct.shipping.applies
         productOnDb.shipping.charge.should.equal otherProduct.shipping.charge
         productOnDb.shipping.dimensions.height.should.equal otherProduct.shipping.dimensions.height
         productOnDb.shipping.dimensions.width.should.equal otherProduct.shipping.dimensions.width

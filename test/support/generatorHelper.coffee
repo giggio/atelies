@@ -20,6 +20,7 @@ exports.generator =
         depth: 17
       weight: 4.1
       shipping:
+        applies: true
         charge: true
         dimensions:
           height: 12
@@ -43,6 +44,7 @@ exports.generator =
         depth: 17
       weight: 8
       shipping:
+        applies: true
         charge: false
         dimensions:
           height: 16
@@ -66,6 +68,7 @@ exports.generator =
         depth: 21
       weight: 5
       shipping:
+        applies: true
         charge: true
         dimensions:
           height: 20
@@ -88,6 +91,7 @@ exports.generator =
         depth: 210
       weight: 220
       shipping:
+        applies: true
         charge: true
         dimensions:
           height: 291
@@ -111,7 +115,32 @@ exports.generator =
         depth: 21
       weight: 12
       shipping:
+        applies: true
         charge: true
+        dimensions:
+          height: 20
+          width: 21
+          depth: 22
+        weight: 13
+      hasInventory: true
+      inventory: 130
+    f: -> new Product
+      name: 'name 5'
+      slug: 'name_5'
+      picture: 'http://lorempixel.com/150/200/cats'
+      price: 52.2
+      storeName: 'store 1'
+      storeSlug: 'store_1'
+      tags: ['mno', 'pqr']
+      description: "Ather Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
+      dimensions:
+        height: 19
+        width: 20
+        depth: 21
+      weight: 12
+      shipping:
+        applies: false
+        charge: false
         dimensions:
           height: 20
           width: 21

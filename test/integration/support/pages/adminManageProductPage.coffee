@@ -25,6 +25,7 @@ module.exports = class AdminManageProductPage extends Page
       => @getValue "#editProduct #width", (text) -> product.dimensions.width = parseInt text
       => @getValue "#editProduct #depth", (text) -> product.dimensions.depth = parseInt text
       => @getValue "#editProduct #weight", (text) -> product.weight = parseFloat text
+      => @getIsChecked "#editProduct #shippingDoesApply", (itIs) -> product.shipping.applies = itIs
       => @getIsChecked "#editProduct #shippingCharge", (itIs) -> product.shipping.charge = itIs
       => @getValue "#editProduct #shippingHeight", (text) -> product.shipping.dimensions.height = parseInt text
       => @getValue "#editProduct #shippingWidth", (text) -> product.shipping.dimensions.width = parseInt text
@@ -42,11 +43,14 @@ module.exports = class AdminManageProductPage extends Page
     @type "#width", product.dimensions?.width
     @type "#depth", product.dimensions?.depth
     @type "#weight", product.weight
-    if product.shipping?.charge then @check "#shippingCharge" else @uncheck '#shippingCharge'
-    @type "#shippingHeight", product.shipping?.dimensions?.height
-    @type "#shippingWidth", product.shipping?.dimensions?.width
-    @type "#shippingDepth", product.shipping?.dimensions?.depth
-    @type "#shippingWeight", product.shipping?.weight
+    if product.shipping?.applies
+      if product.shipping?.charge then @check "#shippingCharge" else @uncheck '#shippingCharge'
+      @type "#shippingHeight", product.shipping?.dimensions?.height
+      @type "#shippingWidth", product.shipping?.dimensions?.width
+      @type "#shippingDepth", product.shipping?.dimensions?.depth
+      @type "#shippingWeight", product.shipping?.weight
+    else
+      @pressButton '#shippingDoesNotApply'
     if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
     @type "#inventory", product.inventory
     @eval "document.getElementById('inventory').blur()", cb
