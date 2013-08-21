@@ -15,8 +15,9 @@ define [
       'click #confirmDeleteProduct':'_deleteProduct'
     @justCreated: false
     template: manageProductTemplate
-    initialize: (opt) =>
+    initialize: (opt) ->
       @model = opt.product
+      @model.bind 'change:shippingApplies', _.bind @_showShippingOptions, @
       @store = opt.store
       @$el.html @template
       @bindings = @initializeBindings
@@ -36,17 +37,12 @@ define [
         "#inventory": "value:integerOr(inventory)"
         "#price": "value:decimalOr(price)"
         "#hasInventory": "checked:hasInventory"
+        "#shippingDoesNotApply": "checked:boolean(shippingApplies)"
+        "#shippingDoesApply": "checked:boolean(shippingApplies)"
         "#showPicture": "attr:{src:picture}"
       @_setValidation()
     _setValidation: ->
-      val = @model.validation
-      unless @store.get 'autoCalculateShipping'
-        vals = [ val.shippingHeight, val.shippingWidth, val.shippingDepth, val.shippingWeight ]
-        for v in vals
-          digits = v.pop()
-          required = v.pop()
-          required.required = false
-          v.push digits, required
+      @model.doNotRequireShippingInfo() unless @store.get 'autoCalculateShipping'
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
@@ -57,6 +53,11 @@ define [
         else
           validationErrorsEl.html valContext errors:errors
           validationErrorsEl.show()
+    _showShippingOptions: ->
+      if @model.get 'shippingApplies'
+        $('#shippingInfo').show()
+      else
+        $('#shippingInfo').hide()
     _updateProduct: =>
       if @model.isValid true
         $("#updateProduct").prop "disabled", on

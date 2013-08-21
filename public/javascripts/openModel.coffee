@@ -1,7 +1,9 @@
 define [
   'backbone'
+  'backboneValidation'
+  'underscore'
   'epoxy'
-], (Backbone) ->
+], (Backbone, Validation, _) ->
   class OpenModel extends Backbone.Model
     validateOnSet: true
     idAttribute: "_id"
@@ -19,3 +21,4 @@ define [
         opt ||= {}
         opt.validate = true
         super key, val, opt
+  OpenModel

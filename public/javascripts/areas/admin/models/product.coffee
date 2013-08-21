@@ -6,6 +6,13 @@ define [
   class Product extends Backbone.Open.Model
     initialize: ->
       @bind 'change:hasInventory', @_hasInventoryChanged
+      @bind 'change:shippingApplies', @_shippingAppliesChanged
+    _shippingAppliesChanged: ->
+      if @get 'shippingApplies'
+        @requireShippingInfo()
+      else
+        @doNotRequireShippingInfo()
+      @validate()
     _hasInventoryChanged: ->
       @validation.inventory[0].required = @get 'hasInventory'
       @validate() if @validate?
@@ -19,6 +26,11 @@ define [
       options.error = (xhr, error, type) ->
         opt.error xhr if opt.error?
       @form.ajaxSubmit options
+    _doNotRequireShippingInfo: false
+    _storeDoesNotRequireShippingInfo: false
+    storeDoesNotRequireShippingInfo: -> @_storeDoesNotRequireShippingInfo = true
+    doNotRequireShippingInfo: -> @_doNotRequireShippingInfo = true
+    requireShippingInfo: -> @_doNotRequireShippingInfo = false
     defaults:
       _id:undefined
       slug:undefined
@@ -31,7 +43,8 @@ define [
       width:undefined
       depth:undefined
       weight:undefined
-      shippingCharge:undefined
+      shippingApplies:true
+      shippingCharge:true
       shippingHeight:undefined
       shippingWidth:undefined
       shippingDepth:undefined
@@ -58,17 +71,17 @@ define [
         [{pattern:'number', msg: 'O peso deve ser um número.'}
          {required: false}]
       shippingHeight:
-        [{required: true, msg: 'A altura de postagem é obrigatória.'}
+        [{ msg: 'A altura de postagem é obrigatória.', required: -> !@_doNotRequireShippingInfo and !@_storeDoesNotRequireShippingInfo },
          {range:[2,105], msg: 'A altura deve ser um número entre 2 e 105.'}]
       shippingWidth:
-        [{required: true, msg: 'A largura de postagem é obrigatória.'}
+        [{msg: 'A largura de postagem é obrigatória.', required: -> !@_doNotRequireShippingInfo and !@_storeDoesNotRequireShippingInfo }
          {range:[11,105], msg: 'A largura deve ser um número entre 11 e 105.'}]
       shippingDepth:
-        [{required: true, msg: 'A profundidade de postagem é obrigatória.'}
+        [{msg: 'A profundidade de postagem é obrigatória.', required: -> !@_doNotRequireShippingInfo and !@_storeDoesNotRequireShippingInfo }
          {range:[16,105], msg: 'A profundidade deve ser um número entre 16 e 105.'}]
       shippingWeight:
-        [{required: true, msg: 'O peso de postagem é obrigatório.'}
+        [{msg: 'O peso de postagem é obrigatório.', required: -> !@_doNotRequireShippingInfo and !@_storeDoesNotRequireShippingInfo }
          {range:[0,30], msg: 'O peso deve ser um número entre 0 e 30.'}]
       inventory:
-        [{required: false, msg: 'O estoque é obrigatório quando o produto terá estoque.'}
+        [{required: false, msg: 'O estoque é obrigatório quando o produto terá estoque.' }
          {pattern:'digits', msg: 'O estoque deve ser um número.'}]

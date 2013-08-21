@@ -50,24 +50,37 @@
   </div>
   <label>Dimensões para postagem (se não for informado o frete não poderá ser calculado e a venda deverá ser fechada diretamente, ou o frete informado posteriormente, o que deixará todo o processo mais lento):</label>
   <div class="control-group">
+    Esse produto será postado?
     <div class="controls">
-      <label class="checkbox">
-        <input type="checkbox" id="shippingCharge" name="shippingCharge" /> Cobrar pela postagem
+      <label class="radio inline">
+        <input type="radio" id="shippingDoesApply" name="shippingApplies" value="true" /> Sim
+      </label>
+      <label class="radio inline">
+        <input type="radio" id="shippingDoesNotApply" name="shippingApplies" value="false" /> Não (produto digital, a ser retirado na loja, etc.)
       </label>
     </div>
   </div>
-  <div class="control-group">
-    <label>Altura, largura e profundidade (em centímetros):</label>
-    <div class="controls">
-      <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
-      <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
-      <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
+  <div id="shippingInfo">
+    <div class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" id="shippingCharge" name="shippingCharge" /> Cobrar o cliente pela postagem (se você não selecionar o cliente não será cobrado e você será responsável pelos custos do frete)
+        </label>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
-    <div class="controls">
-      <input type="text" id="shippingWeight" name="shippingWeight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 0.20" />
+    <div class="control-group">
+      <label>Altura, largura e profundidade (em centímetros):</label>
+      <div class="controls">
+        <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
+        <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
+        <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
+      <div class="controls">
+        <input type="text" id="shippingWeight" name="shippingWeight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 0.20" />
+      </div>
     </div>
   </div>
   <div class="control-group">
