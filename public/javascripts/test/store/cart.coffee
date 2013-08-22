@@ -173,13 +173,6 @@ define [
       ]
       cart.chooseShippingOption 'pac'
       cart.totalSaleAmount().should.equal 25.53
-    it 'when two products are added and no shipping cost selected the price of the products is the total sale amount', ->
-      cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
-      cart.addItem item
-      cart.addItem item
-      cart.setManualShipping()
-      cart.totalSaleAmount().should.equal 22.2
     it 'when quantity is set the shipping options are reset', ->
       cart = Cart.get('store_1')
       item = _id: 1, price: 11.1

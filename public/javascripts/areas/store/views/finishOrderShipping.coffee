@@ -25,7 +25,7 @@ define [
       @show()
       @_calculateShippingCosts()
     show: ->
-      @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions, hasAutoCalculatedShipping: @store.autoCalculateShipping
+      @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions
     finishOrder: ->
       Backbone.history.navigate 'finishOrder/payment', trigger: true
     _redirectIfUserNotSatisfied: ->
@@ -43,10 +43,6 @@ define [
         Backbone.history.navigate 'finishOrder/updateProfile', trigger: true
         return true
     _calculateShippingCosts: ->
-      unless @store.autoCalculateShipping
-        @cart.setManualShipping()
-        $('#finishOrderShipping', @$el).removeAttr 'disabled'
-        return
       if @cart.shippingSelected()
         @shippingOptions = $.extend true, [], @cart.shippingOptions()
         o.cost = converters.currency o.cost for o in @shippingOptions

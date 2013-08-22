@@ -20,11 +20,6 @@
     {{#if new}}
     <div class="control-group">
       <div class="controls">
-        <input type="checkbox" id="autoCalculateShipping" name="autoCalculateShipping" checked>calcular o frete automaticamente usando o serviço dos correios</input>
-      </div>
-    </div>
-    <div class="control-group">
-      <div class="controls">
         <input type="checkbox" id="pagseguro" name="pagseguro" checked>utilizar PagSeguro nas vendas</input>
       </div>
     </div>
@@ -152,53 +147,7 @@
   </form>
   {{/if}}
   {{#unless new}}
-    {{#if autoCalculateShipping}}
-      <input id="unsetAutoCalculateShipping" type="button" class="btn btn-primary footerButton" value="Desligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
-      <div id="modalConfirmAutoCalculateShipping" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="confirmModalLabel">Desligar cálculo automático de frete</h3>
-        </div>
-        <div class="modal-body">
-          <p>Ao desativar o cálculo automático de postagem todas as vendas futuras deixarão de ter o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
-          <p>O uso de qualquer gateway de pagamento (como PagSeguro) também será imediatamente desligado.</p>
-          <p>Após desativar o cálculo automático de postagem você poderá alterar seus produtos para dimensões e pesos diferentes dos autorizados pelos Correios.</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-          <button id="confirmUnsetAutoCalculateShipping" class="btn btn-primary">Desligar</button>
-        </div>
-      </div>
-      <div id="pagseguroOptions"></div>
-    {{else}}
-      <input id="setAutoCalculateShipping" type="button" class="btn btn-primary footerButton" value="Ligar cálculo automático de frete" data-toggle="modal" data-target="#modalConfirmAutoCalculateShipping"/>
-      <div id="modalConfirmAutoCalculateShipping" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="confirmModalLabel">Ligar cálculo automático de frete</h3>
-        </div>
-        <div class="modal-body">
-          <p>Ao ativar o cálculo automático de postagem todas as vendas futuras terão o cálculo de postagem feito automaticamente com o serviço dos Correios.</p>
-          <p>Para ligar o cálculo automático de postagem todos os seus produtos precisam do peso e das dimensões de postagem. Se algum produto estiver fora das dimensões ou peso ou com informações faltando esta ação irá falhar.</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-          <button id="confirmSetAutoCalculateShipping" class="btn btn-primary">Ligar</button>
-        </div>
-      </div>
-      <div id="modalCannotAutoCalculateShipping" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cannotAutoCalculateModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="cannotAutoCalculateModalLabel">Não foi possível ligar o cálculo de postagem</h3>
-        </div>
-        <div class="modal-body">
-          <p>O cálculo de postagem não foi ligado. Verifique se <strong>todos</strong> os seus produtos possuem informações de postagem e tente novamente.</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-        </div>
-      </div>
-    {{/if}}
+    <div id="pagseguroOptions"></div>
   {{/unless}}
   <div id="nameAlreadyExists" class="modal fade hide">
     <div class="modal-header">

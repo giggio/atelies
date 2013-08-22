@@ -119,7 +119,8 @@ module.exports = class Page
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getIsClickable: (selector, cb) ->
-    @isVisible selector, =>
+    @isVisible selector, (itIs) =>
+      return cb false unless itIs
       @getIsEnabled selector, cb
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
@@ -128,20 +129,20 @@ module.exports = class Page
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
-  isVisible: (selector, cb) -> @eval "return $('#{selector}').is(':visible')", cb #or could use isDiplayed
+  isVisible: (selector, cb) -> @findElement(selector).isDisplayed().then cb
   parallel: (actions, cb) ->
     flow = webdriver.promise.createFlow (f) =>
       for action in actions
         do (action) -> f.execute action
       undefined
     flow.then cb, cb
-  waitForAjax: (cb) -> @wait (=> @eval('return $.active;', (active) -> active is 0)), 5000, cb
+  waitForAjax: (cb) ->
+    evalFn = => @eval 'return $.active;', (active) -> active is 0
+    @wait evalFn, 5000, cb
   waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
   waitForSelectorClickable: (selector, cb) -> @wait (=> @getIsClickable(selector, (itIs) -> itIs)), 3000, cb
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
-  wait: (fn, timeout, cb) ->
-    @driver.wait fn, timeout
-    process.nextTick cb
+  wait: (fn, timeout, cb) -> @driver.wait(fn, timeout).then -> cb()
   visitBlank: (cb) -> Page::visit.call @, 'blank', false, cb
   loginFor: (_id, cb) ->
     @currentUrl (url) =>
@@ -167,7 +168,7 @@ module.exports = class Page
         @visitBlank doLogin
       else
         doLogin()
-  eval: (script, cb) -> @driver.executeScript(script).then cb
+  eval: (script, cb) -> @driver.executeScript(script).then cb, cb
   clearLocalStorage: (cb) ->
     @currentUrl (url) =>
       clear = => @eval 'localStorage.clear()', cb

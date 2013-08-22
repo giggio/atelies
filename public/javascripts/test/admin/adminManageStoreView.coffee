@@ -31,7 +31,6 @@ define [
         manageStoreView.$("#state").val(exampleStore.state).change()
         manageStoreView.$("#zip").val(exampleStore.zip).change()
         manageStoreView.$("#otherUrl").val(exampleStore.otherUrl).change()
-        manageStoreView.$("#autoCalculateShipping").prop('checked', true).change()
         manageStoreView.$("#pagseguro").prop('checked', true).change()
         manageStoreView.$("#pagseguroEmail").val(exampleStore.pagseguroEmail).change()
         manageStoreView.$("#pagseguroToken").val(exampleStore.pagseguroToken).change()
@@ -50,7 +49,6 @@ define [
         expect(storePassedIn.state).to.equal exampleStore.state
         expect(storePassedIn.zip).to.equal exampleStore.zip
         expect(storePassedIn.otherUrl).to.equal exampleStore.otherUrl
-        expect(storePassedIn.autoCalculateShipping).to.be.true
         expect(storePassedIn.pagseguro).to.be.true
         expect(storePassedIn.pagseguroEmail).to.equal exampleStore.pagseguroEmail
         expect(storePassedIn.pagseguroToken).to.equal exampleStore.pagseguroToken
@@ -97,7 +95,6 @@ define [
         goToStoreManagePageSpy = storePassedIn = null
         store = generatorc.store.a()
         newStore = generatorc.store.b()
-        newStore.autoCalculateShipping = true
         newStore.pagseguro = true
         newStore.pagseguroEmail = store.pagseguroEmail
         newStore.pagseguroToken = store.pagseguroToken

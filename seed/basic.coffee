@@ -314,7 +314,6 @@ db.stores.insert
   otherUrl: 'http://myotherurl.com'
   banner: 'https://s3.amazonaws.com/ateliesteste/store_1/store/6432062247768044242338555399328480.jpg'
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_1/store/236652196617797020858783057425171200.jpg'
-  autoCalculateShipping: true
   pmtGateways:
     pagseguro:
       email: 'pagseguro@a.com'
@@ -340,7 +339,6 @@ db.stores.insert
   otherUrl: 'http://someotherurl.com'
   banner: 'https://s3.amazonaws.com/ateliesteste/store_1/store/6432062247768044242338555399328480.jpg'
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_2/store/503898129332810600307476012269035000.jpg'
-  autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
 storeId2 = db.stores.findOne(slug:'store_2')._id
@@ -362,7 +360,6 @@ db.stores.insert
   otherUrl: 'http://idontownthisstore.com'
   banner: 'https://s3.amazonaws.com/ateliesteste/store_3/store/759137748274952200984912005718797400.jpg'
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_3/store/519919875310733900163886155933141700.jpg'
-  autoCalculateShipping: true
   pmtGateways: {}
   random: Math.random()
 db.stores.insert
@@ -382,7 +379,6 @@ db.stores.insert
   otherUrl: 'http://somestorefromms.com'
   banner: 'https://s3.amazonaws.com/ateliesteste/store_4/store/977493978571146800762570540187880400.jpg'
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_4/store/186986845219507800735144682228565200.jpg'
-  autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
 db.stores.insert
@@ -401,7 +397,6 @@ db.stores.insert
   zip: "04334-567"
   otherUrl: 'http://somestorefromms.com'
   banner: 'https://s3.amazonaws.com/ateliesteste/store_4/store/977493978571146800762570540187880400.jpg'
-  autoCalculateShipping: false
   pmtGateways: {}
   random: Math.random()
 for i in [4..15]
@@ -424,7 +419,6 @@ for i in [4..15]
     otherUrl: 'http://myotherurl.com'
     banner: "https://s3.amazonaws.com/ateliesteste/store_5/store/67713805800303820043159248307347300.jpg"
     flyer: "https://s3.amazonaws.com/ateliesteste/store_5/store/866178757045418000837425043340772400.jpg"
-    autoCalculateShipping: false
     pmtGateways: {}
     random: Math.random()
   store = db.stores.findOne slug:"store_#{i}"

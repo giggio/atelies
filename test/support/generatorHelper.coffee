@@ -68,7 +68,7 @@ exports.generator =
         depth: 21
       weight: 5
       shipping:
-        applies: true
+        applies: false
         charge: true
         dimensions:
           height: 20
@@ -165,7 +165,6 @@ exports.generator =
       otherUrl: 'http://myotherurl.com'
       banner: 'http://lorempixel.com/800/150/cats/1'
       flyer: 'http://lorempixel.com/350/400/nightlife/1'
-      autoCalculateShipping: true
       pmtGateways:
         pagseguro:
           email: 'pagseguro@a.com'
@@ -185,7 +184,6 @@ exports.generator =
       zip: "04365-000"
       otherUrl: 'http://someotherurl.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/2'
-      autoCalculateShipping: false
       pmtGateways: {}
     c: -> new Store
       name: 'Store 3'
@@ -202,7 +200,6 @@ exports.generator =
       zip: "04234-567"
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
-      autoCalculateShipping: true
       pmtGateways: {}
     d: -> new Store
       name: 'My Very Nice Store'
@@ -220,7 +217,6 @@ exports.generator =
       otherUrl: 'http://somestoreinms.com'
       banner: 'http://lorempixel.com/800/150/cats/4'
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
-      autoCalculateShipping: false
       pmtGateways: {}
     e: -> new Store
       name: 'My Other Very Nice Store'
@@ -237,7 +233,6 @@ exports.generator =
       zip: "05334-567"
       otherUrl: 'http://asomestoreinms.com'
       banner: 'http://lorempixel.com/800/150/cats/5'
-      autoCalculateShipping: false
       pmtGateways: {}
     empty: -> new Store
       name: ''
@@ -254,7 +249,6 @@ exports.generator =
       zip: ''
       otherUrl: ''
       flyer: ''
-      autoCalculateShipping: false
       pmtGateways: {}
   user:
     a: ->

@@ -57,10 +57,7 @@ define ['underscore'], (_) ->
       total
     shippingCost: ->
       shippingOption = @shippingOptionSelected()
-      if @autoCalculatedShipping
-        shippingOption?.cost
-      else
-        0
+      shippingOption?.cost
     totalSaleAmount: -> @totalPrice() + @shippingCost()
     shippingOptions: -> @_shippingOptions
     shippingCalculated: -> @_shippingOptions?
@@ -71,8 +68,5 @@ define ['underscore'], (_) ->
       opt = _.findWhere @_shippingOptions, type: type
       throw new Error("Shipping option does not exist.") unless opt?
       @_shippingOptionSelected = type
-    autoCalculatedShipping: true
-    setManualShipping: -> @autoCalculatedShipping = false
-    setAutoCalculatedShipping: -> @autoCalculatedShipping = true
     choosePaymentType: (paymentType) -> @_paymentType = paymentType
     paymentTypeSelected: -> @_paymentType

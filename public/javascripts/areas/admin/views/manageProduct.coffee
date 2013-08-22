@@ -42,7 +42,6 @@ define [
         "#showPicture": "attr:{src:picture}"
       @_setValidation()
     _setValidation: ->
-      @model.doNotRequireShippingInfo() unless @store.get 'autoCalculateShipping'
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate

@@ -20,7 +20,6 @@ storeSchema = new mongoose.Schema
   otherUrl:               String
   banner:                 String
   flyer:                  String
-  autoCalculateShipping:  Boolean
   pmtGateways:
     pagseguro:
       email:              String
@@ -51,7 +50,6 @@ storeSchema.methods.toSimple = ->
     otherUrl: @otherUrl
     banner: @banner
     flyer: @flyer
-    autoCalculateShipping: @autoCalculateShipping
   store.pagseguro = @pagseguro()
   store
 storeSchema.methods.toSimpler = ->
@@ -68,17 +66,6 @@ storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
-storeSchema.methods.setAutoCalculateShipping = (val, cb) ->
-  unless val
-    @autoCalculateShipping = false
-    setImmediate => cb null, true
-    return
-  Product.findByStoreSlug @slug, (err, products) =>
-    return cb err if err?
-    productWithMissingInfo = _.find products, (p) -> p.hasShippingInfo() is false
-    hasProductWithMissingInfo = productWithMissingInfo?
-    @autoCalculateShipping = true unless hasProductWithMissingInfo
-    cb null, not hasProductWithMissingInfo
 storeSchema.methods.setPagseguro = (set) ->
   if typeof set is 'boolean' and set is false
     @pmtGateways.pagseguro = undefined

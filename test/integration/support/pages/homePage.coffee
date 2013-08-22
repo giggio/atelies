@@ -5,7 +5,7 @@ module.exports = class HomePage extends Page
   url: ''
   clickSearchStores: @::pressButton.partial ".searchStores"
   searchStoresText: (text, cb) ->
-    @wait (=> @getIsClickable('#storeSearchTerm', (itIs) => itIs)), 2000, =>
+    @waitForSelectorClickable '#storeSearchTerm', =>
       @type "#storeSearchTerm", text, cb
   clickDoSearchStores: @::pressButton.partial "#doSearch"
   searchProductsText: @::type.partial "#productSearchTerm"

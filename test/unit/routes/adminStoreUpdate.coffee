@@ -16,7 +16,6 @@ describe 'AdminStoreUpdateRoute', ->
         _id: '9876'
         name: exampleStore.name
         zip: '01234-567'
-        autoCalculateShipping: true
         pmtGateways:
           pagseguro:
             email: 'pagseguro@a.com'
@@ -83,7 +82,6 @@ describe 'AdminStoreUpdateRoute', ->
         _id: '9876'
         name: exampleStore.name + 'aaa'
         zip: '01234-567'
-        autoCalculateShipping: true
         pmtGateways:
           pagseguro:
             email: 'pagseguro@a.com'

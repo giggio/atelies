@@ -44,7 +44,6 @@ describe 'Admin create store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
-        expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         expect(store.pmtGateways.pagseguro.email).to.be.equal exampleStore.pmtGateways.pagseguro.email
         expect(store.pmtGateways.pagseguro.token).to.be.equal exampleStore.pmtGateways.pagseguro.token
         done()

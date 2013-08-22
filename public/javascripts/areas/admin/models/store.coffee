@@ -13,13 +13,6 @@ define [
       options.error = (xhr, error, type) ->
         opt.error xhr if opt.error?
       @form.ajaxSubmit options
-    initialize: ->
-      @bind 'change:autoCalculateShipping', @_autoCalculateShippingChanged
-      @bind 'change:pagseguro', @_pagseguroChanged
-    _pagseguroChanged: ->
-      @set 'autoCalculateShipping', true if @get 'pagseguro'
-    _autoCalculateShippingChanged: ->
-      @set('pagseguro', false) unless @get 'autoCalculateShipping'
     defaults:
       _id:undefined
       name:undefined
@@ -36,7 +29,6 @@ define [
       banner:undefined
       flyer:undefined
       phoneNumber:undefined
-      autoCalculateShipping:true
       pagseguro:true
       pagseguroEmail:undefined
       pagseguroToken:undefined

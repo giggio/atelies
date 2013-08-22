@@ -11,8 +11,6 @@ define [
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
-      'click #confirmSetAutoCalculateShipping':'_confirmSetAutoCalculateShipping'
-      'click #confirmUnsetAutoCalculateShipping':'_confirmUnsetAutoCalculateShipping'
       'change #pagseguro':'_pagseguroChanged'
     template: manageStoreTemplate
     initialize: (opt) ->
@@ -21,9 +19,8 @@ define [
       return if @_redirectIfUserNotSatisfied()
       context = Handlebars.compile @template
       isnew = @model.id? is false
-      @$el.html context new: isnew, autoCalculateShipping: @model.get('autoCalculateShipping'), pagseguro: @model.get('pagseguro'), staticPath: @staticPath
+      @$el.html context new: isnew, pagseguro: @model.get('pagseguro'), staticPath: @staticPath
       @bindings = @initializeBindings
-        '#autoCalculateShipping':'checked:autoCalculateShipping'
         '#pagseguro':'checked:pagseguro'
         "#showFlyer": "attr:{src:flyer}"
         "#showHomePageImage": "attr:{src:homePageImage}"
@@ -31,7 +28,6 @@ define [
       if isnew
         @model.on 'change:pagseguro', => @_pagseguroChanged()
       else
-        delete @bindings['#autoCalculateShipping']
         delete @bindings['#pagseguro']
         delete @bindings['#pagseguroEmail']
         delete @bindings['#pagseguroToken']
@@ -91,28 +87,6 @@ define [
       StoreView.justCreated = !update
       StoreView.justUpdated = update
       Backbone.history.navigate "store/#{store.get('slug')}", trigger: true
-    _confirmSetAutoCalculateShipping: -> @_setAutoCalculateShipping on
-    _confirmUnsetAutoCalculateShipping: -> @_setAutoCalculateShipping off
-    _setAutoCalculateShipping: (set) ->
-      $("#confirmSetAutoCalculateShipping").prop "disabled", on
-      $("#confirmUnsetAutoCalculateShipping").prop "disabled", on
-      url = "/admin/store/#{@model.get('_id')}/setAutoCalculateShipping"
-      url += if set then "On" else "Off"
-      $.ajax
-        url: url
-        type: 'PUT'
-        error: (xhr, text, error) =>
-          @logXhrError 'admin', xhr
-          if xhr.status isnt 409
-            return @showDialogError "Não foi possível alterar o cálculo automático de frete. Tente novamente mais tarde."
-          $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
-          $('#modalCannotAutoCalculateShipping', @el).modal 'show'
-          $("#confirmSetAutoCalculateShipping").prop "disabled", off
-          $("#confirmUnsetAutoCalculateShipping").prop "disabled", off
-        success: (data, text, xhr) =>
-          @model.set 'autoCalculateShipping', set
-          $('#modalConfirmAutoCalculateShipping', @el).modal 'hide'
-          @_storeCreated @model
     _pagseguroChanged: ->
       pagseguro = @model.get 'pagseguro'
       val = @model.validation

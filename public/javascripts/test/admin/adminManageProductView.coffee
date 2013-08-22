@@ -242,7 +242,7 @@ define [
           expect($("#shippingWeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso deve ser um número entre 0 e 30.'
           expect($("#inventory ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O estoque deve ser um número.'
 
-      describe 'Does not create product when missing shipping info on a store that requires it (auto calculate shipping)', ->
+      describe 'Does not create product when missing shipping info when product has shipping info', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
@@ -279,7 +279,7 @@ define [
           expect($("#shippingDepth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade de postagem é obrigatória.'
           expect($("#shippingWeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso de postagem é obrigatório.'
 
-      describe 'Creates a product when missing shipping info on a store that does not require it (no auto calculate shipping)', ->
+      describe 'Creates a product when missing shipping info on a product that does not require it', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
             dataPosted = opt
@@ -303,6 +303,7 @@ define [
           $("#shippingWidth", el).val('').change()
           $("#shippingDepth", el).val('').change()
           $("#shippingWeight", el).val('').change()
+          $("#shippingDoesNotApply", el).click()
           $("#hasInventory", el).prop('checked', newproduct.hasInventory).change()
           $("#inventory", el).val(newproduct.inventory).change()
           $('#updateProduct', el).trigger 'click'

@@ -168,14 +168,11 @@ module.exports = class StoreRoutes
         cb null, orderId
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
-    if store.autoCalculateShipping
-      @_calculateShipping store.slug, data, user, (err, shippingOptions) ->
-        return cb err if err?
-        shippingOption = _.findWhere shippingOptions, type: shippingType
-        shippingCost = shippingOption.cost
-        cb null, shippingCost
-    else
-      setImmediate -> cb null, 0
+    @_calculateShipping store.slug, data, user, (err, shippingOptions) ->
+      return cb err if err?
+      shippingOption = _.findWhere shippingOptions, type: shippingType
+      shippingCost = shippingOption.cost
+      cb null, shippingCost
 
   calculateShipping: (req, res) ->
     @_calculateShipping req.params.storeSlug, req.body, req.user, (err, shippingOptions) =>
@@ -190,7 +187,6 @@ module.exports = class StoreRoutes
     shippingOptions = [ pac, sedex ]
     Store.findBySlug storeSlug, (err, store) ->
       return cb err if err?
-      return cb "Não pode calcular postagem para loja que não optou por cálculo automático via Correios." unless store.autoCalculateShipping
       storeZip = store.zip
       Product.getShippingWeightAndDimensions ids, (err, products) ->
         getShippingPrices = []

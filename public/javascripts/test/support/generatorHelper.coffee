@@ -85,7 +85,6 @@ define ->
         otherUrl: 'http://myotherurl.com'
         banner: 'http://e.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
-        autoCalculateShipping: true
         pagseguro: true
         pagseguroEmail: 'pagseguro@a.com'
         pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
@@ -106,7 +105,6 @@ define ->
         otherUrl: 'http://someurl.com'
         banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
-        autoCalculateShipping: false
         pagseguro: false
       c: ->
         _id: '3'
@@ -124,7 +122,6 @@ define ->
         zip: "04234-567"
         otherUrl: 'http://other.com'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
-        autoCalculateShipping: true
         pagseguro: false
       empty: ->
         _id: ''
@@ -140,5 +137,4 @@ define ->
         city: ""
         state: ""
         otherUrl: ''
-        autoCalculateShipping: false
         pagseguro: false

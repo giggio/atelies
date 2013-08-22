@@ -8,7 +8,7 @@ AccountUpdateProfilePage        = require  './support/pages/accountUpdateProfile
 LoginPage                       = require  './support/pages/loginPageSelenium'
 
 describe 'Store Finish Order: Shipping', ->
-  page = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = storeWithoutAutoCalculateShipping = product1 = product2 = store2 = user1 = userIncompleteAddress = null
+  page = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
   after (done) -> page.closeBrowser done
   before (done) =>
     page = new StoreFinishOrderShippingPage()
@@ -24,10 +24,6 @@ describe 'Store Finish Order: Shipping', ->
       product1.save()
       product2 = generator.product.b()
       product2.save()
-      storeWithoutAutoCalculateShipping = generator.store.b()
-      storeWithoutAutoCalculateShipping.save()
-      product3 = generator.product.c()
-      product3.save()
       user1 = generator.user.d()
       user1.save()
       userIncompleteAddress = generator.user.a()
@@ -152,7 +148,8 @@ describe 'Store Finish Order: Shipping', ->
         a.zip.should.equal userAddress.zip
         done()
 
-  describe 'store without auto calculated shipping', ->
+  #TODO: test with products without shipping
+  describe.skip 'store with only products without shipping', ->
     before (done) ->
       page.clearLocalStorage ->
         page.loginFor user1._id, ->

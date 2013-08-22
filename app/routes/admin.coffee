@@ -15,7 +15,7 @@ module.exports = class AdminRoutes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetAutoCalculateShippingOff', 'adminStoreUpdateSetAutoCalculateShippingOn', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'admin'
@@ -36,7 +36,6 @@ module.exports = class AdminRoutes
       store = req.user.createStore()
       store.updateFromSimple body
       store.name = body.name
-      store.autoCalculateShipping = if body.autoCalculateShipping? then !!body.autoCalculateShipping else false
       if body.pagseguro is on then store.setPagseguro email: body.pagseguroEmail, token: body.pagseguroToken
       uploader = new StoreUploader store
       imageFields = homePageImage: Store.homePageImageDimension, banner: null, flyer: Store.flyerDimension
@@ -80,20 +79,6 @@ module.exports = class AdminRoutes
           store.save (err) =>
             return @handleError req, res, err if err?
             res.send 200, store
-  adminStoreUpdateSetAutoCalculateShippingOff: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, off
-  adminStoreUpdateSetAutoCalculateShippingOn: (req, res) -> @_adminStoreUpdateSetAutoCalculateShipping req, res, on
-  _adminStoreUpdateSetAutoCalculateShipping: (req, res, autoCalculateShipping) ->
-    Store.findById req.params.storeId, (err, store) =>
-      return @handleError req, res, err if err?
-      throw new AccessDenied() unless req.user.hasStore store
-      store.setAutoCalculateShipping autoCalculateShipping, (err, set) =>
-        return @handleError req, res, err if err?
-        if set
-          store.save (err) =>
-            return @handleError req, res, err if err?
-            res.send 204
-        else
-          res.send 409
   adminStoreUpdateSetPagseguroOff: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, off
   adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, email: req.body.email, token: req.body.token
   _adminStoreUpdateSetPagseguro: (req, res, set) ->

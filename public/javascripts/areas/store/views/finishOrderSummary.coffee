@@ -20,24 +20,19 @@ define [
       @cart = opt.cart
       @user = opt.user
     render: =>
-      if @cart.autoCalculatedShipping and @cart.shippingCalculated() is false
+      unless @cart.shippingCalculated()
         return Backbone.history.navigate 'finishOrder/shipping', trigger: true
       context = Handlebars.compile @template
       numberOfProducts = @cart.items().length
-      @hasAutoCalculatedShipping = @cart.shippingSelected()
-      if @hasAutoCalculatedShipping
-        shippingCost = converters.currency @cart.shippingCost()
-      else
-        shippingCost = "Calculado posteriormente"
+      shippingCost = converters.currency @cart.shippingCost()
       orderSummary =
         shippingCost: shippingCost
         productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
-      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, hasAutoCalculatedShipping: @hasAutoCalculatedShipping, paymentType: @cart.paymentTypeSelected(), directSell: @cart.paymentTypeSelected().type is 'directSell'
-      if @hasAutoCalculatedShipping
-        viewModel.shippingOption = @cart.shippingOptionSelected()
-        viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
+      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, paymentType: @cart.paymentTypeSelected(), directSell: @cart.paymentTypeSelected().type is 'directSell'
+      viewModel.shippingOption = @cart.shippingOptionSelected()
+      viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
       @$el.html context viewModel
     finishOrder: ->
       $("#finishOrder").prop "disabled", on
@@ -55,7 +50,7 @@ define [
         @showDialogError "Não foi possível fazer o pedido. Tente novamente mais tarde."
         $("#finishOrder").prop "disabled", off
       order = items: items
-      order.shippingType = @cart.shippingOptionSelected().type if @hasAutoCalculatedShipping
+      order.shippingType = @cart.shippingOptionSelected().type
       order.paymentType = paymentType
       order = new Order order
       orders.add order

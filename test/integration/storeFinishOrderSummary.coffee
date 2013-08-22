@@ -61,7 +61,8 @@ describe 'Store Finish Order: Summary', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/summary"
         done()
 
-  describe 'completing the payment with products with and without inventory and manual shipping calculation', ->
+  #TODO work on having the correct message and shipping costs
+  describe 'completing the payment with products with and without inventory and with products with and without shipping', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
@@ -83,10 +84,10 @@ describe 'Store Finish Order: Summary', ->
                 storeProductPage.visit 'store_2', 'name_1', ->
                   storeProductPage.purchaseItem ->
                     storeCartPage.clickFinishOrder ->
-                      storeFinishOrderShippingPage.clickContinue ->
-                        storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                          page.clickCompleteOrder ->
-                            waitSeconds 2, done
+                      storeFinishOrderShippingPage.clickSedexOption ->
+                        storeFinishOrderShippingPage.clickContinue ->
+                          storeFinishOrderPaymentPage.clickSelectPaymentType ->
+                            page.clickCompleteOrder done
     it 'should have stored a new order on db', (done) ->
       Order.find (err, orders) ->
         throw err if err
@@ -95,9 +96,9 @@ describe 'Store Finish Order: Summary', ->
         order.customer.toString().should.equal user1._id.toString()
         order.store.toString().should.equal store2._id.toString()
         order.items.length.should.equal 2
-        order.shippingCost.should.equal 0
+        order.shippingCost.should.equal 41.7
         order.totalProductsPrice.should.equal product3.price + product1.price
-        order.totalSaleAmount.should.equal order.totalProductsPrice
+        order.totalSaleAmount.should.equal order.totalProductsPrice + order.shippingCost
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()
         order.paymentType.should.equal 'directSell'
         p3 = order.items[0]
@@ -146,8 +147,7 @@ describe 'Store Finish Order: Summary', ->
                     storeFinishOrderShippingPage.clickContinue ->
                       storeFinishOrderPaymentPage.clickSelectDirectPayment ->
                         storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                          page.clickCompleteOrder ->
-                            waitSeconds 5, done
+                          page.clickCompleteOrder done
     it 'should have stored a new order on db with direct payment', (done) ->
       Order.find (err, orders) ->
         throw err if err

@@ -15,4 +15,4 @@ module.exports = class StoreFinishOrderPaymentPage extends Page
       => @getText "#state", (t) -> summary.address.state = t
       => @getText "#zip", (t) -> summary.address.zip = t
     ], (-> cb(summary))
-  clickCompleteOrder: @::pressButton.partial '#finishOrder'
+  clickCompleteOrder: @::pressButtonAndWait.partial '#finishOrder'

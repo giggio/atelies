@@ -21,7 +21,6 @@ describe 'Admin manage store page', ->
         userSeller.save()
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
-        delete otherStore.autoCalculateShipping
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
             page.setFieldsAs otherStore, ->
@@ -48,7 +47,6 @@ describe 'Admin manage store page', ->
         expect(store.state).to.equal otherStore.state
         expect(store.zip).to.equal otherStore.zip
         expect(store.otherUrl).to.equal otherStore.otherUrl
-        expect(store.autoCalculateShipping).to.equal true
         done()
     it 'kept the store to the user', (done) ->
       User.findById userSeller.id, (err, user) ->
@@ -58,104 +56,6 @@ describe 'Admin manage store page', ->
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
-        done()
-
-  describe 'does not update a store to autocalculate shipping if the store has products without shipping info', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
-        exampleStore = generator.store.d()
-        exampleStore.save()
-        product = generator.product.a()
-        product.storeName = exampleStore.name
-        product.storeSlug = exampleStore.slug
-        product.shipping = undefined
-        product.save()
-        userSeller = generator.user.c()
-        userSeller.save()
-        userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickSetAutoCalculateShippingButton ->
-              page.clickConfirmSetAutoCalculateShippingButton -> waitSeconds 10, done
-    it 'is at the store manage page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
-        done()
-    it 'does not show store updated message', (done) ->
-      page.hasMessage (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows error message', (done) ->
-      page.autoCalculateShippingErrorMsg (msg) ->
-        msg.should.equal "O cálculo de postagem não foi ligado. Verifique se todos os seus produtos possuem informações de postagem e tente novamente."
-        done()
-    it 'did not update the store and set auto calculate shipping', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
-        expect(store.autoCalculateShipping).to.equal false
-        done()
-
-  describe 'updates store to autocalculate shipping if the store has products with shipping info', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
-        exampleStore = generator.store.d()
-        exampleStore.save()
-        product = generator.product.a()
-        product.storeName = exampleStore.name
-        product.storeSlug = exampleStore.slug
-        product.save()
-        userSeller = generator.user.c()
-        userSeller.save()
-        userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickSetAutoCalculateShippingButton ->
-              page.clickConfirmSetAutoCalculateShippingButton done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
-        done()
-    it 'shows store updated message', (done) ->
-      page.message (msg) ->
-        msg.endsWith("Loja atualizada com sucesso").should.be.true
-        done()
-    it 'updated the store and set auto calculate shipping', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
-        expect(store.autoCalculateShipping).to.equal true
-        done()
-
-  describe 'updates the store to turn off autocalculate shipping', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
-        exampleStore = generator.store.a()
-        exampleStore.save()
-        product = generator.product.a()
-        product.storeName = exampleStore.name
-        product.storeSlug = exampleStore.slug
-        product.save()
-        userSeller = generator.user.c()
-        userSeller.save()
-        userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickUnsetAutoCalculateShippingButton ->
-              page.clickConfirmUnsetAutoCalculateShippingButton done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
-        done()
-    it 'shows store updated message', (done) ->
-      page.message (msg) ->
-        msg.endsWith("Loja atualizada com sucesso").should.be.true
-        done()
-    it 'updated the store and set auto calculate shipping', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
-        expect(store.autoCalculateShipping).to.equal false
         done()
 
   describe 'updates to use pagseguro', (done) ->
@@ -298,7 +198,6 @@ describe 'Admin manage store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
-        expect(store.autoCalculateShipping).to.equal exampleStore.autoCalculateShipping
         done()
 
   describe 'updating a store keeps products connected to store', (done) ->
@@ -316,7 +215,6 @@ describe 'Admin manage store page', ->
         userSeller.save()
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
-        delete otherStore.autoCalculateShipping
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
             page.setName otherName

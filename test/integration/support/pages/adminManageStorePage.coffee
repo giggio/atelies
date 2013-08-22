@@ -11,11 +11,6 @@ module.exports = class AdminManageStorePage extends Page
   setFieldsAs: (store, cb) =>
     async.parallel [
       (pcb) => @select "#manageStoreBlock #state", store.state, pcb
-      (pcb) => @hasElement "#manageStoreBlock #autoCalculateShipping", (itHas) =>
-        if itHas
-          @checkOrUncheck "#manageStoreBlock #autoCalculateShipping", store.autoCalculateShipping, pcb
-        else
-          pcb()
       (pcb) => @hasElement "#manageStoreBlock #pagseguro", (itHas) =>
         if itHas
           if store.pmtGateways.pagseguro?
@@ -38,7 +33,6 @@ module.exports = class AdminManageStorePage extends Page
       @type "#manageStoreBlock #city", store.city
       @type "#manageStoreBlock #zip", store.zip
       @type "#manageStoreBlock #otherUrl", store.otherUrl
-      store.autoCalculateShipping = true unless store.autoCalculateShipping?
       store.pmtGateways = {} unless store.pmtGateways?
       cb()
   setPagseguroValuesAs: (val, cb) ->
@@ -47,11 +41,6 @@ module.exports = class AdminManageStorePage extends Page
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
-  autoCalculateShippingErrorMsg: @::getText.partial "#modalCannotAutoCalculateShipping .modal-body"
-  clickSetAutoCalculateShippingButton: @::pressButton.partial "#setAutoCalculateShipping"
-  clickConfirmSetAutoCalculateShippingButton: (cb) => @eval "$('#confirmSetAutoCalculateShipping').click()", cb
-  clickUnsetAutoCalculateShippingButton: @::pressButton.partial "#unsetAutoCalculateShipping"
-  clickConfirmUnsetAutoCalculateShippingButton: (cb) => @eval "$('#confirmUnsetAutoCalculateShipping').click()", cb
   clickSetPagseguroButton: @::pressButton.partial "#setPagseguro"
   clickConfirmSetPagseguroButton: (cb) => @eval "$('#confirmSetPagseguro').click()", cb
   clickUnsetPagseguroButton: @::pressButton.partial "#unsetPagseguro"
