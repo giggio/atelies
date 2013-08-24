@@ -21,4 +21,5 @@ define [
         opt ||= {}
         opt.validate = true
         super key, val, opt
+  _.extend OpenModel::, Validation.mixin
   OpenModel

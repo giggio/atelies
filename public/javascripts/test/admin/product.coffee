@@ -4,10 +4,8 @@ define [
   'underscore'
   'backboneValidation'
   'areas/admin/models/product'
-], ($, _, Validation, RealProduct) ->
+], ($, _, Validation, Product) ->
   describe 'Product Model', ->
-    class Product extends RealProduct
-    _.extend Product::, Validation.mixin
     it 'does not validate when requires shipping info is not present', ->
       product = new Product()
       product.set 'name', 'aaa'
