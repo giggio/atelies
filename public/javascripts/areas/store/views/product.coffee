@@ -23,7 +23,7 @@ define [
     purchase: ->
       return unless @canPurchase
       @cart = Cart.get(@store.slug)
-      @cart.addItem _id: @product.get('_id'), name: @product.get('name'), picture: @product.get('picture'), url: @product.get('url'), price: @product.get('price')
+      @cart.addItem _id: @product.get('_id'), name: @product.get('name'), picture: @product.get('picture'), url: @product.get('url'), price: @product.get('price'), shippingApplies: @product.get('shippingApplies')
       Backbone.history.navigate '#cart', trigger: true
     render: ->
       @$el.empty()

@@ -2,7 +2,7 @@ define = require('amdefine')(module, requirejs) if (typeof define isnt 'function
 define [
   'areas/store/models/cart'
 ], (Cart) ->
-  describe 'Cart', ->
+  describe 'The cart', ->
     beforeEach ->
       Cart.get().clear()
     afterEach ->
@@ -25,7 +25,7 @@ define [
       expect(cart.items.length).to.equal 0
     it 'is restored with items from previous session', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 1
+      item = _id: 1, price: 1, shippingApplies: true
       cart.addItem item
       Cart._carts = null
       newCart = Cart.get('store_1')
@@ -33,10 +33,10 @@ define [
       similar(newCart.items()[0], item).should.be.true
     it 'is restored with items from previous session and without other cart items', ->
       cart1 = Cart.get('store_1')
-      item1 = _id: 1, price: 1
+      item1 = _id: 1, price: 1, shippingApplies: true
       cart1.addItem item1
       cart2 = Cart.get('store_2')
-      item2 = _id: 2, price: 2
+      item2 = _id: 2, price: 2, shippingApplies: true
       cart2.addItem item2
       Cart._carts = null
       newCart1 = Cart.get('store_1')
@@ -45,8 +45,8 @@ define [
       similar(newCart2.items()[0], item2).should.be.true
     it 'restored cart sets quantity', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
-      sameItem = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
+      sameItem = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       Cart._carts = null
       newCart = Cart.get('store_1')
@@ -55,7 +55,7 @@ define [
       cart.totalPrice().should.equal 22.2
     it 'has items', ->
       cart = Cart.get('store_1')
-      item = _id: 1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       expect(cart.items()).to.be.like [item]
     it 'works with a clean localStorage', ->
@@ -64,26 +64,26 @@ define [
       expect(cart.items().length).to.equal 0
     it 'has quantity on the items', ->
       cart = Cart.get('store_1')
-      item = _id: 1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       expect(cart.items()[0].quantity).to.equal 1
     it 'when two same products are added it shows correct quantity', ->
       cart = Cart.get('store_1')
-      item = _id: 1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       cart.addItem item
       expect(cart.items()[0].quantity).to.equal 2
     it 'when two same products are added it shows correct total price', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.11
+      item = _id: 1, price: 11.11, shippingApplies: true
       cart.addItem item
       cart.addItem item
       expect(cart.items()[0].totalPrice).to.equal 22.22
     it 'when two different products are added it shows correct quantity', ->
       cart = Cart.get('store_1')
-      item = _id: 1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
-      item2 = _id: 2
+      item2 = _id: 2, price: 11.1, shippingApplies: true
       cart.addItem item2
       items = cart.items()
       expect(items.length).to.equal 2
@@ -91,9 +91,9 @@ define [
       expect(items[1].quantity).to.equal 1
     it 'when removing an item from cart it is removed and does not come back', ->
       cart = Cart.get('store_5')
-      item = _id: 1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
-      item2 = _id: 2
+      item2 = _id: 2, price: 11.1, shippingApplies: true
       cart.addItem item2
       cart.removeById 1
       items = cart.items()
@@ -103,14 +103,14 @@ define [
       expect(Cart.get('store_5').items().length).to.equal 1
     it 'when two different products are added it has correct price', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
-      item2 = _id: 2, price: 12.1
+      item2 = _id: 2, price: 12.1, shippingApplies: true
       cart.addItem item2
       cart.totalPrice().should.equal 23.2
     it 'when two different products are added it has correct price', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       cart.addItem item
       cart.totalPrice().should.equal 22.2
@@ -151,7 +151,7 @@ define [
         { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
       cart.chooseShippingOption 'pac'
-      item = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       cart.shippingCalculated().should.be.false
       cart.shippingSelected().should.be.false
@@ -164,7 +164,7 @@ define [
       expect(=> cart.chooseShippingOption('oops')).to.throw Error
     it 'when two products are added and shipping calculated it has correct total sale amount', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       cart.addItem item
       cart.setShippingOptions [
@@ -175,7 +175,7 @@ define [
       cart.totalSaleAmount().should.equal 25.53
     it 'when quantity is set the shipping options are reset', ->
       cart = Cart.get('store_1')
-      item = _id: 1, price: 11.1
+      item = _id: 1, price: 11.1, shippingApplies: true
       cart.addItem item
       cart.setShippingOptions [
         { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
@@ -185,3 +185,19 @@ define [
       item.setQuantity 3
       cart.shippingCalculated().should.be.false
       cart.shippingSelected().should.be.false
+    it 'does not have shipping if empty', ->
+      cart = Cart.get('store_1')
+      cart.hasShipping().should.be.false
+    it 'does not have shipping if has one product without shipping', ->
+      cart = Cart.get('store_1')
+      cart.addItem _id: 1, price: 11.1, shippingApplies: false
+      cart.hasShipping().should.be.false
+    it 'has shipping if has one product with shipping', ->
+      cart = Cart.get('store_1')
+      cart.addItem _id: 1, price: 11.1, shippingApplies: true
+      cart.hasShipping().should.be.true
+    it 'has shipping if has one product with shipping and one without shipping', ->
+      cart = Cart.get('store_1')
+      cart.addItem _id: 1, price: 11.1, shippingApplies: true
+      cart.addItem _id: 2, price: 11.1, shippingApplies: false
+      cart.hasShipping().should.be.true

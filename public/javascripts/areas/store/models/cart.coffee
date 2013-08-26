@@ -70,3 +70,4 @@ define ['underscore'], (_) ->
       @_shippingOptionSelected = type
     choosePaymentType: (paymentType) -> @_paymentType = paymentType
     paymentTypeSelected: -> @_paymentType
+    hasShipping: -> _.some @_items, (i) -> i.shippingApplies

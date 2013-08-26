@@ -22,12 +22,17 @@ define [
       @context = Handlebars.compile @template
     render: ->
       return if @_redirectIfUserNotSatisfied()
+      return if @_redirectIfNoShipping()
       @show()
       @_calculateShippingCosts()
     show: ->
       @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions
     finishOrder: ->
       Backbone.history.navigate 'finishOrder/payment', trigger: true
+    _redirectIfNoShipping: ->
+      return false if @cart.hasShipping()
+      Backbone.history.navigate 'finishOrder/payment', trigger: true
+      return true
     _redirectIfUserNotSatisfied: ->
       if @user is undefined
         if DEBUG

@@ -8,7 +8,7 @@ AccountUpdateProfilePage        = require  './support/pages/accountUpdateProfile
 LoginPage                       = require  './support/pages/loginPageSelenium'
 
 describe 'Store Finish Order: Shipping', ->
-  page = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
+  page = productNoShipping = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
   after (done) -> page.closeBrowser done
   before (done) =>
     page = new StoreFinishOrderShippingPage()
@@ -28,6 +28,10 @@ describe 'Store Finish Order: Shipping', ->
       user1.save()
       userIncompleteAddress = generator.user.a()
       userIncompleteAddress.save()
+      store2 = generator.store.b()
+      store2.save()
+      productNoShipping = generator.product.c()
+      productNoShipping.save()
       whenServerLoaded done
 
   describe 'logged in user with full address', ->
@@ -148,23 +152,14 @@ describe 'Store Finish Order: Shipping', ->
         a.zip.should.equal userAddress.zip
         done()
 
-  #TODO: test with products without shipping
-  describe.skip 'store with only products without shipping', ->
+  describe 'store with only products without shipping', ->
     before (done) ->
       page.clearLocalStorage ->
         page.loginFor user1._id, ->
-          storeProductPage.visit 'store_2', 'name_3', ->
+          storeProductPage.visit productNoShipping.storeSlug, productNoShipping.slug, ->
             storeProductPage.purchaseItem ->
               storeCartPage.clickFinishOrder done
-    it 'should not show calculated shipping', (done) ->
-      page.shippingInfoExists (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'has next button enabled', (done) ->
-      page.finishOrderButtonIsEnabled (itIs) ->
-        itIs.should.equal true
-        done()
-    it 'shows message about shipping manual calculation', (done) ->
-      page.manualShippingCalculationMessage (m) ->
-        m.should.equal "O cálculo da postagem será feito posteriormente pela loja."
+    it 'should take directly to payment page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/#{productNoShipping.storeSlug}#finishOrder/payment"
         done()
