@@ -9,3 +9,4 @@ compiledPublic
 .elasticbeanstalk/
 seed/*
 .uploadPublicFiles
+TAGS
