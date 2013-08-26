@@ -114,8 +114,20 @@ define [
       cart.addItem item
       cart.addItem item
       cart.totalPrice().should.equal 22.2
-    it 'knows it has to calculate the shipping cost', ->
+    it 'does not have to calculate shipping with an empty cart', ->
       cart = Cart.get('store_1')
+      cart.shippingCalculated().should.be.true
+      cart.shippingSelected().should.be.false
+    it 'does not have to calculate shipping with a cart that only has items that do not to be shipped', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1, shippingApplies: false
+      cart.addItem item
+      cart.shippingCalculated().should.be.true
+      cart.shippingSelected().should.be.false
+    it 'knows it has to calculate the shipping cost if it has one item', ->
+      cart = Cart.get('store_1')
+      item = _id: 1, price: 11.1, shippingApplies: true
+      cart.addItem item
       cart.shippingCalculated().should.be.false
       cart.shippingSelected().should.be.false
     it 'is aware shipping cost has been calculated but not selected', ->
@@ -188,6 +200,7 @@ define [
     it 'does not have shipping if empty', ->
       cart = Cart.get('store_1')
       cart.hasShipping().should.be.false
+      cart.shippingCost().should.equal 0
     it 'does not have shipping if has one product without shipping', ->
       cart = Cart.get('store_1')
       cart.addItem _id: 1, price: 11.1, shippingApplies: false

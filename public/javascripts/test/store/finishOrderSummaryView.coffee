@@ -18,8 +18,8 @@ define [
       before ->
         Cart.clear()
         cart = Cart.get(store1.slug)
-        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
-        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1, shippingApplies: true
+        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1, shippingApplies: true
         cart.addItem item
         cart.addItem item2
         cart.setShippingOptions [
@@ -46,28 +46,28 @@ define [
       it 'shows the payment type', ->
         $("#paymentType", el).text().should.equal "PagSeguro"
 
-    #TODO: change to use products without shipping
-    describe.skip 'Showing order to be finished with products without shipping', ->
+    describe 'Showing order to be finished with products that have no shipping', ->
       after -> view.close()
       before ->
         Cart.clear()
         cart = Cart.get(store2.slug)
-        item = _id: '1', name: 'produto 1', picture: 'http://someurl.com', url: 'store_2#prod_1', price: 2
-        item2 = _id: '2', name: 'produto 2', picture: 'http://someurl2.com', url: 'store_2#prod_2', price: 4
+        item = _id: '1', name: 'produto 1', picture: 'http://someurl.com', url: 'store_2#prod_1', price: 2, shippingApplies: false
+        item2 = _id: '2', name: 'produto 2', picture: 'http://someurl2.com', url: 'store_2#prod_2', price: 4, shippingApplies: false
         cart.addItem item
         cart.addItem item2
         cart.addItem item2
-        cart.setManualShipping()
         cart.choosePaymentType type:'directSell', name:'Pagamento direto ao fornecedor'
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
         view.render()
       it 'shows the sales summary', ->
-        $("#shippingCost", el).text().should.equal 'Calculado posteriormente'
+        $("#shippingCost", el).text().should.equal 'R$ 0,00'
         $("#productsInfo", el).text().should.equal '2 produtos'
         $("#totalProductsPrice", el).text().should.equal 'R$ 10,00'
         $("#totalSaleAmount", el).text().should.equal 'R$ 10,00'
+      it 'shows no shipping information', ->
+        $("#shipping p", el).text().trim().should.equal 'Nenhum produto será postado'
 
     describe 'Finishing order with pagseguro', ->
       item = item2 = ajaxSpy = historySpy = dataPosted = orderPosted = null
@@ -75,8 +75,8 @@ define [
       before ->
         Cart.clear()
         cart = Cart.get(store1.slug)
-        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
-        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1, shippingApplies: true
+        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1, shippingApplies: true
         cart.addItem item
         cart.addItem item2
         cart.setShippingOptions [
@@ -125,8 +125,8 @@ define [
       before ->
         Cart.clear()
         cart = Cart.get(store2.slug)
-        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_2#prod_1', price: 1234567.1
-        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_2#prod_2', price: 1
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_2#prod_1', price: 1234567.1, shippingApplies: true
+        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_2#prod_2', price: 1, shippingApplies: true
         cart.addItem item
         cart.addItem item2
         cart.setShippingOptions [
@@ -173,8 +173,8 @@ define [
       before ->
         Cart.clear()
         cart = Cart.get(store1.slug)
-        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1
-        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1
+        item = _id: '1', name: 'produto 1', quantity: 1, picture: 'http://someurl.com', url: 'store_1#prod_1', price: 1234567.1, shippingApplies: true
+        item2 = _id: '2', name: 'produto 2', quantity: 2, picture: 'http://someurl2.com', url: 'store_1#prod_2', price: 1, shippingApplies: true
         cart.addItem item
         cart.addItem item2
         cart.setShippingOptions [

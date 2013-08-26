@@ -57,10 +57,10 @@ define ['underscore'], (_) ->
       total
     shippingCost: ->
       shippingOption = @shippingOptionSelected()
-      shippingOption?.cost
+      if shippingOption?.cost? then shippingOption.cost else 0
     totalSaleAmount: -> @totalPrice() + @shippingCost()
     shippingOptions: -> @_shippingOptions
-    shippingCalculated: -> @_shippingOptions?
+    shippingCalculated: -> if @hasShipping() then @_shippingOptions? else true
     shippingSelected: -> @_shippingOptionSelected?
     shippingOptionSelected: -> _.findWhere @_shippingOptions, type: @_shippingOptionSelected
     setShippingOptions: (opt) -> @_shippingOptions = opt

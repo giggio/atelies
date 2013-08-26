@@ -30,9 +30,10 @@ define [
         productsInfo: "#{numberOfProducts} produto#{if numberOfProducts > 1 then 's' else ''}"
         totalProductsPrice: converters.currency @cart.totalPrice()
         totalSaleAmount: converters.currency @cart.totalSaleAmount()
-      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, paymentType: @cart.paymentTypeSelected(), directSell: @cart.paymentTypeSelected().type is 'directSell'
-      viewModel.shippingOption = @cart.shippingOptionSelected()
-      viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
+      viewModel = user: @user, cart: @cart, store: @store, orderSummary: orderSummary, paymentType: @cart.paymentTypeSelected(), directSell: @cart.paymentTypeSelected().type is 'directSell', hasShipping: @cart.hasShipping()
+      if @cart.hasShipping()
+        viewModel.shippingOption = @cart.shippingOptionSelected()
+        viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
       @$el.html context viewModel
     finishOrder: ->
       $("#finishOrder").prop "disabled", on

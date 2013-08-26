@@ -125,7 +125,7 @@ db.products.insert
     depth:21
   weight: 5
   shipping:
-    applies: true
+    applies: false
     charge: true
     dimensions:
       height: 20
