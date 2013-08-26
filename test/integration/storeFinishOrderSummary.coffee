@@ -61,7 +61,6 @@ describe 'Store Finish Order: Summary', ->
         url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/summary"
         done()
 
-  #TODO work on having the correct message and shipping costs
   describe 'completing the payment with products with and without inventory and with products with and without shipping', ->
     before (done) ->
       cleanDB (error) ->
@@ -96,7 +95,7 @@ describe 'Store Finish Order: Summary', ->
         order.customer.toString().should.equal user1._id.toString()
         order.store.toString().should.equal store2._id.toString()
         order.items.length.should.equal 2
-        order.shippingCost.should.equal 41.7
+        order.shippingCost.should.equal 20.1
         order.totalProductsPrice.should.equal product3.price + product1.price
         order.totalSaleAmount.should.equal order.totalProductsPrice + order.shippingCost
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()

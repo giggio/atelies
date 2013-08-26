@@ -96,7 +96,8 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
   @shipping.charge = !!simple.shippingCharge
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
-  has = shipping.weight? and shipping.dimensions? and
+  has = shipping.applies and
+  shipping.weight? and shipping.dimensions? and
   shipping.weight <= 30 and
   11 <= shipping.dimensions.width <= 105 and
   2 <= shipping.dimensions.height <= 105 and

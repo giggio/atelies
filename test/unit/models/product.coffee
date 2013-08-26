@@ -68,6 +68,7 @@ describe 'Product', ->
     simpleProduct.width.should.equal product.dimensions.width
     simpleProduct.depth.should.equal product.dimensions.depth
     simpleProduct.weight.should.equal product.weight
+    simpleProduct.shippingApplies.should.equal product.shipping.applies
     simpleProduct.shippingHeight.should.equal product.shipping.dimensions.height
     simpleProduct.shippingWidth.should.equal product.shipping.dimensions.width
     simpleProduct.shippingDepth.should.equal product.shipping.dimensions.depth
@@ -99,3 +100,14 @@ describe 'Product', ->
     product = new Product()
     product.name = null
     product.nameKeywords.should.be.like []
+  it 'has shipping info if shipping applies', ->
+    product = generator.product.a()
+    product.shipping.applies = true
+    product.hasShippingInfo().should.be.true
+    product.shipping.applies = false
+    product.hasShippingInfo().should.be.false
+  it 'does not have shipping info if missing or wrong shipping info', ->
+    product = generator.product.a()
+    product.shipping.applies = true
+    product.shipping.dimensions.height = 1
+    product.hasShippingInfo().should.be.false
