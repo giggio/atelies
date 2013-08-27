@@ -1,5 +1,5 @@
-#userInfo.nav.nav-collapse.collapse
-  ul.nav
+#userInfo.navbar-collapse.collapse.navbar-right
+  ul.nav.navbar-nav
     if (everyauth.loggedIn)
       li.dropdown
         a#greeting.dropdown-toggle(href='#', data-toggle='dropdown')
@@ -22,11 +22,11 @@
       a.facebookLogin(href='/auth/facebook')
         img(src="#{STATIC_PATH}/images/fblogin.png")
         span Login com Facebook
-      div
+      .form-group
         input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.", placeholder="E-mail")
-      div
+      .form-group
         input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", placeholder="Senha")
-      div
+      .form-group
         input(type='submit', class='btn btn-primary', value='Entrar')
         &nbsp;
         a#forgotPasswordLink(href="/account/forgotPassword") Esqueci minha senha

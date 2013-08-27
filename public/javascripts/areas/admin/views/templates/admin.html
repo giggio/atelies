@@ -3,9 +3,9 @@
 <h3>Suas lojas (clique para editar a loja):</h3>
 <div id="stores">
   {{#each storeGroups}}
-  <div class="row-fluid storesRow">
+  <div class="row storesRow">
     {{#each stores}}
-    <div data-id="{{_id}}" class="store span3">
+    <div data-id="{{_id}}" class="store col-md-3">
       <a href="#store/{{slug}}" class="link">
         {{#if flyer}}
         <img src="{{flyer}}" />

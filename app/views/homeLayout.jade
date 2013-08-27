@@ -6,22 +6,20 @@ append layout
       .relative
         img.beta(src="#{STATIC_PATH}/images/beta.png")
       #site-banner.row(style="margin-bottom: 20px")
-        .span4
+        .col-md-4
           if (CONFIG.serverEnvironment == 'production')
             a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
           else
             a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogoTeste.png")
-        .span6
+        .col-md-6
           h3.nameHeader shopping virtual de artes e afins
-        .span2
-          ul.pull-right.social
+        .col-md-2
+          ul.social
             li: a(href="https://www.facebook.com/Atelies", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
             li: a(href="https://twitter.com/ateliescombr", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
-      .navbar
-        .navbar-inner
-          .container
-            include includes/commonHeader
-            include includes/userInfo
+      .navbar.navbar-default(role="navigation")
+        include includes/commonHeader
+        include includes/userInfo
 
       block content
 
@@ -29,7 +27,7 @@ append layout
         footer
           .container
             .row
-              .span5
+              .col-md-5
                 .featured O Ateliês quer ver a comunidade ligada às artes unida e auto organizada<br /> Seja protagonista dessa nova história
                 ul.ideas
                   li: a(href="/contribute") Junte-se a nossa equipe
@@ -41,7 +39,7 @@ append layout
                 .donation
                   a(href="/donating").money $
                   a(href="/donating").accepting Aceitamos doações
-              .span7
+              .col-md-7
                 .featured Sua loja virtual hospedada no portal ideal<br />
                   | Sem intermediários entre você e o cliente<br />
                   | Site sem fins lucrativos <br />

@@ -42,16 +42,20 @@ module.exports = class Page
       else
         return cb null
       @getText el, cb
-  errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) ->
+  errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) =>
     errorMsgs = {}
     actions =
       for el in els
         do (el) -> (cb2) =>
-          el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
-            el.getText().then (text) ->
+          success = (text) ->
+            el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
               errorMsgs[id] = text
               cb2()
-    async.parallel actions, -> cb(errorMsgs)
+          el.getText().then success, -> cb2("error") #needs to have a fail callback to be able to deal with stale elements
+    async.parallel actions, (err) =>
+      if err? #retry if stale elements
+        return setImmediate => @errorMessagesIn(selector, cb)
+      cb(errorMsgs)
   findElement: (selector) -> if typeof selector is 'string' then @driver.findElement(webdriver.By.css(selector)) else selector
   findElements: (selector, cb) ->
     find = @driver.findElements(webdriver.By.css(selector))
@@ -124,8 +128,10 @@ module.exports = class Page
       @getIsEnabled selector, cb
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
-  pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
-  pressButtonAndWait: (selector, cb) -> @pressButton selector, => @waitForAjax cb
+  #pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  click: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  pressButton: (selector, cb = (->)) -> @findElement(selector).sendKeys(webdriver.Key.ENTER).then cb
+  pressButtonAndWait: (selector, cb) -> @pressButton selector, => @waitForAjax => process.nextTick cb
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb

@@ -50,7 +50,7 @@ module.exports = class AdminManageProductPage extends Page
       @type "#shippingDepth", product.shipping?.dimensions?.depth
       @type "#shippingWeight", product.shipping?.weight
     else
-      @pressButton '#shippingDoesNotApply'
+      @click '#shippingDoesNotApply'
     if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
     @type "#inventory", product.inventory
     @eval "document.getElementById('inventory').blur()", cb

@@ -45,13 +45,14 @@ define [
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
-      @model.bind 'validated', (isValid, model, errors) =>
-        if isValid
-          validationErrorsEl.empty()
-          validationErrorsEl.hide()
-        else
-          validationErrorsEl.html valContext errors:errors
-          validationErrorsEl.show()
+      _.defer =>
+        @model.bind 'validated', (isValid, model, errors) =>
+          if isValid
+            validationErrorsEl.empty()
+            validationErrorsEl.hide()
+          else
+            validationErrorsEl.html valContext errors:errors
+            validationErrorsEl.show()
     _showShippingOptions: ->
       if @model.get 'shippingApplies'
         $('#shippingInfo').show()

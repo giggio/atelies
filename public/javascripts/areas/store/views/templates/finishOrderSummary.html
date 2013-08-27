@@ -4,7 +4,7 @@
   </div>
   <div class="row">
     {{#with orderSummary}}
-    <div id="orderSummary" class="span4">
+    <div id="orderSummary" class="col-md-4">
       <h4>Resumo do pedido</h4>
       <table class="table">
         <thead>
@@ -45,7 +45,7 @@
   </div>
   <div class="row">
     {{#with cart}}
-    <div id="cart" class="span8">
+    <div id="cart" class="col-md-12">
       <h4>Produtos no carrinho</strong></h4>
       <table id="cartItems" class="table table-hover table-condensed">
         <thead>
@@ -71,7 +71,7 @@
     {{/with}}
   </div>
   <div class="row">
-    <div id="shipping" class="span4">
+    <div id="shipping" class="col-md-4">
       <h4>Dados de postagem</h4>
       {{#if hasShipping}}
         {{#with user.deliveryAddress}}
@@ -94,7 +94,7 @@
       <p>Nenhum produto será postado</p>
       {{/if}}
     </div>
-    <div class="span4">
+    <div class="col-md-4">
       <h4>Dados de pagamento</h4>
       <span id="paymentType">{{paymentType.name}}</span></span>
     </div>

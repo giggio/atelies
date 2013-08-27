@@ -19,7 +19,7 @@ module.exports = class StoreCartPage extends Page
   clickContinue: @::pressButton.partial '#finishOrderShipping'
   clickSedexOption: (cb) ->
     @waitForSelector '#shippingOptions_sedex', =>
-      @pressButton '#shippingOptions_sedex', cb
+      @click '#shippingOptions_sedex', cb
   shippingInfo: (cb) ->
     @waitForSelector '#shippingInfo' , =>
       options = []

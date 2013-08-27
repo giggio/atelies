@@ -6,7 +6,7 @@ requirejs.config
     backbone: 'lib/backbone/backbone'
     handlebars: 'lib/handlebars/index'
     text: 'lib/requirejs-text/text'
-    twitterBootstrap: 'lib/bootstrap/docs/assets/js/bootstrap'
+    twitterBootstrap: 'lib/bootstrap/dist/js/bootstrap'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd'
     epoxy: 'lib/backbone.epoxy/index'
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'

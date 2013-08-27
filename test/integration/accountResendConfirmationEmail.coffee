@@ -8,7 +8,7 @@ describe 'Resend Confirmation Email', ->
   user = page = null
   before (done) -> whenServerLoaded done
 
-  describe 'Can reset password', ->
+  describe 'Can resend confirmation email', ->
     before (done) ->
       Postman.sentMails.length = 0
       page = new AccountPage()

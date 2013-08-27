@@ -17,42 +17,35 @@ append content
         - each error in errors
           li.error= error
     form#updateProfileForm.validatable.form-horizontal(action='/account/updateProfile#{redirectTo}', method='post')
-      .control-group
-        label.control-label Nome:
-        .controls
-          input#name.span4(type='text', name="name", value=user.name, class="required", title="Informe seu nome.", maxlength="50")
+      .form-group
+        label.control-label.col-lg-2 Nome:
+        .col-lg-4: input#name(type='text', name="name", value=user.name, class="required", title="Informe seu nome.", maxlength="50")
       unless user.isSeller
-        .control-group
-          .controls
+        .form-group
+          label.col-lg-offset-2.col-lg-10
             input#isSeller(type='checkbox', name="isSeller", checked=user.isSeller)
             | registrar-se como vendedor
       p Os dados de endereço são opcionais no cadastro, mas são obrigatórios para completar uma compra.
-      .control-group
-        label.control-label Endereço:
-        .controls
-          input#deliveryStreet.span6(type='text', name="deliveryStreet", value=user.deliveryStreet, title="Informe sua rua.", maxlength="50")
-      .control-group
-        label.control-label Endereço (complemento):
-        .controls
-          input#deliveryStreet2.span6(type='text', name="deliveryStreet2", value=user.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
-      .control-group
-        label.control-label Cidade:
-        .controls
-          input#deliveryCity.span4(type='text', name="deliveryCity", value=user.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
-      .control-group
-        label.control-label Estado:
-        .controls
-          select#deliveryState.span1(title="Informe seu estado.", name="deliveryState")
-            each state in states
-              option(value=state, selected=state===user.deliveryState)= state
-      .control-group
-        label.control-label CEP:
-        .controls
-          input#deliveryZIP(type='text', name="deliveryZIP", value=user.deliveryZIP, title="Informe seu CEP.", placeholder="01234-567", maxlength="9")
-      .control-group
-        label.control-label Telefone:
-        .controls
-          input#phoneNumber(type='text', name="phoneNumber", value=user.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
-      .control-group
-        .controls
+      .form-group
+        label.control-label.col-lg-2 Endereço:
+        .col-lg-6: input#deliveryStreet(type='text', name="deliveryStreet", value=user.deliveryStreet, title="Informe sua rua.", maxlength="50")
+      .form-group
+        label.control-label.col-lg-2 Endereço (complemento):
+        .col-lg-6: input#deliveryStreet2(type='text', name="deliveryStreet2", value=user.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
+      .form-group
+        label.control-label.col-lg-2 Cidade:
+        .col-lg-4: input#deliveryCity(type='text', name="deliveryCity", value=user.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
+      .form-group
+        label.control-label.col-lg-2 Estado:
+        .col-lg-2: select#deliveryState(title="Informe seu estado.", name="deliveryState")
+          each state in states
+            option(value=state, selected=state===user.deliveryState)= state
+      .form-group
+        label.control-label.col-lg-2 CEP:
+        .col-lg-4: input#deliveryZIP(type='text', name="deliveryZIP", value=user.deliveryZIP, title="Informe seu CEP.", placeholder="01234-567", maxlength="9")
+      .form-group
+        label.control-label.col-lg-2 Telefone:
+        .col-lg-4: input#phoneNumber(type='text', name="phoneNumber", value=user.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
+      .form-group
+        .col-lg-offset-2.col-lg-10
           input#updateProfile(type='submit',class='btn btn-primary', value='Atualizar')

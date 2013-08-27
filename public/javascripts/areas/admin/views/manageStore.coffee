@@ -1,5 +1,6 @@
 define [
   'jquery'
+  'underscore'
   'backboneConfig'
   'handlebars'
   'text!./templates/manageStore.html'
@@ -7,7 +8,7 @@ define [
   './store'
   './manageStorePagseguro'
   'backboneValidation'
-], ($, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, Validation) ->
+], ($, _, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, Validation) ->
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
@@ -42,12 +43,13 @@ define [
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
-      @model.bind 'validated', (isValid, model, errors) =>
-        if isValid
-          validationErrorsEl.hide()
-        else
-          validationErrorsEl.html valContext errors:errors
-          validationErrorsEl.show()
+      _.defer =>
+        @model.bind 'validated', (isValid, model, errors) =>
+          if isValid
+            validationErrorsEl.hide()
+          else
+            validationErrorsEl.html valContext errors:errors
+            validationErrorsEl.show()
     _redirectIfUserNotSatisfied: ->
       unless @user.verified
         window.location = "/account#userNotVerified"

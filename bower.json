@@ -1,5 +1,5 @@
 {
-  "name": "open-store",
+  "name": "atelies",
   "version": "0.0.0",
   "ignore": [
     "**/.*",
@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "jquery": "~1.9.x",
-    "bootstrap": "~2.3.2",
+    "bootstrap": "3.x.x",
     "requirejs": "~2.1.6",
     "requirejs-text": "~2.0.6",
     "handlebars": "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js",

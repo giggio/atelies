@@ -2,9 +2,9 @@
   {{#if hasStoresWithFlyer}}
   <div id="stores">
     {{#each storeGroups}}
-    <div class="row-fluid storesRow">
+    <div class="row storesRow">
       {{#each stores}}
-      <div id="store{{_id}}" data-id="{{_id}}" class="store span3">
+      <div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3">
         <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
       </div>
       {{/each}}

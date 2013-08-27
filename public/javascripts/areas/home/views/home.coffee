@@ -23,10 +23,10 @@ define [
       @_showStoresView @stores
       @_showProductsView @products
     searchStores: ->
-      @$('#searchStores').show('slow')
+      @$('#searchStores').attr('style', 'display:block !important;').show()
     closeSearchStore: ->
       @$('#searchStores').hide('fade')
-      Backbone.history.navigate ""
+      Backbone.history.navigate "", true
     _searchTermPressed: (e) -> @_doSearch() if e.keyCode is 13
     _doSearch: ->
       searchTerm = @$('#storeSearchTerm').val()

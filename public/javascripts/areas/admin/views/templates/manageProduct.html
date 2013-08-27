@@ -2,54 +2,61 @@
 <form id="editProduct">
   <div id="_id_holder">Id:<span id="_id"></span></div>
   <div id="slug_holder">Slug:<span id="slug"></span></div>
-  <div class="control-group">
+  <div class="form-group">
     <label class="control-label" for="name">Nome:</label>
     <div class="controls">
       <input type="text" id="name" name="name" class="input-xxlarge" data-error-style="tooltip" />
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <label>Preço (utilizar ponto para separar os centavos):</label>
-    <div class="controls">
+    <div class="controls width4">
       <input type="text" id="price" name="price" class="input-small" data-error-style="tooltip" placeholder="exemplo: 54.50" />
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <label>Foto (deve ter no mínimo 600x600 e será redimensionada para esses valores se for maior):</label>
     <div class="controls">
       <img id="showPicture" /><br />
       Substitua: <input type="file" id="picture" name="picture" />
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <label>Tags (separe as tags com vírgula):</label>
     <div class="controls">
       <input type="text" class="input-xxlarge" id="tags" name="tags" data-error-style="tooltip" placeholder="exemplo: prateleira, ursinho, decoração" />
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <label>Descrição:</label>
     <div class="controls">
-      <textarea id="description" name="description" class="input-xxlarge" rows="8" cols="150" data-error-style="tooltip" ></textarea>
+      <textarea id="description" name="description" class="form-control" rows="8" cols="150" data-error-style="tooltip" ></textarea>
     </div>
   </div>
   <label>Dimensões:</label>
-  <div class="control-group">
+  <div class="form-group">
     <label>Altura, largura e profundidade (em centímetros):</label>
     <div class="controls">
-      <input type="text" id="height" name="height" class="input-mini" data-error-style="tooltip" placeholder="altura" /> x
-      <input type="text" id="width" name="width" class="input-mini" data-error-style="tooltip" placeholder="largura" /> x
-      <input type="text" id="depth" name="depth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
+      <div class="inlineControl1">
+        <input type="text" id="height" name="height" data-error-style="tooltip" placeholder="altura" /> x
+      </div>
+      <div class="inlineControl1">
+        <input type="text" id="width" name="width" data-error-style="tooltip" placeholder="largura" /> x
+      </div>
+      <div class="inlineControl1">
+        <input type="text" id="depth" name="depth" data-error-style="tooltip" placeholder="profund." />
+      </div>
     </div>
   </div>
-  <div class="control-group">
-    <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
-    <div class="controls">
+  <div class="form-group">
+    <label>Peso</label>
+    <span class="help-block">Em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas</label>
+    <div class="controls width4">
       <input type="text" id="weight" name="weight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 1.24" />
     </div>
   </div>
   <label>Dimensões para postagem (se não for informado o frete não poderá ser calculado e a venda deverá ser fechada diretamente, ou o frete informado posteriormente, o que deixará todo o processo mais lento):</label>
-  <div class="control-group">
+  <div class="form-group">
     Esse produto será postado?
     <div class="controls">
       <label class="radio inline">
@@ -61,36 +68,43 @@
     </div>
   </div>
   <div id="shippingInfo">
-    <div class="control-group">
+    <div class="form-group">
       <div class="controls">
         <label class="checkbox">
           <input type="checkbox" id="shippingCharge" name="shippingCharge" /> Cobrar o cliente pela postagem (se você não selecionar o cliente não será cobrado e você será responsável pelos custos do frete)
         </label>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <label>Altura, largura e profundidade (em centímetros):</label>
       <div class="controls">
-        <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
-        <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
-        <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
+        <div class="inlineControl1">
+          <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
+        </div>
+        <div class="inlineControl1">
+          <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
+        </div>
+        <div class="inlineControl1">
+          <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
+        </div>
       </div>
     </div>
-    <div class="control-group">
-      <label>Peso (em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas):</label>
-      <div class="controls">
+    <div class="form-group">
+      <label>Peso</label>
+      <span class="help-block">Em quilos, utilizar ponto para separar quilos de gramas, de zero a 30 quilos - lembre-se que 0.2 significa 200 gramas</span>
+      <div class="controls width4">
         <input type="text" id="shippingWeight" name="shippingWeight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 0.20" />
       </div>
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls">
       <label class="checkbox">
         <input type="checkbox" id="hasInventory" name="hasInventory" /> Possui estoque
       </label>
     </div>
     <label>Estoque:</label>
-    <div class="controls">
+    <div class="controls width2">
       <input type="text" id="inventory" name="inventory" class="input-mini" data-error-style="tooltip" />
     </div>
   </div>
@@ -98,28 +112,36 @@
   <input id="updateProduct" type="button" class="btn btn-primary" value="Atualizar" />
   <input id="deleteProduct" type="button" class="btn btn-danger" value="Excluir" data-toggle="modal" data-target="#confirmDeleteModal" />
 </form>
-<div id="confirmDeleteModal" class="modal hide fade">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Exclusão do produto</h3>
-  </div>
-  <div class="modal-body">
-    <p>O produto será excluído. Essa operação não tem volta.</p>
-  </div>
-  <div class="modal-footer">
-    <button id="confirmDeleteProduct" type="button" class="btn-danger btn">Confirmar exclusão do produto</button>
-    <button id="noConfirmDeleteProduct"  class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+<div id="confirmDeleteModal" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Exclusão do produto</h3>
+      </div>
+      <div class="modal-body">
+        <p>O produto será excluído. Essa operação não tem volta.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="confirmDeleteProduct" type="button" class="btn-danger btn">Confirmar exclusão do produto</button>
+        <button id="noConfirmDeleteProduct"  class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
   </div>
 </div>
-<div id="sizeIsIncorrect" class="modal fade hide">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Não foi possível salvar</h3>
-  </div>
-  <div class="modal-body">
-    <p class="errorMsg">O tamanho de alguma das imagens está muito pequeno. Verifique e corrija.</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+<div id="sizeIsIncorrect" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="sizeIsIncorrectLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="sizeIsIncorrectLabel">Não foi possível salvar</h3>
+      </div>
+      <div class="modal-body">
+        <p class="errorMsg">O tamanho de alguma das imagens está muito pequeno. Verifique e corrija.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+      </div>
+    </div>
   </div>
 </div>

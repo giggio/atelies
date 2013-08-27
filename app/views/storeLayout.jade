@@ -4,17 +4,15 @@ append layout
   block header
     section#main.container
       #site-banner.row(style="margin-bottom: 20px")
-        .span12
+        .col-md-12
           a(href="#")
             if store.banner
               img#storeBanner(src="#{store.banner}")
             else
               h1#storeNameHeader= store.name
-      .navbar
-        .navbar-inner
-          .container
-            include includes/storeHeader
-            include includes/userInfo
+      .navbar.navbar-default(role="navigation")
+        include includes/storeHeader
+        include includes/userInfo
 
       block content
 
@@ -22,7 +20,7 @@ append layout
         footer
           .container
             .row
-              .span9
+              .col-md-9
                 .page-header
                   h2 Sobre #{store.name}
                 p= store.description
@@ -39,7 +37,7 @@ append layout
                     a.social(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
                   if store.urlTwitter
                     a.social(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
-              .span3
+              .col-md-3
                 .page-header
                   h2 Está comprando?
                 ul
