@@ -202,7 +202,7 @@ module.exports = class StoreRoutes
                   return cb err if err?
                   pac.cost += delivery.GrandTotal * quantity if p.shipping.charge
                   pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
-                cb()
+                  cb()
               getShippingPrices.push (cb) =>
                 deliverySpecs = serviceType: 'sedex', from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
                 correios.getPrice deliverySpecs, (err, delivery) ->
