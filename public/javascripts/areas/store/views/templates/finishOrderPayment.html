@@ -15,6 +15,10 @@
     </div>
   </div>
   <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
+  {{#if hasShipping}}
   <a href="#finishOrder/shipping" id="goBackToShipping" class="btn btn-primary">Voltar</a>
+  {{else}}
+  <a href="#cart" id="goBackToShipping" class="btn btn-primary">Voltar</a>
+  {{/if}}
   <button id="selectPaymentType" class="btn btn-primary">Selecionar forma de pagamento</button>
 </div>
