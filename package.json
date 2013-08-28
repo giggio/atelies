@@ -72,6 +72,8 @@
     "zombie": "~2.0.0-alpha19",
     "selenium-webdriver": "~2.35.x",
     "chromedriver": "~2.2.0",
-    "chai": "~1.7.2"
+    "chai": "~1.7.2",
+    "chai-datetime": "1.x.x",
+    "blueimp-md5": "1.x.x"
   }
 }

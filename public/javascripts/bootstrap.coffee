@@ -15,6 +15,7 @@ requirejs.config
     jqexpander: 'lib/jquery.expander/jquery.expander'
     ga: '//www.google-analytics.com/analytics'
     showdown: 'lib/showdown/src/showdown'
+    md5: 'lib/js-md5/js/md5'
   shim:
     'handlebars':
       deps: ['jquery']

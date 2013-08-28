@@ -23,7 +23,8 @@
     "jquery-form": "~3.37.0",
     "jquery.expander": "~1.4.5",
     "showdown": "~0.3.1",
-    "es5-shim": "~2.1.0"
+    "es5-shim": "~2.1.0",
+    "js-md5": "1.x.x"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

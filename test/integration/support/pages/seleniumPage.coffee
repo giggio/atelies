@@ -122,6 +122,7 @@ module.exports = class Page
     el.getAttribute(attribute).then cb
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
+  getSrcIn: @::getAttributeIn.partial(undefined, undefined, 'src', undefined)
   getIsClickable: (selector, cb) ->
     @isVisible selector, (itIs) =>
       return cb false unless itIs

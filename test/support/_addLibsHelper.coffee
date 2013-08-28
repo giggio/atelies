@@ -6,3 +6,4 @@ chai.Assertion.includeStack = true
 global.expect = chai.expect
 sinonChai = require "sinon-chai"
 chai.use sinonChai
+chai.use require 'chai-datetime'

@@ -29,12 +29,24 @@ productSchema = new mongoose.Schema
   hasInventory:   Boolean
   inventory:      Number
   random:         type: Number, required: true, default: -> Math.random()
+  comments: [
+    body:         type: String, required: true
+    date:         type: Date, required: true, default: Date.now
+    user:         type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true
+    userName:     type: String, required: true
+    userEmail:    type: String, required: true
+  ]
 
 productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
+productSchema.methods.addComment = (comment) ->
+  @comments = [] unless @comments?
+  comment.userName = comment.user.name
+  comment.userEmail = comment.user.email
+  @comments.push comment
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.pictureThumb = ->
   return undefined unless @picture?
@@ -54,6 +66,7 @@ productSchema.methods.toSimpleProduct = ->
   shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
+  comments: _.map(@comments, (c) -> title: c.title, body: c.body, date: c.date, userName: c.userName, userEmail: c.userEmail)
 productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,

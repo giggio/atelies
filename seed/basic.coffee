@@ -52,6 +52,7 @@ db.users.insert
   loginError: 0
   verified: false
 user1 = db.users.findOne email:'d@a.com'
+user2 = db.users.findOne email:'c@a.com'
 db.users.ensureIndex { email: 1 }
 db.users.ensureIndex { facebookId: 1 }
 
@@ -82,6 +83,22 @@ db.products.insert
   hasInventory: true
   inventory: 30
   random: Math.random()
+  comments: [
+    {
+    body: "Some really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\n***Again*** really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    date: new Date(2013, 0, 1)
+    user: user1
+    userName: user1.name
+    userEmail: user1.email
+    },
+    {
+    body: "Other long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    date: new Date(2013, 1, 2)
+    user: user2
+    userName: user2.name
+    userEmail: user2.email
+    }
+  ]
 product1 = db.products.findOne name:'name 1'
 db.products.insert
   name: 'name 2'

@@ -35,6 +35,23 @@
     {{/if}}
   </div>
   <div class="clearfix"></div>
+  <div id="comments">
+    {{#if hasComments}}
+      <h4>Comentários sobre o produto:</h4>
+      {{#each product.comments}}
+      <div class="comment">
+        <img class="userPicture" src="{{{gravatarUrl}}" />
+        <div class="commentInfo">
+          <div class="userName">{{userName}}</div>
+          <div class="date">{{niceDate}}</div>
+          <div class="body">{{{body}}}</div>
+        </div>
+      </div>
+      {{/each}}
+    {{else}}
+      <h4>Não há comentários sobre o produto</h4>
+    {{/if}}
+    </div>
   <div id="productsPlaceHolder">
     <strong></strong>
   </div>

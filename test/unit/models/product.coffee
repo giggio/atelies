@@ -111,3 +111,16 @@ describe 'Product', ->
     product.shipping.applies = true
     product.shipping.dimensions.height = 1
     product.hasShippingInfo().should.be.false
+  it 'has comments', ->
+    product = generator.product.a()
+    userCommenting = generator.user.a()
+    title = "some title"
+    body = "some comment"
+    product.addComment user: userCommenting, title: title, body: body
+    product.comments.length.should.equal 1
+    comm = product.comments[0]
+    comm.user.should.equal userCommenting._id
+    comm.userName.should.equal userCommenting.name
+    comm.userEmail.should.equal userCommenting.email
+    comm.body.should.equal body
+    comm.date.should.equalDate new Date()

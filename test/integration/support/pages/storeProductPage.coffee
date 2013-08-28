@@ -1,4 +1,5 @@
 Page          = require './seleniumPage'
+async         = require 'async'
 
 module.exports = class StoreProductPage extends Page
   visit: (storeSlug, productSlug, cb) => super "#{storeSlug}##{productSlug}", cb
@@ -27,3 +28,16 @@ module.exports = class StoreProductPage extends Page
   storeNameHeaderExists: @::hasElement.partial '#storeNameHeader'
   storeBannerExists: @::hasElement.partial '#storeBanner'
   purchaseItemButtonEnabled: @::getIsEnabled.partial "#purchaseItem"
+  comments: (cb) ->
+    @findElementsIn('#comments', '.comment').then (els) =>
+      getCommentsAction =
+        for el in els
+          do (el) =>
+            (getCommentCb) =>
+              getCommentActions =
+                userName: (cb) => @getTextIn el, ".userName", (t) -> cb null, t
+                userPicture: (cb) => @getSrcIn el, ".userPicture", (t) -> cb null, t
+                body: (cb) => @getTextIn el, ".body", (t) -> cb null, t
+                date: (cb) => @getTextIn el, ".date", (t) -> cb null, t
+              async.parallel getCommentActions, getCommentCb
+      async.parallel getCommentsAction, (err, comments) -> cb comments
