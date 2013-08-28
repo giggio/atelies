@@ -1,0 +1,11 @@
+db.products.find().forEach(function (p) { db.products.update(p, {$set:{"shipping.charge":true}});  })
+db.products.find().forEach(function (p) { db.products.update(p, {$set:{"shipping.applies":true}});  })
+
+db.stores.find({autoCalculateShipping:false}).forEach(function(s) {
+  db.products.find({storeSlug:s.slug}).forEach(function(p) {
+    print("loja:" + s.name + " | produto:" + p.name);
+    db.products.update(p, {$set:{"shipping.applies":false}});
+  })})
+
+
+db.stores.update( {}, { $unset: { autoCalculateShipping: "" } } , { multi: true });
