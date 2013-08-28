@@ -13,10 +13,14 @@ define [
       if hash is "" then 'home' else hash
     initialize: ->
       Backbone.history.start()
-      @_log()
+      @_logNavigation()
       @_redirectIfRequested()
-      Backbone.history.on 'route', => @_log()
-    _log: ->
+      Backbone.history.on 'route', => @_navigated()
+    _navigated: ->
+      @_logNavigation()
+      @_scroll()
+    _scroll: -> window.scrollTo 0,0
+    _logNavigation: ->
       console.log "navigated to: " + Backbone.history.getFragment() if console?
       @logger.log category: 'navigation', action: "#{window.location.pathname}##{@getHash()}", label: @logCategory, field: page: window?.location?.pathname
     _redirectIfRequested: ->
