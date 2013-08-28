@@ -47,3 +47,7 @@ module.exports = class RouteFunctions
       res.send 400
   _logError: (area, req, err) ->
     Err.createServer area, req, err
+  _convertToBool: (val) ->
+    val? and (val is true or val is 'true')
+  _convertBodyToBool: (body, fields...) ->
+    body[field] = @_convertToBool body[field] for field in fields

@@ -31,6 +31,7 @@ module.exports = class AdminRoutes
   adminStoreCreate: (req, res) ->
     body = req.body
     name = body.name
+    @_convertBodyToBool req.body, 'pagseguro'
     Store.nameExists name, (err, itExists) =>
       return res.json 409, error: user: "Loja já existe com esse nome." if itExists
       store = req.user.createStore()
@@ -107,6 +108,7 @@ module.exports = class AdminRoutes
       @_productUpdate req, res, product
 
   _productUpdate: (req, res, product) ->
+    @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
     product.updateFromSimpleProduct req.body
     uploader = new ProductUploader()
     uploader.upload product, req.files?.picture, (err, fileUrl) =>
