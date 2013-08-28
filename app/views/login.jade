@@ -27,6 +27,13 @@ append content
             - each error in errors
               li.error= error
       .form-group
+        .col-lg-offset-2.col-lg-10
+          a.facebookLogin(href='/auth/facebook')
+            img(src="#{STATIC_PATH}/images/fblogin.png")
+            span Login com Facebook
+        .col-lg-offset-2.col-lg-10
+          span ou
+      .form-group
         label.control-label.col-lg-2 E-mail:
         .col-lg-4: input#email(type='text', name=everyauth.password.loginFormFieldName, value=email, class="required email", title="Informe seu e-mail.")
       .form-group
