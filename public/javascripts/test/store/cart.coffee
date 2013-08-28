@@ -167,6 +167,18 @@ define [
       cart.addItem item
       cart.shippingCalculated().should.be.false
       cart.shippingSelected().should.be.false
+    it 'after product removed, shipping cost needs to be calculated again', ->
+      cart = Cart.get('store_1')
+      cart.addItem _id: 1, price: 11.1, shippingApplies: true
+      cart.addItem _id: 2, price: 21.1, shippingApplies: true
+      cart.setShippingOptions [
+        { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
+        { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
+      ]
+      cart.chooseShippingOption 'pac'
+      cart.removeById 1
+      cart.shippingCalculated().should.be.false
+      cart.shippingSelected().should.be.false
     it 'throws if shipping option selected does not exist', ->
       cart = Cart.get('store_1')
       cart.setShippingOptions [

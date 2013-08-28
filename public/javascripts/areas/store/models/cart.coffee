@@ -39,8 +39,7 @@ define ['underscore'], (_) ->
     _constructItem: (item) ->
       cart = @
       item.setQuantity = (q) ->
-        cart._shippingOptions = undefined
-        cart._shippingOptionSelected = undefined
+        cart._clearShippingOptions()
         @quantity = q
         @totalPrice = @quantity * @price
     clear: =>
@@ -50,6 +49,10 @@ define ['underscore'], (_) ->
     removeById: (id) =>
       @_items = _.reject @_items, (item) -> item._id is id
       @save()
+      @_clearShippingOptions()
+    _clearShippingOptions: ->
+      @_shippingOptions = undefined
+      @_shippingOptionSelected = undefined
     totalPrice: ->
       total = _.chain(@_items)
         .map((i)->i.price*i.quantity)
