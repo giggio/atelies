@@ -33,4 +33,7 @@ configureRequireJS = ->
 
 initDOM()
 configureRequireJS()
-requirejs 'test/support/_specHelper'
+
+global.staticPath = '/static'
+g = require './generatorHelper'
+exportAll g

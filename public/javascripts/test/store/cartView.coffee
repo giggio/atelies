@@ -3,7 +3,6 @@ define [
   'jquery'
   'areas/store/views/cart'
   'areas/store/models/cart'
-  '../support/_specHelper'
 ], ($, CartView, Cart) ->
   product1  = generatorc.product.a()
   product2  = generatorc.product.b()

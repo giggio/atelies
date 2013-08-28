@@ -5,7 +5,6 @@ define [
   'areas/admin/models/store'
   'areas/admin/models/stores'
   'backboneConfig'
-  '../support/_specHelper'
 ], ($, ManageStoreView, Store, Stores) ->
   el = $('<div></div>')
   describe 'ManageStoreView', ->

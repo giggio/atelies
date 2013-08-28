@@ -3,7 +3,6 @@ define [
   'jquery'
   'areas/store/views/finishOrderSummary'
   'areas/store/models/cart'
-  '../support/_specHelper'
 ], ($, FinishOrderSummaryView, Cart) ->
   product1  = generatorc.product.a()
   product2  = generatorc.product.b()
