@@ -31,14 +31,15 @@ define [
           @logXhrError 'admin', xhr
           if xhr.status isnt 409
             return @showDialogError "Não foi possível alterar o PagSeguro. Tente novamente mais tarde."
+          $('#modalConfirmPagseguro').one 'hidden.bs.modal', =>
+            $('#modalCannotPagseguro', @el).modal 'show'
+            $("#confirmSetPagseguro").prop "disabled", off
+            $("#confirmUnsetPagseguro").prop "disabled", off
           $('#modalConfirmPagseguro', @el).modal 'hide'
-          $('#modalCannotPagseguro', @el).modal 'show'
-          $("#confirmSetPagseguro").prop "disabled", off
-          $("#confirmUnsetPagseguro").prop "disabled", off
         success: (data, text, xhr) =>
           @model.set 'pagseguro', set
+          $('#modalConfirmPagseguro').one 'hidden.bs.modal', => @trigger 'changed', pagseguro:set
           $('#modalConfirmPagseguro', @el).modal 'hide'
-          @trigger 'changed', pagseguro:set
       if set
         return unless @model.isValid true
         $("#confirmSetPagseguro").prop "disabled", on

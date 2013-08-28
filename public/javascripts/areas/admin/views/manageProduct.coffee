@@ -86,5 +86,6 @@ define [
     _productUpdated: =>
       Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
     _productDeleted: =>
+      $('#confirmDeleteModal').one 'hidden.bs.modal', =>
+        Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
       $('#confirmDeleteModal').modal 'hide'
-      Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true

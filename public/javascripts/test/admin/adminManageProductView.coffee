@@ -335,26 +335,27 @@ define [
           expect(dataPosted.type).to.equal "POST"
 
     describe 'Deleting a Product', ->
+      deleteStub = null
       describe 'Deletes product', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
             dataPosted = opt
             opt.success()
-          historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
+          deleteStub = sinon.stub manageProductView, '_productDeleted'
           $('#deleteProduct', el).trigger 'click'
           $('#confirmDeleteProduct', el).trigger 'click'
         after ->
           ajaxSpy.restore()
-          historySpy.restore()
+          deleteStub.restore()
           manageProductView.close()
         it 'deleted the product', ->
           ajaxSpy.should.have.been.called
         it 'navigated to store manage', ->
-          expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
+          deleteStub.should.have.been.called
         it 'posted to correct url', ->
           expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
           expect(dataPosted.type).to.equal "DELETE"
@@ -362,18 +363,18 @@ define [
       describe 'does not confirm product deletion', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
-          historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
           manageProductView.render()
+          deleteStub = sinon.stub manageProductView, '_productDeleted'
           $('#deleteProduct', el).trigger 'click'
           $('#noConfirmDeleteProduct', el).trigger 'click'
         after ->
           ajaxSpy.restore()
-          historySpy.restore()
+          deleteStub.restore()
           manageProductView.close()
         it 'did not delete the product', ->
           ajaxSpy.should.not.have.been.called
         it 'stays at the product manage page', ->
-          historySpy.should.not.have.been.called
+          deleteStub.should.not.have.been.called
