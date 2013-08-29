@@ -2,6 +2,9 @@ mongoose  = require 'mongoose'
 slug      = require '../helpers/slug'
 _         = require 'underscore'
 path      = require 'path'
+async     = require 'async'
+Postman   = require './postman'
+postman = new Postman()
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true
@@ -42,11 +45,40 @@ productSchema.path('name').set (val) ->
   @slug = slug val.toLowerCase(), "_"
   val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
-productSchema.methods.addComment = (comment) ->
-  @comments = [] unless @comments?
+productSchema.methods.addComment = (comment, cb) ->
   comment.userName = comment.user.name
   comment.userEmail = comment.user.email
   @comments.push comment
+  @validate (err) =>
+    if err?
+      @comments.pop()
+      return cb err
+    else
+      @findAdmins (err, users) =>
+        return cb err if err?
+        body = "<html>
+          <h1>Olá!</h1>
+          <div>
+            Como você é um dos administradores da loja #{@storeName} estamos te avisando que o produto <strong>#{@name}</strong> recebeu um comentário.<br />
+          </div>
+          <div>
+            Clique <a href='https://www.atelies.com.br/#{@url()}'>aqui</a> para ver o comentário.
+          </div>
+          <div>&nbsp;</div>
+          <div>&nbsp;</div>
+          <div>
+            Equipe Ateliês
+          </div>
+          </html>"
+        sendMailActions =
+          for user in users
+            (cb) => postman.sendFromContact user, "Ateliês: O produto #{@name} da loja #{@storeName} recebeu um comentário", body, cb
+        async.parallel sendMailActions, cb
+
+productSchema.methods.findAdmins = (cb) ->
+  Store.findBySlug @storeSlug, (err, store) =>
+    return cb if err?
+    User.findAdminsFor store, cb
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.pictureThumb = ->
   return undefined unless @picture?
@@ -118,7 +150,8 @@ productSchema.methods.hasShippingInfo = ->
   shipping.dimensions.height + shipping.dimensions.width + shipping.dimensions.depth <= 200
   has
 
-Product = mongoose.model 'product', productSchema
+module.exports = Product = mongoose.model 'product', productSchema
+
 Product.findRandom = (howMany, cb) ->
   random = Math.random()
   Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany).exec (err, products) ->
@@ -148,4 +181,5 @@ Product.getShippingWeightAndDimensions = (ids, cb) ->
 Product.pictureDimension = '600x600'
 Product.pictureThumbDimension = '150x150'
 
-module.exports = Product
+User      = require './user'
+Store     = require './store'

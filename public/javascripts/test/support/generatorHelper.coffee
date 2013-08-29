@@ -9,7 +9,7 @@ define ->
         picture: 'http://c.jpg'
         pictureThumb: 'http://c_thumb.jpg'
         price: 3.43
-        storeName: 'store 1'
+        storeName: 'Store 1'
         storeSlug: 'store_1'
         url: 'store_1#prod_1'
         tags: 'abc, def'
@@ -32,7 +32,7 @@ define ->
         picture: 'http://d.jpg'
         pictureThumb: 'http://d_thumb.jpg'
         price: 4.56
-        storeName: 'store 1'
+        storeName: 'Store 1'
         storeSlug: 'store_1'
         url: 'store_1#prod_2'
         tags: 'ghi, jkl'
@@ -53,7 +53,7 @@ define ->
         picture: 'http://lorempixel.com/150/150/cats'
         pictureThumb: 'http://lorempixel.com/150/150/cats_thumb'
         price: 33.33
-        storeName: 'store 2'
+        storeName: 'Store 2'
         storeSlug: 'store_2'
         tags: 'abc, mno'
         description: "Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend."

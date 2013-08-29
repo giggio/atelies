@@ -1,5 +1,6 @@
 define [
   'jquery'
+  'underscore'
   'backboneConfig'
   'handlebars'
   'showdown'
@@ -7,20 +8,21 @@ define [
   '../models/products'
   'text!./templates/product.html'
   '../models/cart'
-], ($, Backbone, Handlebars, Showdown, md5, Products, productTemplate, Cart) ->
+], ($, _, Backbone, Handlebars, Showdown, md5, Products, productTemplate, Cart) ->
   class ProductView extends Backbone.Open.View
     template: productTemplate
     initialize: (opt) ->
       @markdown = new Showdown.converter()
       @store = opt.store
       @product = opt.product
+      @user = opt.user
       if @product?.get('hasInventory')
         @canPurchase = @product?.get('inventory') > 0
       else
         @canPurchase = true
-    events: ->
-      if @product?
-        "click #product > #purchaseItem": 'purchase'
+    events:
+      "click #product > #purchaseItem": 'purchase'
+      "click #createComment": "_createComment"
     purchase: ->
       return unless @canPurchase
       @cart = Cart.get(@store.slug)
@@ -30,7 +32,7 @@ define [
       @$el.empty()
       context = Handlebars.compile @template
       @delegateEvents()
-      attr = @product.attributes
+      attr = _.extend {}, @product.attributes
       attr.tags = attr.tags.split(', ')
       description = @markdown.makeHtml attr.description if attr.description?
       if attr.comments?
@@ -56,3 +58,21 @@ define [
         when diffInMins < 140 then 'a duas horas'
         when diffInHours < 24 then "a #{Math.floor diffInHours, 0} horas"
         else "a #{Math.floor diffInDays, 0} dias"
+    _createComment: ->
+      $("#createComment", @$el).attr 'disabled', 'disabled'
+      body = $("#newCommentBody", @$el).val()
+      jqxhr = $.post "/products/#{@product.get '_id'}/comments", body:body, =>
+        @product.get('comments').push date: new Date(), userEmail: @user.email, userName: @user.name, body: body
+        $("#createComment", @$el).removeAttr 'disabled'
+        $("#newCommentBody", @$el).val ''
+        @render()
+        @showDialog "<strong>Obrigado!</strong>
+          O seu comentário foi criado com sucesso e já está disponível na página do produto. A loja também foi notificada que você comentou.<br /><br />
+          Apreciamos muito o seu feedback. Fique a vontade para fazer comentários em outros produtos. O vendedor poderá lhe responder aqui mesmo na página do
+          produto ou diretamente."
+          , "Comentário criado"
+      jqxhr.error =>
+        $("#createComment", @$el).removeAttr 'disabled'
+        @logError 'store', 'Error sending comment'
+        @showDialogError 'Não foi possível realizar o comentário. Tente novamente mais tarde. Se o problema
+          persistir envie um e-mail contato@atelies.com.br.'

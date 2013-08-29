@@ -1,6 +1,5 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
-Store     = require './store'
 config    = require '../helpers/config'
 Postman   = require './postman'
 postman = new Postman()
@@ -113,8 +112,9 @@ userSchema.methods.sendMailPasswordReset = (cb) ->
     </html>"
   postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body, cb
   
-User = mongoose.model 'user', userSchema
+module.exports = User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email, cb
+User.findAdminsFor = (store, cb) -> User.find stores: store, cb
 User.findByFacebookId = (facebookId, cb) -> User.findOne facebookId: facebookId, cb
 
-module.exports = User
+Store     = require './store'

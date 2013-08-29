@@ -28,12 +28,13 @@ define [
       viewsManager.show @storeView
     product: (slug) ->
       store = storeBootstrapModel.store
+      user = storeBootstrapModel.user
       products = new Products store.slug, slug
       products.fetch
         reset: true
         success: =>
           product = products.first()
-          productView = new ProductView store: store, product: product
+          productView = new ProductView store: store, product: product, user: user
           viewsManager.show productView
         error: (col, xhr, opt) =>
           @logXhrError xhr

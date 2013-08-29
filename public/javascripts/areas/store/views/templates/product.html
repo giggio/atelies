@@ -49,9 +49,15 @@
       </div>
       {{/each}}
     {{else}}
-      <h4>Não há comentários sobre o produto</h4>
+      <h4>Não há comentários sobre o produto, seja o primeiro a comentar!</h4>
     {{/if}}
+  </div>
+  <div id="newComment">
+    <div class="form-group">
+      <textarea id="newCommentBody" name="newCommentBody" rows="8" class="form-control" ></textarea>
+      <button id="createComment" class="btn btn-primary">Comentar</button>
     </div>
+  </div>
   <div id="productsPlaceHolder">
     <strong></strong>
   </div>

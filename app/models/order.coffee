@@ -47,7 +47,9 @@ orderSchema.methods.sendMailAfterPurchase = (cb) ->
       <div>Total da venda: #{@totalSaleAmount}</div>
       </html>"
     postman.send @store, @customer, "Pedido realizado", body, cb
-Order = mongoose.model 'order', orderSchema
+
+module.exports = Order = mongoose.model 'order', orderSchema
+
 Order.create = (user, store, items, shippingCost, paymentType, cb) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items
@@ -132,5 +134,3 @@ Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
       quantity: i.quantity
       totalPrice: i.totalPrice
     cb null, simpleOrder
-
-module.exports = Order

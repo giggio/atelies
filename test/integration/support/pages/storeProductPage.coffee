@@ -41,3 +41,7 @@ module.exports = class StoreProductPage extends Page
                 date: (cb) => @getTextIn el, ".date", (t) -> cb null, t
               async.parallel getCommentActions, getCommentCb
       async.parallel getCommentsAction, (err, comments) -> cb comments
+  writeComment: (comm, cb) ->
+    @type "#newCommentBody", comm, =>
+      @pressButtonAndWait "#createComment", cb
+  newCommentBodyText: @::getValue.partial "#newCommentBody"

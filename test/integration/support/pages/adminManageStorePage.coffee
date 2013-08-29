@@ -41,10 +41,16 @@ module.exports = class AdminManageStorePage extends Page
   clickUpdateStoreButton: @::pressButton.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
-  clickSetPagseguroButton: @::pressButton.partial "#setPagseguro"
-  clickConfirmSetPagseguroButton: (cb) => @eval "$('#confirmSetPagseguro').click()", cb
-  clickUnsetPagseguroButton: @::pressButton.partial "#unsetPagseguro"
-  clickConfirmUnsetPagseguroButton: (cb) => @eval "$('#confirmUnsetPagseguro').click()", cb
+  clickSetPagseguroButton: (cb) ->
+    @pressButton "#setPagseguro", =>
+      @waitForSelectorClickable "#confirmSetPagseguro", cb
+  clickConfirmSetPagseguroButton: (cb) ->
+    @pressButtonAndWait "#confirmSetPagseguro", => waitMilliseconds 500, cb
+  clickUnsetPagseguroButton: (cb) ->
+    @pressButton "#unsetPagseguro", =>
+      @waitForSelectorClickable "#confirmUnsetPagseguro", cb
+  clickConfirmUnsetPagseguroButton: (cb) ->
+    @pressButtonAndWait "#confirmUnsetPagseguro", => waitMilliseconds 500, cb
   pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
   pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"
   storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"

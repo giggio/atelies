@@ -3,13 +3,13 @@ Store                 = require '../../app/models/store'
 Product               = require '../../app/models/product'
 StoreProductPage      = require './support/pages/storeProductPage'
 md5                   = require("blueimp-md5").md5
+Postman               = require '../../app/models/postman'
 
 describe 'Store product page', ->
   page = store = product1 = null
   before (done) ->
     page = new StoreProductPage()
     whenServerLoaded done
-  after (done) -> page.closeBrowser done
   describe 'regular product', ->
     before (done) ->
       cleanDB (error) ->
@@ -74,7 +74,7 @@ describe 'Store product page', ->
 
   describe 'comments', ->
     describe 'showing', ->
-      userCommenting1 = userCommenting2 = title1 = title2 = body1 = body2 = null
+      userCommenting1 = userCommenting2 = body1 = body2 = null
       before (done) ->
         cleanDB (error) ->
           return done error if error
@@ -85,10 +85,8 @@ describe 'Store product page', ->
           userCommenting2 = generator.user.b()
           body1 = "body1"
           body2 = "body2"
-          title1 = "body1"
-          title2 = "body2"
-          product1.addComment user: userCommenting1, title: title1, body: body1
-          product1.addComment user: userCommenting2, title: title2, body: body2
+          product1.addComment user: userCommenting1, body: body1
+          product1.addComment user: userCommenting2, body: body2
           product1.save()
           page.visit "store_1", "name_1", done
       it 'shows comments', (done) ->
@@ -101,3 +99,48 @@ describe 'Store product page', ->
           comments[1].userPicture.should.equal "https://secure.gravatar.com/avatar/#{md5(userCommenting2.email.toLowerCase())}?d=mm&r=pg&s=50"
           comments[1].body.should.equal body2
           done()
+    describe 'creating', ->
+      userCommenting = userSeller = body = null
+      before (done) ->
+        cleanDB (error) ->
+          return done error if error
+          Postman.sentMails.length = 0
+          store = generator.store.a()
+          store.save()
+          userSeller = generator.user.c()
+          userSeller.stores.push store
+          userSeller.save()
+          product1 = generator.product.a()
+          userCommenting = generator.user.a()
+          userCommenting.save()
+          product1.save()
+          body = "body1"
+          page.loginFor userCommenting._id, ->
+            page.visit "store_1", "name_1", ->
+              page.writeComment body, done
+      it 'created the comment on the database', (done) ->
+        Product.findById product1._id, (err, product) ->
+          product.comments.length.should.equal 1
+          comm = product.comments[0]
+          comm.user.toString().should.equal userCommenting._id.toString()
+          comm.date.should.equalDate new Date()
+          comm.body.should.equal body
+          comm.userName.should.equal userCommenting.name
+          comm.userEmail.should.equal userCommenting.email
+          done()
+      it 'displayed the comment', (done) ->
+        page.comments (comments) ->
+          comments.length.should.equal 1
+          comments[0].userName.should.equal userCommenting.name
+          comments[0].userPicture.should.equal "https://secure.gravatar.com/avatar/#{md5(userCommenting.email.toLowerCase())}?d=mm&r=pg&s=50"
+          comments[0].body.should.equal body
+          done()
+      it 'cleared the comment area', (done) ->
+        page.newCommentBodyText (t) ->
+          t.should.equal ''
+          done()
+      it 'emailed the store admin', ->
+        Postman.sentMails.length.should.equal 1
+        mail = Postman.sentMails[0]
+        mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+        mail.subject.should.equal "Ateliês: O produto #{product1.name} da loja #{store.name} recebeu um comentário"

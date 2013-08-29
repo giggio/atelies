@@ -10,7 +10,7 @@ exports.generator =
       slug: 'name_1'
       picture: 'http://lorempixel.com/300/450/cats'
       price: 11.1
-      storeName: 'store 1'
+      storeName: 'Store 1'
       storeSlug: 'store_1'
       tags: ['abc', 'def']
       description: "Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis."
@@ -34,7 +34,7 @@ exports.generator =
       slug: 'name_2'
       picture: 'http://lorempixel.com/150/150/cats'
       price: 22.2
-      storeName: 'store 1'
+      storeName: 'Store 1'
       storeSlug: 'store_1'
       tags: ['ghi', 'jkl']
       description: "Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
@@ -81,7 +81,7 @@ exports.generator =
       slug: 'some_cool_item'
       picture: 'http://lorempixel.com/150/200/cats/5'
       price: 42.2
-      storeName: 'store 1'
+      storeName: 'Store 1'
       storeSlug: 'store_1'
       tags: ['abc', 'xyz']
       description: "Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
@@ -105,7 +105,7 @@ exports.generator =
       slug: 'name_4'
       picture: 'http://lorempixel.com/150/200/cats'
       price: 42.2
-      storeName: 'store 1'
+      storeName: 'Store 1'
       storeSlug: 'store_1'
       tags: ['mno', 'pqr']
       description: "Other Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
@@ -129,7 +129,7 @@ exports.generator =
       slug: 'name_5'
       picture: 'http://lorempixel.com/150/200/cats'
       price: 52.2
-      storeName: 'store 1'
+      storeName: 'Store 1'
       storeSlug: 'store_1'
       tags: ['mno', 'pqr']
       description: "Ather Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."

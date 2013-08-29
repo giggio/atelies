@@ -97,7 +97,7 @@ module.exports = (grunt) ->
           require: ['test/support/_specHelper.js']
           reporter: 'spec'
           ui: 'bdd'
-          timeout: 40000
+          timeout: 20000
       client:
         src: 'public/javascripts/test/**/*.js'
         options:

@@ -1,5 +1,8 @@
 require '../support/_specHelper'
 Product     = require '../../../app/models/product'
+Store       = require '../../../app/models/store'
+User        = require '../../../app/models/user'
+Postman     = require '../../../app/models/postman'
 
 describe 'Product', ->
   it 'requires name to be present', (done) ->
@@ -111,16 +114,33 @@ describe 'Product', ->
     product.shipping.applies = true
     product.shipping.dimensions.height = 1
     product.hasShippingInfo().should.be.false
-  it 'has comments', ->
-    product = generator.product.a()
-    userCommenting = generator.user.a()
-    title = "some title"
-    body = "some comment"
-    product.addComment user: userCommenting, title: title, body: body
-    product.comments.length.should.equal 1
-    comm = product.comments[0]
-    comm.user.should.equal userCommenting._id
-    comm.userName.should.equal userCommenting.name
-    comm.userEmail.should.equal userCommenting.email
-    comm.body.should.equal body
-    comm.date.should.equalDate new Date()
+  describe 'has comments', ->
+    user = product = store = userCommenting = body = null
+    before (done) ->
+      Postman.dryrun = on
+      Postman.sentMails.length = 0
+      product = generator.product.a()
+      userCommenting = generator.user.a()
+      title = "some title"
+      body = "some comment"
+      store = generator.store.a()
+      user = generator.store.b()
+      sinon.stub(Store, "findBySlug").yields null, store
+      sinon.stub(User, "findAdminsFor").yields null, [user]
+      product.addComment {user: userCommenting, body: body}, done
+    after ->
+      Store.findBySlug.restore()
+      User.findAdminsFor.restore()
+    it 'added the comment to the product', ->
+      product.comments.length.should.equal 1
+      comm = product.comments[0]
+      comm.user.should.equal userCommenting._id
+      comm.userName.should.equal userCommenting.name
+      comm.userEmail.should.equal userCommenting.email
+      comm.body.should.equal body
+      comm.date.should.equalDate new Date()
+    it 'sent email', ->
+      Postman.sentMails.length.should.equal 1
+      mail = Postman.sentMails[0]
+      mail.to.should.equal "'#{user.name}' <#{user.email}>"
+      mail.subject.should.equal "Ateliês: O produto #{product.name} da loja #{store.name} recebeu um comentário"

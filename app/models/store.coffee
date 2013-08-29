@@ -1,5 +1,4 @@
 mongoose = require 'mongoose'
-Product  = require './product'
 slug     = require '../helpers/slug'
 _        = require 'underscore'
 
@@ -88,13 +87,15 @@ storeSchema.methods.updateName = (name, cb) ->
       p.storeName = name
       p.save()
     cb()
-Store = mongoose.model 'store', storeSchema
+
+module.exports = Store = mongoose.model 'store', storeSchema
+
 Store.nameExists = (name, cb) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug aSlug, (err, store) -> cb err, store?
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
 Store.findWithProductsBySlug = (slug, cb) ->
-  Store.findBySlug slug, (err, store) ->
+  Store.findBySlug slug, (err, store) =>
     return cb err if err?
     return cb(null, null) if store is null
     Product.findByStoreSlug slug, (err, products) ->
@@ -127,4 +128,4 @@ Store.homePageImageDimension = '600x400'
 Store.flyerDimension = '350x350'
 #Store.bannerDimension = '1200x300'
 
-module.exports = Store
+Product  = require './product'

@@ -15,13 +15,13 @@ request         = require 'request'
 
 module.exports = class StoreRoutes
   constructor: (@env, @domain) ->
-    @_auth 'orderCreate', 'calculateShipping'
+    @_auth 'orderCreate', 'calculateShipping', 'commentCreate'
     @_authVerified 'orderCreate'
   _.extend @::, RouteFunctions::
 
-  handleError: @::_handleError.partial 'admin'
+  handleError: @::_handleError.partial 'store'
 
-  logError: @::_logError.partial 'admin'
+  logError: @::_logError.partial 'store'
   
   store: (req, res) ->
     subdomain = @_getSubdomain @domain, req.host.toLowerCase()
@@ -220,3 +220,10 @@ module.exports = class StoreRoutes
       return @handleError req, res, err if err?
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
+
+  commentCreate: (req, res) ->
+    Product.findById req.params.productId, (err, product) =>
+      return @handleError req, res, err if err?
+      product.addComment {user: req.user, body: req.body.body}, (err) =>
+        product.save()
+        res.send 201
