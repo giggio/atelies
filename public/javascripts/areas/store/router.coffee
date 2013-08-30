@@ -9,6 +9,7 @@ define [
     routes:
       '': routes.home
       'cart': routes.cart
+      'evaluations': routes.evaluations
       ':productSlug': routes.product
       'finishOrder/shipping': routes.finishOrderShipping
       'finishOrder/updateProfile': routes.finishOrderUpdateProfile

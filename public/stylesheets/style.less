@@ -1,3 +1,7 @@
+@import (less) '../javascripts/lib/jrating/jquery/jRating.jquery.css';
+p.jRatingInfos {
+  background: transparent url('../images/jrating/bg_jRatingInfos.png') no-repeat;
+}
 @import '../javascripts/lib/bootstrap/less/bootstrap.less';
 @icon-font-path: '../javascripts/lib/bootstrap/fonts/';
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
@@ -470,6 +474,35 @@ section#app-container {
           float: right;
         }
         #newCommentBody {}
+      }
+    }
+    #evaluations {
+      .evaluation {
+        .evaluationInfo {
+          .make-md-column(11);
+          .userName {
+            font-weight: bold;
+            float: left;
+            padding-right: 5px;
+            padding-bottom: 5px;
+          }
+          .date {
+            padding-bottom: 5px;
+          }
+          .ratingStars {
+            float: left;
+          }
+          .rating {
+            padding-left: 120px;
+          }
+          .body {
+            padding-top: 8px;
+            padding-bottom: 30px;
+          }
+        }
+        .userPicture {
+          .make-md-column(1);
+        }
       }
     }
     #cartItems {

@@ -336,6 +336,24 @@ db.stores.insert
       email: 'pagseguro@a.com'
       token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
   random: Math.random()
+  evaluations: [
+    {
+    body: 'Alguma avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
+    rating: 3.4
+    date: new Date(2013,3,4)
+    user: user1._id
+    userName: user1.name
+    userEmail: user1.email
+    },
+    {
+    body: 'Uma outra avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
+    rating: 4.6
+    date: new Date(2013,5,4)
+    user: user2._id
+    userName: user2.name
+    userEmail: user2.email
+    }
+  ]
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId

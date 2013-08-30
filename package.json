@@ -55,7 +55,7 @@
     "grunt-nodemon": "~0.1.x",
     "grunt-concurrent": "~0.3.0",
     "grunt-bower-task": "~0.3.x",
-    "connect-less": "~0.3.x",
+    "connect-less": "git://github.com/giggio/connect-less.git",
     "jsdom": "*",
     "backbone": "~1.0.x",
     "underscore.string": "~2.3.x",

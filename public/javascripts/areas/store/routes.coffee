@@ -10,12 +10,14 @@ define [
   './views/finishOrderPayment'
   './views/finishOrderSummary'
   './views/finishOrderOrderFinished'
+  './views/evaluations'
   './models/products'
   './models/store'
   './models/cart'
   './models/productsSearch'
+  './models/storeEvaluations'
   '../shared/views/dialog'
-],($, _, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, Products, Store, Cart, ProductsSearch, Dialog) ->
+],($, _, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, EvaluationsView, Products, Store, Cart, ProductsSearch, StoreEvaluations, Dialog) ->
   class Routes extends Backbone.Open.Routes
     area: 'store'
     constructor: ->
@@ -78,5 +80,16 @@ define [
         error: (col, xhr, opt) =>
           @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
+    evaluations: ->
+      store = storeBootstrapModel.store
+      evaluations = new StoreEvaluations storeSlug: store.slug
+      evaluations.fetch
+        reset: true
+        success: =>
+          evaluationsView = new EvaluationsView store: store, evaluations: evaluations.toJSON()
+          viewsManager.show evaluationsView
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
+          Dialog.showError viewsManager.$el, "Não foi possível obter as avaliações. Tente novamente mais tarde."
 
   _.bindAll new Routes()

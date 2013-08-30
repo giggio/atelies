@@ -16,6 +16,8 @@ requirejs.config
     ga: '//www.google-analytics.com/analytics'
     showdown: 'lib/showdown/src/showdown'
     md5: 'lib/js-md5/js/md5'
+    swag: 'lib/swag/lib/swag'
+    jrating: 'lib/jrating/jquery/jRating.jquery'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -48,3 +50,9 @@ requirejs.config
     'jqexpander':
       deps: ['jquery']
       exports: '$.fn.expander'
+    'swag':
+      deps: ['handlebars']
+      exports: 'Swag'
+    'jrating':
+      deps: [ 'jquery' ]
+      exports: '$.fn.jRating'

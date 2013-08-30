@@ -74,6 +74,7 @@ exports.route = (app) ->
   app.post    "/shipping/:storeSlug",                                       store.calculateShipping
   #store
   app.get     "/products/search/:storeSlug/:searchTerm",                    store.productsSearch
+  app.post    "/products/:productId/comments",                              store.commentCreate
+  app.get     "/stores/:storeSlug/evaluations",                             store.evaluations
   app.get     "/:storeSlug",                                                store.store
   app.get     "/:storeSlug/:productSlug",                                   store.product
-  app.post    "/products/:productId/comments",                              store.commentCreate

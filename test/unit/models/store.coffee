@@ -71,5 +71,21 @@ describe 'Store', ->
     store.city.should.equal simple.city
     store.state.should.equal simple.state
     store.otherUrl.should.equal simple.otherUrl
-    #store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
-    #store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+  describe 'evaluations', ->
+    store = userEvaluating1 = rating1 = body1 = null
+    before (done) ->
+      store = new Store()
+      userEvaluating1 = generator.user.a()
+      body1 = "body1"
+      rating1 = 2
+      store = generator.store.a()
+      store.addEvaluation {user: userEvaluating1, body: body1, rating: rating1}, done
+    it 'has evaluations', ->
+      store.evaluations.length.should.equal 1
+      ev = store.evaluations[0]
+      ev.user.should.equal userEvaluating1._id
+      ev.userName.should.equal userEvaluating1.name
+      ev.userEmail.should.equal userEvaluating1.email
+      ev.body.should.equal body1
+      ev.date.should.equalDate new Date()
+      ev.rating.should.equal rating1

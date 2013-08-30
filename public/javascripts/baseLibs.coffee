@@ -2,11 +2,15 @@ define [
   'jquery'
   './errorLogger'
   './logger'
+  'handlebars'
+  'swag'
   './backboneConfig'
   './loginPopover'
   './jqueryValidationExt'
   'jqexpander'
-], ($, ErrorLogger, Logger) ->
+  'jrating'
+], ($, ErrorLogger, Logger, Handlebars, Swag) ->
+  Swag.registerHelpers Handlebars
   $ ->
     logger = new Logger()
     $('.expander .answer').expander

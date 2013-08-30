@@ -227,3 +227,8 @@ module.exports = class StoreRoutes
       product.addComment {user: req.user, body: req.body.body}, (err) =>
         product.save()
         res.send 201
+
+  evaluations: (req, res) ->
+    Store.findBySlug req.params.storeSlug, (err, store) ->
+      return @handleError req, res, err if err?
+      res.json store.toSimpleEvaluations()
