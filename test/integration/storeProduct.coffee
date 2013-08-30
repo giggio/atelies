@@ -144,3 +144,27 @@ describe 'Store product page', ->
         mail = Postman.sentMails[0]
         mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
         mail.subject.should.equal "Ateliês: O produto #{product1.name} da loja #{store.name} recebeu um comentário"
+
+    describe "can't create if not logged in", ->
+      before (done) ->
+        cleanDB (error) ->
+          return done error if error
+          page.clearCookies =>
+            Postman.sentMails.length = 0
+            store = generator.store.a()
+            store.save()
+            product1 = generator.product.a()
+            product1.save()
+            page.visit "store_1", "name_1", done
+      it "comment text is invisible", (done) ->
+        page.commentBodyIsVisible (itIs) ->
+          itIs.should.be.false
+          done()
+      it 'comment button is invisible', (done) ->
+        page.commentButtonIsVisible (itIs) ->
+          itIs.should.be.false
+          done()
+      it 'has a message stating user must login to comment', (done) ->
+        page.mustLoginToCommentMessageIsVisible (itIs) ->
+          itIs.should.be.true
+          done()

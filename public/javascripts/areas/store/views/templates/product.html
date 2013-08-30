@@ -52,12 +52,18 @@
       <h4>Não há comentários sobre o produto, seja o primeiro a comentar!</h4>
     {{/if}}
   </div>
+  {{#if user}}
   <div id="newComment">
     <div class="form-group">
       <textarea id="newCommentBody" name="newCommentBody" rows="8" class="form-control" ></textarea>
       <button id="createComment" class="btn btn-primary">Comentar</button>
     </div>
   </div>
+  {{else}}
+  <div id="mustLoginToCommentMessage">
+    Você precisa estar logado para poder comentar. Clique <a href="/account/login?redirectTo=/{{encodedUrl}}">aqui</a> para logar.
+  </div>
+  {{/if}}
   <div id="productsPlaceHolder">
     <strong></strong>
   </div>

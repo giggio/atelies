@@ -40,7 +40,7 @@ define [
           c.niceDate = @createNiceDate c.date
           c.gravatarUrl = "https://secure.gravatar.com/avatar/#{md5(c.userEmail.toLowerCase())}?d=mm&r=pg&s=50"
           c.body = @markdown.makeHtml c.body
-      @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description, hasComments: attr.comments?.length > 0
+      @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description, hasComments: attr.comments?.length > 0, user: @user, encodedUrl: encodeURIComponent attr.url
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'
       date = date.getTime() unless typeof date is 'number'

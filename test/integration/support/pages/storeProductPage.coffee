@@ -45,3 +45,6 @@ module.exports = class StoreProductPage extends Page
     @type "#newCommentBody", comm, =>
       @pressButtonAndWait "#createComment", cb
   newCommentBodyText: @::getValue.partial "#newCommentBody"
+  commentBodyIsVisible: @::hasElement.partial "#newCommentBody"
+  commentButtonIsVisible: @::hasElement.partial "#createComment"
+  mustLoginToCommentMessageIsVisible: @::isVisible.partial "#mustLoginToCommentMessage"
