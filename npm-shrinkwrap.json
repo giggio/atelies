@@ -966,6 +966,11 @@
       "version": "0.2.9",
       "from": "marked@",
       "resolved": "https://registry.npmjs.org/marked/-/marked-0.2.9.tgz"
+    },
+    "grunt-wait": {
+      "version": "0.1.0",
+      "from": "grunt-wait@",
+      "resolved": "https://registry.npmjs.org/grunt-wait/-/grunt-wait-0.1.0.tgz"
     }
   }
 }

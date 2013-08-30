@@ -43,7 +43,8 @@
     "aws-sdk": "~1.3.2",
     "recaptcha": "~1.2.0",
     "gm": "~1.10.0",
-    "marked": "~0.2.9"
+    "marked": "~0.2.9",
+    "grunt-wait": "~0.1.0"
   },
   "devDependencies": {
     "grunt-coffeelint": "0.0.x",

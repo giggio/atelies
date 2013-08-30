@@ -51,7 +51,7 @@ module.exports = (grunt) ->
           nospawn: true
       compileAndTest:
         files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'compileAndTest' ]
+        tasks: [ 'wait:watch', 'compileAndTest' ]
         options:
           nospawn: true
 
@@ -177,6 +177,7 @@ module.exports = (grunt) ->
                 'twitterBootstrap'
                 'showdown'
                 'md5'
+                'swag'
                 'backboneValidation'
                 'epoxy'
                 'caroufredsel'
@@ -236,6 +237,13 @@ module.exports = (grunt) ->
           report: 'min'
         files:
           "compiledPublic/stylesheets/style.css": "compiledPublic/stylesheets/style.less"
+    wait:
+      watch:
+        options:
+          delay: 1000
+          after: ->
+            return true unless grunt.util._.isEmpty changedFiles
+            undefined
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -248,6 +256,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-shell'
   grunt.loadNpmTasks 'grunt-contrib-less'
+  grunt.loadNpmTasks 'grunt-wait'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -267,7 +276,7 @@ module.exports = (grunt) ->
     grunt.config ['tests', 'src'], testFiles
     grunt.config ['dev'], []
     changedFiles = {}
-  , 200
+  , 1000
   grunt.event.on 'watch', (action, filepath) ->
     changedFiles[filepath] = action
     onChange()
@@ -276,7 +285,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:prod' ]
   grunt.registerTask 'nodeInspector', [ 'shell:nodeInspector' ]
-  grunt.registerTask 'compileAndTest', (env) ->
+  grunt.registerTask 'compileAndTest', ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
       tasks.push 'test:client'
