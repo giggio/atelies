@@ -59,8 +59,18 @@ define [
         when diffInHours < 24 then "a #{Math.floor diffInHours, 0} horas"
         else "a #{Math.floor diffInDays, 0} dias"
     _createComment: ->
+      control = @$('#newCommentBody')
+      body = control.val()
+      if body.trim().length is 0
+        control.tooltip "destroy"
+        control.tooltip
+          placement: "right"
+          trigger: "manual"
+          title: "Informe o comentário"
+        return control.tooltip "show"
+      else
+        control.tooltip "destroy"
       $("#createComment", @$el).attr 'disabled', 'disabled'
-      body = $("#newCommentBody", @$el).val()
       jqxhr = $.post "/products/#{@product.get '_id'}/comments", body:body, =>
         @product.get('comments').push date: new Date(), userEmail: @user.email, userName: @user.name, body: body
         $("#createComment", @$el).removeAttr 'disabled'
