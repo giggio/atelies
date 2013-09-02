@@ -24,6 +24,8 @@ storeSchema = new mongoose.Schema
       email:              String
       token:              String
   random:                 type: Number, required: true, default: -> Math.random()
+  numberOfEvaluations:    type: Number, required: true, default: 0
+  evaluationAvgRating:    type: Number, required: true, default: 0
   evaluations: [
     body:         type: String, required: true
     rating:       type: Number, required: true
@@ -45,6 +47,7 @@ storeSchema.methods.addEvaluation = (evaluation, cb) ->
   @evaluations.push evaluation
   @validate (err) =>
     return cb err if err?
+    @evaluationAvgRating = ( @evaluationAvgRating * @numberOfEvaluations + evaluation.rating ) / ++@numberOfEvaluations
     cb()
 storeSchema.methods.toSimpleEvaluations = ->
   _.map @evaluations, (e) -> body: e.body, rating: e.rating, date: e.date, userName: e.userName, userEmail: e.userEmail
@@ -66,6 +69,8 @@ storeSchema.methods.toSimple = ->
     otherUrl: @otherUrl
     banner: @banner
     flyer: @flyer
+    numberOfEvaluations: @numberOfEvaluations
+    evaluationAvgRating: @evaluationAvgRating
   store.pagseguro = @pagseguro()
   store
 storeSchema.methods.toSimpler = ->

@@ -336,6 +336,8 @@ db.stores.insert
       email: 'pagseguro@a.com'
       token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
   random: Math.random()
+  numberOfEvaluations: 2
+  evaluationAvgRating: 4
   evaluations: [
     {
     body: 'Alguma avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
@@ -376,6 +378,8 @@ db.stores.insert
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_2/store/503898129332810600307476012269035000.jpg'
   pmtGateways: {}
   random: Math.random()
+  numberOfEvaluations: 0
+  evaluationAvgRating: 0
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert
@@ -397,6 +401,8 @@ db.stores.insert
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_3/store/519919875310733900163886155933141700.jpg'
   pmtGateways: {}
   random: Math.random()
+  numberOfEvaluations: 0
+  evaluationAvgRating: 0
 db.stores.insert
   name: 'Some Fancy Name'
   nameKeywords: ['some', 'fancy', 'name']
@@ -416,6 +422,8 @@ db.stores.insert
   flyer: 'https://s3.amazonaws.com/ateliesteste/store_4/store/186986845219507800735144682228565200.jpg'
   pmtGateways: {}
   random: Math.random()
+  numberOfEvaluations: 0
+  evaluationAvgRating: 0
 db.stores.insert
   name: 'Some Other Fancy Name'
   nameKeywords: ['some', 'other', 'fancy', 'name']
@@ -434,6 +442,8 @@ db.stores.insert
   banner: 'https://s3.amazonaws.com/ateliesteste/store_4/store/977493978571146800762570540187880400.jpg'
   pmtGateways: {}
   random: Math.random()
+  numberOfEvaluations: 0
+  evaluationAvgRating: 0
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -456,6 +466,8 @@ for i in [4..15]
     flyer: "https://s3.amazonaws.com/ateliesteste/store_5/store/866178757045418000837425043340772400.jpg"
     pmtGateways: {}
     random: Math.random()
+    numberOfEvaluations: 0
+    evaluationAvgRating: 0
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
 db.stores.ensureIndex { slug: 1 }

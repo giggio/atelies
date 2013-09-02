@@ -407,13 +407,51 @@ section#app-container {
     }
     #storeHeader {
       .clearfix();
-      #homePageImage {
-        float:left;
-        margin-right: 30px;
+      #homePageImageHolder {
+        .make-md-column(7);
+        #homePageImage {
+        }
       } 
-      .social {
-        img {
-          display: inline;
+      #storeDescription {
+        .make-md-column(5);
+        position: relative;
+        @media (min-width: @screen-lg) {
+          height: 400px;
+          #evaluation {
+            position: absolute;
+            top: 380px;
+            left: 165px;
+            width: 300px;
+            #ratingStars {
+              float: left;
+            }
+          }
+        }
+        @media (min-width: @screen-md) and (max-width: @screen-lg) {
+          height: 400px;
+          #evaluation {
+            position: absolute;
+            top: 320px;
+            left: 80px;
+            width: 300px;
+            #ratingStars {
+              float: left;
+            }
+          }
+        }
+        @media (min-width: @screen-xs) and (max-width: @screen-md) {
+          #evaluation {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            #ratingStars {
+              float: left;
+            }
+          }
+        }
+        .social {
+          img {
+            display: inline;
+          }
         }
       }
     }

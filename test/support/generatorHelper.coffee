@@ -169,6 +169,8 @@ exports.generator =
         pagseguro:
           email: 'pagseguro@a.com'
           token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
     b: -> new Store
       name: 'Store 2'
       slug: 'store_2'
@@ -185,6 +187,8 @@ exports.generator =
       otherUrl: 'http://someotherurl.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/2'
       pmtGateways: {}
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
     c: -> new Store
       name: 'Store 3'
       slug: 'store_3'
@@ -201,6 +205,8 @@ exports.generator =
       otherUrl: 'http://idontownthisstore.com'
       flyer: 'http://lorempixel.com/350/400/nightlife/3'
       pmtGateways: {}
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
     d: -> new Store
       name: 'My Very Nice Store'
       slug: 'my_very_nice_store'
@@ -218,6 +224,8 @@ exports.generator =
       banner: 'http://lorempixel.com/800/150/cats/4'
       flyer: 'http://lorempixel.com/350/400/nightlife/4'
       pmtGateways: {}
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
     e: -> new Store
       name: 'My Other Very Nice Store'
       slug: 'my_other_very_nice_store'
@@ -234,6 +242,8 @@ exports.generator =
       otherUrl: 'http://asomestoreinms.com'
       banner: 'http://lorempixel.com/800/150/cats/5'
       pmtGateways: {}
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
     empty: -> new Store
       name: ''
       slug: ''
@@ -250,6 +260,8 @@ exports.generator =
       otherUrl: ''
       flyer: ''
       pmtGateways: {}
+      numberOfEvaluations: 0
+      evaluationAvgRating: 0
   user:
     a: ->
       user = new User
