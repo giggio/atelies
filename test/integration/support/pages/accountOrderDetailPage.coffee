@@ -1,4 +1,5 @@
 Page          = require './seleniumPage'
+webdriver     = require 'selenium-webdriver'
 
 module.exports = class AccountOrdersPage extends Page
   visit: (_id, cb) -> super "account#orders/#{_id}", cb
@@ -33,3 +34,10 @@ module.exports = class AccountOrdersPage extends Page
           getData.push => @getAttributeIn el, ".picture", 'src', (t) => item.picture = t
       @parallel getData, -> cb(order)
       undefined
+  newEvaluationVisible: @::hasElementAndIsVisible.partial '#newEvaluation'
+  evaluateOrderWith: (opt, cb) ->
+    @type "#newEvaluationBody", opt.body, =>
+      action = new webdriver.ActionSequence @driver
+      action.mouseMove(@findElement("#ratingStars .jStar"), {x:23*opt.rating, y:0})
+        .click()
+        .perform().then cb

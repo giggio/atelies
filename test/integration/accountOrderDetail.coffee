@@ -1,15 +1,20 @@
 require './support/_specHelper'
 Order                   = require '../../app/models/order'
+Store                   = require '../../app/models/store'
 AccountOrderDetailPage  = require './support/pages/accountOrderDetailPage'
+Postman                 = require '../../app/models/postman'
 
 describe 'Account order detail page', ->
-  page = store = product1 = product2 = user = order1 = null
+  page = store = product1 = product2 = user = order1 = userSeller = null
   before (done) =>
     page = new AccountOrderDetailPage()
     cleanDB (error) ->
       return done error if error
       store = generator.store.a()
       store.save()
+      userSeller = generator.user.c()
+      userSeller.stores.push store
+      userSeller.save()
       product1 = generator.product.a()
       product1.save()
       product2 = generator.product.b()
@@ -64,3 +69,43 @@ describe 'Account order detail page', ->
         i2.quantity.should.equal 2
         i2.url.should.equal "http://localhost:8000/#{product2.url()}"
         done()
+    it 'shows pending evaluation', (done) ->
+      page.newEvaluationVisible (itIs) ->
+        itIs.should.be.true
+        done()
+
+  describe.skip 'evaluation order and store', ->
+    evaluationBody = rating = null
+    before (done) =>
+      Postman.sentMails.length = 0
+      evaluationBody = "body1"
+      rating = 4
+      page.loginFor user._id, ->
+        page.visit order1._id, ->
+          page.evaluateOrderWith {body: evaluationBody, rating: rating}, done
+    it 'should record the evaluation on the order', (done) ->
+      Order.findById order1._id (err, o) ->
+        o.evaluatedBy.should.equal user._id
+        done()
+    it 'should record the evaluation on the store', (done) ->
+      Store.findById store._id (err, st) ->
+        st.numberOfEvaluations.should.equal 1
+        ev = st.evaluation[0]
+        ev.body.should.equal evaluationBody
+        ev.rating.should.equal rating
+        ev.date.should.equalDate new Date()
+        done()
+    it 'should make the evaluation field disappear', (done) ->
+      page.newEvaluationVisible (itIs) ->
+        itIs.should.be.false
+        done()
+    it 'should send an e-mail message to the store admins', ->
+      Postman.sentMails.length.should.equal 1
+      mail = Postman.sentMails[0]
+      mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+      mail.subject.should.equal "Ateliês: A loja #{store.name} recebeu uma avaliação"
+    it 'does not show pending evaluation anymore when visited again', (done) ->
+      page.reload ->
+        page.newEvaluationVisible (itIs) ->
+          itIs.should.be.false
+          done()

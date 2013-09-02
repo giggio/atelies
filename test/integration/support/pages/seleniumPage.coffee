@@ -136,6 +136,10 @@ module.exports = class Page
   clickLink: @::pressButton
   currentUrl: (cb) -> @driver.getCurrentUrl().then cb
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
+  hasElementAndIsVisible: (selector, cb) ->
+    @hasElement selector, (itHas) =>
+      return cb false unless itHas
+      @isVisible selector, cb
   isVisible: (selector, cb) -> @findElement(selector).isDisplayed().then cb
   parallel: (actions, cb) ->
     flow = webdriver.promise.createFlow (f) =>
@@ -184,6 +188,7 @@ module.exports = class Page
       else
         clear()
   refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
+  reload: @::refresh
   getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
   getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb
   getDialogMsg: (cb) ->

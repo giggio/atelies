@@ -37,3 +37,4 @@ define [
         canRateAgain: on
         step: true
         showRateInfo: off
+        nbRates: 9999
