@@ -1,5 +1,19 @@
 <h2>Pedido:</h2>
 <div id="order">
+  <div id="newEvaluation" class="panel panel-warning">
+    <div class="panel-heading">
+      <h4 class="panel-title"><strong>Você ainda não avaliou esse pedido!</strong> Por favor avalie o vendedor auxiliar na sua classificação.</h4>
+    </div>
+    <div class="panel-body">
+      Como você classificaria o lojista com relação a esse pedido (1 sendo muito ruim e 5 excelente)?
+      <div id="ratingStars" data-average="0" data-id="1"></div>
+      <div class="form-group">
+        <label for="newEvaluation">Comente sobre sua avaliação (opcional):</label>
+        <textarea id="newEvaluationBody" name="newEvaluationBody" rows="4" class="form-control" ></textarea>
+      </div>
+      <button id="createEvaluation" class="btn btn-warning">Avaliar</button>
+    </div>
+  </div>
   <div id="orderDescription">
     <span id="_id" data-id="{{order._id}}"></span>
     Pedido realizado em <strong><span id="orderDate">{{order.orderDate}}</span></strong>

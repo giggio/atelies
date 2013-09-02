@@ -29,3 +29,11 @@ define [
         quantity: i.quantity
         totalPrice: converters.currency i.totalPrice
       @$el.html context user: @user, order: order
+      @$("#ratingStars").jRating
+        bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
+        smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
+        sendRequest: off
+        rateMax: 5
+        canRateAgain: on
+        step: true
+        showRateInfo: off
