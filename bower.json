@@ -26,7 +26,8 @@
     "es5-shim": "~2.1.0",
     "js-md5": "1.x.x",
     "swag": "~0.3.1",
-    "jrating": "alpixel/jRating"
+    "jrating": "alpixel/jRating",
+    "ga": "http://www.google-analytics.com/analytics.js"
   },
   "devDependencies": {
     "mocha": "~1.9.0",

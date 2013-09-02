@@ -13,7 +13,7 @@ requirejs.config
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
     jqform: 'lib/jquery-form/jquery.form'
     jqexpander: 'lib/jquery.expander/jquery.expander'
-    ga: '//www.google-analytics.com/analytics'
+    ga: [ '//www.google-analytics.com/analytics' , 'lib/ga/index' ]
     showdown: 'lib/showdown/src/showdown'
     md5: 'lib/js-md5/js/md5'
     swag: 'lib/swag/lib/swag'
