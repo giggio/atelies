@@ -71,11 +71,11 @@ define [
         @model.save @model.attributes,
           success: @_productUpdated
           error: (model, xhr, options) =>
-            @logXhrError 'admin', xhr
             $("#updateProduct").prop "disabled", off
             if xhr.status is 422
               $('#sizeIsIncorrect .errorMsg', @$el).text JSON.parse(xhr.responseText).smallerThan
               return $('#sizeIsIncorrect').modal()
+            @logXhrError 'admin', xhr
             @showDialogError "Não foi possível salvar o produto. Tente novamente mais tarde."
     _deleteProduct: =>
       @model.destroy
