@@ -164,6 +164,8 @@ module.exports = (grunt) ->
           preserveLicenseComments: false
           optimizeCss: 'none'
           skipDirOptimize: true
+          paths:
+            ga: 'empty:'
           modules:[
             {
               name: 'bootstrap'
