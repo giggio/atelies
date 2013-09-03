@@ -41,6 +41,7 @@ define [
         "#shippingDoesApply": "checked:boolean(shippingApplies)"
         "#showPicture": "attr:{src:picture}"
       @_setValidation()
+      @_showShippingOptions()
     _setValidation: ->
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
@@ -55,12 +56,12 @@ define [
             validationErrorsEl.show()
     _showShippingOptions: ->
       if @model.get 'shippingApplies'
-        $('#shippingInfo').show()
+        @$('#shippingInfo').show()
       else
-        $('#shippingInfo').hide()
+        @$('#shippingInfo').hide()
     _updateProduct: =>
       if @model.isValid true
-        $("#updateProduct").prop "disabled", on
+        @$("#updateProduct").prop "disabled", on
         pictureVal = $('#picture').val()
         if typeof pictureVal isnt 'undefined' and pictureVal isnt ''
           @model.hasFiles = true
@@ -86,6 +87,6 @@ define [
     _productUpdated: =>
       Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
     _productDeleted: =>
-      $('#confirmDeleteModal').one 'hidden.bs.modal', =>
+      @$('#confirmDeleteModal').one 'hidden.bs.modal', =>
         Backbone.history.navigate "store/#{@store.get('slug')}", trigger: true
-      $('#confirmDeleteModal').modal 'hide'
+      @$('#confirmDeleteModal').modal 'hide'
