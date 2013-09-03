@@ -11,7 +11,7 @@ RouteFunctions  = require './routeFunctions'
 
 module.exports = class AccountRoutes
   constructor: (@env) ->
-    @_auth 'changePasswordShow', 'changePassword', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account'
+    @_auth 'changePasswordShow', 'changePassword', 'updateProfile', 'updateProfileShow', 'profileUpdated', 'account', 'evaluationCreate'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'admin'
@@ -140,3 +140,15 @@ module.exports = class AccountRoutes
           res.redirect 'account/passwordChanged'
       else
         return res.render 'resetPassword', error: 'Não foi possível trocar a senha.'
+
+  evaluationCreate: (req, res) ->
+    Order.findById req.params._id, (err, order) =>
+      return @handleError req, res, err if err?
+      order.addEvaluation {user: req.user, body: req.body.body, rating: req.body.rating}, (err, evaluation, store) =>
+        return @handleError req, res, err if err?
+        evaluation.save =>
+          order.save =>
+            store.save =>
+              order.sendMailAfterEvaluation (err) =>
+                return @handleError req, res, err if err?
+                res.send 201

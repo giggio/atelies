@@ -1,6 +1,7 @@
 require './support/_specHelper'
 Order                   = require '../../app/models/order'
 Store                   = require '../../app/models/store'
+StoreEvaluation         = require '../../app/models/storeEvaluation'
 AccountOrderDetailPage  = require './support/pages/accountOrderDetailPage'
 Postman                 = require '../../app/models/postman'
 
@@ -26,7 +27,7 @@ describe 'Account order detail page', ->
         { product: product2, quantity: 2 }
       ]
       shippingCost = 1
-      Order.create user, store, items, shippingCost, 'directSell', (order) ->
+      Order.create user, store, items, shippingCost, 'directSell', (err, order) ->
         order1 = order
         order.orderDate = new Date(2013,0,1)
         order1.save()
@@ -74,7 +75,7 @@ describe 'Account order detail page', ->
         itIs.should.be.true
         done()
 
-  describe.skip 'evaluation order and store', ->
+  describe 'evaluation order and store', ->
     evaluationBody = rating = null
     before (done) =>
       Postman.sentMails.length = 0
@@ -83,29 +84,39 @@ describe 'Account order detail page', ->
       page.loginFor user._id, ->
         page.visit order1._id, ->
           page.evaluateOrderWith {body: evaluationBody, rating: rating}, done
-    it 'should record the evaluation on the order', (done) ->
-      Order.findById order1._id (err, o) ->
-        o.evaluatedBy.should.equal user._id
-        done()
     it 'should record the evaluation on the store', (done) ->
-      Store.findById store._id (err, st) ->
+      Store.findById store._id, (err, st) ->
         st.numberOfEvaluations.should.equal 1
-        ev = st.evaluation[0]
+        st.evaluationAvgRating.should.equal 4
+        done()
+    it 'should have stored the evaluation and set it on the order', (done) ->
+      StoreEvaluation.findOne order: order1._id, (err, ev) ->
         ev.body.should.equal evaluationBody
         ev.rating.should.equal rating
         ev.date.should.equalDate new Date()
-        done()
+        ev.store.toString().should.equal order1.store.toString()
+        ev.order.toString().should.equal order1._id.toString()
+        ev.user.toString().should.equal user._id.toString()
+        Order.findById order1._id, (err, o) ->
+          o.evaluation.toString().should.equal ev._id.toString()
+          done()
     it 'should make the evaluation field disappear', (done) ->
       page.newEvaluationVisible (itIs) ->
         itIs.should.be.false
+        done()
+    it 'should show existing evaluation', (done) ->
+      page.existingEvaluation (ev) ->
+        ev.rating.should.equal rating
         done()
     it 'should send an e-mail message to the store admins', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
       mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store.name} recebeu uma avaliação"
-    it 'does not show pending evaluation anymore when visited again', (done) ->
+    it 'does not show pending evaluation anymore when visited again and shows existing evaluation', (done) ->
       page.reload ->
         page.newEvaluationVisible (itIs) ->
           itIs.should.be.false
-          done()
+          page.existingEvaluation (ev) ->
+            ev.rating.should.equal rating
+            done()

@@ -2,6 +2,7 @@ Product         = require '../models/product'
 User            = require '../models/user'
 Store           = require '../models/store'
 Order           = require '../models/order'
+StoreEvaluation = require '../models/storeEvaluation'
 _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
@@ -63,7 +64,8 @@ module.exports = class StoreRoutes
         @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (err, shippingCost) =>
           return @handleError req, res, err if err?
           paymentType = req.body.paymentType
-          Order.create user, store, items, shippingCost, paymentType, (order) =>
+          Order.create user, store, items, shippingCost, paymentType, (err, order) =>
+            return @handleError req, res, err if err?
             order.save (err, order) =>
               return @handleError req, res, err if err?
               for item in items
@@ -230,6 +232,6 @@ module.exports = class StoreRoutes
         res.send 201
 
   evaluations: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) ->
+    StoreEvaluation.getSimpleFromStore req.params._id, (err, evals) =>
       return @handleError req, res, err if err?
-      res.json store.toSimpleEvaluations()
+      res.json evals

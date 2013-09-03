@@ -22,11 +22,7 @@ define [
       @$(".ratingStars").jRating
         bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
         smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
-        sendRequest: off
         rateMax: 5
-        canRateAgain: on
-        step: true
-        showRateInfo: off
         isDisabled: on
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'

@@ -38,6 +38,7 @@ exports.route = (app) ->
   app.get     "/account/verifyUser/:_id",                                   account.verifyUser
   app.get     "/account/verified",                                          account.verified
   app.get     "/account/orders/:_id",                                       account.order
+  app.post    "/account/orders/:_id/evaluation",                            account.evaluationCreate
   app.get     "/account/changePassword",                                    account.changePasswordShow
   app.post    "/account/changePassword",                                    account.changePassword
   app.get     "/account/passwordChanged",                                   account.passwordChanged
@@ -75,6 +76,6 @@ exports.route = (app) ->
   #store
   app.get     "/products/search/:storeSlug/:searchTerm",                    store.productsSearch
   app.post    "/products/:productId/comments",                              store.commentCreate
-  app.get     "/stores/:storeSlug/evaluations",                             store.evaluations
+  app.get     "/stores/:_id/evaluations",                                   store.evaluations
   app.get     "/:storeSlug",                                                store.store
   app.get     "/:storeSlug/:productSlug",                                   store.product

@@ -82,7 +82,7 @@ define [
           Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
     evaluations: ->
       store = storeBootstrapModel.store
-      evaluations = new StoreEvaluations storeSlug: store.slug
+      evaluations = new StoreEvaluations storeId: store._id
       evaluations.fetch
         reset: true
         success: =>

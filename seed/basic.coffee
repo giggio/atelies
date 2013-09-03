@@ -126,6 +126,7 @@ db.products.insert
   hasInventory: true
   inventory: 40
   random: Math.random()
+product2 = db.products.findOne name:'name 2'
 db.products.insert
   name: 'name 3'
   nameKeywords: ['name', '3']
@@ -338,24 +339,6 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 2
   evaluationAvgRating: 4
-  evaluations: [
-    {
-    body: 'Alguma avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
-    rating: 3.4
-    date: new Date(2013,3,4)
-    user: user1._id
-    userName: user1.name
-    userEmail: user1.email
-    },
-    {
-    body: 'Uma outra avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
-    rating: 4.6
-    date: new Date(2013,5,4)
-    user: user2._id
-    userName: user2.name
-    userEmail: user2.email
-    }
-  ]
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
@@ -489,4 +472,46 @@ db.orders.insert
   customer: user1._id
   deliveryAddress: user1.deliveryAddress
   paymentType: 'directSell'
-db.orders.ensureIndex { customer: 1 }
+order1 = db.orders.findOne shippingCost: 1
+db.orders.insert
+  store: store1._id
+  items: [
+    product: product2._id
+    name: product2.name
+    price: product2.price
+    quantity: 1
+    totalPrice: product2.price
+  ]
+  totalProductsPrice: product2.price
+  shippingCost: 2
+  totalSaleAmount: product2.price + 2
+  orderDate: new Date(2013, 2, 1)
+  customer: user2._id
+  deliveryAddress: user2.deliveryAddress
+  paymentType: 'directSell'
+order2 = db.orders.findOne shippingCost: 2
+db.orders.ensureIndex customer: 1
+db.storeevaluations.remove()
+db.storeevaluations.insert
+  body: 'Alguma avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
+  rating: 3.4
+  date: new Date(2013,3,4)
+  user: user1._id
+  userName: user1.name
+  userEmail: user1.email
+  order: order1._id
+  store: store1._id
+storeEvaluation1 = db.storeevaluations.findOne rating: 3.4
+db.storeevaluations.insert
+  body: 'Uma outra avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
+  rating: 4.6
+  date: new Date(2013,5,4)
+  user: user2._id
+  userName: user2.name
+  userEmail: user2.email
+  order: order1._id
+  store: store1._id
+storeEvaluation2 = db.storeevaluations.findOne rating: 4.6
+db.storeevaluation.ensureIndex { store: 1 }
+db.orders.update {shippingCost: 1}, $set: evaluation: storeEvaluation1._id
+db.orders.update {shippingCost: 2}, $set: evaluation: storeEvaluation2._id

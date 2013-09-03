@@ -1,5 +1,6 @@
 Page          = require './seleniumPage'
 webdriver     = require 'selenium-webdriver'
+async         = require 'async'
 
 module.exports = class AccountOrdersPage extends Page
   visit: (_id, cb) -> super "account#orders/#{_id}", cb
@@ -38,6 +39,11 @@ module.exports = class AccountOrdersPage extends Page
   evaluateOrderWith: (opt, cb) ->
     @type "#newEvaluationBody", opt.body, =>
       action = new webdriver.ActionSequence @driver
-      action.mouseMove(@findElement("#ratingStars .jStar"), {x:23*opt.rating, y:0})
+      action.mouseMove(@findElement("#newRatingStars .jStar"), {x:23*opt.rating, y:0})
         .click()
-        .perform().then cb
+        .perform().then =>
+          @pressButtonAndWait "#createEvaluation", cb
+  existingEvaluation: (cb) ->
+    getExistingEval =
+      rating: (cb) => @getAttribute "#evaluation #ratingStars", "data-average", (t) => cb null, parseFloat t
+    async.parallel getExistingEval, (err, ev) -> cb ev

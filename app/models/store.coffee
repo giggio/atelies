@@ -1,6 +1,7 @@
 mongoose = require 'mongoose'
 slug     = require '../helpers/slug'
 _        = require 'underscore'
+Evaluation = require './storeEvaluation'
 
 storeSchema = new mongoose.Schema
   name:                   type: String, required: true
@@ -26,14 +27,6 @@ storeSchema = new mongoose.Schema
   random:                 type: Number, required: true, default: -> Math.random()
   numberOfEvaluations:    type: Number, required: true, default: 0
   evaluationAvgRating:    type: Number, required: true, default: 0
-  evaluations: [
-    body:         type: String, required: true
-    rating:       type: Number, required: true
-    date:         type: Date, required: true, default: Date.now
-    user:         type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true
-    userName:     type: String, required: true
-    userEmail:    type: String, required: true
-  ]
 
 storeSchema.methods.createProduct = ->
   product = new Product()
@@ -41,16 +34,8 @@ storeSchema.methods.createProduct = ->
   product.storeSlug = @slug
   product
 
-storeSchema.methods.addEvaluation = (evaluation, cb) ->
-  evaluation.userName = evaluation.user.name
-  evaluation.userEmail = evaluation.user.email
-  @evaluations.push evaluation
-  @validate (err) =>
-    return cb err if err?
-    @evaluationAvgRating = ( @evaluationAvgRating * @numberOfEvaluations + evaluation.rating ) / ++@numberOfEvaluations
-    cb()
-storeSchema.methods.toSimpleEvaluations = ->
-  _.map @evaluations, (e) -> body: e.body, rating: e.rating, date: e.date, userName: e.userName, userEmail: e.userEmail
+storeSchema.methods.evaluationAdded = (evaluation) ->
+  @evaluationAvgRating = ( @evaluationAvgRating * @numberOfEvaluations + evaluation.rating ) / ++@numberOfEvaluations
 storeSchema.methods.toSimple = ->
   store =
     _id: @_id

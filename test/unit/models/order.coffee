@@ -23,7 +23,7 @@ describe 'Order', ->
       item2 = product: p2, quantity: 2
       items = [ item1, item2 ]
       shippingCost = 1
-      Order.create user, store, items, shippingCost, 'directSell', (o) ->
+      Order.create user, store, items, shippingCost, 'directSell', (err, o) ->
         order = o
         done()
     it 'assigned customer', ->

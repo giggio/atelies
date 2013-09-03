@@ -3,6 +3,6 @@ define [
 ], (Backbone) ->
   class StoreEvaluations extends Backbone.Collection
     initialize: (opt) ->
-      @storeSlug = opt.storeSlug
+      @storeId = opt.storeId
     model: Backbone.Open.Model
-    url: -> "/stores/#{@storeSlug}/evaluations"
+    url: -> "/stores/#{@storeId}/evaluations"

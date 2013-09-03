@@ -1,7 +1,8 @@
 mongoose  = require 'mongoose'
 _         = require 'underscore'
 Postman   = require './postman'
-postman = new Postman()
+postman   = new Postman()
+async     = require 'async'
 
 orderSchema = new mongoose.Schema
   store:                      type: mongoose.Schema.Types.ObjectId, ref: 'store'
@@ -24,7 +25,37 @@ orderSchema = new mongoose.Schema
     state:                    type: String, required: true
     zip:                      type: String, required: true
   paymentType:                type: String, required: true
+  evaluation:                 type: mongoose.Schema.Types.ObjectId, ref: 'storeevaluation'
 
+orderSchema.methods.addEvaluation = (evaluation, cb) ->
+  evaluation.order = @
+  evaluation.store = @store
+  StoreEvaluation.create evaluation, (err, evaluation) =>
+    return cb err, evaluation if err?
+    @evaluation = evaluation
+    Store.findById @store, (err, store) =>
+      return cb err if err?
+      store.evaluationAdded evaluation
+      cb null, evaluation, store
+orderSchema.methods.sendMailAfterEvaluation = (cb) ->
+  @populate 'evaluation store', (err) =>
+    return cb err if err?
+    User.findAdminsFor @store._id, (err, users) =>
+      return cb err if err?
+      sendMailActions =
+        for user in users
+          do (user) =>
+            body = "<html>
+              <h1>Olá #{user.name},</h1>
+              <h2>Sua loja recebeu uma avaliação</h2>
+              <div>
+                O cliente <a href=\"mailto:#{@evaluation.userEmail}\">#{@evaluation.userName}</a> fez uma
+                avaliação de #{@evaluation.rating} estrelas, com o comentário '#{@evaluation.body}'.
+              </div>
+              <div>Você pode vê-lo <a href=\"https://www.atelies.com.br/#{@store.slug}#evaluations\">aqui</a>.</div>
+              </html>"
+            (cb) => postman.sendFromContact user, "Ateliês: A loja #{@store.name} recebeu uma avaliação", body, cb
+      async.parallel sendMailActions, cb
 orderSchema.methods.toSimpleOrder = ->
   items = _.map @items, (i) ->
     _id: i.product.toString()
@@ -59,7 +90,8 @@ Order.create = (user, store, items, shippingCost, paymentType, cb) ->
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
   order.paymentType = paymentType
-  process.nextTick -> cb order
+  order.validate (err) =>
+    cb err, order
 Order.getSimpleByUser = (user, cb) ->
   Order.find(customer: user).populate('store', 'name slug').exec (err, orders) ->
     cb err, null if err?
@@ -114,7 +146,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
       totalPrice: i.totalPrice
     cb null, simpleOrder
 Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
-  Order.findById(_id).populate('items.product', '_id name slug picture').exec (err, order) ->
+  Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation').exec (err, order) ->
     cb err, null if err?
     return cb null, null if order.customer.toString() isnt user._id.toString()
     simpleOrder =
@@ -133,4 +165,12 @@ Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
       price: i.price
       quantity: i.quantity
       totalPrice: i.totalPrice
+    if order.evaluation?
+      simpleOrder.evaluation =
+        rating: order.evaluation.rating
+        body: order.evaluation.body
     cb null, simpleOrder
+
+StoreEvaluation = require './storeEvaluation'
+Store = require './store'
+User = require './user'
