@@ -126,13 +126,14 @@ describe 'Store Finish Order: Summary', ->
         url.should.equal "http://localhost:8000/#{store2.slug}#finishOrder/orderFinished"
         done()
 
-  describe 'completing the payment with manual shipping calculation', ->
+  describe 'completing the payment with product without shipping', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()
+        product1.shipping.applies = false
         product1.save()
         p1Inventory = product1.inventory
         user1 = generator.user.d()
@@ -142,11 +143,9 @@ describe 'Store Finish Order: Summary', ->
             storeProductPage.visit 'store_1', 'name_1', ->
               storeProductPage.purchaseItem ->
                 storeCartPage.clickFinishOrder ->
-                  storeFinishOrderShippingPage.clickSedexOption ->
-                    storeFinishOrderShippingPage.clickContinue ->
-                      storeFinishOrderPaymentPage.clickSelectDirectPayment ->
-                        storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                          page.clickCompleteOrder done
+                  storeFinishOrderPaymentPage.clickSelectDirectPayment ->
+                    storeFinishOrderPaymentPage.clickSelectPaymentType ->
+                      page.clickCompleteOrder done
     it 'should have stored a new order on db with direct payment', (done) ->
       Order.find (err, orders) ->
         throw err if err
@@ -155,7 +154,7 @@ describe 'Store Finish Order: Summary', ->
         order.customer.toString().should.equal user1._id.toString()
         order.store.toString().should.equal store._id.toString()
         order.items.length.should.equal 1
-        order.shippingCost.should.equal 20.1
+        order.shippingCost.should.equal 0
         order.totalProductsPrice.should.equal product1.price
         order.totalSaleAmount.should.equal order.totalProductsPrice + order.shippingCost
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()

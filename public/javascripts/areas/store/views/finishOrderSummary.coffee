@@ -51,7 +51,8 @@ define [
         @showDialogError "Não foi possível fazer o pedido. Tente novamente mais tarde."
         $("#finishOrder").prop "disabled", off
       order = items: items
-      order.shippingType = @cart.shippingOptionSelected().type
+      if @cart.hasShipping()
+        order.shippingType = @cart.shippingOptionSelected().type
       order.paymentType = paymentType
       order = new Order order
       orders.add order

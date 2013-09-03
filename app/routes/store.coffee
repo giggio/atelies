@@ -168,6 +168,7 @@ module.exports = class StoreRoutes
         cb null, orderId
 
   _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
+    return setImmediate(-> cb null, 0) unless shippingType?
     @_calculateShipping store.slug, data, user, (err, shippingOptions) ->
       return cb err if err?
       shippingOption = _.findWhere shippingOptions, type: shippingType
