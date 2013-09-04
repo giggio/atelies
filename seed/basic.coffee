@@ -348,6 +348,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 2
   evaluationAvgRating: 4
+  isFlyerAuthorized: true
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
@@ -372,6 +373,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
+  isFlyerAuthorized: true
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert
@@ -395,6 +397,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
+  isFlyerAuthorized: false
 db.stores.insert
   name: 'Some Fancy Name'
   nameKeywords: ['some', 'fancy', 'name']
@@ -416,6 +419,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
+  isFlyerAuthorized: true
 db.stores.insert
   name: 'Some Other Fancy Name'
   nameKeywords: ['some', 'other', 'fancy', 'name']
@@ -436,6 +440,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
+  isFlyerAuthorized: true
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -460,6 +465,7 @@ for i in [4..15]
     random: Math.random()
     numberOfEvaluations: 0
     evaluationAvgRating: 0
+    isFlyerAuthorized: true
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
 db.stores.ensureIndex { slug: 1 }

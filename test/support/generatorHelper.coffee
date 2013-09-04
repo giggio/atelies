@@ -171,6 +171,7 @@ exports.generator =
           token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: true
     b: -> new Store
       name: 'Store 2'
       slug: 'store_2'
@@ -189,6 +190,7 @@ exports.generator =
       pmtGateways: {}
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: true
     c: -> new Store
       name: 'Store 3'
       slug: 'store_3'
@@ -207,6 +209,7 @@ exports.generator =
       pmtGateways: {}
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: true
     d: -> new Store
       name: 'My Very Nice Store'
       slug: 'my_very_nice_store'
@@ -226,6 +229,7 @@ exports.generator =
       pmtGateways: {}
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: true
     e: -> new Store
       name: 'My Other Very Nice Store'
       slug: 'my_other_very_nice_store'
@@ -244,6 +248,7 @@ exports.generator =
       pmtGateways: {}
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: true
     empty: -> new Store
       name: ''
       slug: ''
@@ -262,6 +267,7 @@ exports.generator =
       pmtGateways: {}
       numberOfEvaluations: 0
       evaluationAvgRating: 0
+      isFlyerAuthorized: false
   user:
     superAdmin: ->
       user = new User

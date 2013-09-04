@@ -27,6 +27,7 @@ storeSchema = new mongoose.Schema
   random:                 type: Number, required: true, default: -> Math.random()
   numberOfEvaluations:    type: Number, required: true, default: 0
   evaluationAvgRating:    type: Number, required: true, default: 0
+  isFlyerAuthorized:      type: Boolean, default: false
 
 storeSchema.methods.createProduct = ->
   product = new Product()
@@ -117,11 +118,11 @@ Store.findWithProductsById = (_id, cb) ->
       cb null, store, products
 Store.findRandomForHome = (howMany, cb) ->
   random = Math.random()
-  Store.find({flyer: /./, random:$gte:random}).sort('random').limit(howMany).exec (err, stores) ->
+  Store.find({flyer: /./, isFlyerAuthorized: true, random:$gte:random}).sort('random').limit(howMany).exec (err, stores) ->
     return cb err if err?
     if stores.length < howMany
       difference = stores.length - howMany
-      Store.find({flyer: /./}).sort('random').limit(difference).exec (err, newStores) ->
+      Store.find({flyer: /./, isFlyerAuthorized: true}).sort('random').limit(difference).exec (err, newStores) ->
         return cb err if err?
         cb null, stores.concat newStores
     else
