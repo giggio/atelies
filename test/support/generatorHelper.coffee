@@ -263,6 +263,18 @@ exports.generator =
       numberOfEvaluations: 0
       evaluationAvgRating: 0
   user:
+    superAdmin: ->
+      user = new User
+        email: 'admin@atelies.com.br'
+        passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+        name: 'Super Admin'
+        isSeller: false
+        stores: []
+        loginError: 0
+        verified: true
+        isAdmin: true
+      user.password = 'abc'
+      user
     a: ->
       user = new User
         email: 'a@a.com'
