@@ -26,3 +26,4 @@ module.exports = class HomePage extends Page
     ]
     async.parallel actions, ->
       cb product
+  storesIds: @::getAttributeInElements.partial '#stores .store', "data-id"

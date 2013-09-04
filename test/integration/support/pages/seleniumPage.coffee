@@ -99,6 +99,13 @@ module.exports = class Page
     el.isSelected().then (itIs) -> if itIs then el.click().then cb else process.nextTick cb
   getTextIn: (selector, childSelector, cb) ->
     @findElementIn selector, childSelector, (el) => @getText el, cb
+  getAttributeInElements: (selector, attr, cb) ->
+    @findElements selector, (els) =>
+      getActions =
+        for el in els
+          do (el) =>
+            (cb) => @getAttribute el, attr, (t) -> cb null, t
+      async.parallel getActions, (err, vals) -> cb vals
   getAttributeIn: (selector, childSelector, attr, cb) ->
     @findElementIn selector, childSelector, (el) =>
       @getAttribute el, attr, cb
