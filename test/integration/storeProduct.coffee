@@ -1,6 +1,7 @@
 require './support/_specHelper'
 Store                 = require '../../app/models/store'
 Product               = require '../../app/models/product'
+ProductComment        = require '../../app/models/productComment'
 StoreProductPage      = require './support/pages/storeProductPage'
 md5                   = require("blueimp-md5").md5
 Postman               = require '../../app/models/postman'
@@ -81,14 +82,16 @@ describe 'Store product page', ->
           store = generator.store.a()
           store.save()
           product1 = generator.product.a()
+          product1.save()
           userCommenting1 = generator.user.a()
           userCommenting2 = generator.user.b()
           body1 = "body1"
           body2 = "body2"
-          product1.addComment user: userCommenting1, body: body1
-          product1.addComment user: userCommenting2, body: body2
-          product1.save()
-          page.visit "store_1", "name_1", done
+          product1.addComment user: userCommenting1, body: body1, (err, comment) =>
+            comment.save()
+            product1.addComment user: userCommenting2, body: body2, (err, comment) =>
+              comment.save()
+              page.visit "store_1", "name_1", done
       it 'shows comments', (done) ->
         page.comments (comments) ->
           comments.length.should.equal 2
@@ -119,9 +122,9 @@ describe 'Store product page', ->
             page.visit "store_1", "name_1", ->
               page.writeComment body, done
       it 'created the comment on the database', (done) ->
-        Product.findById product1._id, (err, product) ->
-          product.comments.length.should.equal 1
-          comm = product.comments[0]
+        ProductComment.findByProduct product1._id, (err, comments) ->
+          comments.length.should.equal 1
+          comm = comments[0]
           comm.user.toString().should.equal userCommenting._id.toString()
           comm.date.should.equalDate new Date()
           comm.body.should.equal body

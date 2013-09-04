@@ -115,7 +115,7 @@ describe 'Product', ->
     product.shipping.dimensions.height = 1
     product.hasShippingInfo().should.be.false
   describe 'has comments', ->
-    user = product = store = userCommenting = body = null
+    user = product = store = userCommenting = body = comment = null
     before (done) ->
       Postman.dryrun = on
       Postman.sentMails.length = 0
@@ -127,18 +127,19 @@ describe 'Product', ->
       user = generator.store.b()
       sinon.stub(Store, "findBySlug").yields null, store
       sinon.stub(User, "findAdminsFor").yields null, [user]
-      product.addComment {user: userCommenting, body: body}, done
+      product.addComment {user: userCommenting, body: body}, (err, commentCreated) ->
+        return done err if err?
+        comment = commentCreated
+        done()
     after ->
       Store.findBySlug.restore()
       User.findAdminsFor.restore()
     it 'added the comment to the product', ->
-      product.comments.length.should.equal 1
-      comm = product.comments[0]
-      comm.user.should.equal userCommenting._id
-      comm.userName.should.equal userCommenting.name
-      comm.userEmail.should.equal userCommenting.email
-      comm.body.should.equal body
-      comm.date.should.equalDate new Date()
+      comment.user.should.equal userCommenting._id
+      comment.userName.should.equal userCommenting.name
+      comment.userEmail.should.equal userCommenting.email
+      comment.body.should.equal body
+      comment.date.should.equalDate new Date()
     it 'sent email', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]

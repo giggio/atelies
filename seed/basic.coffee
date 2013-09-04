@@ -83,22 +83,6 @@ db.products.insert
   hasInventory: true
   inventory: 30
   random: Math.random()
-  comments: [
-    {
-    body: "Some really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\n***Again*** really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    date: new Date(2013, 0, 1)
-    user: user1._id
-    userName: user1.name
-    userEmail: user1.email
-    },
-    {
-    body: "Other long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    date: new Date(2013, 1, 2)
-    user: user2._id
-    userName: user2.name
-    userEmail: user2.email
-    }
-  ]
 product1 = db.products.findOne name:'name 1'
 db.products.insert
   name: 'name 2'
@@ -314,6 +298,22 @@ for i in [8..25]
 db.products.ensureIndex { description:'text' }, { default_language: "portuguese" }
 db.products.ensureIndex { nameKeywords: 1 }
 db.products.ensureIndex { slug: 1 }
+db.productcomments.remove()
+db.productcomments.insert
+  body: "Some really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\n***Again*** really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  date: new Date(2013, 0, 1)
+  user: user1._id
+  userName: user1.name
+  userEmail: user1.email
+  product: product1._id
+db.productcomments.insert
+  body: "Other long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  date: new Date(2013, 1, 2)
+  user: user2._id
+  userName: user2.name
+  userEmail: user2.email
+  product: product1._id
+db.productcomments.ensureIndex { product: 1 }
 db.stores.remove()
 db.stores.insert
   name: 'Store 1'

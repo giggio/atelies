@@ -32,13 +32,6 @@ productSchema = new mongoose.Schema
   hasInventory:   Boolean
   inventory:      Number
   random:         type: Number, required: true, default: -> Math.random()
-  comments: [
-    body:         type: String, required: true
-    date:         type: Date, required: true, default: Date.now
-    user:         type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true
-    userName:     type: String, required: true
-    userEmail:    type: String, required: true
-  ]
 
 productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
@@ -46,34 +39,8 @@ productSchema.path('name').set (val) ->
   val
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
 productSchema.methods.addComment = (comment, cb) ->
-  comment.userName = comment.user.name
-  comment.userEmail = comment.user.email
-  @comments.push comment
-  @validate (err) =>
-    if err?
-      @comments.pop()
-      return cb err
-    else
-      @findAdmins (err, users) =>
-        return cb err if err?
-        body = "<html>
-          <h1>Olá!</h1>
-          <div>
-            Como você é um dos administradores da loja #{@storeName} estamos te avisando que o produto <strong>#{@name}</strong> recebeu um comentário.<br />
-          </div>
-          <div>
-            Clique <a href='https://www.atelies.com.br/#{@url()}'>aqui</a> para ver o comentário.
-          </div>
-          <div>&nbsp;</div>
-          <div>&nbsp;</div>
-          <div>
-            Equipe Ateliês
-          </div>
-          </html>"
-        sendMailActions =
-          for user in users
-            (cb) => postman.sendFromContact user, "Ateliês: O produto #{@name} da loja #{@storeName} recebeu um comentário", body, cb
-        async.parallel sendMailActions, cb
+  comment.product = @
+  ProductComment.create comment, cb
 
 productSchema.methods.findAdmins = (cb) ->
   Store.findBySlug @storeSlug, (err, store) =>
@@ -98,7 +65,12 @@ productSchema.methods.toSimpleProduct = ->
   shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
-  comments: _.map(@comments, (c) -> title: c.title, body: c.body, date: c.date, userName: c.userName, userEmail: c.userEmail)
+productSchema.methods.toSimpleProductWithComments = (cb) ->
+  simple = @toSimpleProduct()
+  ProductComment.findByProduct @, (err, comments) =>
+    return cb err if err?
+    simple.comments = _.map comments, (c) -> c.toSimple()
+    cb null, simple
 productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
@@ -181,5 +153,6 @@ Product.getShippingWeightAndDimensions = (ids, cb) ->
 Product.pictureDimension = '600x600'
 Product.pictureThumbDimension = '150x150'
 
-User      = require './user'
-Store     = require './store'
+User                = require './user'
+Store               = require './store'
+ProductComment      = require './productComment'

@@ -48,7 +48,9 @@ module.exports = class StoreRoutes
     Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) =>
       return @handleError req, res, err if err?
       return res.send 404 if product is null
-      res.json product.toSimpleProduct()
+      product.toSimpleProductWithComments (err, simpleProduct) =>
+        return @handleError req, res, err if err?
+        res.json simpleProduct
   
   orderCreate: (req, res) ->
     user = req.user
@@ -227,8 +229,9 @@ module.exports = class StoreRoutes
   commentCreate: (req, res) ->
     Product.findById req.params.productId, (err, product) =>
       return @handleError req, res, err if err?
-      product.addComment {user: req.user, body: req.body.body}, (err) =>
-        product.save()
+      product.addComment {user: req.user, body: req.body.body}, (err, comment) =>
+        return @handleError req, res, err if err?
+        comment.save()
         res.send 201
 
   evaluations: (req, res) ->
