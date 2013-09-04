@@ -7,7 +7,7 @@ append scriptsFooter
     }
   script(src='#{STATIC_PATH}/javascripts/lib/requirejs/require.js', data-main='#{STATIC_PATH}/javascripts/bootstrap.js')
   script.
-    //-require(['siteAdminBootstrap']);
+    require(['siteAdminBootstrap']);
 
 append content
   .container.siteAdminContainer
