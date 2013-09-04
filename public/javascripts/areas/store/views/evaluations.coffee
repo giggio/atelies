@@ -20,8 +20,8 @@ define [
       context = Handlebars.compile @template
       @$el.html context store: @store, evaluations: @evaluations, hasEvaluations: @evaluations.length > 0
       @$(".ratingStars").jRating
-        bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
-        smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
+        bigStarsPath : "#{staticPath}/images/jrating/stars.png"
+        smallStarsPath : "#{staticPath}/images/jrating/small.png"
         rateMax: 5
         isDisabled: on
     createNiceDate: (date) ->

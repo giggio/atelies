@@ -36,15 +36,15 @@ define [
     _showStars: ->
       if @order.evaluation?
         @$("#ratingStars").jRating
-          bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
-          smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
+          bigStarsPath : "#{staticPath}/images/jrating/stars.png"
+          smallStarsPath : "#{staticPath}/images/jrating/small.png"
           rateMax: 5
           showRateInfo: off
           isDisabled: on
       else
         @$("#newRatingStars").jRating
-          bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
-          smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
+          bigStarsPath : "#{staticPath}/images/jrating/stars.png"
+          smallStarsPath : "#{staticPath}/images/jrating/small.png"
           sendRequest: off
           rateMax: 5
           canRateAgain: on

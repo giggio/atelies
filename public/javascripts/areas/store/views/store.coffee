@@ -23,8 +23,8 @@ define [
       userOwned = @user?.isSeller and _.contains @user.stores, @store.slug
       @$el.html context store: @store, staticPath: @staticPath, homePageDescription: homePageDescription, userOwned: userOwned, evaluationAvgRating: @store.evaluationAvgRating, numberOfEvaluations: @store.numberOfEvaluations, hasEvaluations: @store.numberOfEvaluations > 0
       @$("#ratingStars").jRating
-        bigStarsPath : 'public/javascripts/lib/jrating/jquery/icons/stars.png'
-        smallStarsPath : 'public/javascripts/lib/jrating/jquery/icons/small.png'
+        bigStarsPath : "#{staticPath}/images/jrating/stars.png"
+        smallStarsPath : "#{staticPath}/images/jrating/small.png"
         sendRequest: off
         rateMax: 5
         canRateAgain: on
