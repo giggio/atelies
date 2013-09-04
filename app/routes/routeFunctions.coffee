@@ -29,6 +29,15 @@ module.exports = class RouteFunctions
           return res.redirect 'account/mustVerifyUser' unless req.loggedIn and req.user?.verified
           original.apply @, arguments
 
+  _authSiteAdmin: ->
+    for fn in arguments
+      do (fn) =>
+        original = @[fn]
+        @[fn] = (req, res) ->
+          unless req.loggedIn and req.user?.isAdmin
+            return res.render 'accessDenied', (err, html) =>
+              res.send 403, html
+          original.apply @, arguments
   _getSubdomain: (domain, host) ->
     return undefined if @env isnt 'production' and host is 'localhost'
     if host isnt domain and host isnt "www.#{domain}"

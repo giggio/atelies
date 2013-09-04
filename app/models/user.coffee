@@ -21,7 +21,9 @@ userSchema = new mongoose.Schema
   loginError:       Number
   verified:         type: Boolean, default: false
   resetKey:         Number
+  isAdmin:          type: Boolean, default: false
 
+userSchema.virtual("isSuperAdmin").get -> @email is config.superAdminEmail
 userSchema.methods.createResetKey = ->
   return @resetKey if @resetKey?
   @resetKey = Math.random() * Math.pow(10, 18)

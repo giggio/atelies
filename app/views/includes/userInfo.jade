@@ -7,6 +7,10 @@
           span &nbsp;#{user.name}
           b.caret
         ul.dropdown-menu
+          if user.isAdmin
+            li: a#siteAdmin(href='/siteAdmin') Administração do site
+          if user.isSeller
+            li: a#admin2(href='/admin') Administração
           li: a#account(href="/account") Sua conta
           li: a#goCheckOrders(href="/account#orders") Pedidos realizados
           li: a#goChangePassword(href="/account/changePassword") Troque sua senha

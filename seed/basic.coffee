@@ -4,6 +4,15 @@ db = connect "#{server2}/#{dbName2}"
 db.auth user, password if password?
 db.users.remove()
 db.users.insert
+  email: 'admin@atelies.com.br'
+  passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
+  name: 'Super Admin'
+  isSeller: false
+  stores: []
+  loginError: 0
+  verified: true
+  isAdmin: true
+db.users.insert
   email: 'a@a.com'
   passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
   name: 'Some Guy'

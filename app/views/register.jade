@@ -18,9 +18,10 @@ append content
             Temos ainda uma página de sugestões no [UserVoice](https://atelies.uservoice.com).  
             **Bem vindo!**
         if ('undefined' !== typeof errors && errors.length)
-          ul#errors
-            - each error in errors
-              li.error= error
+          .alert.alert-warning
+            ul#errors
+              - each error in errors
+                li.error= error
         :coffeescript
           window.RecaptchaOptions =
             custom_translations:

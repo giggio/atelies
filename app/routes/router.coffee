@@ -3,6 +3,7 @@ Home      = require './home'
 Account   = require './account'
 Store     = require './store'
 Admin     = require './admin'
+SiteAdmin = require './siteAdmin'
 
 exports.route = (app) ->
   env = app.get "env"
@@ -15,6 +16,8 @@ exports.route = (app) ->
   _.bindAll account
   admin = new Admin env
   _.bindAll admin
+  siteAdmin = new SiteAdmin env
+  _.bindAll siteAdmin
   home.storeWithDomain = store.store
   #home
   app.get     "/",                                                          home.index domain
@@ -53,6 +56,8 @@ exports.route = (app) ->
   app.post    "/account/resendConfirmationEmail",                           account.resendConfirmationEmail
   app.get     "/account/afterFacebookLogin",                                account.afterFacebookLogin
   app.get     "/notseller",                                                 account.notSeller
+  #site admin
+  app.get     "/siteAdmin",                                                 siteAdmin.siteAdmin
   #admin
   app.get     "/admin",                                                     admin.admin
   app.get     "/admin/orders",                                              admin.orders

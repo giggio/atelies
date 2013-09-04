@@ -10,6 +10,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
   process.env.FB_APP_ID = '618886944811863'
   process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d'
+  process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
 switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
@@ -44,12 +45,13 @@ values =
   facebook:
     appId: process.env.FB_APP_ID
     appSecret: process.env.FB_APP_SECRET
+  superAdminEmail: process.env.SUPER_ADMIN_EMAIL?.toLowerCase()
 values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else ""
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and
     @recaptcha? and @recaptcha?.publicKey? and @recaptcha?.privateKey and @baseDomain? and @serverEnvironment? and
-    @staticPath?
+    @staticPath? and @superAdminEmail?
 valuesPresent =
   appCookieSecret: values.appCookieSecret?
   connectionString: values.connectionString?
@@ -69,6 +71,7 @@ valuesPresent =
   baseDomain: values.baseDomain?
   serverEnvironment: values.serverEnvironment?
   staticPath: values.staticPath?
+  superAdminEmail: values.superAdminEmail?
 unless values.environment is 'test'
   console.log "Config values present: #{JSON.stringify valuesPresent}"
   console.log "Config values: #{JSON.stringify values}"

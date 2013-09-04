@@ -135,6 +135,10 @@ exports.configure = (app) ->
         errors.push "A senha não é forte."
         cb.fulfill errors
         return cb
+      if email is config.superAdminEmail
+        errors.push "E-mail já cadastrado."
+        cb.fulfill errors
+        return cb
       User.findByEmail email, (error, user) ->
         if error?
           errors.push error

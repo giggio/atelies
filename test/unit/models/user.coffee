@@ -29,3 +29,12 @@ describe 'User', ->
     user = generator.user.a()
     user.loginError = 3
     user.carefulLogin().should.equal.true
+  it 'is not usually super admin', ->
+    user = generator.user.a()
+    user.isSuperAdmin.should.be.false
+  it 'has a super admin', ->
+    config = require '../../../app/helpers/config'
+    superAdminEmail = "some@atelies.com.br"
+    config.superAdminEmail = superAdminEmail
+    user = new User email: superAdminEmail
+    user.isSuperAdmin.should.be.true
