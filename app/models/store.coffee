@@ -27,7 +27,7 @@ storeSchema = new mongoose.Schema
   random:                 type: Number, required: true, default: -> Math.random()
   numberOfEvaluations:    type: Number, required: true, default: 0
   evaluationAvgRating:    type: Number, required: true, default: 0
-  isFlyerAuthorized:      type: Boolean, default: false
+  isFlyerAuthorized:      Boolean
 
 storeSchema.methods.createProduct = ->
   product = new Product()

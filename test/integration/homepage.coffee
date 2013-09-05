@@ -69,7 +69,10 @@ describe 'Home page', ->
           for i in [0..11]
             s = generator.store.a()
             s.name+=i
-            s.isFlyerAuthorized = false
+            if i > 5
+              s.isFlyerAuthorized = undefined
+            else
+              s.isFlyerAuthorized = false
             s.save()
             s
         authorizedStores =
