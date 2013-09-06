@@ -108,7 +108,7 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
     unauthorizedMsg = "<div>Quando o flyer de uma loja é reprovado a loja não aparece
       mais na home page do Ateliês (mas ainda aparece nas buscas).</div>
       <div>Para que sua loja apareça você deve colocar um arquivo que represente sua identidade visual e
-      contenha o nome do seu aletiê de maneira legível, este arquivo será aprovado em até 48 horas por um
+      contenha o nome do seu ateliê de maneira legível, este arquivo será aprovado em até 48 horas por um
       administrador do portal.</div>
       <div>Você também pode falar com o administrador que reprovou o flyer diretamente.</div>"
   User.findAdminsFor @_id, (err, users) =>
