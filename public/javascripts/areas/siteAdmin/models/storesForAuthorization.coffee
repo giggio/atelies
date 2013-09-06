@@ -4,19 +4,20 @@ define [
   './storeForAuthorization'
 ], (_, Backbone, StoreForAuthorization) ->
   class StoresForAuthorization extends Backbone.Collection
+    url: -> "siteAdmin/storesForAuthorization/#{@isFlyerAuthorizedString}"
     initialize: (opt) ->
-      @isFlyerAuthorized = if opt.status? then opt.status else ''
+      @isFlyerAuthorizedString = if opt.status? then opt.status else ''
+      @isFlyerAuthorized = opt.status
       @listenTo @, "sync", ->
         for store in @models
           @listenTo store, "authorized", _.bind @_storeAuthorized, @
           @listenTo store, "unauthorized", _.bind @_storeUnauthorized, @
     model: StoreForAuthorization
-    url: -> "siteAdmin/storesForAuthorization/#{@isFlyerAuthorized}"
     _storeAuthorized: (store) ->
-      @remove store unless @isFlyerAuthorized
+      @remove store if !@isFlyerAuthorized or !@isFlyerAuthorized?
       @trigger 'authorized', @, store
       @trigger 'authorizationChanged', @, store, "authorized"
     _storeUnauthorized: (store) ->
-      @remove store if @isFlyerAuthorized
+      @remove store if @isFlyerAuthorized or !@isFlyerAuthorized?
       @trigger 'unauthorized', @, store
       @trigger 'authorizationChanged', @, store, "unauthorized"
