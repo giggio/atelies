@@ -102,7 +102,12 @@ storeSchema.methods.updateName = (name, cb) ->
 storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
   if @isFlyerAuthorized
     status = "aprovado"
-    unauthorizedMsg = "<div>Quando o flyer de uma loja é reprovado a loja não aparece mais na home page do Ateliês (mas ainda aparece nas buscas). Veja os critérios para que a loja seja aprovada no FAQ ou fale com o administrador que reprovou o flyer diretamente.</div>"
+    unauthorizedMsg = "<div>Quando o flyer de uma loja é reprovado a loja não aparece
+      mais na home page do Ateliês (mas ainda aparece nas buscas).</div>
+      <div>Para que sua loja apareça você deve colocar um arquivo que represente sua identidade visual e
+      contenha o nome do seu aletiê de maneira legível, este arquivo será aprovado em até 48 horas por um
+      administrador do portal.</div>
+      <div>Você também pode falar com o administrador que reprovou o flyer diretamente.</div>"
   else
     status = "reprovado"
     unauthorizedMsg = ""
@@ -119,6 +124,7 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
             <div>O usuário que realizou a ação foi <a href='mailto:#{userAuthorizing.email}'>#{userAuthorizing.name}</a>.</div>
             <div></div>
             #{unauthorizedMsg}
+            <div></div>
             <div></div>
             <div>Equipe Ateliês</div>
             </html>"
