@@ -201,6 +201,11 @@ module.exports = (grunt) ->
               ]
             }
             {
+              name: 'siteAdminBootstrap'
+              include: ['areas/siteAdmin/router']
+              exclude: ['bootstrap']
+            }
+            {
               name: 'adminBootstrap'
               include: ['areas/admin/router']
               exclude: ['bootstrap']
