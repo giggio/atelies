@@ -23,7 +23,6 @@ describe 'Site Admin home page', ->
     it 'shows access denied message', (done) ->
       page.accessDeniedMessageIsVisible (itIs) -> itIs.should.be.true; done()
 
-
   describe 'accessing with a admin user allows access', ->
     before (done) ->
       page.loginFor adminUser._id, ->

@@ -1,0 +1,9 @@
+<div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3 {{#if canUnauthorize}}toUnauthorize{{/if}} {{#if canAuthorize}}toAuthorize{{/if}}">
+  <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+  {{#if canUnauthorize}}
+    <button class="unauthorize btn btn-danger">Reprovar</button>
+  {{/if}}
+  {{#if canAuthorize}}
+    <button class="authorize btn btn-primary">Aprovar</button>
+  {{/if}}
+</div>

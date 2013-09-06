@@ -373,7 +373,6 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
-  isFlyerAuthorized: true
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert

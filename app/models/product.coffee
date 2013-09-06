@@ -3,8 +3,6 @@ slug      = require '../helpers/slug'
 _         = require 'underscore'
 path      = require 'path'
 async     = require 'async'
-Postman   = require './postman'
-postman = new Postman()
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true

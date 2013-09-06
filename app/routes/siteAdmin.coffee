@@ -1,19 +1,14 @@
 Product         = require '../models/product'
 User            = require '../models/user'
 Store           = require '../models/store'
-Order           = require '../models/order'
 _               = require 'underscore'
-everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
-correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
-ProductUploader = require '../models/productUploader'
-StoreUploader   = require '../models/storeUploader'
 
 module.exports = class AdminRoutes
   constructor: (@env) ->
-    @_authSiteAdmin 'siteAdmin'
+    @_authSiteAdmin 'siteAdmin', 'storesForAuthorization', 'updateStoreFlyerAuthorization'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'siteAdmin'
@@ -21,3 +16,22 @@ module.exports = class AdminRoutes
   siteAdmin: (req, res) ->
     req.user.toSimpleUser (user) ->
       res.render 'siteAdmin', user: user
+
+  storesForAuthorization: (req, res) ->
+    isFlyerAuthorized = switch req.params.isFlyerAuthorized
+      when undefined then undefined
+      when 'true' then true
+      else false
+    Store.findSimpleByFlyerAuthorization isFlyerAuthorized, (err, stores) =>
+      return @handleError req, res, err if err?
+      res.json stores
+
+  updateStoreFlyerAuthorization: (req, res) ->
+    Store.findById req.params._id, (err, store) ->
+      return @handleError req, res, err if err?
+      isFlyerAuthorized = req.params.isFlyerAuthorized is 'true'
+      store.isFlyerAuthorized = isFlyerAuthorized
+      store.save()
+      store.sendMailAfterFlyerAuthorization req.user, (err) ->
+        return @handleError req, res, err if err?
+        res.json 200

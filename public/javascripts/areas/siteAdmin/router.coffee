@@ -8,3 +8,6 @@ define [
     _routes: routes
     routes:
       '': routes.siteAdmin
+      'authorizeStores': routes.authorizeStores
+      'authorizeStores/authorized': routes.authorizeStoresAuthorized
+      'authorizeStores/unauthorized': routes.authorizeStoresUnauthorized

@@ -58,6 +58,8 @@ exports.route = (app) ->
   app.get     "/notseller",                                                 account.notSeller
   #site admin
   app.get     "/siteAdmin",                                                 siteAdmin.siteAdmin
+  app.get     "/siteAdmin/storesForAuthorization/:isFlyerAuthorized?",      siteAdmin.storesForAuthorization
+  app.put     "/siteAdmin/storesForAuthorization/:_id/isFlyerAuthorized/:isFlyerAuthorized", siteAdmin.updateStoreFlyerAuthorization
   #admin
   app.get     "/admin",                                                     admin.admin
   app.get     "/admin/orders",                                              admin.orders

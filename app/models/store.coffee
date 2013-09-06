@@ -1,7 +1,10 @@
 mongoose = require 'mongoose'
+async    = require 'async'
 slug     = require '../helpers/slug'
 _        = require 'underscore'
 Evaluation = require './storeEvaluation'
+Postman  = require './postman'
+postman = new Postman()
 
 storeSchema = new mongoose.Schema
   name:                   type: String, required: true
@@ -57,6 +60,7 @@ storeSchema.methods.toSimple = ->
     flyer: @flyer
     numberOfEvaluations: @numberOfEvaluations
     evaluationAvgRating: @evaluationAvgRating
+    isFlyerAuthorized: @isFlyerAuthorized
   store.pagseguro = @pagseguro()
   store
 storeSchema.methods.toSimpler = ->
@@ -95,6 +99,31 @@ storeSchema.methods.updateName = (name, cb) ->
       p.storeName = name
       p.save()
     cb()
+storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
+  if @isFlyerAuthorized
+    status = "aprovado"
+    unauthorizedMsg = "<div>Quando o flyer de uma loja é reprovado a loja não aparece mais na home page do Ateliês (mas ainda aparece nas buscas). Veja os critérios para que a loja seja aprovada no FAQ ou fale com o administrador que reprovou o flyer diretamente.</div>"
+  else
+    status = "reprovado"
+    unauthorizedMsg = ""
+  User.findAdminsFor @_id, (err, users) =>
+    return cb err if err?
+    sendMailActions =
+      for user in users
+        do (user) =>
+          body = "<html>
+            <h1>Olá #{user.name},</h1>
+            <h2>O flyer da sua loja foi avaliado e foi #{status}.</h2>
+            <div>
+            </div>
+            <div>O usuário que realizou a ação foi <a href='mailto:#{userAuthorizing.email}'>#{userAuthorizing.name}</a>.</div>
+            <div></div>
+            #{unauthorizedMsg}
+            <div></div>
+            <div>Equipe Ateliês</div>
+            </html>"
+          (cb) => postman.sendFromContact user, "Ateliês: A loja #{@name} teve seu flyer #{status}", body, cb
+    async.parallel sendMailActions, cb
 
 module.exports = Store = mongoose.model 'store', storeSchema
 
@@ -102,6 +131,10 @@ Store.nameExists = (name, cb) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug aSlug, (err, store) -> cb err, store?
 Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
+Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized, cb) ->
+  Store.find isFlyerAuthorized: isFlyerAuthorized, flyer: /./, (err, stores) ->
+    return cb err if err?
+    cb null, _.map stores, (s) -> s.toSimple()
 Store.findWithProductsBySlug = (slug, cb) ->
   Store.findBySlug slug, (err, store) =>
     return cb err if err?
@@ -137,3 +170,4 @@ Store.flyerDimension = '350x350'
 #Store.bannerDimension = '1200x300'
 
 Product  = require './product'
+User  = require './user'
