@@ -30,10 +30,10 @@ define [
           auto:
             pauseOnHover: true
           prev:
-            button  : "#carouselRight"
+            button  : "#carouselLeft"
             key     : "right"
           next:
-            button: "#carouselLeft"
+            button: "#carouselRight"
             key: "left"
       $ ->
         $('#products').imagesLoaded

@@ -35,6 +35,24 @@
     {{/if}}
   </div>
   <div class="clearfix"></div>
+  <h4 id="otherProductsHeader">Outros produtos que podem lhe interessar</h4>
+  <div id="otherProducts" class="row">
+    <div id="carousel">
+      {{#each products}}
+      <div id="product{{_id}}" data-id="{{_id}}" class="product">
+        <a id="product{{_id}}_picture" href="#{{slug}}" class="link">
+          <img src="{{pictureThumb}}" alt="{{name}}" class="picture" />
+          <div class="productInfoBox">
+            <span id="product{{_id}}_name" class="name">{{name}}</span>
+            <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+          </div>
+        </a>
+      </div>
+      {{/each}}
+    </div>
+    <a class="prev" id="carouselLeft" href="#"><i class="glyphicon glyphicon-chevron-left"></i></a>
+    <a class="next" id="carouselRight" href="#"><i class="glyphicon glyphicon-chevron-right"></i></a>
+  </div>
   {{#if user}}
     {{#if hasComments}}
       <h4>Deixe seu comentário:</h4>
@@ -66,8 +84,5 @@
       </div>
       {{/each}}
     {{/if}}
-  </div>
-  <div id="productsPlaceHolder">
-    <strong></strong>
   </div>
 </div>

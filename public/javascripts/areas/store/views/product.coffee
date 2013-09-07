@@ -8,6 +8,8 @@ define [
   '../models/products'
   'text!./templates/product.html'
   '../models/cart'
+  'caroufredsel'
+  'imagesloaded'
 ], ($, _, Backbone, Handlebars, Showdown, md5, Products, productTemplate, Cart) ->
   class ProductView extends Backbone.Open.View
     template: productTemplate
@@ -15,6 +17,7 @@ define [
       @markdown = new Showdown.converter()
       @store = opt.store
       @product = opt.product
+      @products = _.chain(opt.products).reject((p) => p.slug is @product.get 'slug').shuffle().value()
       @user = opt.user
       if @product?.get('hasInventory')
         @canPurchase = @product?.get('inventory') > 0
@@ -40,7 +43,43 @@ define [
           c.niceDate = @createNiceDate c.date
           c.gravatarUrl = "https://secure.gravatar.com/avatar/#{md5(c.userEmail.toLowerCase())}?d=mm&r=pg&s=50"
           c.body = @markdown.makeHtml c.body
-      @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description, hasComments: attr.comments?.length > 0, user: @user, encodedUrl: encodeURIComponent attr.url
+      @$el.html context product: attr, store: @store, canPurchase: @canPurchase, description: description, hasComments: attr.comments?.length > 0, user: @user, encodedUrl: encodeURIComponent(attr.url), products: @products
+      doCarousel = ->
+        return showCarousel() if $('#carousel').length is 1
+        setTimeout doCarousel
+        , 500
+      showCarousel = ->
+        $('#carousel').carouFredSel
+          scroll:
+            items:1
+            easing:'linear'
+            duration: 1000
+          width: '100%'
+          auto:
+            pauseOnHover: true
+          prev:
+            button  : "#carouselLeft"
+            key     : "right"
+          next:
+            button: "#carouselRight"
+            key: "left"
+      $('#otherProducts').imagesLoaded
+        always: -> setTimeout doCarousel, 200
+      debounce = (wait, immediate, fn) -> _.debounce fn, wait, immediate
+      $('section#app-container').off()
+      $('section#app-container').on 'mouseenter', '#carousel .product', ->
+        $('.productInfoBox', @).animate
+          top: '-=50'
+          height: '+=50'
+        , 500, ->
+          $('.name,.price', @).show()
+        $('.name,.price', @).show()
+      $('section#app-container').on 'mouseleave', '#carousel .product', ->
+        $('.productInfoBox', @).animate
+          top: '+=50'
+          height: '-=50'
+        , 500, ->
+          $('.name,.price', @).hide()
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'
       date = date.getTime() unless typeof date is 'number'

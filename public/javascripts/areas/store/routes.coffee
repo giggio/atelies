@@ -31,12 +31,13 @@ define [
     product: (slug) ->
       store = storeBootstrapModel.store
       user = storeBootstrapModel.user
+      otherProducts = storeBootstrapModel.products
       products = new Products store.slug, slug
       products.fetch
         reset: true
         success: =>
           product = products.first()
-          productView = new ProductView store: store, product: product, user: user
+          productView = new ProductView store: store, product: product, user: user, products: otherProducts
           viewsManager.show productView
         error: (col, xhr, opt) =>
           @logXhrError xhr
