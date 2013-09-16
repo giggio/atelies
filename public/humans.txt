@@ -1,0 +1,20 @@
+/* TEAM */
+  Developer and all things technical: Giovanni Bassi
+  Contact: giggio [at] giggio.net
+  Twitter: @giovannibassi
+  From: Sao Paulo, SP, Brazil
+
+  Ideas, design, PO and everything else: Luana Costa da Rocha
+  Contact: contato@atelies.com.br
+  Twitter: @ateliescombr
+  From: Sao Paulo, SP, Brazil
+
+/* THANKS */
+  All the craftsman and craftswomen on the site and all our supporters
+
+/* SITE */
+  Last updated: probably yesterday, it is very often
+  Language: Portuguese
+  Doctype: HTML5
+  IDE: Why, if VIM exists?
+  Source: https://github.com/giggio/atelies

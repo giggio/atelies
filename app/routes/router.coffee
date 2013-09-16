@@ -31,6 +31,7 @@ exports.route = (app) ->
   app.get     "/contribute",                                                home.contribute
   app.get     "/donating",                                                  home.donating
   app.post    "/error",                                                     home.errorCreate
+  app.get     "/humans.txt",                                                home.humanstxt
   #home search
   app.get     "/stores/search/:searchTerm",                                 home.storesSearch
   app.get     "/products/search/:searchTerm",                               home.productsSearch

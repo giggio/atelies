@@ -67,3 +67,9 @@ module.exports = class HomeRoutes
     err.user = req.user
     Err.createClient err
     res.send 200
+
+  humanstxt: (req, res) ->
+    path = require 'path'
+    publicDir = path.join __dirname, '..', '..', "public"
+    humanstxt = path.join publicDir, 'humans.txt'
+    res.sendfile humanstxt
