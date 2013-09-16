@@ -18,7 +18,7 @@ module.exports = class AmazonFileUploader
       return cb smallerThan: "O tamanho da imagem é menor do que o esperado, ela deve ter no mínimo #{dimensions}." if itIs
       @im.resizeAndCrop file.path, dimensions, (err, newFileName) =>
         return cb err if err?
-        fileParams = Bucket: @bucket, Key: fileName, Body: fs.createReadStream(newFileName), ContentType: file.type
+        fileParams = Bucket: @bucket, Key: fileName, Body: fs.createReadStream(newFileName), ContentType: file.headers['content-type']
         @s3.putObject fileParams, (err, data) =>
           return cb err if err?
           url = "https://s3.amazonaws.com/#{@bucket}/#{fileName}"

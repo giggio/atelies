@@ -203,22 +203,18 @@
       }
     },
     "express": {
-      "version": "3.3.5",
-      "from": "express@3.3.x",
-      "resolved": "https://registry.npmjs.org/express/-/express-3.3.5.tgz",
+      "version": "3.4.0",
+      "from": "express@3.x",
+      "resolved": "https://registry.npmjs.org/express/-/express-3.4.0.tgz",
       "dependencies": {
         "connect": {
-          "version": "2.8.5",
-          "from": "connect@2.8.5",
-          "resolved": "https://registry.npmjs.org/connect/-/connect-2.8.5.tgz",
+          "version": "2.9.0",
+          "from": "connect@2.9.0",
+          "resolved": "https://registry.npmjs.org/connect/-/connect-2.9.0.tgz",
           "dependencies": {
             "qs": {
               "version": "0.6.5",
               "from": "qs@0.6.5"
-            },
-            "formidable": {
-              "version": "1.0.14",
-              "from": "formidable@1.0.14"
             },
             "bytes": {
               "version": "0.2.0",
@@ -230,8 +226,23 @@
             },
             "uid2": {
               "version": "0.0.2",
-              "from": "uid2@0.0.2",
-              "resolved": "https://registry.npmjs.org/uid2/-/uid2-0.0.2.tgz"
+              "from": "uid2@0.0.2"
+            },
+            "multiparty": {
+              "version": "2.1.8",
+              "from": "multiparty@2.1.8",
+              "resolved": "https://registry.npmjs.org/multiparty/-/multiparty-2.1.8.tgz",
+              "dependencies": {
+                "readable-stream": {
+                  "version": "1.0.17",
+                  "from": "readable-stream@~1.0.2"
+                },
+                "stream-counter": {
+                  "version": "0.1.0",
+                  "from": "stream-counter@~0.1.0",
+                  "resolved": "https://registry.npmjs.org/stream-counter/-/stream-counter-0.1.0.tgz"
+                }
+              }
             }
           }
         },
@@ -264,8 +275,7 @@
         },
         "fresh": {
           "version": "0.2.0",
-          "from": "fresh@0.2.0",
-          "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.2.0.tgz"
+          "from": "fresh@0.2.0"
         },
         "methods": {
           "version": "0.0.1",
@@ -274,10 +284,9 @@
         "send": {
           "version": "0.1.4",
           "from": "send@0.1.4",
-          "resolved": "https://registry.npmjs.org/send/-/send-0.1.4.tgz",
           "dependencies": {
             "mime": {
-              "version": "1.2.10",
+              "version": "1.2.11",
               "from": "mime@~1.2.9"
             }
           }

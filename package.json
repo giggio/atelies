@@ -25,7 +25,7 @@
     "grunt-cli": "~0.1.x",
     "grunt-contrib-coffee": "~0.7.x",
     "grunt-shell": "~0.3.1",
-    "express": "~3.3.x",
+    "express": "~3.4.0",
     "jade": "~0.33.x",
     "coffee-script": "~1.6.x",
     "underscore": "~1.4.4",
