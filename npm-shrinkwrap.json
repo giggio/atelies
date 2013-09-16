@@ -932,33 +932,28 @@
       "resolved": "https://registry.npmjs.org/recaptcha/-/recaptcha-1.2.0.tgz"
     },
     "gm": {
-      "version": "1.10.0",
-      "from": "gm@",
-      "resolved": "https://registry.npmjs.org/gm/-/gm-1.10.0.tgz",
+      "version": "1.13.1",
+      "from": "gm@1.x",
       "dependencies": {
         "debug": {
           "version": "0.7.0",
-          "from": "debug@0.7.0",
-          "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.0.tgz"
+          "from": "debug@0.7.0"
         },
         "array-series": {
           "version": "0.1.4",
-          "from": "array-series@~0.1.0",
-          "resolved": "https://registry.npmjs.org/array-series/-/array-series-0.1.4.tgz"
+          "from": "array-series@~0.1.0"
         },
         "array-parallel": {
           "version": "0.1.2",
-          "from": "array-parallel@~0.1.0",
-          "resolved": "https://registry.npmjs.org/array-parallel/-/array-parallel-0.1.2.tgz"
+          "from": "array-parallel@~0.1.0"
+        },
+        "stream-to-buffer": {
+          "version": "0.0.1",
+          "from": "stream-to-buffer@~0.0.1"
         },
         "through": {
           "version": "2.3.4",
           "from": "through@~2.3.1"
-        },
-        "stream-to-buffer": {
-          "version": "0.0.1",
-          "from": "stream-to-buffer@~0.0.1",
-          "resolved": "https://registry.npmjs.org/stream-to-buffer/-/stream-to-buffer-0.0.1.tgz"
         }
       }
     },
