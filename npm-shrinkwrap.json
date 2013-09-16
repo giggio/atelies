@@ -473,7 +473,7 @@
     },
     "underscore": {
       "version": "1.4.4",
-      "from": "underscore@~1.4.4"
+      "from": "underscore@1.4.x"
     },
     "bcrypt": {
       "version": "0.7.6",
