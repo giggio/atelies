@@ -8,6 +8,7 @@ define [
   '../models/product'
   '../models/products'
   'backboneValidation'
+  'select2'
 ], ($, Backbone, Handlebars, _, manageProductTemplate, validationErrorsTemplate, Product, Products, Validation) ->
   class ManageProductView extends Backbone.Open.View
     events:
@@ -20,6 +21,13 @@ define [
       @model.bind 'change:shippingApplies', _.bind @_showShippingOptions, @
       @store = opt.store
       @$el.html @template
+      @_initializeBindings()
+    render: ->
+      @_setValidation()
+      @_showShippingOptions()
+      @_prepareSelects()
+
+    _initializeBindings: ->
       @bindings = @initializeBindings
         "#_id": "html:_id"
         "#slug": "html:slug"
@@ -40,8 +48,25 @@ define [
         "#shippingDoesNotApply": "checked:boolean(shippingApplies)"
         "#shippingDoesApply": "checked:boolean(shippingApplies)"
         "#showPicture": "attr:{src:picture}"
-      @_setValidation()
-      @_showShippingOptions()
+
+    _prepareSelects: ->
+      @$('#tags').select2
+        tags: []
+        maximumInputLength: 30
+        tokenSeparators: [","]
+        formatNoMatches: -> ""
+      $.ajax
+        url: "/admin/#{@store.get '_id'}/categories"
+        success: (data, status, jqxhr) =>
+          cats = @$('#categories')
+          cats.select2
+            tags: _.pluck data, "text"
+            maximumInputLength: 30
+            tokenSeparators: [","]
+        error: (jqxhr, status, errorThrown) =>
+          @showDialogError "Não foi possível obter as categorias. Tente novamente mais tarde."
+          @logXhrError 'admin', jqxhr
+
     _setValidation: ->
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)

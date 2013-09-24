@@ -37,6 +37,7 @@ define [
       name:undefined
       description:undefined
       tags:undefined
+      categories:undefined
       price:undefined
       picture:undefined
       height:undefined

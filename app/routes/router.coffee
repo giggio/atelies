@@ -76,6 +76,7 @@ exports.route = (app) ->
   app.get     "/admin/:storeSlug/products/:productId",                      admin.storeProduct
   app.put     "/admin/:storeSlug/products/:productId",                      admin.adminProductUpdate
   app.delete  "/admin/:storeSlug/products/:productId",                      admin.adminProductDelete
+  app.get     "/admin/:storeId/categories",                                 admin.storeCategories
   #store order
   app.post    "/orders/:storeId",                                           store.orderCreate
   app.get     "/paymentGateway/pagseguro/:storeSlug/returnFromPayment",     store.pagseguroReturnFromPayment

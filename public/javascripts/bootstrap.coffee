@@ -18,6 +18,8 @@ requirejs.config
     md5: 'lib/js-md5/js/md5'
     swag: 'lib/swag/lib/swag'
     jrating: 'lib/jrating/jquery/jRating.jquery'
+    select2en: 'lib/select2/select2'
+    select2: 'lib/select2/select2_locale_pt-BR'
   shim:
     'handlebars':
       deps: ['jquery']
@@ -56,3 +58,8 @@ requirejs.config
     'jrating':
       deps: [ 'jquery' ]
       exports: '$.fn.jRating'
+    'select2':
+      deps: [ 'select2en' ]
+    'select2en':
+      deps: [ 'jquery' ]
+      exports: '$.fn.select2'

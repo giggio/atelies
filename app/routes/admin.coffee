@@ -156,3 +156,7 @@ module.exports = class AdminRoutes
     Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) =>
       return @handleError req, res, err if err?
       res.json order
+
+  storeCategories: (req, res) ->
+    res.json [ { id: '1', text: 'Infantil' }
+      { id: '2', text: 'Decoração' } ]

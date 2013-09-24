@@ -180,6 +180,8 @@ module.exports = (grunt) ->
                 'showdown'
                 'md5'
                 'swag'
+                'select2en'
+                'select2'
                 'backboneValidation'
                 'epoxy'
                 'caroufredsel'

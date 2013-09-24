@@ -27,7 +27,8 @@
     "js-md5": "1.x.x",
     "swag": "~0.3.1",
     "jrating": "alpixel/jRating",
-    "ga": "http://www.google-analytics.com/analytics.js"
+    "ga": "http://www.google-analytics.com/analytics.js",
+    "select2": "~3.4.3"
   },
   "devDependencies": {
     "mocha": "~1.9.0",
