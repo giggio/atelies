@@ -17,7 +17,7 @@ describe 'Product', ->
     product = new Product()
     product.name = "Meu Produto"
     expect(product.slug).to.equal 'meu_produto'
-  it 'updated from simple product', ->
+  it 'updated from simple product', (done) ->
     simpleProduct =
       name: 'Some Product'
       picture: 'http://a.com/a.jpg'
@@ -38,21 +38,24 @@ describe 'Product', ->
       hasInventory: true
       inventory: 30
     product = new Product()
-    product.updateFromSimpleProduct simpleProduct
-    product.name.should.equal simpleProduct.name
-    product.price.should.equal simpleProduct.price
-    product.tags.should.be.like simpleProduct.tags.split ','
-    product.description.should.equal simpleProduct.description
-    product.dimensions.height.should.equal simpleProduct.height
-    product.dimensions.width.should.equal simpleProduct.width
-    product.dimensions.depth.should.equal simpleProduct.depth
-    product.weight.should.equal simpleProduct.weight
-    product.shipping.dimensions.height.should.equal simpleProduct.shippingHeight
-    product.shipping.dimensions.width.should.equal simpleProduct.shippingWidth
-    product.shipping.dimensions.depth.should.equal simpleProduct.shippingDepth
-    product.shipping.weight.should.equal simpleProduct.shippingWeight
-    product.hasInventory.should.equal simpleProduct.hasInventory
-    product.inventory.should.equal simpleProduct.inventory
+    store = addCategories: (categories, cb) -> cb()
+    product.updateFromSimpleProduct simpleProduct, store, (err) ->
+      return done err if err?
+      product.name.should.equal simpleProduct.name
+      product.price.should.equal simpleProduct.price
+      product.tags.should.be.like simpleProduct.tags.split ','
+      product.description.should.equal simpleProduct.description
+      product.dimensions.height.should.equal simpleProduct.height
+      product.dimensions.width.should.equal simpleProduct.width
+      product.dimensions.depth.should.equal simpleProduct.depth
+      product.weight.should.equal simpleProduct.weight
+      product.shipping.dimensions.height.should.equal simpleProduct.shippingHeight
+      product.shipping.dimensions.width.should.equal simpleProduct.shippingWidth
+      product.shipping.dimensions.depth.should.equal simpleProduct.shippingDepth
+      product.shipping.weight.should.equal simpleProduct.shippingWeight
+      product.hasInventory.should.equal simpleProduct.hasInventory
+      product.inventory.should.equal simpleProduct.inventory
+      done()
   it 'should produce the correct url', ->
     product = new Product(name: 'name 1', slug: 'name_1', picture: 'http://lorempixel.com/150/150/cats', price: 11.1, storeName: 'store 1', storeSlug: 'store_1')
     expect(product.url()).to.equal "#{product.storeSlug}##{product.slug}"

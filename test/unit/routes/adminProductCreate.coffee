@@ -8,9 +8,15 @@ describe 'AdminProductCreateRoute', ->
     simpleProduct = toSimpleProductStub = ProductStub = saveStub = updateFromSimpleProductSpy = product = store = req = res = body = user = null
     before ->
       simpleProduct = {}
-      store = _id: 9876, slug: 'some_store', name: 'Some Store', createProduct: -> new ProductStub()
+      store =
+        _id: 9876
+        slug: 'some_store'
+        name: 'Some Store'
+        createProduct: -> new ProductStub()
+        addCategories: (categories, cb) -> cb()
+        save: sinon.stub().yields()
       saveStub = sinon.stub().yields null, product
-      updateFromSimpleProductSpy = sinon.spy()
+      updateFromSimpleProductSpy = sinon.stub().yields()
       toSimpleProductStub = sinon.stub().returns simpleProduct
       class ProductStub
         @created: false
@@ -42,6 +48,8 @@ describe 'AdminProductCreateRoute', ->
       Store.findBySlug.restore()
     it 'created a product', ->
       ProductStub.created.should.be.true
+    it 'saved the store', ->
+      store.save.should.have.been.called
     it 'looked for correct store', ->
       Store.findBySlug.should.have.been.calledWith store.slug
     it 'access allowed and return code is correct', ->

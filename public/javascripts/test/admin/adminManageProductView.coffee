@@ -21,6 +21,9 @@ define [
     describe 'Updating Product', ->
       describe 'Shows product', ->
         before ->
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            dataPosted = opt
+            opt.success []
           products = new Products [product], storeSlug: product.storeSlug
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
@@ -31,7 +34,7 @@ define [
           expect($("#price", el).val()).to.equal product.price.toString()
           expect($("#slug", el).text()).to.equal product.slug
           expect($("#showPicture", el).attr('src')).to.equal product.picture
-          expect($("#tags", el).val()).to.equal product.tags
+          expect($("#tags", el).val()).to.equal product.tags.split(/[\s,]+/).join()
           expect($("#description", el).val()).to.equal product.description
           expect($("#height", el).val()).to.equal product.height.toString()
           expect($("#width", el).val()).to.equal product.width.toString()
@@ -44,11 +47,18 @@ define [
           expect($("#shippingWeight", el).val()).to.equal product.shippingWeight.toString()
           expect($("#hasInventory", el).prop('checked')).to.equal product.hasInventory
           expect($("#inventory", el).val()).to.equal product.inventory.toString()
+        it 'loaded categories', ->
+          expect(ajaxSpy).to.have.been.calledOnce
+          dataPosted.url.should.equal "/admin/1/categories"
+        after ->
+          ajaxSpy.restore()
+          manageProductView.close()
   
       describe 'Updates product', ->
         before ->
           productPosted = null
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success()
@@ -80,7 +90,7 @@ define [
           historySpy.restore()
           manageProductView.close()
         it 'updated product', ->
-          expect(ajaxSpy).to.have.been.called
+          expect(ajaxSpy).to.have.been.calledTwice
           expect(productPosted.name).to.equal updatedProduct.name
           expect(productPosted.price).to.equal updatedProduct.price
           expect(productPosted.tags).to.equal updatedProduct.tags
@@ -128,7 +138,7 @@ define [
           historySpy.restore()
           manageProductView.close()
         it 'did not update product', ->
-          expect(ajaxSpy).not.to.have.been.called
+          expect(ajaxSpy).to.have.been.calledOnce
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
@@ -148,6 +158,7 @@ define [
       describe 'Creates product', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success(_id: '456')
@@ -225,7 +236,7 @@ define [
           historySpy.restore()
           manageProductView.close()
         it 'did not update product', ->
-          expect(ajaxSpy).not.to.have.been.called
+          expect(ajaxSpy).to.have.been.calledOnce
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
@@ -269,7 +280,7 @@ define [
           historySpy.restore()
           manageProductView.close()
         it 'did not update product', ->
-          expect(ajaxSpy).not.to.have.been.called
+          expect(ajaxSpy).to.have.been.calledOnce
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
@@ -281,6 +292,7 @@ define [
       describe 'Creates a product when missing shipping info on a product that does not require it', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/2/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success(_id: '456')
@@ -374,6 +386,6 @@ define [
           deleteStub.restore()
           manageProductView.close()
         it 'did not delete the product', ->
-          ajaxSpy.should.not.have.been.called
+          ajaxSpy.should.have.been.calledOnce
         it 'stays at the product manage page', ->
           deleteStub.should.not.have.been.called

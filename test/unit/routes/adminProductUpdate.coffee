@@ -12,9 +12,9 @@ describe 'AdminProductUpdateRoute', ->
       product =
         save: sinon.stub().yields null, product
         storeSlug: 'some_store'
-        updateFromSimpleProduct: sinon.spy()
+        updateFromSimpleProduct: sinon.stub().yields()
         toSimpleProduct: ->
-      store = _id: 9876, slug: product.storeSlug
+      store = _id: 9876, slug: product.storeSlug, save: sinon.stub().yields()
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
@@ -44,6 +44,8 @@ describe 'AdminProductUpdateRoute', ->
       expect(product.slug).to.be.undefined
     it 'product should had been saved', ->
       product.save.should.have.been.called
+    it 'saved the store', ->
+      store.save.should.have.been.called
 
   describe 'Access is denied', ->
     describe "a seller but does not own this product's store", ->

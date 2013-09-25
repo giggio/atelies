@@ -98,30 +98,33 @@ module.exports = class AdminRoutes
       Product.findById req.params.productId, (err, product) =>
         return @handleError req, res, err if err?
         return @handleError req, res, new Error() if product.storeSlug isnt store.slug
-        @_productUpdate req, res, product
+        @_productUpdate req, res, product, store
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
       return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       product = store.createProduct()
-      @_productUpdate req, res, product
+      @_productUpdate req, res, product, store
 
-  _productUpdate: (req, res, product) ->
+  _productUpdate: (req, res, product, store) ->
     @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
-    product.updateFromSimpleProduct req.body
-    uploader = new ProductUploader()
-    uploader.upload product, req.files?.picture, (err, fileUrl) =>
-      return res.json 422, err if err?.smallerThan?
+    product.updateFromSimpleProduct req.body, store, (err) =>
       return @handleError req, res, err if err?
-      product.picture = fileUrl if fileUrl?
-      isNew = product.isNew
-      product.save (err) =>
+      uploader = new ProductUploader()
+      uploader.upload product, req.files?.picture, (err, fileUrl) =>
+        return res.json 422, err if err?.smallerThan?
         return @handleError req, res, err if err?
-        if isNew
-          res.json 201, product.toSimpleProduct()
-        else
-          res.send 204
+        product.picture = fileUrl if fileUrl?
+        isNew = product.isNew
+        product.save (err) =>
+          return @handleError req, res, err if err?
+          store.save (err) =>
+            return @handleError req, res, err if err?
+            if isNew
+              res.json 201, product.toSimpleProduct()
+            else
+              res.send 204
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) =>

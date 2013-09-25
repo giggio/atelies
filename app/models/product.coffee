@@ -30,6 +30,7 @@ productSchema = new mongoose.Schema
   hasInventory:   Boolean
   inventory:      Number
   random:         type: Number, required: true, default: -> Math.random()
+  categories:     [ String ]
 
 productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
@@ -73,7 +74,7 @@ productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), slug: @slug
-productSchema.methods.updateFromSimpleProduct = (simple) ->
+productSchema.methods.updateFromSimpleProduct = (simple, store, cb) ->
   simple.hasInventory = false unless simple.hasInventory?
   for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
     if simple[attr]? and simple[attr] isnt ''
@@ -81,7 +82,7 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
     else
       @[attr] = undefined
   if simple.tags? and simple.tags isnt ''
-    @tags = simple.tags?.split ','
+    @tags = simple.tags.split ','
   else
     @tags = []
   @dimensions = {} unless @dimensions?
@@ -109,6 +110,12 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
     @shipping.weight = undefined
   @shipping.applies = !!simple.shippingApplies
   @shipping.charge = !!simple.shippingCharge
+  if simple.categories? and simple.categories isnt ''
+    @categories = simple.categories.split ','
+    store.addCategories @categories, cb
+  else
+    @categories = []
+    process.nextTick cb
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
   has = shipping.applies and
