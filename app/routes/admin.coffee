@@ -109,22 +109,21 @@ module.exports = class AdminRoutes
 
   _productUpdate: (req, res, product, store) ->
     @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
-    product.updateFromSimpleProduct req.body, store, (err) =>
+    product.updateFromSimpleProduct req.body, store
+    uploader = new ProductUploader()
+    uploader.upload product, req.files?.picture, (err, fileUrl) =>
+      return res.json 422, err if err?.smallerThan?
       return @handleError req, res, err if err?
-      uploader = new ProductUploader()
-      uploader.upload product, req.files?.picture, (err, fileUrl) =>
-        return res.json 422, err if err?.smallerThan?
+      product.picture = fileUrl if fileUrl?
+      isNew = product.isNew
+      product.save (err) =>
         return @handleError req, res, err if err?
-        product.picture = fileUrl if fileUrl?
-        isNew = product.isNew
-        product.save (err) =>
+        store.save (err) =>
           return @handleError req, res, err if err?
-          store.save (err) =>
-            return @handleError req, res, err if err?
-            if isNew
-              res.json 201, product.toSimpleProduct()
-            else
-              res.send 204
+          if isNew
+            res.json 201, product.toSimpleProduct()
+          else
+            res.send 204
   
   adminProductDelete: (req, res) ->
     Product.findById req.params.productId, (err, product) =>

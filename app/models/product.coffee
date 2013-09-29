@@ -74,7 +74,7 @@ productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), slug: @slug
-productSchema.methods.updateFromSimpleProduct = (simple, store, cb) ->
+productSchema.methods.updateFromSimpleProduct = (simple, store) ->
   simple.hasInventory = false unless simple.hasInventory?
   for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
     if simple[attr]? and simple[attr] isnt ''
@@ -112,10 +112,9 @@ productSchema.methods.updateFromSimpleProduct = (simple, store, cb) ->
   @shipping.charge = !!simple.shippingCharge
   if simple.categories? and simple.categories isnt ''
     @categories = simple.categories.split ','
-    store.addCategories @categories, cb
+    store.addCategories @categories
   else
     @categories = []
-    process.nextTick cb
 productSchema.methods.hasShippingInfo = ->
   shipping = @shipping
   has = shipping.applies and

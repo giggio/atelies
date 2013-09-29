@@ -16,7 +16,7 @@ describe 'AdminProductCreateRoute', ->
         addCategories: (categories, cb) -> cb()
         save: sinon.stub().yields()
       saveStub = sinon.stub().yields null, product
-      updateFromSimpleProductSpy = sinon.stub().yields()
+      updateFromSimpleProductSpy = sinon.spy()
       toSimpleProductStub = sinon.stub().returns simpleProduct
       class ProductStub
         @created: false

@@ -3,7 +3,6 @@ async    = require 'async'
 slug     = require '../helpers/slug'
 _        = require 'underscore'
 Evaluation = require './storeEvaluation'
-Category = require './storeCategory'
 Postman  = require './postman'
 postman = new Postman()
 
@@ -32,7 +31,7 @@ storeSchema = new mongoose.Schema
   numberOfEvaluations:    type: Number, required: true, default: 0
   evaluationAvgRating:    type: Number, required: true, default: 0
   isFlyerAuthorized:      Boolean
-  categories:             [ type: mongoose.Schema.Types.ObjectId, ref: 'storecategory' ]
+  categories:             [ String ]
 
 storeSchema.methods.createProduct = ->
   product = new Product()
@@ -40,18 +39,9 @@ storeSchema.methods.createProduct = ->
   product.storeSlug = @slug
   product
 
-storeSchema.methods.addCategories = (categoryNames, cb) ->
-  @populate 'categories', =>
-    existingCategories = _.pluck @categories, "name"
-    newCategoryNames = _.reject categoryNames, (categoryName) -> categoryName in existingCategories
-    createCats =
-      for newCategoryName in newCategoryNames
-        do (newCategoryName) =>
-          (cb) => Category.create { name: newCategoryName }, (err, category) =>
-            return cb err if err
-            @categories.push category
-            cb()
-    async.parallel createCats, cb
+storeSchema.methods.addCategories = (categoryNames) ->
+  newCategoryNames = _.reject categoryNames, (categoryName) => categoryName in @categories
+  @categories.push newCategoryNames...
 
 storeSchema.methods.evaluationAdded = (evaluation) ->
   @evaluationAvgRating = ( @evaluationAvgRating * @numberOfEvaluations + evaluation.rating ) / ++@numberOfEvaluations
