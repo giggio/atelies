@@ -57,3 +57,6 @@ module.exports = class AdminManageProductPage extends Page
   clickUpdateProduct: (cb) => @pressButtonAndWait "#editProduct #updateProduct", cb
   clickDeleteProduct: (cb) => @pressButtonAndWait "#deleteProduct", cb
   clickConfirmDeleteProduct: (cb) => @eval "$('#confirmDeleteProduct').click()", cb
+  setCategories: (categories, cb) =>
+    @type "#categories", categories
+    cb()

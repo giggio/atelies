@@ -146,6 +146,31 @@ describe 'Admin Manage Product page', ->
         productOnDb.inventory.should.equal otherProduct.inventory
         done()
 
+  describe 'adding category to a product', ->
+    before (done) ->
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, product._id.toString(), ->
+          page.setCategories "Cat1, Cat2", ->
+            page.clickUpdateProduct done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        done()
+    it 'added category to the product', (done) ->
+      Product.findById product._id, (err, productOnDb) ->
+        return done err if err
+        productOnDb.categories.length.should.equal 2
+        productOnDb.categories.should.contain "Cat1"
+        productOnDb.categories.should.contain "Cat2"
+        done()
+    it 'added category to the store', (done) ->
+      Store.findBySlug product.storeSlug, (err, storeOnDb) ->
+        return done err if err
+        storeOnDb.categories.length.should.equal 2
+        storeOnDb.categories.should.contain "Cat1"
+        storeOnDb.categories.should.contain "Cat2"
+        done()
+
   describe 'deleting product', ->
     otherProduct = null
     before (done) ->
