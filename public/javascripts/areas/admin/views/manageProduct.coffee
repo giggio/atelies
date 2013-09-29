@@ -60,7 +60,7 @@ define [
         success: (data, status, jqxhr) =>
           cats = @$('#categories')
           cats.select2
-            tags: _.pluck data, "text"
+            tags: data
             maximumInputLength: 30
             tokenSeparators: [","]
         error: (jqxhr, status, errorThrown) =>

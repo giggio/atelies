@@ -160,5 +160,6 @@ module.exports = class AdminRoutes
       res.json order
 
   storeCategories: (req, res) ->
-    res.json [ { id: '1', text: 'Infantil' }
-      { id: '2', text: 'Decoração' } ]
+    Store.findById req.params.storeId, (err, store) =>
+      return @handleError req, res, err if err?
+      res.json store.categories
