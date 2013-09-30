@@ -33,7 +33,7 @@ describe 'Admin Manage Product page', ->
         aproduct.price.should.equal product.price.toString()
         aproduct.slug.should.equal product.slug
         aproduct.picture.should.equal product.picture
-        aproduct.tags.should.equal product.tags.join ', '
+        aproduct.tags.should.equal product.tags.join ','
         aproduct.description.should.equal product.description
         aproduct.dimensions.height.should.equal product.dimensions.height
         aproduct.dimensions.width.should.equal product.dimensions.width
