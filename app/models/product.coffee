@@ -111,7 +111,7 @@ productSchema.methods.updateFromSimpleProduct = (simple, store) ->
   @shipping.applies = !!simple.shippingApplies
   @shipping.charge = !!simple.shippingCharge
   if simple.categories? and simple.categories isnt ''
-    @categories = simple.categories.split /[\s,]+/
+    @categories = simple.categories.match /(?=\S)[^,]+?(?=\s*(,|$))/g
     store.addCategories @categories
   else
     @categories = []
