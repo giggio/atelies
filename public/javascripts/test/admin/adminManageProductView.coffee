@@ -114,7 +114,9 @@ define [
   
       describe 'Does not update product when invalid', ->
         before ->
-          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
+            opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [product], storeSlug: product.storeSlug
           productModel = products.at 0
@@ -212,7 +214,9 @@ define [
   
       describe 'Does not create product when invalid', ->
         before ->
-          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
+            opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [newproduct], storeSlug: newproduct.storeSlug
           productModel = products.at 0
@@ -254,7 +258,9 @@ define [
 
       describe 'Does not create product when missing shipping info when product has shipping info', ->
         before ->
-          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
+            opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [newproduct], storeSlug: newproduct.storeSlug
           productModel = products.at 0
@@ -350,6 +356,7 @@ define [
       describe 'Deletes product', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
             dataPosted = opt
             opt.success()
           products = new Products [product], storeSlug: store.slug
@@ -373,7 +380,9 @@ define [
 
       describe 'does not confirm product deletion', ->
         before ->
-          ajaxSpy = sinon.stub $, 'ajax', (opt) => opt.success()
+          ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+            return if opt.url is "/admin/1/categories"
+            opt.success()
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
           manageProductView = new ManageProductView el:el, product: productModel, store:storeModel
