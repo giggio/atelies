@@ -66,7 +66,7 @@ describe 'Product', ->
     simpleProduct.slug.should.equal product.slug
     simpleProduct.storeName.should.equal product.storeName
     simpleProduct.storeSlug.should.equal product.storeSlug
-    simpleProduct.tags.should.equal product.tags.join ', '
+    simpleProduct.tags.should.equal product.tags.join ','
     simpleProduct.description.should.equal product.description
     simpleProduct.height.should.equal product.dimensions.height
     simpleProduct.width.should.equal product.dimensions.width

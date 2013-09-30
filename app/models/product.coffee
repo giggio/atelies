@@ -82,7 +82,7 @@ productSchema.methods.updateFromSimpleProduct = (simple, store) ->
     else
       @[attr] = undefined
   if simple.tags? and simple.tags isnt ''
-    @tags = simple.tags.split ','
+    @tags = simple.tags.match /(?=\S)[^,]+?(?=\s*(,|$))/g
   else
     @tags = []
   @dimensions = {} unless @dimensions?
