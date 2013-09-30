@@ -66,6 +66,7 @@ storeSchema.methods.toSimple = ->
     numberOfEvaluations: @numberOfEvaluations
     evaluationAvgRating: @evaluationAvgRating
     isFlyerAuthorized: @isFlyerAuthorized
+    categories: @categories
   store.pagseguro = @pagseguro()
   store
 storeSchema.methods.toSimpler = ->

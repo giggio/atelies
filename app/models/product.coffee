@@ -55,7 +55,7 @@ productSchema.methods.pictureThumb = ->
 productSchema.methods.toSimpleProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
-  url: @url(), tags: if @tags? then @tags.join ', ' else ''
+  url: @url(), tags: if @tags? then @tags.join ',' else ''
   manageUrl: @manageUrl(), slug: @slug
   description: @description,
   height: @dimensions?.height, width: @dimensions?.width, depth: @dimensions?.depth
@@ -64,6 +64,7 @@ productSchema.methods.toSimpleProduct = ->
   shippingHeight: @shipping?.dimensions?.height, shippingWidth: @shipping?.dimensions?.width, shippingDepth: @shipping?.dimensions?.depth
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
+  categories: @categories.join ','
 productSchema.methods.toSimpleProductWithComments = (cb) ->
   simple = @toSimpleProduct()
   ProductComment.findByProduct @, (err, comments) =>
@@ -74,6 +75,7 @@ productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
   url: @url(), slug: @slug
+  categories: @categories
 productSchema.methods.updateFromSimpleProduct = (simple, store) ->
   simple.hasInventory = false unless simple.hasInventory?
   for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']

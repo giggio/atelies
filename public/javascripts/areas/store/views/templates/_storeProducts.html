@@ -1,17 +1,22 @@
 <div id="products">
-  {{#each productGroups}}
-  <div class="row productsRow">
+  {{#each categories}}
+    {{#if ../hasMoreThanOneCategory}}
+      <h4 class="categoryHeader">{{category}}</h4>
+    {{/if}}
     {{#each products}}
-    <div id="product{{_id}}" data-id="{{_id}}" class="product">
-      <a href="#{{slug}}" class="link">
-        <img src="{{pictureThumb}}" />
-        <div class="productInfoBox">
-          <span id="product{{_id}}_name" class="name">{{name}}</span>
-          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
-        </div>
-      </a>
+    <div class="row productsRow">
+      {{#each products}}
+      <div id="product{{_id}}" data-id="{{_id}}" class="product">
+        <a href="#{{slug}}" class="link">
+          <img src="{{pictureThumb}}" />
+          <div class="productInfoBox">
+            <span id="product{{_id}}_name" class="name">{{name}}</span>
+            <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+          </div>
+        </a>
+      </div>
+      {{/each}}
     </div>
     {{/each}}
-  </div>
   {{/each}}
 </div>
