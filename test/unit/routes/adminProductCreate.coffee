@@ -5,18 +5,10 @@ AccessDenied    = require '../../../app/errors/accessDenied'
 
 describe 'AdminProductCreateRoute', ->
   describe 'If user owns the store and product', sinon.test ->
-    simpleProduct = toSimpleProductStub = ProductStub = saveStub = updateFromSimpleProductSpy = product = store = req = res = body = user = null
+    simpleProduct = toSimpleProductStub = ProductStub = saveStub = product = store = req = res = body = user = createProductSpy = null
     before ->
       simpleProduct = {}
-      store =
-        _id: 9876
-        slug: 'some_store'
-        name: 'Some Store'
-        createProduct: -> new ProductStub()
-        addCategories: (categories, cb) -> cb()
-        save: sinon.stub().yields()
       saveStub = sinon.stub().yields null, product
-      updateFromSimpleProductSpy = sinon.spy()
       toSimpleProductStub = sinon.stub().returns simpleProduct
       class ProductStub
         @created: false
@@ -24,10 +16,17 @@ describe 'AdminProductCreateRoute', ->
           ProductStub.created = true
           product = @
         save: saveStub
-        storeSlug: store.slug
-        updateFromSimpleProduct: updateFromSimpleProductSpy
+        storeSlug: 'some_store'
         toSimpleProduct: toSimpleProductStub
         isNew: true
+      createProductSpy = sinon.stub().returns(new ProductStub())
+      store =
+        _id: 9876
+        slug: 'some_store'
+        name: 'Some Store'
+        createProduct: createProductSpy
+        addCategories: (categories, cb) -> cb()
+        save: sinon.stub().yields()
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
         isSeller: true
@@ -55,7 +54,7 @@ describe 'AdminProductCreateRoute', ->
     it 'access allowed and return code is correct', ->
       res.json.should.have.been.calledWith 201, simpleProduct
     it 'product is updated correctly', ->
-      updateFromSimpleProductSpy.should.have.been.calledWith req.body
+      createProductSpy.should.have.been.calledWith req.body
     it 'product should had been saved', ->
       saveStub.should.have.been.called
 

@@ -12,9 +12,12 @@ describe 'AdminProductUpdateRoute', ->
       product =
         save: sinon.stub().yields null, product
         storeSlug: 'some_store'
-        updateFromSimpleProduct: sinon.spy()
         toSimpleProduct: ->
-      store = _id: 9876, slug: product.storeSlug, save: sinon.stub().yields()
+      store =
+        _id: 9876
+        slug: product.storeSlug
+        updateProduct: sinon.spy()
+        save: sinon.stub().yields()
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store
       user =
@@ -36,7 +39,7 @@ describe 'AdminProductUpdateRoute', ->
     it 'access allowed and return code is correct', ->
       res.send.should.have.been.calledWith 204
     it 'product is updated correctly', ->
-      product.updateFromSimpleProduct.should.have.been.calledWith req.body
+      store.updateProduct.should.have.been.calledWith product, req.body
     it "does not try to change the product's store", ->
       expect(product.storeName).to.be.undefined
       product.storeSlug.should.equal 'some_store'

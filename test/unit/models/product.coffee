@@ -38,8 +38,9 @@ describe 'Product', ->
       hasInventory: true
       inventory: 30
     product = new Product()
-    store = addCategories: (categories, cb) -> cb()
-    product.updateFromSimpleProduct simpleProduct, store
+    store = new Store()
+    store.addCategories = (categories, cb) -> cb()
+    store.updateProduct product, simpleProduct
     product.name.should.equal simpleProduct.name
     product.price.should.equal simpleProduct.price
     product.tags.should.be.like simpleProduct.tags.split ','

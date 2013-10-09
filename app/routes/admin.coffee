@@ -98,18 +98,19 @@ module.exports = class AdminRoutes
       Product.findById req.params.productId, (err, product) =>
         return @handleError req, res, err if err?
         return @handleError req, res, new Error() if product.storeSlug isnt store.slug
+        @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
+        store.updateProduct product, req.body
         @_productUpdate req, res, product, store
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
       return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
-      product = store.createProduct()
+      @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
+      product = store.createProduct req.body
       @_productUpdate req, res, product, store
 
   _productUpdate: (req, res, product, store) ->
-    @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
-    product.updateFromSimpleProduct req.body, store
     uploader = new ProductUploader()
     uploader.upload product, req.files?.picture, (err, fileUrl) =>
       return res.json 422, err if err?.smallerThan?
