@@ -9,6 +9,7 @@ exports.start = (cb) ->
   path                = require "path"
   app                 = express()
   everyauthConfig     = require './helpers/everyauthConfig'
+  AmazonFileUploader  = require './helpers/amazonFileUploader'
   router              = require './routes/router'
   Postman             = require './models/postman'
   MongoStore          = require('connect-mongo')(express)
@@ -19,9 +20,14 @@ exports.start = (cb) ->
   sessionStore = new MongoStore url:config.connectionString
   if config.isProduction
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
+    AmazonFileUploader.configure config.aws.accessKeyId, config.aws.secretKey, config.aws.region, config.aws.imagesBucket
   else
     app.use express.errorHandler()
     app.locals.pretty = on
+    if config.test.uploadFiles
+      AmazonFileUploader.configure config.aws.accessKeyId, config.aws.secretKey, config.aws.region, config.aws.imagesBucket
+    else
+      AmazonFileUploader.dryrun = on
     if app.get("env") is 'development'
       app.use express.logger "dev"
       everyauth.debug = on

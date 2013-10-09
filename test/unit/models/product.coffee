@@ -120,7 +120,6 @@ describe 'Product', ->
   describe 'has comments', ->
     user = product = store = userCommenting = body = comment = null
     before (done) ->
-      Postman.dryrun = on
       Postman.sentMails.length = 0
       product = generator.product.a()
       userCommenting = generator.user.a()

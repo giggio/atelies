@@ -16,3 +16,8 @@ global.exportAll = exportAll
 exports.exportAll = exportAll
 global.print = console.log
 exportAll require './generatorHelper'
+
+Postman = require '../../app/models/postman'
+Postman.dryrun = on
+AmazonFileUploader = require '../../app/helpers/amazonFileUploader'
+AmazonFileUploader.dryrun = on

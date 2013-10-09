@@ -210,3 +210,7 @@ module.exports = class Page
         @getText '#dialogTitle', (dialogTitle) =>
           cb dialogMsg: dialogMsg, dialogTitle: dialogTitle
   getParent: (el) -> el.findElement(webdriver.By.xpath('..'))
+  uploadFile: (selector, path, cb) ->
+    @findElement(selector).then (el) =>
+      el.sendKeys path if path?
+      cb() if cb?

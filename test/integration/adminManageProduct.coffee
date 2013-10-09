@@ -3,6 +3,8 @@ Store                       = require '../../app/models/store'
 Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
 AdminManageProductPage      = require './support/pages/adminManageProductPage'
+AmazonFileUploader          = require '../../app/helpers/amazonFileUploader'
+path                        = require "path"
 
 describe 'Admin Manage Product page', ->
   page = product = product2 = store = userSeller = null
@@ -188,3 +190,31 @@ describe 'Admin Manage Product page', ->
         return done err if err
         expect(productOnDb).to.be.null
         done()
+
+  describe 'editing a product with upload', ->
+    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.png$/
+    uploadedThumbRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+_thumb150x150\.png$/
+    product3 = null
+    before (done) ->
+      AmazonFileUploader.filesUploaded.length = 0
+      product3 = generator.product.e()
+      product3.picture = null
+      product3.save()
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, product3._id.toString(), ->
+          filePath = path.join __dirname, 'support', 'images', '700x700.png'
+          page.setPictureFile filePath, ->
+            page.clickUpdateProduct done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product3.storeSlug}"
+        done()
+    it 'updated the product to include the file', (done) ->
+      Product.findById product3._id, (err, productOnDb) ->
+        return done err if err
+        productOnDb.picture.should.match uploadedRegexMatch
+        done()
+    it 'tried to upload the file', ->
+      AmazonFileUploader.filesUploaded.length.should.equal 2
+      AmazonFileUploader.filesUploaded[0].should.match uploadedRegexMatch
+      AmazonFileUploader.filesUploaded[1].should.match uploadedThumbRegexMatch

@@ -74,11 +74,15 @@ module.exports = (grunt) ->
           env:
             NODE_ENV: 'development'
             PORT: 3000
+            UPLOAD_FILES: true
+            AWS_REGION: 'us-east-1'
+            RECAPTCHA_PUBLIC_KEY: '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
+            FB_APP_ID: '202085769951904'
           cwd: __dirname
 
     concurrent:
       devServer:
-        tasks: [ 'watch:compileAndTest', 'nodemon:dev', 'nodeInspector' ]
+        tasks: [ 'watch:compileAndTest', 'nodemon:dev' ]
         options:
           logConcurrentOutput: true
 
@@ -233,12 +237,6 @@ module.exports = (grunt) ->
             }
           ]
 
-    shell:
-      nodeInspector:
-        command: 'node-inspector'
-        options:
-          stdout: true
-
     less:
       production:
         options:
@@ -293,7 +291,6 @@ module.exports = (grunt) ->
   #TASKS:
   grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:prod' ]
-  grunt.registerTask 'nodeInspector', [ 'shell:nodeInspector' ]
   grunt.registerTask 'compileAndTest', ->
     tasks = [ 'compile' ]
     if grunt.config(['client', 'src']).length isnt 0
@@ -320,3 +317,4 @@ module.exports = (grunt) ->
       grunt.task.run [ 'compile:server' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
+  grunt.registerTask 'quickStart', [ 'concurrent:devServer']

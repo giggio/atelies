@@ -60,3 +60,4 @@ module.exports = class AdminManageProductPage extends Page
   setCategories: (categories, cb) =>
     @type "#categories", categories
     cb()
+  setPictureFile: @::uploadFile.partial '#picture'

@@ -36,6 +36,7 @@ values =
     privateKey: process.env.RECAPTCHA_PRIVATE_KEY
   test:
     sendMail: process.env.SEND_MAIL?
+    uploadFiles: process.env.UPLOAD_FILES?
   baseDomain: process.env.BASE_DOMAIN
   serverEnvironment: process.env.SERVER_ENVIRONMENT
   app:
@@ -68,6 +69,7 @@ valuesPresent =
     privateKey: values.recaptcha?.privateKey?
   test:
     sendMail: values.test?.sendMail?
+    uploadFiles: values.test?.uploadFiles?
   baseDomain: values.baseDomain?
   serverEnvironment: values.serverEnvironment?
   staticPath: values.staticPath?
