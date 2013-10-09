@@ -2,6 +2,8 @@ require './support/_specHelper'
 Store                     = require '../../app/models/store'
 User                      = require '../../app/models/user'
 AdminManageStorePage      = require './support/pages/adminManageStorePage'
+AmazonFileUploader        = require '../../app/helpers/amazonFileUploader'
+path                      = require "path"
 
 describe 'Admin create store page', ->
   page = exampleStore = userSeller = null
@@ -111,4 +113,61 @@ describe 'Admin create store page', ->
     it 'shows store name already exists', (done) ->
       page.storeNameExistsModalVisible (itDoes) ->
         itDoes.should.be.true
+        done()
+
+  describe 'creates store with picture upload', (done) ->
+    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/store\/\d+\.png$/
+    before (done) ->
+      AmazonFileUploader.filesUploaded.length = 0
+      cleanDB (error) ->
+        return done error if error
+        userSeller = generator.user.c()
+        userSeller.save()
+        exampleStore = generator.store.a()
+        page.loginFor userSeller._id, ->
+          page.visit ->
+            page.setFieldsAs exampleStore, ->
+              bannerPath = path.join __dirname, 'support', 'images', '200x200.png'
+              flyerPath = path.join __dirname, 'support', 'images', '600x600.png'
+              homePageImagePath = path.join __dirname, 'support', 'images', '700x700.png'
+              page.setPictureFiles bannerPath, flyerPath, homePageImagePath, ->
+                page.clickUpdateStoreButton done
+    it 'is at the admin store page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        done()
+    it 'shows store created message', (done) ->
+      page.message (msg) ->
+        msg.endsWith("Loja criada com sucesso").should.be.true
+        done()
+    it 'tried to upload the file', ->
+      AmazonFileUploader.filesUploaded[0].should.match uploadedRegexMatch
+      AmazonFileUploader.filesUploaded[1].should.match uploadedRegexMatch
+      AmazonFileUploader.filesUploaded[2].should.match uploadedRegexMatch
+    it 'created a new store with correct information and file uploads', (done) ->
+      Store.findBySlug exampleStore.slug, (error, store) ->
+        return done error if error
+        expect(store).not.to.be.null
+        store.homePageImage.should.match uploadedRegexMatch
+        store.flyer.should.match uploadedRegexMatch
+        store.banner.should.match uploadedRegexMatch
+        expect(store.slug).to.equal exampleStore.slug
+        expect(store.name).to.equal exampleStore.name
+        expect(store.email).to.equal exampleStore.email
+        expect(store.description).to.equal exampleStore.description
+        expect(store.homePageDescription).to.equal exampleStore.homePageDescription
+        expect(store.urlFacebook).to.equal exampleStore.urlFacebook
+        expect(store.urlTwitter).to.equal exampleStore.urlTwitter
+        expect(store.phoneNumber).to.equal exampleStore.phoneNumber
+        expect(store.city).to.equal exampleStore.city
+        expect(store.state).to.equal exampleStore.state
+        expect(store.zip).to.equal exampleStore.zip
+        expect(store.otherUrl).to.equal exampleStore.otherUrl
+        expect(store.pmtGateways.pagseguro.email).to.be.equal exampleStore.pmtGateways.pagseguro.email
+        expect(store.pmtGateways.pagseguro.token).to.be.equal exampleStore.pmtGateways.pagseguro.token
+        done()
+    it 'added the store to the user', (done) ->
+      User.findById userSeller.id, (err, user) ->
+        return done err if err
+        user.stores.length.should.equal 1
         done()
