@@ -218,3 +218,23 @@ describe 'Admin Manage Product page', ->
       AmazonFileUploader.filesUploaded.length.should.equal 2
       AmazonFileUploader.filesUploaded[0].should.match uploadedRegexMatch
       AmazonFileUploader.filesUploaded[1].should.match uploadedThumbRegexMatch
+    it 'did not update other characteristics of the product', (done) ->
+      Product.findById product3._id, (err, productOnDb) ->
+        return done err if err
+        productOnDb.name.should.equal product3.name
+        productOnDb.price.should.equal product3.price
+        productOnDb.tags.should.be.like product3.tags
+        productOnDb.description.should.equal product3.description
+        productOnDb.dimensions.height.should.equal product3.dimensions.height
+        productOnDb.dimensions.width.should.equal product3.dimensions.width
+        productOnDb.dimensions.depth.should.equal product3.dimensions.depth
+        productOnDb.weight.should.equal product3.weight
+        productOnDb.shipping.applies.should.equal product3.shipping.applies
+        productOnDb.shipping.charge.should.equal product3.shipping.charge
+        productOnDb.shipping.dimensions.height.should.equal product3.shipping.dimensions.height
+        productOnDb.shipping.dimensions.width.should.equal product3.shipping.dimensions.width
+        productOnDb.shipping.dimensions.depth.should.equal product3.shipping.dimensions.depth
+        productOnDb.shipping.weight.should.equal product3.shipping.weight
+        productOnDb.hasInventory.should.equal product3.hasInventory
+        productOnDb.inventory.should.equal product3.inventory
+        done()

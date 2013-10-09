@@ -3,6 +3,8 @@ Store                       = require '../../app/models/store'
 Product                     = require '../../app/models/product'
 User                        = require '../../app/models/user'
 AdminManageProductPage      = require './support/pages/adminManageProductPage'
+AmazonFileUploader          = require '../../app/helpers/amazonFileUploader'
+path                        = require "path"
 
 describe 'Admin Create Product page', ->
   page = product = productNoShippingInfo = productNoShippingInfo2 = store = userSeller = null
@@ -138,4 +140,50 @@ describe 'Admin Create Product page', ->
         expect(productOnDb.shipping.applies).to.equal false
         productOnDb.hasInventory.should.equal productNoShippingInfo2.hasInventory
         productOnDb.inventory.should.equal productNoShippingInfo2.inventory
+        done()
+
+  describe 'create a product with upload', ->
+    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.png$/
+    uploadedThumbRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+_thumb150x150\.png$/
+    product3 = null
+    before (done) ->
+      AmazonFileUploader.filesUploaded.length = 0
+      product3 = generator.product.e()
+      product3.picture = null
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, ->
+          filePath = path.join __dirname, 'support', 'images', '700x700.png'
+          page.setFieldsAs product3, ->
+            page.setPictureFile filePath, ->
+              page.clickUpdateProduct done
+    it 'is at the store manage page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin#store/#{product3.storeSlug}"
+        done()
+    it 'tried to upload the file and thumbnail', ->
+      AmazonFileUploader.filesUploaded.length.should.equal 2
+      AmazonFileUploader.filesUploaded[0].should.match uploadedRegexMatch
+      AmazonFileUploader.filesUploaded[1].should.match uploadedThumbRegexMatch
+    it 'created the file on the db with the file name correct', (done) ->
+      Product.find name: product3.name, (err, productsOnDb) ->
+        return done err if err
+        productsOnDb.should.have.length 1
+        productOnDb = productsOnDb[0]
+        productOnDb.picture.should.match uploadedRegexMatch
+        productOnDb.name.should.equal product3.name
+        productOnDb.price.should.equal product3.price
+        productOnDb.tags.should.be.like product3.tags
+        productOnDb.description.should.equal product3.description
+        productOnDb.dimensions.height.should.equal product3.dimensions.height
+        productOnDb.dimensions.width.should.equal product3.dimensions.width
+        productOnDb.dimensions.depth.should.equal product3.dimensions.depth
+        productOnDb.weight.should.equal product3.weight
+        productOnDb.shipping.applies.should.equal product3.shipping.applies
+        productOnDb.shipping.charge.should.equal product3.shipping.charge
+        productOnDb.shipping.dimensions.height.should.equal product3.shipping.dimensions.height
+        productOnDb.shipping.dimensions.width.should.equal product3.shipping.dimensions.width
+        productOnDb.shipping.dimensions.depth.should.equal product3.shipping.dimensions.depth
+        productOnDb.shipping.weight.should.equal product3.shipping.weight
+        productOnDb.hasInventory.should.equal product3.hasInventory
+        productOnDb.inventory.should.equal product3.inventory
         done()
