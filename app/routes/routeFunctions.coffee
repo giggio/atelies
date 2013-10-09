@@ -60,3 +60,7 @@ module.exports = class RouteFunctions
     val? and (val is true or val is 'true')
   _convertBodyToBool: (body, fields...) ->
     body[field] = @_convertToBool body[field] for field in fields
+  _convertEmptyToUndefined: (val) ->
+    if val? and val isnt '' then val else undefined
+  _convertBodyToEmptyToUndefined: (body, fields...) ->
+    body[field] = @_convertEmptyToUndefined body[field] for field in fields

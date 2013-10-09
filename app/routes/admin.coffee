@@ -99,6 +99,7 @@ module.exports = class AdminRoutes
         return @handleError req, res, err if err?
         return @handleError req, res, new Error() if product.storeSlug isnt store.slug
         @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
+        @_convertBodyToEmptyToUndefined req.body, 'name', 'price', 'description', 'weight', 'hasInventory', 'inventory', 'height', 'width', 'depth'
         store.updateProduct product, req.body
         @_productUpdate req, res, product, store
   
@@ -107,6 +108,7 @@ module.exports = class AdminRoutes
       return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
+      @_convertBodyToEmptyToUndefined req.body, 'name', 'price', 'description', 'weight', 'hasInventory', 'inventory', 'height', 'width', 'depth'
       product = store.createProduct req.body
       @_productUpdate req, res, product, store
 

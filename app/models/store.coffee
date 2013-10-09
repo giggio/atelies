@@ -41,45 +41,17 @@ storeSchema.methods.createProduct = (simple) ->
 
 storeSchema.methods.updateProduct = (product, simple) ->
   simple.hasInventory = false unless simple.hasInventory?
-  for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
-    if simple[attr]? and simple[attr] isnt ''
-      product[attr] = simple[attr]
-    else
-      product[attr] = undefined
-  if simple.tags? and simple.tags isnt ''
-    product.tags = simple.tags.match /(?=\S)[^,]+?(?=\s*(,|$))/g
-  else
-    product.tags = []
+  product[attr] = simple[attr] for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
+  product.tags = simple.tags?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
   product.dimensions = {} unless product.dimensions?
-  for attr in ['height', 'width', 'depth']
-    if simple[attr]? and simple[attr] isnt ''
-      product.dimensions[attr] = simple[attr]
-    else
-      product.dimensions[attr] = undefined
+  product.dimensions[attr] = simple[attr] for attr in ['height', 'width', 'depth']
   product.shipping = dimensions: {} unless product.shipping?
-  if simple.shippingHeight? and simple.shippingHeight isnt ''
-    product.shipping.dimensions.height = simple.shippingHeight
-  else
-    product.shipping.dimensions.height = undefined
-  if simple.shippingWidth? and simple.shippingWidth isnt ''
-    product.shipping.dimensions.width = simple.shippingWidth
-  else
-    product.shipping.dimensions.width = undefined
-  if simple.shippingDepth? and simple.shippingDepth isnt ''
-    product.shipping.dimensions.depth = simple.shippingDepth
-  else
-    product.shipping.dimensions.depth = undefined
-  if simple.shippingWeight? and simple.shippingWeight isnt ''
-    product.shipping.weight = simple.shippingWeight
-  else
-    product.shipping.weight = undefined
+  product.shipping.dimensions[attr] = simple["shipping#{attr.capitaliseFirstLetter()}"] for attr in ['height', 'width', 'depth']
+  product.shipping.weight = simple.shippingWeight
   product.shipping.applies = !!simple.shippingApplies
   product.shipping.charge = !!simple.shippingCharge
-  if simple.categories? and simple.categories isnt ''
-    product.categories = simple.categories.match /(?=\S)[^,]+?(?=\s*(,|$))/g
-    @addCategories product.categories
-  else
-    product.categories = []
+  product.categories = simple.categories?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
+  @addCategories product.categories
   product
 
 storeSchema.methods.addCategories = (categoryNames) ->

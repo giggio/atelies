@@ -17,3 +17,7 @@ Function::partial = ->
       for i in [pushedArgs..arguments.length - 1]
         args.push arguments[i]
     fn.apply @, args
+String::capitaliseFirstLetter = ->
+  return @ if @length is 0
+  return @toUpperCase() if @length is 1
+  @charAt(0).toUpperCase() + @slice(1)
