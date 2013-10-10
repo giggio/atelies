@@ -38,21 +38,11 @@ storeSchema.methods.createProduct = (simple) ->
   product.storeName = @name
   product.storeSlug = @slug
   @updateProduct product, simple
+  product
 
 storeSchema.methods.updateProduct = (product, simple) ->
-  simple.hasInventory = false unless simple.hasInventory?
-  product[attr] = simple[attr] for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
-  product.tags = simple.tags?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
-  product.dimensions = {} unless product.dimensions?
-  product.dimensions[attr] = simple[attr] for attr in ['height', 'width', 'depth']
-  product.shipping = dimensions: {} unless product.shipping?
-  product.shipping.dimensions[attr] = simple["shipping#{attr.capitaliseFirstLetter()}"] for attr in ['height', 'width', 'depth']
-  product.shipping.weight = simple.shippingWeight
-  product.shipping.applies = !!simple.shippingApplies
-  product.shipping.charge = !!simple.shippingCharge
-  product.categories = simple.categories?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
+  product.updateFromSimpleProduct simple
   @addCategories product.categories
-  product
 
 storeSchema.methods.addCategories = (categoryNames) ->
   newCategoryNames = _.reject categoryNames, (categoryName) => categoryName in @categories

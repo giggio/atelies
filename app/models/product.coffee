@@ -36,6 +36,17 @@ productSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
   val
+productSchema.methods.updateFromSimpleProduct = (simple) ->
+  @[attr] = simple[attr] for attr in ['name', 'price', 'description', 'weight', 'hasInventory', 'inventory']
+  @tags = simple.tags?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
+  @dimensions = {} unless @dimensions?
+  @dimensions[attr] = simple[attr] for attr in ['height', 'width', 'depth']
+  @shipping = dimensions: {} unless @shipping?
+  @shipping.dimensions[attr] = simple["shipping#{attr.capitaliseFirstLetter()}"] for attr in ['height', 'width', 'depth']
+  @shipping.weight = simple.shippingWeight
+  @shipping.applies = !!simple.shippingApplies
+  @shipping.charge = !!simple.shippingCharge
+  @categories = simple.categories?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
 productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
 productSchema.methods.addComment = (comment, cb) ->
   comment.product = @
