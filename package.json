@@ -44,7 +44,8 @@
     "recaptcha": "~1.2.0",
     "gm": "1.x.x",
     "marked": "~0.2.9",
-    "grunt-wait": "~0.1.0"
+    "grunt-wait": "~0.1.0",
+    "prerender-node": "0.0.9"
   },
   "devDependencies": {
     "grunt-coffeelint": "0.0.x",
