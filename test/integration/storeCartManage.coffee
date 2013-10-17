@@ -48,7 +48,7 @@ describe 'Store shopping cart page (manage)', ->
               page.visit 'store_1', done
     it 'is at the cart location', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/store_1#cart"
+        url.should.equal "http://localhost:8000/store_1/cart"
         done()
     it 'shows a cart with one item', (done) ->
       page.itemsQuantity (q) ->

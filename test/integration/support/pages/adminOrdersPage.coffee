@@ -1,7 +1,7 @@
 Page          = require './seleniumPage'
 
 module.exports = class AccountOrdersPage extends Page
-  url: 'admin#orders'
+  url: 'admin/orders'
   orders: (cb) ->
     orders = []
     getData = []

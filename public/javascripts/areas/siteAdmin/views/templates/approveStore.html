@@ -1,5 +1,5 @@
 <div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3 {{#if canUnauthorize}}toUnauthorize{{/if}} {{#if canAuthorize}}toAuthorize{{/if}}">
-  <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+  <a href="/{{slug}}" class="link" data-not-push-state="true"><img src="{{flyer}}" /></a>
   {{#if canUnauthorize}}
     <button class="unauthorize btn btn-danger">Reprovar</button>
   {{/if}}

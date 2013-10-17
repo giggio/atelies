@@ -46,7 +46,7 @@ describe 'Store Finish Order: Payment', ->
         done()
     it 'should be at payment page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/payment"
         done()
 
   describe 'payment info for store without pagseguro enabled', ->
@@ -76,5 +76,5 @@ describe 'Store Finish Order: Payment', ->
         done()
     it 'should be at payment page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/payment"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/payment"
         done()

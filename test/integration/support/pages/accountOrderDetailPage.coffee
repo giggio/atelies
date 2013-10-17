@@ -3,7 +3,7 @@ webdriver     = require 'selenium-webdriver'
 async         = require 'async'
 
 module.exports = class AccountOrdersPage extends Page
-  visit: (_id, cb) -> super "account#orders/#{_id}", cb
+  visit: (_id, cb) -> super "account/orders/#{_id}", cb
   order: (cb) ->
     items = []
     order = deliveryAddress:{}, items: items

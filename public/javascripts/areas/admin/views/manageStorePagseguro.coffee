@@ -25,7 +25,7 @@ define [
     _confirmUnsetPagSeguro: -> @_setPagseguro off
     _setPagseguro: (set) ->
       opt =
-        url: "/admin/store/#{@storeId}/setPagSeguro"
+        url: "/api/admin/store/#{@storeId}/setPagSeguro"
         type: 'PUT'
         error: (xhr, text, error) =>
           @logXhrError 'admin', xhr

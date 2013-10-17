@@ -50,7 +50,7 @@ describe 'Store shopping cart page', ->
               done()
     it 'is at the cart location', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/store_1#cart"
+        url.should.equal "http://localhost:8000/store_1/cart"
         done()
 
   describe 'when add two items to cart', ->
@@ -64,7 +64,7 @@ describe 'Store shopping cart page', ->
                 storeProductPage.purchaseItem done
     it 'is at the cart location', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/store_1#cart"
+        url.should.equal "http://localhost:8000/store_1/cart"
         done()
     it 'shows a cart with one item', (done) ->
       page.itemsQuantity (q) ->

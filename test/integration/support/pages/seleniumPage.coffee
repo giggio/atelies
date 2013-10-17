@@ -136,7 +136,8 @@ module.exports = class Page
       @getIsEnabled selector, cb
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
-  #pressButton: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  pressButtonLegacy: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  pressButtonJS: (id, cb = (->)) -> @eval "document.getElementById('#{id}').click()", cb
   click: (selector, cb = (->)) -> @findElement(selector).click().then cb
   pressButton: (selector, cb = (->)) -> @findElement(selector).sendKeys(webdriver.Key.ENTER).then cb
   pressButtonAndWait: (selector, cb) -> @pressButton selector, => @waitForAjax => process.nextTick cb

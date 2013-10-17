@@ -55,7 +55,7 @@ describe 'Admin manage store page', ->
         done()
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{otherStore.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{otherStore.slug}"
         done()
 
   describe 'updates to use pagseguro', (done) ->
@@ -74,7 +74,7 @@ describe 'Admin manage store page', ->
                 page.clickConfirmSetPagseguroButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
         done()
     it 'shows store updated message', (done) ->
       page.message (msg) ->
@@ -103,7 +103,7 @@ describe 'Admin manage store page', ->
                 page.clickConfirmSetPagseguroButton done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
+        url.should.equal "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
         done()
     it 'does not show store updated message', (done) ->
       page.hasMessage (itDoes) ->
@@ -137,7 +137,7 @@ describe 'Admin manage store page', ->
               page.clickConfirmUnsetPagseguroButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
         done()
     it 'shows store updated message', (done) ->
       page.message (msg) ->
@@ -168,7 +168,7 @@ describe 'Admin manage store page', ->
               page.clickUpdateStoreButton done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#manageStore/#{exampleStore._id}"
+        url.should.equal "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
         done()
     it 'does not show store updated message', (done) ->
       page.hasMessage (itDoes) ->
@@ -221,7 +221,7 @@ describe 'Admin manage store page', ->
             page.clickUpdateStoreButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{otherSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{otherSlug}"
         done()
     it 'updated the store name and slug', (done) ->
       Store.find (error, stores) ->

@@ -13,6 +13,7 @@ define [
     events:
       'click #finishOrderShipping':'finishOrder'
       'click [name=shippingOptions]':'_shippingOptionSelected'
+      'click #goBackToCart': -> Backbone.history.navigate('cart', true)
     template: finishOrderShippingTemplate
     initialize: (opt) =>
       @store = opt.store
@@ -41,7 +42,7 @@ define [
           window.location = "https://#{window.location.host}/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
         return true
       unless @user.verified
-        window.location = "/account#userNotVerified"
+        window.location = "/account/userNotVerified"
         return true
       ad = @user.deliveryAddress
       unless ad.street? and ad.state? and ad.city and ad.zip
@@ -59,7 +60,7 @@ define [
         return
       data = items: _.map(@cart.items(), (i) -> _id: i._id, quantity: i.quantity)
       $.ajax
-        url: "/shipping/#{@store.slug}"
+        url: "/api/shipping/#{@store.slug}"
         data: data
         type: 'POST'
         error: (xhr, text, error) =>

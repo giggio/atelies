@@ -14,6 +14,8 @@ define [
   class FinishOrderPayment extends Backbone.Open.View
     events:
       'click #finishOrder':'finishOrder'
+      'click #backToStore': -> Backbone.history.navigate('', true)
+      'click #goBackToPayment': -> Backbone.history.navigate('finishOrder/payment', true)
     template: finishOrderSummaryTemplate
     initialize: (opt) =>
       @store = opt.store

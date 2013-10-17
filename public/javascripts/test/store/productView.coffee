@@ -31,7 +31,7 @@ define [
       it 'shows the price', ->
         expect($('#product #price', el).text()).to.equal product1.price.toString()
       it 'shows the tags', ->
-        $('#product .tag', el).text().should.equal product1.tags.split(', ').join ''
+        $('#product .tag', el).text().should.equal product1.tags.split(',').join ''
       it 'shows the description', ->
         expect($('#product #description', el).text()).to.equal product1.description
       it 'shows the height', ->

@@ -2,7 +2,7 @@ define [
   'backboneConfig'
 ], (Backbone) ->
   class StoreForAuthorization extends Backbone.Open.Model
-    url: -> "siteAdmin/storesForAuthorization/#{@id}/isFlyerAuthorized/#{@get 'isFlyerAuthorized'}"
+    url: -> "/api/siteAdmin/storesForAuthorization/#{@id}/isFlyerAuthorized/#{@get 'isFlyerAuthorized'}"
     authorize: (opt) -> @_authorizeOr true, opt
     unauthorize: (opt) -> @_authorizeOr false, opt
     _authorizeOr: (isFlyerAuthorized, opt) ->

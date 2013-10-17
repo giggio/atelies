@@ -16,7 +16,7 @@ define [
       @$el.html context user: @user
     _resendConfirmationEmail: (e)->
       e.preventDefault()
-      jqxhr = $.post "/account/resendConfirmationEmail", =>
+      jqxhr = $.post "/api/account/resendConfirmationEmail", =>
         @showDialog "<strong>E-mail enviado com sucesso.</strong>
           Verifique sua caixa de mensagens, e caso não o encontre verifique também a caixa de spam.
           Adicione contato@atelies.com.br como um contato confiável no seu sistema de e-mails.<br /><br />

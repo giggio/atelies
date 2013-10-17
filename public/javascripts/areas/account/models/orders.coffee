@@ -6,4 +6,4 @@ define [
     initialize: (models, opt) ->
       @_id = opt._id
     model: Order
-    url: -> "account/orders/#{@_id}"
+    url: -> "/api/account/orders/#{@_id}"

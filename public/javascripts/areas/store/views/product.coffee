@@ -36,7 +36,7 @@ define [
       context = Handlebars.compile @template
       @delegateEvents()
       attr = _.extend {}, @product.attributes
-      attr.tags = attr.tags.split(', ')
+      attr.tags = attr.tags.split ','
       description = @markdown.makeHtml attr.description if attr.description?
       if attr.comments?
         for c in attr.comments
@@ -110,7 +110,7 @@ define [
       else
         control.tooltip "destroy"
       $("#createComment", @$el).attr 'disabled', 'disabled'
-      jqxhr = $.post "/products/#{@product.get '_id'}/comments", body:body, =>
+      jqxhr = $.post "/api/products/#{@product.get '_id'}/comments", body:body, =>
         @product.get('comments').push date: new Date(), userEmail: @user.email, userName: @user.name, body: body
         $("#createComment", @$el).removeAttr 'disabled'
         $("#newCommentBody", @$el).val ''

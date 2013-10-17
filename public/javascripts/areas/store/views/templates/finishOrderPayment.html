@@ -14,11 +14,11 @@
       </label>
     </div>
   </div>
-  <a id="backToStore" class="btn btn-primary" href="#">Voltar à loja</a>
+  <button id="backToStore" class="btn btn-primary">Voltar à loja</button>
   {{#if hasShipping}}
-  <a href="#finishOrder/shipping" id="goBackToShipping" class="btn btn-primary">Voltar</a>
+  <button id="goBackToShipping" class="btn btn-primary">Voltar</button>
   {{else}}
-  <a href="#cart" id="goBackToShipping" class="btn btn-primary">Voltar</a>
+  <button id="goBackToCart" class="btn btn-primary">Voltar</button>
   {{/if}}
   <button id="selectPaymentType" class="btn btn-primary">Selecionar forma de pagamento</button>
 </div>

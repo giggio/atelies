@@ -109,7 +109,7 @@ define [
         it 'navigated to store manage', ->
           expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
         it 'posted to correct url', ->
-          expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
+          expect(dataPosted.url).to.equal "/api/admin/#{product.storeSlug}/products/#{product._id}"
           expect(dataPosted.type).to.equal "PUT"
   
       describe 'Does not update product when invalid', ->
@@ -209,7 +209,7 @@ define [
         it 'navigated to store manage', ->
           expect(historySpy).to.have.been.calledWith "store/#{product.storeSlug}", trigger:true
         it 'posted to correct url', ->
-          expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products"
+          expect(dataPosted.url).to.equal "/api/admin/#{product.storeSlug}/products"
           expect(dataPosted.type).to.equal "POST"
   
       describe 'Does not create product when invalid', ->
@@ -348,7 +348,7 @@ define [
         it 'navigated to store manage', ->
           expect(historySpy).to.have.been.calledWith "store/#{store2.slug}", trigger:true
         it 'posted to correct url', ->
-          expect(dataPosted.url).to.equal "/admin/#{store2.slug}/products"
+          expect(dataPosted.url).to.equal "/api/admin/#{store2.slug}/products"
           expect(dataPosted.type).to.equal "POST"
 
     describe 'Deleting a Product', ->
@@ -375,7 +375,7 @@ define [
         it 'navigated to store manage', ->
           deleteStub.should.have.been.called
         it 'posted to correct url', ->
-          expect(dataPosted.url).to.equal "/admin/#{product.storeSlug}/products/#{product._id}"
+          expect(dataPosted.url).to.equal "/api/admin/#{product.storeSlug}/products/#{product._id}"
           expect(dataPosted.type).to.equal "DELETE"
 
       describe 'does not confirm product deletion', ->

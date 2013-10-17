@@ -4,10 +4,10 @@ Page          = require './seleniumPage'
 module.exports = class AdminManageProductPage extends Page
   visit: (storeSlug, productId, cb) ->
     if typeof productId is 'string'
-      super "admin#manageProduct/#{storeSlug}/#{productId}", cb
+      super "admin/manageProduct/#{storeSlug}/#{productId}", cb
     else
       cb = productId
-      super "admin#createProduct/#{storeSlug}", cb
+      super "admin/createProduct/#{storeSlug}", cb
        
   product: (cb) ->
     product =

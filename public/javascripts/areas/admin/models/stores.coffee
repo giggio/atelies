@@ -4,4 +4,4 @@ define [
 ], (Backbone, Store) ->
   class Products extends Backbone.Collection
     model: Store
-    url: "/admin/store"
+    url: "/api/admin/store"

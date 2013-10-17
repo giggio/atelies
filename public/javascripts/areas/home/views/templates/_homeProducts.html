@@ -2,7 +2,7 @@
   <div id="carousel">
     {{#each products}}
     <div id="product{{_id}}" data-id="{{_id}}" class="product">
-      <a id="product{{_id}}_picture" href="{{url}}" class="link">
+      <a id="product{{_id}}_picture" href="{{url}}" class="link" data-not-push-state="true">
         <img src="{{pictureThumb}}" alt="{{name}}" class="picture" />
         <div class="productInfoBox">
           <span id="product{{_id}}_storeName" class="storeName">{{storeName}}</span>

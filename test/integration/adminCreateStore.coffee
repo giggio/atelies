@@ -24,7 +24,7 @@ describe 'Admin create store page', ->
               page.clickUpdateStoreButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
         done()
     it 'shows store created message', (done) ->
       page.message (msg) ->
@@ -71,7 +71,7 @@ describe 'Admin create store page', ->
               page.clickUpdateStoreButton done
     it 'is at the store create page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#createStore"
+        url.should.equal "http://localhost:8000/admin/createStore"
         done()
     it 'does not show store created message', (done) ->
       page.hasMessage (itDoes) ->
@@ -104,7 +104,7 @@ describe 'Admin create store page', ->
               page.clickUpdateStoreButton done
     it 'is at the store create page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#createStore"
+        url.should.equal "http://localhost:8000/admin/createStore"
         done()
     it 'does not show store created message', (done) ->
       page.hasMessage (itDoes) ->
@@ -134,7 +134,7 @@ describe 'Admin create store page', ->
                 page.clickUpdateStoreButton done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{exampleStore.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
         done()
     it 'shows store created message', (done) ->
       page.message (msg) ->

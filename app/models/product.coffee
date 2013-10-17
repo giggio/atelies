@@ -47,7 +47,7 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
   @shipping.applies = !!simple.shippingApplies
   @shipping.charge = !!simple.shippingCharge
   @categories = simple.categories?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
-productSchema.methods.url = -> "#{@storeSlug}##{@slug}"
+productSchema.methods.url = -> "#{@storeSlug}/#{@slug}"
 productSchema.methods.addComment = (comment, cb) ->
   comment.product = @
   ProductComment.create comment, cb

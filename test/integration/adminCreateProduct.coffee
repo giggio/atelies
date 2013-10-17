@@ -37,7 +37,7 @@ describe 'Admin Create Product page', ->
             page.clickUpdateProduct done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
         done()
     it 'did not create the product', (done) ->
       Product.find (err, products) ->
@@ -69,7 +69,7 @@ describe 'Admin Create Product page', ->
             page.clickUpdateProduct done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#createProduct/#{product.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
         done()
     it 'did not create the product', (done) ->
       Product.find (err, products) ->
@@ -89,7 +89,7 @@ describe 'Admin Create Product page', ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
         done()
     it 'created the product', (done) ->
       Product.find (err, productsOnDb) ->
@@ -122,7 +122,7 @@ describe 'Admin Create Product page', ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{store.slug}"
+        url.should.equal "http://localhost:8000/admin/store/#{store.slug}"
         done()
     it 'created the product', (done) ->
       Product.find name: productNoShippingInfo2.name, (err, productsOnDb) ->
@@ -158,7 +158,7 @@ describe 'Admin Create Product page', ->
               page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product3.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"
         done()
     it 'tried to upload the file and thumbnail', ->
       AmazonFileUploader.filesUploaded.length.should.equal 2

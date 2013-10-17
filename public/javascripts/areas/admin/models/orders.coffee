@@ -4,4 +4,4 @@ define [
 ], (Backbone, Order) ->
   class Orders extends Backbone.Collection
     model: Order
-    url: "admin/orders"
+    url: "/api/admin/orders"

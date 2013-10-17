@@ -59,7 +59,7 @@ describe 'Admin Manage Product page', ->
             page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
+        url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
         done()
     it 'did not update the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
@@ -105,7 +105,7 @@ describe 'Admin Manage Product page', ->
             page.clickUpdateProduct done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#manageProduct/#{product.storeSlug}/#{product._id}"
+        url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
         done()
     it 'shows error messages', (done) ->
       page.errorMessagesIn '#editProduct', (errorMsgs) ->
@@ -125,7 +125,7 @@ describe 'Admin Manage Product page', ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
         done()
     it 'updated the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
@@ -156,7 +156,7 @@ describe 'Admin Manage Product page', ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
         done()
     it 'added category to the product', (done) ->
       Product.findById product._id, (err, productOnDb) ->
@@ -180,10 +180,10 @@ describe 'Admin Manage Product page', ->
         page.visit store.slug, product2._id.toString(), ->
           page.clickDeleteProduct ->
             page.clickConfirmDeleteProduct ->
-              page.waitForUrl "http://localhost:8000/admin#store/#{product2.storeSlug}", done
+              page.waitForUrl "http://localhost:8000/admin/store/#{product2.storeSlug}", done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product2.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product2.storeSlug}"
         done()
     it 'deleted the product', (done) ->
       Product.findById product2._id, (err, productOnDb) ->
@@ -207,7 +207,7 @@ describe 'Admin Manage Product page', ->
             page.clickUpdateProduct done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin#store/#{product3.storeSlug}"
+        url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"
         done()
     it 'updated the product to include the file', (done) ->
       Product.findById product3._id, (err, productOnDb) ->

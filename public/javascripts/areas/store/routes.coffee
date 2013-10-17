@@ -22,6 +22,7 @@ define [
     area: 'store'
     constructor: ->
       viewsManager.$el = $ '#app-container > .store'
+      _.bindAll @
     home: ->
       store = storeBootstrapModel.store
       user = storeBootstrapModel.user
@@ -92,5 +93,3 @@ define [
         error: (col, xhr, opt) =>
           @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível obter as avaliações. Tente novamente mais tarde."
-
-  _.bindAll new Routes()

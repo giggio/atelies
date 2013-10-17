@@ -5,7 +5,7 @@
     <div class="row storesRow">
       {{#each stores}}
       <div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3">
-        <a href="{{slug}}" class="link"><img src="{{flyer}}" /></a>
+        <a href="/{{slug}}" class="link" data-not-push-state="true"><img src="{{flyer}}" /></a>
       </div>
       {{/each}}
     </div>
@@ -17,7 +17,7 @@
   <div id="storesWithoutFlyer">
     <ul>
       {{#each storesWithoutFlyer}}
-      <li class="storeWithoutFlyer"><a href="{{slug}}">{{name}}</a></li>
+      <li class="storeWithoutFlyer"><a href="/{{slug}}">{{name}}</a></li>
       {{/each}}
     </ul>
   </div>

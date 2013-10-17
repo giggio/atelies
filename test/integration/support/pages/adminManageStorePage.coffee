@@ -4,10 +4,10 @@ async         = require 'async'
 module.exports = class AdminManageStorePage extends Page
   visit: (storeId, cb) ->
     if typeof storeId is 'string'
-      super "admin#manageStore/#{storeId}", cb
+      super "admin/manageStore/#{storeId}", cb
     else
       cb = storeId
-      super "admin#createStore", cb
+      super "admin/createStore", cb
   setFieldsAs: (store, cb) =>
     async.parallel [
       (pcb) => @select "#manageStoreBlock #state", store.state, pcb

@@ -2,7 +2,7 @@ Page          = require './seleniumPage'
 async         = require 'async'
 
 module.exports = class StoreEvaluationsPage extends Page
-  visit: (storeSlug, cb) => super "#{storeSlug}#evaluations", cb
+  visit: (storeSlug, cb) => super "#{storeSlug}/evaluations", cb
   evaluations: (cb) ->
     @findElementsIn('#evaluations', '.evaluation').then (els) =>
       getEvaluationsAction =

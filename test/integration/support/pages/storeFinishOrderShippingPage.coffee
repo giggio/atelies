@@ -2,7 +2,7 @@ Page          = require './seleniumPage'
 async         = require 'async'
 
 module.exports = class StoreCartPage extends Page
-  visit: (storeSlug, cb) => super "#{storeSlug}#finishOrder/shipping", cb
+  visit: (storeSlug, cb) => super "#{storeSlug}/finishOrder/shipping", cb
   address: (cb) ->
     @waitForSelectorClickable '#deliveryAddress #street', =>
       address = {}

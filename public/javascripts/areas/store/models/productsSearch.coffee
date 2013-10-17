@@ -6,4 +6,4 @@ define [
       @searchTerm = opt.searchTerm
       @storeSlug = opt.storeSlug
     model: Backbone.Open.Model
-    url: -> "/products/search/#{@storeSlug}/#{@searchTerm}"
+    url: -> "/api/products/search/#{@storeSlug}/#{@searchTerm}"

@@ -5,4 +5,4 @@ define [
   class StoresSearch extends Backbone.Collection
     initialize: (opt) -> @searchTerm = opt?.searchTerm
     model: Store
-    url: -> "/stores/search/#{@searchTerm}"
+    url: -> "/api/stores/search/#{@searchTerm}"

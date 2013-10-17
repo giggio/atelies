@@ -5,4 +5,4 @@ define [
     initialize: (opt) ->
       @storeId = opt.storeId
     model: Backbone.Open.Model
-    url: -> "/stores/#{@storeId}/evaluations"
+    url: -> "/api/stores/#{@storeId}/evaluations"

@@ -2,7 +2,7 @@ Page          = require './seleniumPage'
 async         = require 'async'
 
 module.exports = class StoreProductPage extends Page
-  visit: (storeSlug, productSlug, cb) => super "#{storeSlug}##{productSlug}", cb
+  visit: (storeSlug, productSlug, cb) => super "#{storeSlug}/#{productSlug}", cb
   purchaseItem: (cb) => @pressButton "#purchaseItem", cb
   product: (cb) ->
     product = {}

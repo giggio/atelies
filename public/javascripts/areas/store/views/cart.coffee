@@ -12,6 +12,7 @@ define [
     events:
       'click #clearCart':'clear'
       'click #finishOrderCart':'finishOrder'
+      'click #backToStore': -> Backbone.history.navigate('', true)
     template: cartTemplate
     initialize: (opt) =>
       @store = opt.store

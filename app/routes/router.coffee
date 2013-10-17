@@ -30,19 +30,21 @@ exports.route = (app) ->
   app.get     "/iWantToSell",                                               home.iWantToSell
   app.get     "/contribute",                                                home.contribute
   app.get     "/donating",                                                  home.donating
-  app.post    "/error",                                                     home.errorCreate
+  app.post    "/api/error",                                                 home.errorCreate
   app.get     "/humans.txt",                                                home.humanstxt
+  #home client routes
+  app.get     "/searchProducts/:searchTerm?",                               home.index domain
+  app.get     "/searchStores/:searchTerm?",                                 home.index domain
   #home search
-  app.get     "/stores/search/:searchTerm",                                 home.storesSearch
-  app.get     "/products/search/:searchTerm",                               home.productsSearch
+  app.get     "/api/stores/search/:searchTerm",                             home.storesSearch
+  app.get     "/api/products/search/:searchTerm",                           home.productsSearch
   #account
-  app.get     "/account",                                                   account.account
   app.get     "/account/registered",                                        account.registered
   app.get     "/account/mustVerifyUser",                                    account.mustVerifyUser
   app.get     "/account/verifyUser/:_id",                                   account.verifyUser
   app.get     "/account/verified",                                          account.verified
-  app.get     "/account/orders/:_id",                                       account.order
-  app.post    "/account/orders/:_id/evaluation",                            account.evaluationCreate
+  app.get     "/api/account/orders/:_id",                                   account.order
+  app.post    "/api/account/orders/:_id/evaluation",                        account.evaluationCreate
   app.get     "/account/changePassword",                                    account.changePasswordShow
   app.post    "/account/changePassword",                                    account.changePassword
   app.get     "/account/passwordChanged",                                   account.passwordChanged
@@ -54,37 +56,41 @@ exports.route = (app) ->
   app.get     "/account/passwordResetSent",                                 account.passwordResetSent
   app.get     "/account/resetPassword",                                     account.resetPasswordShow
   app.post    "/account/resetPassword",                                     account.resetPassword
-  app.post    "/account/resendConfirmationEmail",                           account.resendConfirmationEmail
+  app.post    "/api/account/resendConfirmationEmail",                       account.resendConfirmationEmail
   app.get     "/account/afterFacebookLogin",                                account.afterFacebookLogin
+  app.get     /account\/?.*/,                                                 account.account
   app.get     "/notseller",                                                 account.notSeller
   #site admin
-  app.get     "/siteAdmin",                                                 siteAdmin.siteAdmin
-  app.get     "/siteAdmin/storesForAuthorization/:isFlyerAuthorized?",      siteAdmin.storesForAuthorization
-  app.put     "/siteAdmin/storesForAuthorization/:_id/isFlyerAuthorized/:isFlyerAuthorized", siteAdmin.updateStoreFlyerAuthorization
+  app.get     /^\/siteAdmin\/?.*/,                                           siteAdmin.siteAdmin
+  app.get     "/api/siteAdmin/storesForAuthorization/:isFlyerAuthorized?",  siteAdmin.storesForAuthorization
+  app.put     "/api/siteAdmin/storesForAuthorization/:_id/isFlyerAuthorized/:isFlyerAuthorized", siteAdmin.updateStoreFlyerAuthorization
   #admin
-  app.get     "/admin",                                                     admin.admin
-  app.get     "/admin/orders",                                              admin.orders
-  app.get     "/admin/orders/:_id",                                         admin.order
+  app.get     "/api/admin/orders",                                          admin.orders
+  app.get     "/api/admin/orders/:_id",                                     admin.order
   #admin store
-  app.post    "/admin/store",                                               admin.adminStoreCreate
-  app.put     "/admin/store/:storeId",                                      admin.adminStoreUpdate
-  app.put     "/admin/store/:storeId/setPagseguroOn",                       admin.adminStoreUpdateSetPagseguroOn
-  app.put     "/admin/store/:storeId/setPagseguroOff",                      admin.adminStoreUpdateSetPagseguroOff
+  app.post    "/api/admin/store",                                           admin.adminStoreCreate
+  app.put     "/api/admin/store/:storeId",                                  admin.adminStoreUpdate
+  app.put     "/api/admin/store/:storeId/setPagseguroOn",                   admin.adminStoreUpdateSetPagseguroOn
+  app.put     "/api/admin/store/:storeId/setPagseguroOff",                  admin.adminStoreUpdateSetPagseguroOff
   #admin product
-  app.get     "/admin/:storeSlug/products",                                 admin.storeProducts
-  app.post    "/admin/:storeSlug/products",                                 admin.adminProductCreate
-  app.get     "/admin/:storeSlug/products/:productId",                      admin.storeProduct
-  app.put     "/admin/:storeSlug/products/:productId",                      admin.adminProductUpdate
-  app.delete  "/admin/:storeSlug/products/:productId",                      admin.adminProductDelete
-  app.get     "/admin/:storeId/categories",                                 admin.storeCategories
+  app.get     "/api/admin/:storeSlug/products",                             admin.storeProducts
+  app.post    "/api/admin/:storeSlug/products",                             admin.adminProductCreate
+  app.get     "/api/admin/:storeSlug/products/:productId",                  admin.storeProduct
+  app.put     "/api/admin/:storeSlug/products/:productId",                  admin.adminProductUpdate
+  app.delete  "/api/admin/:storeSlug/products/:productId",                  admin.adminProductDelete
+  app.get     "/api/admin/:storeId/categories",                             admin.storeCategories
+  app.get     /admin(\/.*)?/,                                               admin.admin
   #store order
-  app.post    "/orders/:storeId",                                           store.orderCreate
+  app.post    "/api/orders/:storeId",                                       store.orderCreate
   app.get     "/paymentGateway/pagseguro/:storeSlug/returnFromPayment",     store.pagseguroReturnFromPayment
-  app.post    "/paymentGateway/pagseguro/:storeSlug/statusChanged",         store.pagseguroStatusChanged
-  app.post    "/shipping/:storeSlug",                                       store.calculateShipping
+  app.post    "/api/paymentGateway/pagseguro/:storeSlug/statusChanged",     store.pagseguroStatusChanged
+  app.post    "/api/shipping/:storeSlug",                                   store.calculateShipping
   #store
-  app.get     "/products/search/:storeSlug/:searchTerm",                    store.productsSearch
-  app.post    "/products/:productId/comments",                              store.commentCreate
-  app.get     "/stores/:_id/evaluations",                                   store.evaluations
+  app.get     "/api/products/search/:storeSlug/:searchTerm",                store.productsSearch
+  app.post    "/api/products/:productId/comments",                          store.commentCreate
+  app.get     "/api/stores/:_id/evaluations",                               store.evaluations
+  app.get     "/api/:storeSlug/:productSlug",                               store.product
+  app.get     "/:storeSlug/*",                                              store.store
   app.get     "/:storeSlug",                                                store.store
-  app.get     "/:storeSlug/:productSlug",                                   store.product
+  #store client routes
+  app.get     "/:storeSlug/searchProducts/:searchTerm?",                    store.store

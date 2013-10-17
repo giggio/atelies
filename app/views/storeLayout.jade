@@ -5,7 +5,7 @@ append layout
     section#main.container
       #site-banner.row(style="margin-bottom: 20px")
         .col-md-12
-          a(href="#")
+          a(href="/#{store.slug}", onclick="Backbone.history.navigate('', true); return false;")
             if store.banner
               img#storeBanner(src="#{store.banner}")
             else
@@ -41,7 +41,7 @@ append layout
                 .page-header
                   h2 Está comprando?
                 ul
-                  li: a(href="/account#orders") Meus pedidos
+                  li: a(href="/account/orders") Meus pedidos
                   li: a(href="/IWantToBuy") Quero comprar
                   li: a(href="/faq#whybuyhere") Porque comprar aqui?
 

@@ -98,7 +98,7 @@ define [
         ajaxSpy.restore()
         historySpy.restore()
       it 'has sent the order to the server', ->
-        dataPosted.url.should.equal "/orders/#{store1._id}"
+        dataPosted.url.should.equal "/api/orders/#{store1._id}"
         dataPosted.type.should.equal "POST"
       it 'posted the correct order', ->
         orderPosted.paymentType.should.equal 'pagseguro'
@@ -148,7 +148,7 @@ define [
         ajaxSpy.restore()
         historySpy.restore()
       it 'has sent the order to the server', ->
-        dataPosted.url.should.equal "/orders/#{store2._id}"
+        dataPosted.url.should.equal "/api/orders/#{store2._id}"
         dataPosted.type.should.equal "POST"
       it 'posted the correct order', ->
         orderPosted.paymentType.should.equal 'directSell'

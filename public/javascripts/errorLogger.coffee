@@ -17,7 +17,7 @@ define [
           catch e
             stack = e.stack
         otherInfo.location = window.location.toString()
-        $.post '/error',
+        $.post '/api/error',
           module: area
           message: message
           stack: stack

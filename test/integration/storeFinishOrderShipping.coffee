@@ -102,7 +102,7 @@ describe 'Store Finish Order: Shipping', ->
               storeCartPage.clickFinishOrder done
     it 'should redirect to update profile page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/updateProfile"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/updateProfile"
         done()
 
   describe 'logged in user with incomplete address completes address and comes back to the store and cart', ->
@@ -118,7 +118,7 @@ describe 'Store Finish Order: Shipping', ->
                       page.pressButton "#redirectTo", done
     it 'should take back to the shipping page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/shipping"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
         done()
     it 'should show address', (done) ->
       page.address (a) ->
@@ -140,7 +140,7 @@ describe 'Store Finish Order: Shipping', ->
                 loginPage.loginWith user1, done
     it 'should take back to the shipping page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/shipping"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
         done()
     it 'should show address', (done) ->
       page.address (a) ->
@@ -161,5 +161,5 @@ describe 'Store Finish Order: Shipping', ->
               storeCartPage.clickFinishOrder done
     it 'should take directly to payment page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{productNoShipping.storeSlug}#finishOrder/payment"
+        url.should.equal "http://localhost:8000/#{productNoShipping.storeSlug}/finishOrder/payment"
         done()

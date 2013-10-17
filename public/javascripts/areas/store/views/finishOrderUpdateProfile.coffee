@@ -15,4 +15,4 @@ define [
     render: =>
       context = Handlebars.compile @template
       @$el.html context user: @user, storeSlug: @store.slug
-      setTimeout (=> window.location = "/account/updateProfile?redirectTo=/#{@store.slug}%23finishOrder/shipping"), 10000
+      setTimeout (=> window.location = "/account/updateProfile?redirectTo=/#{@store.slug}/finishOrder/shipping"), 10000

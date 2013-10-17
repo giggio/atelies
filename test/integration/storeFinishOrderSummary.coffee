@@ -58,7 +58,7 @@ describe 'Store Finish Order: Summary', ->
         done()
     it 'should be at summary page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/summary"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/summary"
         done()
 
   describe 'completing the payment with products with and without inventory and with products with and without shipping', ->
@@ -123,7 +123,7 @@ describe 'Store Finish Order: Summary', ->
         done()
     it 'should be at order completed page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store2.slug}#finishOrder/orderFinished"
+        url.should.equal "http://localhost:8000/#{store2.slug}/finishOrder/orderFinished"
         done()
 
   describe 'completing the payment with product without shipping', ->
@@ -172,5 +172,5 @@ describe 'Store Finish Order: Summary', ->
         done()
     it 'should be at order completed page', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}#finishOrder/orderFinished"
+        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/orderFinished"
         done()
