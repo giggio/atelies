@@ -976,9 +976,9 @@
       "resolved": "https://registry.npmjs.org/grunt-wait/-/grunt-wait-0.1.0.tgz"
     },
     "prerender-node": {
-      "version": "0.0.9",
-      "from": "prerender-node@",
-      "resolved": "https://registry.npmjs.org/prerender-node/-/prerender-node-0.0.9.tgz"
+      "version": "0.1.2",
+      "from": "prerender-node@0.1.x",
+      "resolved": "https://registry.npmjs.org/prerender-node/-/prerender-node-0.1.2.tgz"
     }
   }
 }
