@@ -58,10 +58,12 @@ exports.route = (app) ->
   app.post    "/account/resetPassword",                                     account.resetPassword
   app.post    "/api/account/resendConfirmationEmail",                       account.resendConfirmationEmail
   app.get     "/account/afterFacebookLogin",                                account.afterFacebookLogin
-  app.get     /account\/?.*/,                                                 account.account
+  app.get     "/account",                                                   account.redirectAddingDash
+  app.get     /account\/.*/,                                                account.account
   app.get     "/notseller",                                                 account.notSeller
   #site admin
-  app.get     /^\/siteAdmin\/?.*/,                                           siteAdmin.siteAdmin
+  app.get     "/siteAdmin",                                                 siteAdmin.redirectAddingDash
+  app.get     /^\/siteAdmin\/.*/,                                           siteAdmin.siteAdmin
   app.get     "/api/siteAdmin/storesForAuthorization/:isFlyerAuthorized?",  siteAdmin.storesForAuthorization
   app.put     "/api/siteAdmin/storesForAuthorization/:_id/isFlyerAuthorized/:isFlyerAuthorized", siteAdmin.updateStoreFlyerAuthorization
   #admin
@@ -79,7 +81,8 @@ exports.route = (app) ->
   app.put     "/api/admin/:storeSlug/products/:productId",                  admin.adminProductUpdate
   app.delete  "/api/admin/:storeSlug/products/:productId",                  admin.adminProductDelete
   app.get     "/api/admin/:storeId/categories",                             admin.storeCategories
-  app.get     /admin(\/.*)?/,                                               admin.admin
+  app.get     "/admin",                                                     admin.redirectAddingDash
+  app.get     /admin\/.*/,                                                  admin.admin
   #store order
   app.post    "/api/orders/:storeId",                                       store.orderCreate
   app.get     "/paymentGateway/pagseguro/:storeSlug/returnFromPayment",     store.pagseguroReturnFromPayment
@@ -90,7 +93,7 @@ exports.route = (app) ->
   app.post    "/api/products/:productId/comments",                          store.commentCreate
   app.get     "/api/stores/:_id/evaluations",                               store.evaluations
   app.get     "/api/:storeSlug/:productSlug",                               store.product
+  app.get     "/:storeSlug",                                                store.redirectAddingDash
   app.get     "/:storeSlug/*",                                              store.store
-  app.get     "/:storeSlug",                                                store.store
   #store client routes
   app.get     "/:storeSlug/searchProducts/:searchTerm?",                    store.store

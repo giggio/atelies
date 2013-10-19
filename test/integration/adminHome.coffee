@@ -34,8 +34,8 @@ describe 'Admin home page', ->
       page.storesQuantity (q) -> q.should.equal 2; done()
     it 'links to store manage pages', (done) ->
       page.stores (stores) =>
-        stores[0].url.should.equal "http://localhost:8000/admin#store/#{store1.slug}"
-        stores[1].url.should.equal "http://localhost:8000/admin#store/#{store2.slug}"
+        stores[0].url.should.equal "http://localhost:8000/admin/store/#{store1.slug}"
+        stores[1].url.should.equal "http://localhost:8000/admin/store/#{store2.slug}"
         done()
 
   describe 'accessing with a logged in but not a seller user', ->
@@ -57,5 +57,5 @@ describe 'Admin home page', ->
         page.visit done
     it 'redirects user to login', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login?redirectTo=/admin"
+        url.should.equal "http://localhost:8000/account/login?redirectTo=/admin/"
         done()

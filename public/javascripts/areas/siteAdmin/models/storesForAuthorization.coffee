@@ -4,9 +4,9 @@ define [
   './storeForAuthorization'
 ], (_, Backbone, StoreForAuthorization) ->
   class StoresForAuthorization extends Backbone.Collection
-    url: -> "/api/siteAdmin/storesForAuthorization/#{@isFlyerAuthorizedString}"
+    url: -> "/api/siteAdmin/storesForAuthorization#{@isFlyerAuthorizedString}"
     initialize: (opt) ->
-      @isFlyerAuthorizedString = if opt.status? then opt.status else ''
+      @isFlyerAuthorizedString = if opt.status? then "/#{opt.status}" else ''
       @isFlyerAuthorized = opt.status
       @listenTo @, "sync", ->
         for store in @models

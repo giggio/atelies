@@ -31,8 +31,8 @@ define [
         Backbone.history.navigate boostrapedRedirect, trigger: true
     _redirectLinksToBackboneNavigation: ->
       $ =>
-        $("section#app-container").on "click", "a:not([data-not-push-state]):not(.close)", (event) =>
+        $("section#app-container").parent().on "click", "a:not([data-not-push-state])", (event) =>
           return if event.altKey or event.ctrlKey or event.metaKey or event.shiftKey
           event.preventDefault()
-          url = $(event.currentTarget).attr("href").replace "#{@_rootUrl}/",""
+          url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}/#{@_rootUrl}/",""
           Backbone.history.navigate url, trigger: true

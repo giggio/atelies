@@ -70,7 +70,7 @@ describe 'Login', ->
       browser = newBrowser browser
       browser.visit "http://localhost:8000/admin", done
     it 'is at the login page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login?redirectTo=/admin"
+      expect(browser.location.toString()).to.equal "http://localhost:8000/account/login?redirectTo=/admin/"
 
   xdescribe 'Login with admin user redirects to original url', -> #doesnt work on zombie...
     before (done) ->

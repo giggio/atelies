@@ -64,3 +64,5 @@ module.exports = class RouteFunctions
     if val? and val isnt '' then val else undefined
   _convertBodyToEmptyToUndefined: (body, fields...) ->
     body[field] = @_convertEmptyToUndefined body[field] for field in fields
+  redirectAddingDash: (req, res) ->
+    res.redirect 301, req.originalUrl + "/"

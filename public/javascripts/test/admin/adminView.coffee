@@ -19,9 +19,9 @@ define [
       it 'shows the stores being managed', ->
         expect($("#stores .store", el).length).to.equal 2
         expect($("#stores [data-id='#{store1._id}'] .name", el).text().trim()).to.equal store1.name
-        expect($("#stores [data-id='#{store1._id}'] .link", el).attr('href')).to.equal "#store/#{store1.slug}"
+        expect($("#stores [data-id='#{store1._id}'] .link", el).attr('href')).to.equal "store/#{store1.slug}"
         expect($("#stores [data-id='#{store2._id}'] .name", el).text().trim()).to.equal store2.name
-        expect($("#stores [data-id='#{store2._id}'] .link", el).attr('href')).to.equal "#store/#{store2.slug}"
+        expect($("#stores [data-id='#{store2._id}'] .link", el).attr('href')).to.equal "store/#{store2.slug}"
     describe 'Without stores', ->
       before ->
         adminView = new AdminView el:el, stores: []

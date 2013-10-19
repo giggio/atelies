@@ -50,6 +50,7 @@ exports.start = (cb) ->
   app.set "port", config.port
   app.set "views", path.join __dirname, "views"
   app.set "view engine", "jade"
+  app.set "strict routing", on
   app.set 'domain', config.baseDomain
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
   app.use "/isHealthy", healthCheck

@@ -13,7 +13,7 @@
 <h2 id="name">{{store.name}}</h2>
 <a href="/createProduct/{{store.slug}}" id="createProduct" class="btn-primary btn">Crie um novo produto</a>
 <a href="/manageStore/{{store._id}}" id="manageStore" class="btn-primary btn">Alterar a loja</a>
-<a href="{{store.slug}}" id="viewStore" class="btn btn-default">Visualizar a loja</a>
+<a href="/{{store.slug}}/" id="viewStore" class="btn btn-default" data-not-push-state="true">Visualizar a loja</a>
 <div id="products">
   {{#each productGroups}}
   <div class="row-fluid productsRow">
