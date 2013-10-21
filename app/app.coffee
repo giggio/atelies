@@ -64,7 +64,7 @@ exports.start = (cb) ->
   app.use express.session secret: config.appCookieSecret, store:sessionStore
   if app.get("env") isnt 'production'
     less = require 'connect-less'
-    app.use less src: path.join(publicDir, '..'), debug: false, compress: config.isProduction
+    app.use less src: path.join(publicDir, '..'), debug: false, compress: false
     app.use config.staticPath, express.static publicDir
 
   everyauthConfig.configure app
