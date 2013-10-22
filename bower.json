@@ -9,8 +9,8 @@
   "dependencies": {
     "jquery": "~1.9.x",
     "bootstrap": "3.x.x",
-    "requirejs": "~2.1.6",
-    "requirejs-text": "~2.0.6",
+    "requirejs": "~2.1.9",
+    "requirejs-text": "~2.0.10",
     "handlebars": "http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js",
     "jquery.validation": "~1.11.1",
     "backbone": "~1.0.0",
