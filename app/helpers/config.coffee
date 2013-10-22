@@ -11,6 +11,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.FB_APP_ID = '618886944811863'
   process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d'
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
+  process.env.CLIENT_LIB_VERSION = "."
 switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
@@ -47,12 +48,14 @@ values =
     appId: process.env.FB_APP_ID
     appSecret: process.env.FB_APP_SECRET
   superAdminEmail: process.env.SUPER_ADMIN_EMAIL?.toLowerCase()
+  clientLibVersion: process.env.CLIENT_LIB_VERSION
+  clientLibPath: "#{process.env.STATIC_PATH}/javascripts/#{process.env.CLIENT_LIB_VERSION}"
 values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else ""
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and
     @recaptcha? and @recaptcha?.publicKey? and @recaptcha?.privateKey and @baseDomain? and @serverEnvironment? and
-    @staticPath? and @superAdminEmail?
+    @staticPath? and @clientLibVersion? and @superAdminEmail?
 valuesPresent =
   appCookieSecret: values.appCookieSecret?
   connectionString: values.connectionString?
@@ -73,6 +76,7 @@ valuesPresent =
   baseDomain: values.baseDomain?
   serverEnvironment: values.serverEnvironment?
   staticPath: values.staticPath?
+  clientLibVersion: values.clientLibVersion?
   superAdminEmail: values.superAdminEmail?
 unless values.environment is 'test'
   console.log "Config values present: #{JSON.stringify valuesPresent}"

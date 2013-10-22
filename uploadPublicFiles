@@ -9,8 +9,12 @@ if [ "$AWS_ACCESS_KEY_ID" = '' ]; then
   echo Missing environment variable AWS_ACCESS_KEY_ID
   exit 12
 fi
-if [ "$AWS_STATIC_IMAGES_BUCKET" = '' ]; then
-  echo Missing environment variable AWS_STATIC_IMAGES_BUCKET
+if [ "$AWS_STATIC_BUCKET" = '' ]; then
+  echo Missing environment variable AWS_STATIC_BUCKET
+  exit 13
+fi
+if [ "$CLIENT_LIB_VERSION " = '' ]; then
+  echo Missing environment variable CLIENT_LIB_VERSION
   exit 13
 fi
 
@@ -40,15 +44,15 @@ echo $(date) Rename
 find compiledPublic -type f -name '*.gz' | while read filename; do mv -v "${filename}" "`echo "${filename}" | sed -e 's/\.gz$//'`"; done > .uploadPublicFiles/log/rename.log
 
 echo $(date) Upload stylesheets
-.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/stylesheets s3://$AWS_STATIC_IMAGES_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg > .uploadPublicFiles/log/uploadToS3.log
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/stylesheets s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg > .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Upload js
-.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/javascripts s3://$AWS_STATIC_IMAGES_BUCKET/ --exclude=compiledPublic/javascripts/lib/*.* --exclude=**/*.coffee --exclude=compiledPublic/javascripts/test/*.* --include=compiledPublic/javascripts/lib/requirejs/require.js --include=compiledPublic/javascripts/lib/bootstrap/fonts/*.*  --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/javascripts/ s3://$AWS_STATIC_BUCKET/javascripts/$CLIENT_LIB_VERSION/ --exclude=compiledPublic/javascripts/lib/*.* --exclude=**/*.coffee --exclude=compiledPublic/javascripts/test/*.* --include=compiledPublic/javascripts/lib/requirejs/require.js --include=compiledPublic/javascripts/lib/bootstrap/fonts/*.*  --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Upload images
-.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/images s3://$AWS_STATIC_IMAGES_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/images s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Upload fonts
-.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/fonts s3://$AWS_STATIC_IMAGES_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/fonts s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Done!

@@ -8,6 +8,7 @@ html
     script.
       window.prerenderReady = false;
       var staticPath = '!{STATIC_PATH}';
+      var clientLibPath = '!{CLIENT_LIB_PATH}'; //not used anywhere, but is here so we remember clientLibPath and staticPath are different
     block head
   body
     #overlay: #loading
