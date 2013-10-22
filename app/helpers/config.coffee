@@ -12,6 +12,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d'
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
   process.env.CLIENT_LIB_VERSION = "."
+  process.env.UPLOAD_FILES = true unless process.env.UPLOAD_FILES?
 switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"

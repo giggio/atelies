@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# run it like this:
+# AWS_ACCESS_KEY_ID=<your key> AWS_SECRET_KEY=<your secret> AWS_STATIC_BUCKET=ateliestestestatic CLIENT_LIB_VERSION=1.0 ./uploadPublicFiles
+
 echo $(date) starting...
 if [ "$AWS_SECRET_KEY" = '' ]; then
   echo Missing environment variable AWS_SECRET_KEY
