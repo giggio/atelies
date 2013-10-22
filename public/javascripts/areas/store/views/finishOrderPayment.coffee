@@ -24,6 +24,7 @@ define [
     render: =>
       context = Handlebars.compile @template
       @$el.html context pagseguro:@store.pagseguro, hasShipping: @cart.hasShipping()
+      super
     _selectPaymentType: ->
       selected = $('#paymentTypesHolder input[type=radio]:checked', @$el)
       paymentType = switch selected.val()

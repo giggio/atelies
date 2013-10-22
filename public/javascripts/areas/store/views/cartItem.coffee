@@ -27,7 +27,6 @@ define [
       ".price":"html:currency(price)"
       ".totalPrice":"html:currency(totalPrice)"
     template: cartItemTemplate
-    render: ->
     remove: (e) ->
       removed @cartItem for removed in @removedCallbacks
       e.preventDefault()

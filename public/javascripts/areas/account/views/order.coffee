@@ -33,6 +33,7 @@ define [
         totalPrice: converters.currency i.totalPrice
       @$el.html context user: @user, order: order
       @_showStars()
+      super
     _showStars: ->
       if @order.evaluation?
         @$("#ratingStars").jRating

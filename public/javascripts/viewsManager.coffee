@@ -1,7 +1,9 @@
-define ->
+define [
+  './seoLoadManager'
+], (SEOLoadManager) ->
   class ViewsManager
     @show: (view) ->
       @view.close() if @view?
       @view = view
       @$el.html view.el
-      view.render()
+      view.render -> new SEOLoadManager().done()

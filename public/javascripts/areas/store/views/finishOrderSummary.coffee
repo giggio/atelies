@@ -37,6 +37,7 @@ define [
         viewModel.shippingOption = @cart.shippingOptionSelected()
         viewModel.shippingOptionPlural = viewModel.shippingOption.days > 1
       @$el.html context viewModel
+      super
     finishOrder: ->
       $("#finishOrder").prop "disabled", on
       items = _.map @cart.items(), (i) -> _id: i._id, quantity: i.quantity

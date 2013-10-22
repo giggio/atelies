@@ -19,7 +19,7 @@ define [
     describe 'Store with banner and product with inventory', ->
       before ->
         productView = new ProductView el:el, store: store1, product: new Product product1
-        productView.render 'product_1'
+        productView.render()
       it 'renders the products', ->
         expect($('#product', el)).to.be.defined
       it 'show the name', ->
@@ -49,7 +49,7 @@ define [
     describe 'product without inventory', ->
       before ->
         productView = new ProductView el:el, store: store2, product: new Product product2
-        productView.render 'product_2'
+        productView.render()
       it 'shows there is no inventory/made on demand', ->
         expect($('#product #inventory', el).text()).to.equal 'Feito sob encomenda'
       it 'enabled add to cart button', ->
@@ -60,7 +60,7 @@ define [
         Cart.get().clear()
         spy = sinon.spy Backbone.history, "navigate"
         productView = new ProductView el:el, store: store2, product: new Product product2
-        productView.render 'product_2'
+        productView.render()
         productView.purchase()
       it 'adds an item to the cart', ->
         expect(_.findWhere(Cart.get(store2.slug).items(), _id: product2._id).id).not.to.be.null
@@ -69,6 +69,6 @@ define [
     describe 'product with inventory but none available', ->
       before ->
         productView = new ProductView el:el, store: store1, product: new Product product3
-        productView.render 'product_1'
+        productView.render()
       it 'disable add to cart button', ->
         $('#purchaseItem', el).attr('disabled').should.equal 'disabled'

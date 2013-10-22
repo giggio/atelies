@@ -6,6 +6,7 @@ html
     link(rel='stylesheet', href='#{STATIC_PATH}/stylesheets/style.css')
     include includes/shims
     script.
+      window.prerenderReady = false;
       var staticPath = '!{STATIC_PATH}';
     block head
   body

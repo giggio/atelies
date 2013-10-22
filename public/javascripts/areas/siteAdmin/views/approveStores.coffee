@@ -23,6 +23,7 @@ define [
         for store in group.stores
           storeView = new ApproveStoreView store:store
           storeRowEl.append storeView.el
+      super
     _groupStores: (stores) ->
       _.reduce stores, (groups, store) ->
         if groups.length is 0 or _.last(groups).stores.length is 4 then groups.push stores:[]

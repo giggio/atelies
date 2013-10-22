@@ -1,13 +1,38 @@
 define [
+  'jquery'
+  'underscore'
   'backboneConfig'
-  'areas/siteAdmin/routes'
-],
-(Backbone, routes) ->
+  '../../viewsManager'
+  './views/siteAdmin'
+  './views/approveStores'
+  './models/storesForAuthorization'
+  '../shared/views/dialog'
+],($, _, Backbone, viewsManager, SiteAdminView, ApproveStoresView, StoresForAuthorization, Dialog) ->
   class Router extends Backbone.Open.Router
+    area: 'siteAdmin'
     logCategory: 'siteAdmin'
-    _routes: routes
-    routes:
-      '': routes.siteAdmin
-      'authorizeStores': routes.authorizeStores
-      'authorizeStores/authorized': routes.authorizeStoresAuthorized
-      'authorizeStores/unauthorized': routes.authorizeStoresUnauthorized
+    constructor: ->
+      viewsManager.$el = $ "#app-container > .siteAdmin"
+      @_createRoutes
+        '': @siteAdmin
+        'authorizeStores': @authorizeStores
+        'authorizeStores/authorized': @authorizeStoresAuthorized
+        'authorizeStores/unauthorized': @authorizeStoresUnauthorized
+      _.bindAll @
+      super
+    siteAdmin: ->
+      homeView = new SiteAdminView()
+      viewsManager.show homeView
+    authorizeStores: -> @_authorizeStoresWithStatus()
+    authorizeStoresAuthorized: -> @_authorizeStoresWithStatus true
+    authorizeStoresUnauthorized: -> @_authorizeStoresWithStatus false
+    _authorizeStoresWithStatus: (status) ->
+      stores = new StoresForAuthorization status: status
+      stores.fetch
+        reset:true
+        success: =>
+          approveStoresView = new ApproveStoresView stores: stores
+          viewsManager.show approveStoresView
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
+          Dialog.showError viewsManager.$el, "Não foi possível buscar as lojas. Tente novamente mais tarde."

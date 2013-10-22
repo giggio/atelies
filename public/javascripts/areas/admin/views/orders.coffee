@@ -21,3 +21,4 @@ define [
         orderDate: converters.prettyDate new Date(o.orderDate)
         numberOfItems: o.numberOfItems
       @$el.html context orders: orders
+      super

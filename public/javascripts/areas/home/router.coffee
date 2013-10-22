@@ -1,15 +1,52 @@
 define [
+  'jquery'
+  'underscore'
   'backboneConfig'
-  './routes'
-],
-(Backbone, routes) ->
+  '../../viewsManager'
+  './views/home'
+  './models/storesSearch'
+  './models/productsSearch'
+  '../shared/views/dialog'
+],($, _, Backbone, viewsManager, HomeView, StoresSearch, ProductsSearch, Dialog) ->
   class Router extends Backbone.Open.Router
     logCategory: 'home'
-    _routes: routes
-    routes:
-      '': routes.home
-      'home': routes.home
-      'searchStores': routes.searchStores
-      'closeSearchStore': routes.closeSearchStore
-      'searchStores/:searchTerm': routes.searchStore
-      'searchProducts/:searchTerm': routes.searchProducts
+    area: 'home'
+    constructor: ->
+      @_createRoutes
+        '': @home
+        'home': @home
+        'searchStores': @searchStores
+        'closeSearchStore': @closeSearchStore
+        'searchStores/:searchTerm': @searchStore
+        'searchProducts/:searchTerm': @searchProducts
+      viewsManager.$el = $ "#app-container > .home"
+      _.bindAll @
+      super
+    home: ->
+      @homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel
+      viewsManager.show @homeView
+    searchStores: ->
+      @home() unless @homeView?
+      @homeView.searchStores()
+    closeSearchStore: ->
+      @homeView.closeSearchStore()
+    searchStore: (searchTerm) =>
+      unless @homeView?
+        @home()
+        @searchStores()
+      storesSearch = new StoresSearch searchTerm:searchTerm
+      storesSearch.fetch
+        reset:true
+        success: => @homeView.showStoresSearchResults searchTerm, storesSearch.toJSON()
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
+          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
+    searchProducts: (searchTerm) ->
+      @home() unless @homeView?
+      productsSearch = new ProductsSearch searchTerm:searchTerm
+      productsSearch.fetch
+        reset:true
+        success: => @homeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
+        error: (col, xhr, opt) =>
+          @logXhrError xhr
+          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."

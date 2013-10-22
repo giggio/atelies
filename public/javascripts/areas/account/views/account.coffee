@@ -14,6 +14,7 @@ define [
       @$el.empty()
       context = Handlebars.compile @template
       @$el.html context user: @user
+      super
     _resendConfirmationEmail: (e)->
       e.preventDefault()
       jqxhr = $.post "/api/account/resendConfirmationEmail", =>

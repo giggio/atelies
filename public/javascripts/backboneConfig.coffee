@@ -59,7 +59,6 @@ define [
   Backbone.Epoxy.binding.addFilter 'decimalOr', (val) -> if $.isNumeric val then parseFloat val else val
   Backbone.Epoxy.binding.addFilter 'boolean', get: ((val) -> val.toString()), set: (val) -> if val is 'true' then true else false
   Backbone.Epoxy.binding.addFilter 'currency', converters.currency
-  Backbone.View::render = ->
   Backbone.View::close = ->
     try
       @remove()

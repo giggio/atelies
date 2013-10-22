@@ -26,7 +26,7 @@ define [
       @_setValidation()
       @_showShippingOptions()
       @_prepareSelects()
-
+      super
     _initializeBindings: ->
       @bindings = @initializeBindings
         "#_id": "html:_id"

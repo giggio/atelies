@@ -80,6 +80,7 @@ define [
           height: '-=50'
         , 500, ->
           $('.name,.price', @).hide()
+      super
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'
       date = date.getTime() unless typeof date is 'number'

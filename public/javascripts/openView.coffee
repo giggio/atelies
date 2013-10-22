@@ -24,3 +24,4 @@ define [
       @logError area, xhr.responseText, otherInfo if xhr.status is 400
     logError: (area, message, otherInfo) ->
       ErrorLogger.logError area, message, '', '', otherInfo
+    render: (done) -> done() if done?

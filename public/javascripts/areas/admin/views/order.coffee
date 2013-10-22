@@ -28,3 +28,4 @@ define [
         quantity: i.quantity
         totalPrice: converters.currency i.totalPrice
       @$el.html context order: order
+      super

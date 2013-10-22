@@ -12,3 +12,4 @@ define [
       @$el.empty()
       context = Handlebars.compile @template
       @$el.html context user: @user
+      super

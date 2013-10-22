@@ -33,6 +33,7 @@ define [
         isDisabled: on
       @productsView = new ProductsView products:@products
       @$('#productsPlaceHolder').html @productsView.el
+      super
     showProductsSearchResults: (searchTerm, products) ->
       $('#productSearchTerm').val searchTerm
       productsSearchResultsView = new ProductsSearchResultsView products:products

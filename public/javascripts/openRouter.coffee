@@ -2,12 +2,16 @@ define [
   'backbone'
   'underscore'
   './logger'
-], (Backbone, _, Logger) ->
+  './seoLoadManager'
+], (Backbone, _, Logger, SEOLoadManager) ->
   class Router extends Backbone.Router
     constructor: ->
       @logger = new Logger()
-      @routes['redirect/:to'] = @_routes.redirect
       super
+    _createRoutes: (routes) ->
+      @routes = routes
+      @routes['redirect/:to'] = @redirect
+      @_bindLoadingStartedToEveryRoute()
     getHash: ->
       hash = Backbone.history.getFragment()
       if hash is "" then 'home' else hash
@@ -36,3 +40,17 @@ define [
           event.preventDefault()
           url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}/#{@_rootUrl}/",""
           Backbone.history.navigate url, trigger: true
+    redirect: (to) ->
+      Backbone.history.navigate to, trigger: true
+    logXhrError: (xhr, otherInfo) ->
+      @logError xhr.responseText, otherInfo if xhr.status is 400
+    logError: (message, otherInfo) ->
+      ErrorLogger.logError @area, message, '', '', otherInfo
+    _bindLoadingStartedToEveryRoute: ->
+      for url, fn of @routes
+        do (fn) =>
+          @routes[url] = =>
+            @_setLoadingStarted()
+            fn.apply @, arguments
+    _setLoadingStarted: -> @seoLoadManager = new SEOLoadManager().set()
+    _setLoadingDone: -> @seoLoadManager.done()

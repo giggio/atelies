@@ -11,3 +11,4 @@ define [
     render: =>
       context = Handlebars.compile @template
       @$el.html context()
+      super

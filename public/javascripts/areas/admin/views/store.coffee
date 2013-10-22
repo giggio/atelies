@@ -18,6 +18,7 @@ define [
       context = Handlebars.compile @template
       productGroups = @_groupProducts @products.toJSON()
       @$el.html context store:@store, productGroups:productGroups, justCreated:justCreated, justUpdated:justUpdated
+      super
     _groupProducts: (products) ->
       _.reduce products, (groups, product) ->
         if groups.length is 0 or _.last(groups).products.length is 6 then groups.push products:[]
