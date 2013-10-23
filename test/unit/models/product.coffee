@@ -43,7 +43,6 @@ describe 'Product', ->
     store.updateProduct product, simpleProduct
     product.name.should.equal simpleProduct.name
     product.price.should.equal simpleProduct.price
-    print product.tags
     product.tags.should.be.like simpleProduct.tags.split ','
     product.description.should.equal simpleProduct.description
     product.dimensions.height.should.equal simpleProduct.height

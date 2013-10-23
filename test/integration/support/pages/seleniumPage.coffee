@@ -215,3 +215,6 @@ module.exports = class Page
     @findElement(selector).then (el) =>
       el.sendKeys path if path?
       cb() if cb?
+  waitForReady: (cb) ->
+    evalFn = => @eval "return document.readyState === 'complete';", (itIs) -> itIs
+    @wait evalFn, 5000, cb

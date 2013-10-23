@@ -3,7 +3,8 @@ async         = require 'async'
 
 module.exports = class HomePage extends Page
   url: ''
-  clickSearchStores: @::pressButton.partial ".searchStores"
+  clickSearchStores: (cb) ->
+    @waitForReady => @pressButton ".searchStores", cb
   searchStoresText: (text, cb) ->
     @waitForSelectorClickable '#storeSearchTerm', =>
       @type "#storeSearchTerm", text, cb

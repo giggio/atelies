@@ -2,7 +2,7 @@ require './support/_specHelper'
 Product                 = require '../../app/models/product'
 HomePage                = require './support/pages/homePage'
 
-describe.skip 'Home Search Store', ->
+describe 'Home Search Store', ->
   page = store1 = store2 = store3 = product1 = product2 = null
   after (done) -> page.closeBrowser done
   before (done) ->
