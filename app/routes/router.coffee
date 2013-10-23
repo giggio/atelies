@@ -9,15 +9,15 @@ exports.route = (app) ->
   env = app.get "env"
   domain = app.get 'domain'
   home = new Home env
-  _.bindAll home
+  _.bindAll home, _.functions(home)...
   store = new Store env, domain
-  _.bindAll store
+  _.bindAll store, _.functions(store)...
   account = new Account env
-  _.bindAll account
+  _.bindAll account, _.functions(account)...
   admin = new Admin env
-  _.bindAll admin
+  _.bindAll admin, _.functions(admin)...
   siteAdmin = new SiteAdmin env
-  _.bindAll siteAdmin
+  _.bindAll siteAdmin, _.functions(siteAdmin)...
   home.storeWithDomain = store.store
   #home
   app.get     "/",                                                          home.index domain
