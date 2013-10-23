@@ -144,17 +144,17 @@ define [
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
-          expect($("#name ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O nome é obrigatório.'
-          expect($("#price ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O preço deve ser um número.'
-          expect($("#height ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A altura deve ser um número.'
-          expect($("#width ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A largura deve ser um número.'
-          expect($("#depth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade deve ser um número.'
-          expect($("#weight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso deve ser um número.'
-          expect($("#shippingHeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A altura deve ser um número entre 2 e 105.'
-          expect($("#shippingWidth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A largura deve ser um número entre 11 e 105.'
-          expect($("#shippingDepth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade deve ser um número entre 16 e 105.'
-          expect($("#shippingWeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso deve ser um número entre 0 e 30.'
-          expect($("#inventory ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O estoque deve ser um número.'
+          expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
+          expect($("#price ~ .tooltip .tooltip-inner", el).text()).to.equal 'O preço deve ser um número.'
+          expect($("#height ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
+          expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
+          expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
+          expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número entre 2 e 105.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número entre 11 e 105.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número entre 16 e 105.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número entre 0 e 30.'
+          expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
 
     describe 'Creating a Product', ->
       describe 'Creates product', ->
@@ -244,17 +244,17 @@ define [
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
-          expect($("#name ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O nome é obrigatório.'
-          expect($("#price ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O preço deve ser um número.'
-          expect($("#height ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A altura deve ser um número.'
-          expect($("#width ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A largura deve ser um número.'
-          expect($("#depth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade deve ser um número.'
-          expect($("#weight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso deve ser um número.'
-          expect($("#shippingHeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A altura deve ser um número entre 2 e 105.'
-          expect($("#shippingWidth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A largura deve ser um número entre 11 e 105.'
-          expect($("#shippingDepth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade deve ser um número entre 16 e 105.'
-          expect($("#shippingWeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso deve ser um número entre 0 e 30.'
-          expect($("#inventory ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O estoque deve ser um número.'
+          expect($("#name ~ .tooltip .tooltip-inner", el).text()).to.equal 'O nome é obrigatório.'
+          expect($("#price ~ .tooltip .tooltip-inner", el).text()).to.equal 'O preço deve ser um número.'
+          expect($("#height ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número.'
+          expect($("#width ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número.'
+          expect($("#depth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número.'
+          expect($("#weight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número.'
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura deve ser um número entre 2 e 105.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura deve ser um número entre 11 e 105.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade deve ser um número entre 16 e 105.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso deve ser um número entre 0 e 30.'
+          expect($("#inventory ~ .tooltip .tooltip-inner", el).text()).to.equal 'O estoque deve ser um número.'
 
       describe 'Does not create product when missing shipping info when product has shipping info', ->
         before ->
@@ -290,10 +290,10 @@ define [
         it 'did not navigate', ->
           expect(historySpy).not.to.have.been.called
         it 'showed validation messages', ->
-          expect($("#shippingHeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A altura de postagem é obrigatória.'
-          expect($("#shippingWidth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A largura de postagem é obrigatória.'
-          expect($("#shippingDepth ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'A profundidade de postagem é obrigatória.'
-          expect($("#shippingWeight ~ .tooltip .tooltip-inner :first", el).text()).to.equal 'O peso de postagem é obrigatório.'
+          expect($("#shippingHeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'A altura de postagem é obrigatória.'
+          expect($("#shippingWidth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A largura de postagem é obrigatória.'
+          expect($("#shippingDepth ~ .tooltip .tooltip-inner", el).text()).to.equal 'A profundidade de postagem é obrigatória.'
+          expect($("#shippingWeight ~ .tooltip .tooltip-inner", el).text()).to.equal 'O peso de postagem é obrigatório.'
 
       describe 'Creates a product when missing shipping info on a product that does not require it', ->
         before ->
