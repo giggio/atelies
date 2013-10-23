@@ -20,7 +20,7 @@ define [
         'searchStores/:searchTerm': @searchStore
         'searchProducts/:searchTerm': @searchProducts
       viewsManager.$el = $ "#app-container > .home"
-      _.bindAll @
+      _.bindAll @, _.functions(@)...
       super
     home: ->
       @homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel

@@ -20,7 +20,7 @@ define [
         'orders': @orders
         'orders/:orderId': @order
         'userNotVerified': @userNotVerified
-      _.bindAll @
+      _.bindAll @, _.functions(@)...
       super
     home: ->
       user = accountBootstrapModel.user

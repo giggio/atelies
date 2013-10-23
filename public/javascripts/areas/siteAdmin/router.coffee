@@ -18,7 +18,7 @@ define [
         'authorizeStores': @authorizeStores
         'authorizeStores/authorized': @authorizeStoresAuthorized
         'authorizeStores/unauthorized': @authorizeStoresUnauthorized
-      _.bindAll @
+      _.bindAll @, _.functions(@)...
       super
     siteAdmin: ->
       homeView = new SiteAdminView()

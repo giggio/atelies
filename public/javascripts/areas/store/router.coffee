@@ -35,7 +35,7 @@ define [
         'finishOrder/summary': @finishOrderSummary
         'finishOrder/orderFinished': @finishOrderOrderFinished
         'searchProducts/:searchTerm': @searchProducts
-      _.bindAll @
+      _.bindAll @, _.functions(@)...
       super
     home: ->
       store = storeBootstrapModel.store

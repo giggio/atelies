@@ -154,10 +154,11 @@ describe 'Admin manage store page', ->
     before (done) ->
       cleanDB (error) ->
         return done error if error
-        userSeller = generator.user.c()
-        userSeller.save()
         exampleStore = generator.store.a()
         exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.stores.push exampleStore
+        userSeller.save()
         emptyStore = generator.store.empty()
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), (error) ->
@@ -212,8 +213,8 @@ describe 'Admin manage store page', ->
         product = generator.product.a()
         product.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        userSeller.save()
         otherStore = generator.store.d().toJSON()
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->

@@ -30,7 +30,7 @@ define [
         'createProduct/:storeSlug': @createProduct
         'orders': @orders
         'orders/:orderId': @order
-      _.bindAll @
+      _.bindAll @, _.functions(@)...
       super
     admin: ->
       homeView = new AdminView stores: adminStoresBootstrapModel.stores
