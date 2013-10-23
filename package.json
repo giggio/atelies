@@ -40,9 +40,9 @@
     "request": "~2.22.0",
     "requirejs": "~2.1.9",
     "connect-mongo": "~0.3.3",
-    "aws-sdk": "~1.6.0",
+    "aws-sdk": "~1.9.0",
     "recaptcha": "~1.2.0",
-    "gm": "~1.13.2",
+    "gm": "~1.13.3",
     "marked": "~0.2.9",
     "grunt-wait": "~0.1.0",
     "prerender-node": "~0.1.3"

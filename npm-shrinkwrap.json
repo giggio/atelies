@@ -953,9 +953,9 @@
       }
     },
     "aws-sdk": {
-      "version": "1.6.0",
-      "from": "aws-sdk@1.x",
-      "resolved": "https://registry.npmjs.org/aws-sdk/-/aws-sdk-1.6.0.tgz",
+      "version": "1.9.0",
+      "from": "aws-sdk@latest",
+      "resolved": "https://registry.npmjs.org/aws-sdk/-/aws-sdk-1.9.0.tgz",
       "dependencies": {
         "xml2js": {
           "version": "0.2.4",
@@ -979,9 +979,9 @@
       "resolved": "https://registry.npmjs.org/recaptcha/-/recaptcha-1.2.0.tgz"
     },
     "gm": {
-      "version": "1.13.2",
-      "from": "gm@1.13.2",
-      "resolved": "https://registry.npmjs.org/gm/-/gm-1.13.2.tgz",
+      "version": "1.13.3",
+      "from": "gm@latest",
+      "resolved": "https://registry.npmjs.org/gm/-/gm-1.13.3.tgz",
       "dependencies": {
         "debug": {
           "version": "0.7.0",
