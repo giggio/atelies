@@ -5,7 +5,7 @@ append layout
     section#main.container
       #site-banner.row(style="margin-bottom: 20px")
         .col-md-12
-          a(href="/#{store.slug}", onclick="Backbone.history.navigate('', true); return false;")
+          a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
             if store.banner
               img#storeBanner(src="#{store.banner}")
             else

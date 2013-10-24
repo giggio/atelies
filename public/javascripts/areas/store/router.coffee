@@ -26,6 +26,7 @@ define [
       viewsManager.$el = $ '#app-container > .store'
       @_createRoutes
         '': @home
+        'home': @home
         'cart': @cart
         'evaluations': @evaluations
         ':productSlug': @product
