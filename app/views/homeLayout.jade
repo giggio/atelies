@@ -8,9 +8,9 @@ append layout
       #site-banner.row(style="margin-bottom: 20px")
         .col-md-4
           if (CONFIG.serverEnvironment == 'production')
-            a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
+            a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
           else
-            a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogoTeste.png")
+            a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogoTeste.png")
         .col-md-6
           h3.nameHeader shopping virtual de artes e afins
         .col-md-2
