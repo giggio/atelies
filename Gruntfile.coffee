@@ -165,6 +165,9 @@ module.exports = (grunt) ->
           mainConfigFile: 'public/javascripts/bootstrap.js'
           generateSourceMaps: true
           optimize: "uglify2"
+          #uglify2:
+            #output:
+              #beautify: true
           preserveLicenseComments: false
           optimizeCss: 'none'
           skipDirOptimize: true
