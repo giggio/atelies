@@ -201,7 +201,6 @@ module.exports = (grunt) ->
                 'loginPopover'
                 'openModel'
                 'openRouter'
-                'openRoutes'
                 'openView'
                 'viewsManager'
               ]

@@ -5,11 +5,10 @@ define [
   './openModel'
   './openView'
   './openRouter'
-  './openRoutes'
   './converters'
   'twitterBootstrap'
   'epoxy'
-], ($, _, Validation, OpenModel, OpenView, OpenRouter, OpenRoutes, converters) ->
+], ($, _, Validation, OpenModel, OpenView, OpenRouter, converters) ->
   Validation.configure forceUpdate: true
   _.extend Validation.callbacks,
     valid: (view, attr, selector) ->
@@ -54,7 +53,6 @@ define [
   Backbone.Open.Model = OpenModel
   Backbone.Open.View = OpenView
   Backbone.Open.Router = OpenRouter
-  Backbone.Open.Routes = OpenRoutes
   Backbone.Epoxy.binding.addFilter 'integerOr', (val) -> if $.isNumeric val then parseInt val else val
   Backbone.Epoxy.binding.addFilter 'decimalOr', (val) -> if $.isNumeric val then parseFloat val else val
   Backbone.Epoxy.binding.addFilter 'boolean', get: ((val) -> val.toString()), set: (val) -> if val is 'true' then true else false
