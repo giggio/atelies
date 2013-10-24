@@ -250,6 +250,11 @@ module.exports = (grunt) ->
           after: ->
             return true unless grunt.util._.isEmpty changedFiles
             undefined
+    copy:
+      fonts:
+        files: [
+          src: ['**'], dest: 'public/fonts/bootstrap/', cwd: 'public/javascripts/lib/bootstrap/fonts/', expand: true
+        ]
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -263,6 +268,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-shell'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-wait'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
 
   _ = grunt.util._
   filterFiles = (files, dir) ->
@@ -314,6 +320,6 @@ module.exports = (grunt) ->
     home = process.env.HOME
     if home?.substr(0,11) is "/tmp/build_" #trying to identify heroku
       grunt.task.run [ 'compile:server' ]
-  grunt.registerTask 'install', [ 'bower', 'compile', 'requirejs:multipackage', 'less' ]
+  grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
   grunt.registerTask 'quickStart', [ 'concurrent:devServer']
