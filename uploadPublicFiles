@@ -50,7 +50,7 @@ echo $(date) Upload stylesheets
 .uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/stylesheets s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg > .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Upload js
-.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/javascripts/ s3://$AWS_STATIC_BUCKET/javascripts/$CLIENT_LIB_VERSION/ --exclude=compiledPublic/javascripts/lib/*.* --exclude=**/*.coffee --exclude=compiledPublic/javascripts/test/*.* --include=compiledPublic/javascripts/lib/requirejs/require.js --include=compiledPublic/javascripts/lib/bootstrap/fonts/*.*  --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
+.uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/javascripts/ s3://$AWS_STATIC_BUCKET/javascripts/$CLIENT_LIB_VERSION/ --exclude=compiledPublic/javascripts/lib/*.* --exclude=**/*.coffee --exclude=**/*.js.map --exclude=compiledPublic/javascripts/test/*.* --include=compiledPublic/javascripts/lib/requirejs/require.js --include=compiledPublic/javascripts/lib/bootstrap/fonts/*.*  --add-header="Content-Encoding:gzip" --mime-type=text/javascript --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
 
 echo $(date) Upload images
 .uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/images s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
