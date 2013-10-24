@@ -1,6 +1,6 @@
 {
   "name": "atelies",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "dependencies": {
     "grunt": {
       "version": "0.4.1",
