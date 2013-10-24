@@ -930,9 +930,9 @@
       }
     },
     "requirejs": {
-      "version": "2.1.9",
-      "from": "requirejs@2.1.9",
-      "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.9.tgz"
+      "version": "2.1.8",
+      "from": "requirejs@2.1.8",
+      "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.8.tgz"
     },
     "connect-mongo": {
       "version": "0.3.3",
