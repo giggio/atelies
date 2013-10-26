@@ -31,7 +31,8 @@ exports.route = (app) ->
   app.get     "/contribute",                                                home.contribute
   app.get     "/donating",                                                  home.donating
   app.post    "/api/error",                                                 home.errorCreate
-  app.get     "/humans.txt",                                                home.humanstxt
+  app.get     "/humans.txt",                                                home.staticFile 'humans.txt'
+  app.get     "/robots.txt",                                                home.staticFile 'robots.txt'
   #home client routes
   app.get     "/searchProducts/:searchTerm?",                               home.index domain
   app.get     "/searchStores/:searchTerm?",                                 home.index domain
