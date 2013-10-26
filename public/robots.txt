@@ -2,3 +2,7 @@ User-agent: *
 Disallow: /admin
 Disallow: /account
 Disallow: /siteAdmin
+Allow: /account/register
+Allow: /account/login
+Allow: /account/resetPassword
+Allow: /account/changePassword
