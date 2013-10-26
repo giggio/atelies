@@ -33,6 +33,7 @@ exports.route = (app) ->
   app.post    "/api/error",                                                 home.errorCreate
   app.get     "/humans.txt",                                                home.staticFile 'humans.txt'
   app.get     "/robots.txt",                                                home.staticFile 'robots.txt'
+  app.get     "/sitemap.xml",                                               home.sitemap()
   #home client routes
   app.get     "/searchProducts/:searchTerm?",                               home.index domain
   app.get     "/searchStores/:searchTerm?",                                 home.index domain

@@ -931,8 +931,7 @@
     },
     "requirejs": {
       "version": "2.1.8",
-      "from": "requirejs@2.1.8",
-      "resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.1.8.tgz"
+      "from": "requirejs@2.1.8"
     },
     "connect-mongo": {
       "version": "0.3.3",
@@ -1019,6 +1018,11 @@
       "version": "0.1.3",
       "from": "prerender-node@0.1.3",
       "resolved": "https://registry.npmjs.org/prerender-node/-/prerender-node-0.1.3.tgz"
+    },
+    "sitemap": {
+      "version": "0.7.0",
+      "from": "sitemap@",
+      "resolved": "https://registry.npmjs.org/sitemap/-/sitemap-0.7.0.tgz"
     }
   }
 }

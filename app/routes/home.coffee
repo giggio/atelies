@@ -74,3 +74,32 @@ module.exports = class HomeRoutes
     (req, res) ->
       filePath = path.join publicDir, file
       res.sendfile filePath
+
+  sitemap: ->
+    sm = require 'sitemap'
+    map =
+      hostname: 'https://www.atelies.com.br/',
+      cacheTime: 12 * 60 * 60 * 1000 # twice a day, in miliseconds
+      urls: [
+         { url: '',  changefreq: 'always', priority: 0.6 }
+         { url: 'faq', changefreq: 'monthly', priority: 0.1 }
+         { url: "about",  changefreq: 'monthly', priority: 0.1 }
+         { url: "terms", changefreq: 'monthly', priority: 0.1 }
+         { url: "faq", changefreq: 'monthly', priority: 0.1 }
+         { url: "technology", changefreq: 'monthly', priority: 0.1 }
+         { url: "iWantToBuy", changefreq: 'monthly', priority: 0.1 }
+         { url: "iWantToSell", changefreq: 'monthly', priority: 0.1 }
+         { url: "contribute", changefreq: 'monthly', priority: 0.1 }
+         { url: "donating", changefreq: 'monthly', priority: 0.1 }
+      ]
+    Store.find().select('slug').exec (err, stores) ->
+      unless err?
+        map.urls.push { url: store.slug, changefreq: 'weekly', priority: 0.7 } for store in stores
+    Product.find().select('slug storeSlug').exec (err, products) ->
+      unless err?
+        map.urls.push { url: product.url(), changefreq: 'weekly', priority: 0.7 } for product in products
+    sitemap = sm.createSitemap map
+    (req, res) ->
+      sitemap.toXML (xml) ->
+        res.header 'Content-Type', 'application/xml'
+        res.send xml
