@@ -17,6 +17,7 @@ define [
       @products = opt.products
       @stores = opt.stores
       @showProductsAndStores()
+      document.title = "Ateliês - Shopping virtual de artes e afins"
     showProductsAndStores: ->
       context = Handlebars.compile @template
       @$el.html context
@@ -24,6 +25,7 @@ define [
       @_showProductsView @products
     searchStores: ->
       @$('#searchStores').attr('style', 'display:block !important;').show()
+      document.title = "Ateliês - busca por lojas"
     closeSearchStore: ->
       @$('#searchStores').hide('fade')
       Backbone.history.navigate "", true
@@ -36,6 +38,7 @@ define [
       @$('#storeSearchTerm').val searchTerm
       @$('#productsPlaceHolder').empty()
       @_showStoresView stores
+      document.title = "Ateliês - busca por lojas: #{searchTerm}"
     _showStoresView: (stores) ->
       @storesView = new StoresView stores:stores
       @$('#storesPlaceHolder').html @storesView.el
@@ -49,3 +52,4 @@ define [
       $('#productSearchTerm').val searchTerm
       @$('#storesPlaceHolder').empty()
       @_showProductsSearchResultView products
+      document.title = "Ateliês - busca por produtos: #{searchTerm}"

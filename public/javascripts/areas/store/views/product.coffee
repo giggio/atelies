@@ -80,6 +80,7 @@ define [
           height: '-=50'
         , 500, ->
           $('.name,.price', @).hide()
+      document.title = "#{@store.name} - #{@product.get('name')}"
       super
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'

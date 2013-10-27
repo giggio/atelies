@@ -24,6 +24,7 @@ define [
         smallStarsPath : "#{staticPath}/images/jrating/small.png"
         rateMax: 5
         isDisabled: on
+      document.title = "#{@store.name} - Avaliações"
     createNiceDate: (date) ->
       date = new Date(date) if typeof date is 'string'
       date = date.getTime() unless typeof date is 'number'

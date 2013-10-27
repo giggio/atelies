@@ -22,6 +22,7 @@ define [
       cartItems = Cart.get(@store.slug).items()
       @$el.html context cartItems: cartItems, store: @store, hasItems: cartItems.length isnt 0
       @renderCartItems()
+      document.title = "#{@store.name} - Carrinho"
       super
     renderCartItems: =>
       items = @cart.items()
