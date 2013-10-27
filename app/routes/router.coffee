@@ -4,6 +4,7 @@ Account   = require './account'
 Store     = require './store'
 Admin     = require './admin'
 SiteAdmin = require './siteAdmin'
+config    = require '../helpers/config'
 
 exports.route = (app) ->
   env = app.get "env"
@@ -32,7 +33,10 @@ exports.route = (app) ->
   app.get     "/donating",                                                  home.donating
   app.post    "/api/error",                                                 home.errorCreate
   app.get     "/humans.txt",                                                home.staticFile 'humans.txt'
-  app.get     "/robots.txt",                                                home.staticFile 'robots.txt'
+  if config.environment is config.serverEnvironment is 'production'
+    app.get     "/robots.txt",                                              home.staticFile 'robots.txt'
+  else
+    app.get     "/robots.txt",                                              home.staticFile 'robots-dev.txt'
   app.get     "/sitemap.xml",                                               home.sitemap()
   #home client routes
   app.get     "/searchProducts/:searchTerm?",                               home.index domain
