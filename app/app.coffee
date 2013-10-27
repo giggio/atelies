@@ -56,7 +56,7 @@ exports.start = (cb) ->
   app.use express.favicon path.join publicDir, 'images', 'favicon.ico'
   app.use "/isHealthy", healthCheck
   app.enable 'trust proxy'
-  app.use require 'prerender-node'
+  app.use require('prerender-node').blacklisted ['\.xml$']
   app.use redirectUnlessSecure
   #app.use express.compress() if config.isProduction #turned off as amazon already does this
   app.use express.bodyParser()
