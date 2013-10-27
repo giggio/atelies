@@ -1,12 +1,16 @@
-<div id="storeHeader" class="row">
+<div id="storeHeader" class="row" itemscope itemtype="http://schema.org/Store">
+  <meta itemprop="name" content="{{store.name}}" />
   <div id="homePageImageHolder">
-    <img id="homePageImage"  src="{{store.homePageImage}}"/>
+    <img id="homePageImage" src="{{store.homePageImage}}" itemprop="image"/>
   </div>
   <div id="storeDescription">
     {{#if hasEvaluations}}
-    <div id="evaluation">
+    <div id="evaluation" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
       <div id="ratingStars" data-average="{{evaluationAvgRating}}" data-id="1"></div>
-      <div id="ratingDescription">({{numberOfEvaluations}} avaliações, <a href="evaluations">veja todas</a>)</div>
+      <meta itemprop="ratingValue" content="{{evaluationAvgRating}}" />
+      <meta itemprop="worstRating" content="1" />
+      <meta itemprop="bestRating" content="5" />
+      <div id="ratingDescription">(<span itemprop="ratingCount">{{numberOfEvaluations}}</span> avaliações, <a href="evaluations">veja todas</a>)</div>
     </div>
     {{/if}}
     {{#if userOwned}}
@@ -14,7 +18,7 @@
       <a class="btn btn-primary" href="/admin/store/{{store.slug}}" data-not-push-state="true">Editar sua loja</a>
     </p>
     {{/if}}
-    <div id="homePageDescription">{{{homePageDescription}}}</div>
+    <div id="homePageDescription" itemprop="description">{{{homePageDescription}}}</div>
     {{#if store.urlFacebook}}
     <a id="urlFacebook" class="social" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook" target="_blank" data-not-push-state="true"><img class="img-circle" src="{{staticPath}}/images/facebook.png" /></a>
     {{/if}}
@@ -23,9 +27,17 @@
     {{/if}}
     {{#if store.otherUrl}}
     <div>
-      <a id="otherUrl" href="{{store.otherUrl}}" title="Outro site de {{store.name}}" data-not-push-state="true">{{store.otherUrl}}</a>
+      <a id="otherUrl" href="{{store.otherUrl}}" itemprop="sameAs" title="Outro site de {{store.name}}" data-not-push-state="true">{{store.otherUrl}}</a>
     </div>
     {{/if}}
+    <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+      <meta itemprop="addressLocality" content="{{store.city}}" />
+      <meta itemprop="addressRegion" content="{{store.state}}" />
+      <meta itemprop="postalCode" content="{{store.zip}}" />
+      <meta itemprop="addressCountry" content="BR" />
+      <meta itemprop="email" content="{{store.email}}" />
+      <meta itemprop="telephone" content="{{store.phoneNumber}}" />
+    </div>
   </div>
 </div>
 <hr />

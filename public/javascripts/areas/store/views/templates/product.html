@@ -1,5 +1,6 @@
 <div id="productInfo">
   <div id="product" data-id="{{product._id}}" itemscope itemtype="http://schema.org/Product">
+    <meta itemprop="productID" content="{{product.id}}"/>
     <img id="picture" src="{{product.picture}}" alt="{{product.name}}" itemprop="image"/>
     <div class="nameHolder">
       <h2><span id="name" itemprop="name">{{product.name}}</span>
