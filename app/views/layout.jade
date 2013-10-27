@@ -1,5 +1,6 @@
 block variables
   - var title = "Ateliês - "
+  - var pageSchema = "http://schema.org/WebPage"
 doctype 5
 html
   head
@@ -12,7 +13,7 @@ html
       var staticPath = '!{STATIC_PATH}';
       var clientLibPath = '!{CLIENT_LIB_PATH}'; //not used anywhere, but is here so we remember clientLibPath and staticPath are different
     block head
-  body
+  body(itemscope, itemtype=pageSchema)
     #overlay: #loading
     block layout
     block scriptsFooter
