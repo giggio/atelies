@@ -1,14 +1,15 @@
 <div id="products" class="row">
   <div id="carousel">
     {{#each products}}
-    <div id="product{{_id}}" data-id="{{_id}}" class="product">
-      <a id="product{{_id}}_picture" href="{{url}}" class="link" data-not-push-state="true">
+    <div id="product{{_id}}" data-id="{{_id}}" class="product" itemscope itemtype="http://schema.org/Product">
+      <meta itemprop="name" content="{{name}}" />
+      <a id="product{{_id}}_picture" href="/{{url}}" class="link" data-not-push-state="true" itemprop="url">
         <img src="{{pictureThumb}}" alt="{{name}}" class="picture" />
-        <div class="productInfoBox">
-          <span id="product{{_id}}_storeName" class="storeName">{{storeName}}</span>
-          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
-        </div>
       </a>
+      <div class="productInfoBox">
+        <span id="product{{_id}}_storeName" class="storeName">{{storeName}}</span>
+        <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+      </div>
     </div>
     {{/each}}
   </div>

@@ -4,8 +4,9 @@
     {{#each storeGroups}}
     <div class="row storesRow">
       {{#each stores}}
-      <div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3">
-        <a href="/{{slug}}" class="link" data-not-push-state="true"><img src="{{flyer}}" /></a>
+      <div id="store{{_id}}" data-id="{{_id}}" class="store col-md-3" itemscope itemtype="http://schema.org/Store">
+        <meta itemprop="name" content="{{name}}" />
+        <a href="/{{slug}}" class="link" data-not-push-state="true" itemprop="url"><img src="{{flyer}}" /></a>
       </div>
       {{/each}}
     </div>
