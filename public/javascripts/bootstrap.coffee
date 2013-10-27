@@ -54,7 +54,7 @@ requirejs.config
       exports: '$.fn.expander'
     'swag':
       deps: ['handlebars']
-      exports: 'Swag'
+      exports: 'window.Swag'
     'jrating':
       deps: [ 'jquery' ]
       exports: '$.fn.jRating'

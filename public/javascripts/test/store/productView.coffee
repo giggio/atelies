@@ -6,7 +6,10 @@ define [
   'areas/store/models/cart'
   'underscore'
   'areas/store/models/product'
-], ($, ProductView, Backbone, Cart, _, Product) ->
+  'swag'
+  'handlebars'
+], ($, ProductView, Backbone, Cart, _, Product, Swag, Handlebars) ->
+  Swag.registerHelpers Handlebars
   product1  = generatorc.product.a()
   product2  = generatorc.product.b()
   product3  = generatorc.product.a()
