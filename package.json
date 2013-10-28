@@ -72,7 +72,7 @@
     "amdefine": "~0.1.0",
     "sandboxed-module": "~0.3.0",
     "mocha-lcov-reporter": "0.0.x",
-    "zombie": "~2.0.0-alpha19",
+    "zombie": "~2.0.0-alpha24",
     "selenium-webdriver": "~2.37.0",
     "chromedriver": "~2.2.0",
     "chai": "~1.7.2",
