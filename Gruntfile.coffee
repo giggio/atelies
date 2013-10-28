@@ -173,6 +173,7 @@ module.exports = (grunt) ->
           skipDirOptimize: true
           paths:
             ga: 'empty:'
+            gplus: 'empty:'
           modules:[
             {
               name: 'bootstrap'
