@@ -29,6 +29,7 @@ configureRequireJS = ->
     suppress: nodeShim: true
     paths:
       ga: 'test/support/gaStub'
+      gplus: 'test/support/gplusStub'
   global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
 
 initDOM()

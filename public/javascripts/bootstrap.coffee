@@ -14,6 +14,7 @@ requirejs.config
     jqform: 'lib/jquery-form/jquery.form'
     jqexpander: 'lib/jquery.expander/jquery.expander'
     ga: [ '//www.google-analytics.com/analytics' , 'lib/ga/index' ]
+    gplus: [ '//apis.google.com/js/plusone', 'lib/gplus/index' ]
     showdown: 'lib/showdown/src/showdown'
     md5: 'lib/js-md5/js/md5'
     swag: 'lib/swag/lib/swag'
@@ -49,6 +50,11 @@ requirejs.config
         window.GoogleAnalyticsObject='ga' if window?
         return undefined
       exports: 'ga'
+    'gplus':
+      init: ->
+        window.___gcfg = {lang: 'pt-BR'}
+        return undefined
+      exports: 'window.gapi.plusone'
     'jqexpander':
       deps: ['jquery']
       exports: '$.fn.expander'

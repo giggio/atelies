@@ -27,11 +27,11 @@ define [
     it 'should display the store name for product 2', ->
       expect($("#product2_storeName", el).text()).to.equal product2.storeName
     it 'links to the product page on the product name on product 1', ->
-      expect($("#product1 a", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
+      expect($("#product1 a", el).attr('href')).to.equal "/#{product1.storeSlug}##{product1.slug}"
     it 'displays the picture for product 1', ->
       expect($("#product1_picture img", el).attr('src')).to.equal product1.pictureThumb
     it 'links to the product page on the picture on product 1', ->
-      expect($("#product1_picture", el).attr('href')).to.equal "#{product1.storeSlug}##{product1.slug}"
+      expect($("#product1_picture", el).attr('href')).to.equal "/#{product1.storeSlug}##{product1.slug}"
     it 'shows stores', ->
       $('#stores .store', el).length.should.equal stores.length
     it 'shows store banner', ->

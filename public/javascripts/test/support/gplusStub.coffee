@@ -1,0 +1,3 @@
+window.gapi =
+  plusone:
+    go: ->

@@ -15,8 +15,9 @@ append layout
           h3.nameHeader shopping virtual de artes e afins
         .col-md-2
           ul.social
-            li: a(href="https://www.facebook.com/Atelies", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
-            li: a(href="https://twitter.com/ateliescombr", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
+            li: a(href="https://www.facebook.com/Atelies", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
+            li: a(href="https://plus.google.com/111286901107324902673", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/gplus.png")
+            li: a(href="https://twitter.com/ateliescombr", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
       .navbar.navbar-default(role="navigation")
         include includes/commonHeader
         include includes/userInfo
@@ -52,6 +53,9 @@ append layout
                   a.link(href="/IWantToBuy") Quero Comprar
                   a.link(href="/IWantToSell") Quero vender
                   a.link(href="/faq") Perguntas frequentes
+                #socialLikes
+                  .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
+                  //-.g-page(data-href="https://plus.google.com/111286901107324902673", data-layout="landscape", data-theme="dark", data-showcoverphoto="false", data-width="273", data-showtagline="false")
 
             .lastFooter
               &copy; 2013 - Ateliês
