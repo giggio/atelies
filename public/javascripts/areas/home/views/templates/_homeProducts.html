@@ -6,10 +6,12 @@
       <a id="product{{_id}}_picture" href="/{{url}}" class="link" data-not-push-state="true" itemprop="url">
         <img src="{{pictureThumb}}" alt="{{name}}" class="picture" />
       </a>
-      <div class="productInfoBox">
-        <span id="product{{_id}}_storeName" class="storeName">{{storeName}}</span>
-        <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
-      </div>
+      <a href="/{{url}}" data-not-push-state="true">
+        <div class="productInfoBox">
+          <span id="product{{_id}}_storeName" class="storeName">{{storeName}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
+      </a>
     </div>
     {{/each}}
   </div>

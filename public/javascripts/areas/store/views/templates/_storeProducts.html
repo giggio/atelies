@@ -6,9 +6,12 @@
     {{#each products}}
     <div class="row productsRow">
       {{#each products}}
-      <div id="product{{_id}}" data-id="{{_id}}" class="product">
-        <a href="{{slug}}" class="link">
+      <div id="product{{_id}}" data-id="{{_id}}" class="product" itemscope itemtype="http://schema.org/Product">
+        <meta itemprop="name" content="{{name}}" />
+        <a href="{{slug}}" class="link" itemprop="url">
           <img src="{{pictureThumb}}" />
+        </a>
+        <a href="{{slug}}">
           <div class="productInfoBox">
             <span id="product{{_id}}_name" class="name">{{name}}</span>
             <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
