@@ -11,3 +11,4 @@ define [
         new SEOLoadManager().done()
         Social.renderGooglePlus()
         Social.renderFacebook()
+        Social.renderTwitter()

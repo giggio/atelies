@@ -175,6 +175,7 @@ module.exports = (grunt) ->
             ga: 'empty:'
             gplus: 'empty:'
             facebook: 'empty:'
+            twitter: 'empty:'
           modules:[
             {
               name: 'bootstrap'

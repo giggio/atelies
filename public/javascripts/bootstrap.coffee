@@ -16,6 +16,7 @@ requirejs.config
     ga: [ '//www.google-analytics.com/analytics' , 'lib/ga/index' ]
     gplus: [ '//apis.google.com/js/plusone', 'lib/gplus/index' ]
     facebook: [ '//connect.facebook.net/pt_BR/all', 'lib/facebook/index' ]
+    twitter: [ '//platform.twitter.com/widgets', 'lib/twitter/index' ]
     showdown: 'lib/showdown/src/showdown'
     md5: 'lib/js-md5/js/md5'
     swag: 'lib/swag/lib/swag'
@@ -65,6 +66,8 @@ requirejs.config
           xfbml:true
         return undefined
       exports: 'FB'
+    'twitter':
+      exports: 'twttr'
     'jqexpander':
       deps: ['jquery']
       exports: '$.fn.expander'
