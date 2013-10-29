@@ -29,6 +29,7 @@
     "jrating": "alpixel/jRating",
     "ga": "http://www.google-analytics.com/analytics.js",
     "gplus": "https://apis.google.com/js/plusone.js",
+    "facebook": "https://connect.facebook.net/pt_BR/all.js",
     "select2": "~3.4.3",
     "respond": "~1.3.0"
   },

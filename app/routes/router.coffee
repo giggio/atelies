@@ -34,9 +34,10 @@ exports.route = (app) ->
   app.post    "/api/error",                                                 home.errorCreate
   app.get     "/humans.txt",                                                home.staticFile 'humans.txt'
   if config.environment is config.serverEnvironment is 'production'
-    app.get     "/robots.txt",                                              home.staticFile 'robots.txt'
+    app.get   "/robots.txt",                                              home.staticFile 'robots.txt'
   else
-    app.get     "/robots.txt",                                              home.staticFile 'robots-dev.txt'
+    app.get   "/robots.txt",                                              home.staticFile 'robots-dev.txt'
+  app.get     "/facebookChannel.html",                                      home.staticFile 'javascripts/areas/shared/views/templates/facebookChannel.html'
   app.get     "/sitemap.xml",                                               home.sitemap()
   #home client routes
   app.get     "/searchProducts/:searchTerm?",                               home.index domain

@@ -15,6 +15,7 @@ requirejs.config
     jqexpander: 'lib/jquery.expander/jquery.expander'
     ga: [ '//www.google-analytics.com/analytics' , 'lib/ga/index' ]
     gplus: [ '//apis.google.com/js/plusone', 'lib/gplus/index' ]
+    facebook: [ '//connect.facebook.net/pt_BR/all', 'lib/facebook/index' ]
     showdown: 'lib/showdown/src/showdown'
     md5: 'lib/js-md5/js/md5'
     swag: 'lib/swag/lib/swag'
@@ -55,6 +56,15 @@ requirejs.config
         window.___gcfg = {lang: 'pt-BR'}
         return undefined
       exports: 'window.gapi.plusone'
+    'facebook':
+      init: ->
+        FB.init
+          appId:'618886944811863'
+          channelUrl:'//www.atelies.com.br/facebookChannel.html'
+          status:true
+          xfbml:true
+        return undefined
+      exports: 'FB'
     'jqexpander':
       deps: ['jquery']
       exports: '$.fn.expander'

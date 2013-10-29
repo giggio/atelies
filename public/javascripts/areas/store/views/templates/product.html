@@ -41,8 +41,14 @@
       {{/each}}
     </div>
   </div>
-  <div class="gplusContainer">
-    <div class="g-plusone" data-annotation="bubble" data-width="300" data-href="https://www.atelies.com.br/{{product.url}}"></div>
+  <div class="socialContainers" >
+    <div class="facebookContainer">
+      <div class="fb-like" data-href="https://www.atelies.com.br/{{product.url}}" data-width="220" data-height="100" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
+    </div>
+    <div class="gplusContainer">
+      <div class="g-plusone" data-annotation="bubble" data-width="300" data-href="https://www.atelies.com.br/{{product.url}}"></div>
+    </div>
+    <div></div>
   </div>
   <div id="askAQuestion">
     {{#if store.email}}

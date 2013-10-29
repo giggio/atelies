@@ -10,3 +10,4 @@ define [
       view.render ->
         new SEOLoadManager().done()
         Social.renderGooglePlus()
+        Social.renderFacebook()

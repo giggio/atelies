@@ -53,9 +53,13 @@ append layout
                   a.link(href="/IWantToBuy") Quero Comprar
                   a.link(href="/IWantToSell") Quero vender
                   a.link(href="/faq") Perguntas frequentes
-                #socialLikes
-                  .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
-                  //-.g-page(data-href="https://plus.google.com/111286901107324902673", data-layout="landscape", data-theme="dark", data-showcoverphoto="false", data-width="273", data-showtagline="false")
+                #socialContainers
+                  .facebookContainer
+                    #fb-root
+                    .fb-like(data-href="https://www.atelies.com.br", data-width="250", data-height="100", data-colorscheme="light", data-layout="button_count", data-action="like", data-show-faces="true", data-send="false")
+                  .gplusContainer
+                    .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
+                    //-.g-page(data-href="https://plus.google.com/111286901107324902673", data-layout="landscape", data-theme="dark", data-showcoverphoto="false", data-width="273", data-showtagline="false")
 
             .lastFooter
               &copy; 2013 - Ateliês
