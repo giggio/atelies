@@ -3,7 +3,7 @@
     "node": "0.10.x"
   },
   "name": "atelies",
-  "version": "1.16.2",
+  "version": "1.16.3",
   "private": true,
   "scripts": {
     "start": "node server.js",
