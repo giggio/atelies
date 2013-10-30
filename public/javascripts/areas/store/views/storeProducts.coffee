@@ -15,6 +15,7 @@ define [
       context = Handlebars.compile @template
       @$el.html context categories: categories, hasMoreThanOneCategory: categories.length > 1
     _groupCategories: (products) ->
+      return [] if products.length is 0
       noCategory = "(sem categoria)"
       p.categories = [noCategory] for p in products when p.categories.length is 0
       categories = _.chain(products)
