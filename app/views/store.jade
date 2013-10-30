@@ -10,7 +10,7 @@ append scriptsFooter
       user:!{typeof(user)==='undefined'?'undefined':JSON.stringify(user)},
       order:!{typeof(order)==='undefined'?'undefined':JSON.stringify(order)}
     };
-    var rootUrl = '!{store.slug}';
+    var rootUrl = "!{store.slug.replace(/'/g, '\'').replace(/\"/g, '%22')}";
   if typeof(bootstrapedRedirect) !== 'undefined'
     script .
       var boostrapedRedirect = '!{bootstrapedRedirect}';
