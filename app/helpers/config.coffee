@@ -8,8 +8,8 @@ unless process.env.NODE_ENV is 'production'
   process.env.STATIC_PATH = '/public' unless process.env.STATIC_PATH?
   process.env.RECAPTCHA_PUBLIC_KEY = '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
   process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
-  process.env.FB_APP_ID = '618886944811863'
-  process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d'
+  process.env.FB_APP_ID = '618886944811863' unless process.env.FB_APP_ID?
+  process.env.FB_APP_SECRET = '0cd3ee557fd385e31fdd065616347e1d' unless FB_APP_SECRET?
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
   process.env.CLIENT_LIB_VERSION = "."
   process.env.UPLOAD_FILES = true unless process.env.UPLOAD_FILES?
