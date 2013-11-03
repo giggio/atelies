@@ -27,6 +27,7 @@ define [
     renderCartItems: =>
       items = @cart.items()
       for item in items
+        item.url = '/' + item.url
         cartItemView = new CartItemView cartItem: item
         $('#cartItems > tbody', @$el).append cartItemView.$el
         cartItemView.removed @remove

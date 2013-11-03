@@ -46,7 +46,7 @@ append content
           span &nbsp; ou &nbsp;
           button#manualEntry.btn.btn-primary Preencha os dados de cadastro
 
-        form#registerForm.validatable.form-horizontal.hide2(action='#{secureUrl}/account/register', method='post', role="form")
+        form#registerForm.validatable.form-horizontal.hide2(action='#{secureUrl}/account/register#{redirectTo}', method='post', role="form")
           .form-group
             label.control-label.col-lg-2 Nome:
             .col-lg-10: input#name(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.", maxlength="50")

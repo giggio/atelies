@@ -6,3 +6,13 @@ append content
     .alert.alert-success
       strong Muito bem!
       | &nbsp;Usuário verificado com sucesso!
+    if redirectTo
+      .alert.alert-warning
+        strong Você já irá continuar comprando!
+        | &nbsp;Você está sendo redirecionado agora para o seu carrinho para prosseguir com a sua compra!
+        script.
+          setTimeout(function() {
+            window.location.pathname = "#{redirectTo}";
+          }, 9000);
+    else
+      a.btn.btn-primary(href="/") Voltar para a home page!

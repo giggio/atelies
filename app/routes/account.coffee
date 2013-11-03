@@ -27,7 +27,7 @@ module.exports = class AccountRoutes
 
   resendConfirmationEmail: (req, res) ->
     user = req.user
-    user.sendMailConfirmRegistration (err, mailResponse) =>
+    user.sendMailConfirmRegistration null, (err, mailResponse) =>
       return @handleError req, res, err if err?
       res.send 200
 
@@ -109,13 +109,13 @@ module.exports = class AccountRoutes
       user.verified = true
       user.save (err, user) =>
         return @handleError req, res, err if err?
-        res.redirect 'account/verified'
+        res.redirect 'account/verified' + if req.query?.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
 
-  verified: (req, res) -> res.render 'accountVerified'
+  verified: (req, res) -> res.render 'accountVerified', redirectTo: if req.query?.redirectTo? then req.query.redirectTo else undefined
 
   mustVerifyUser: (req, res) -> res.render 'accountMustVerifyUser'
 
-  registered: (req, res) -> res.render 'accountRegistered'
+  registered: (req, res) -> res.render 'accountRegistered', redirectTo: req.query.redirectTo?
 
   forgotPasswordShow: (req, res) -> res.render 'forgotPassword'
 

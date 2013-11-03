@@ -28,7 +28,7 @@ module.exports = class Postman
     if from.email isnt 'contato@atelies.com.br'
       mail.replyTo = "'#{from.name}' <#{from.email}>"
     if Postman.dryrun
-      console.log "NOT sending mail, dry run"
+      console.log "NOT sending mail to #{mail.to} with subject #{mail.subject}, dry run"
       Postman.sentMails.push mail
       cb()
     else

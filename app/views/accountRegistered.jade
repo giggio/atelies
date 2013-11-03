@@ -4,7 +4,10 @@ extends baseBootstrap
 append content
   .container
     .alert.alert-success
-      strong Muito bem!
-      | &nbsp;Usuário registrado com sucesso!
-      | Agora você deve ter recebido um e-mail de boas vindas. Nele você tem um link onde deverá clicar para confirmar que o e-mail
-      | está correto. Com isso você poderá fazer sua primeira compra, e, caso tenha se registrado como vendedor, criar sua primeira loja.
+      strong Usuário registrado com sucesso!
+      | &nbsp;Acesse o e-mail informado e valide seu cadastro e fazer sua primeira compra ou,
+      | caso tenha se registrado com vendedor, criar sua primeira loja.
+    if redirectTo
+      .alert.alert-warning
+        strong Continue esta compra!
+        | &nbsp;Acesse o e-mail informado e valide seu cadastro para concluir esta compra.

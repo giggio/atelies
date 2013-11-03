@@ -175,8 +175,7 @@ exports.configure = (app) ->
       user = new User attrs
       user.setPassword password
       user.save (error, user) ->
-        user.sendMailConfirmRegistration (error, mailResponse) ->
-          cb.fulfill(if error? then [error] else user)
+        cb.fulfill(if error? then [error] else user)
       cb
 
     extractExtraRegistrationParams: (req) ->
@@ -192,6 +191,9 @@ exports.configure = (app) ->
       deliveryState: req.body.deliveryState
       deliveryZIP: req.body.deliveryZIP
       phoneNumber: req.body.phoneNumber
+    respondToRegistrationSucceed: (req, res, user) ->
+      user.sendMailConfirmRegistration req.query?.redirectTo, (error, mailResponse) =>
+        @redirect res, @registerSuccessRedirect() + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
     User.findById userId, (error, user) ->

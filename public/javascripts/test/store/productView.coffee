@@ -68,7 +68,7 @@ define [
       it 'adds an item to the cart', ->
         expect(_.findWhere(Cart.get(store2.slug).items(), _id: product2._id).id).not.to.be.null
       it 'navigated', ->
-        expect(spy).to.have.been.calledWith '#cart', trigger:true
+        expect(spy).to.have.been.calledWith 'cart', trigger:true
     describe 'product with inventory but none available', ->
       before ->
         productView = new ProductView el:el, store: store1, product: new Product product3

@@ -72,8 +72,9 @@ userSchema.methods.toSimpleUser = (cb) ->
   else
     setImmediate cb user
 
-userSchema.methods.sendMailConfirmRegistration = (cb) ->
-  registrationLink = "#{config.secureUrl}/account/verifyUser/#{@_id}"
+userSchema.methods.sendMailConfirmRegistration = (redirectTo, cb) ->
+  redirectTo = if redirectTo? then "?redirectTo=#{redirectTo}" else ""
+  registrationLink = "#{config.secureUrl}/account/verifyUser/#{@_id}#{redirectTo}"
   body = "<html>
     <h1>Olá #{@name}!</h1>
     <h2>Bem vindo ao Ateliês!</h2>
