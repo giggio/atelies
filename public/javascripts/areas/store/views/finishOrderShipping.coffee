@@ -37,9 +37,9 @@ define [
     _redirectIfUserNotSatisfied: ->
       if @user is undefined
         if DEBUG
-          window.location = "/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
+          window.location = "/account/login?redirectTo=/#{@store.slug}/finishOrder/shipping"
         else
-          window.location = "https://#{window.location.host}/account/login?redirectTo=/#{@store.slug}%23finishOrder/shipping"
+          window.location = "https://#{window.location.host}/account/login?redirectTo=/#{@store.slug}/finishOrder/shipping"
         return true
       unless @user.verified
         window.location = "/account/userNotVerified"
