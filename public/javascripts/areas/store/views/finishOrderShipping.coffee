@@ -27,7 +27,7 @@ define [
       @show()
       @_calculateShippingCosts()
     show: ->
-      @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions
+      @$el.html @context user: @user, shippingOptions: @shippingOptions, hasShippingOptions: @hasShippingOptions, store: @store
     finishOrder: ->
       Backbone.history.navigate 'finishOrder/payment', trigger: true
     _redirectIfNoShipping: ->
@@ -46,7 +46,7 @@ define [
         return true
       ad = @user.deliveryAddress
       unless ad.street? and ad.state? and ad.city and ad.zip
-        Backbone.history.navigate 'finishOrder/updateProfile', trigger: true
+        Backbone.history.navigate "finishOrder/updateProfile", trigger: true
         return true
     _calculateShippingCosts: ->
       if @cart.shippingSelected()

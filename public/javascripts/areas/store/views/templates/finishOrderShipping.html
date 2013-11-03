@@ -25,7 +25,7 @@
     Obtendo custo do frete...
   </div>
   {{/if}}
-  <a id="updateProfile" class="btn btn-primary" href="/account/updateProfile" data-not-push-state="true">Atualizar cadastro</a>
+  <a id="updateProfile" class="btn btn-primary" href="/account/updateProfile?redirectTo=/{{store.slug}}/finishOrder/shipping" data-not-push-state="true">Atualizar cadastro</a>
   <button id="goBackToCart" class="btn btn-primary">Voltar</button>
   <button id="finishOrderShipping" class="btn btn-primary" disabled="disabled">Continuar</button>
 </div>
