@@ -43,10 +43,6 @@ exports.start = (cb) ->
       Postman.dryrun = on
 
   publicDir = path.join __dirname, '..', "public"
-  global.DEBUG = !config.isProduction
-  global.CONFIG = config
-  global.STATIC_PATH = config.staticPath
-  global.CLIENT_LIB_PATH = config.clientLibPath
   app.locals.secureUrl = config.secureUrl
   app.set "port", config.port
   app.set "views", path.join __dirname, "views"
