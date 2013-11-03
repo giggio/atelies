@@ -1,29 +1,32 @@
 require './support/_specHelper'
 User     = require '../../app/models/user'
 bcrypt   = require 'bcrypt'
+Page     = require './support/pages/changePasswordPage'
 
 describe 'Change Password', ->
-  user = browser = page = null
-  before (done) -> whenServerLoaded done
-  after -> browser.destroy()
+  user = page = null
+  before (done) ->
+    page = new Page()
+    whenServerLoaded done
 
   describe 'Can change password', ->
     before (done) ->
-      browser = newBrowser()
-      page = browser.changePasswordPage
       cleanDB (error) ->
         return done error if error
         user = generator.user.a()
         user.save()
-        browser.loginPage.navigateAndLoginWith user, ->
-          page.visit (error) ->
-            return done error if error
+        page.loginFor user._id, ->
+          page.visit ->
             page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
             page.clickChangePasswordButton done
-    it 'does not show the change password failed message', ->
-      expect(page.errors()).to.equal ''
-    it 'is at the password changed page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/account/passwordChanged"
+    it 'does not show the change password failed message', (done) ->
+      page.hasErrors (itHas) =>
+        itHas.should.be.false
+        done()
+    it 'is at the password changed page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/account/passwordChanged"
+        done()
     it 'changed the user password', (done) ->
       User.findByEmail user.email, (error, foundUser) ->
         return done error if error
@@ -32,21 +35,22 @@ describe 'Change Password', ->
 
   describe 'Can\'t change invalid password', ->
     before (done) ->
-      browser = newBrowser()
-      page = browser.changePasswordPage
       cleanDB (error) ->
         return done error if error
         user = generator.user.a()
         user.save()
-        browser.loginPage.navigateAndLoginWith user, ->
-          page.visit (error) ->
-            return done error if error
+        page.loginFor user._id, ->
+          page.visit ->
             page.setFieldsAs password: "#{user.password}other", newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
             page.clickChangePasswordButton done
-    it 'shows the invalid password message', ->
-      expect(page.errors()).to.equal 'Senha inválida.'
-    it 'is at the change password page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/account/changePassword"
+    it 'shows the invalid password message', (done) ->
+      page.errors (errors) =>
+        expect(errors).to.equal 'Senha inválida.'
+        done()
+    it 'is at the change password page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/account/changePassword"
+        done()
     it 'did not changed the user password', (done) ->
       User.findByEmail user.email, (error, foundUser) ->
         return done error if error
@@ -56,21 +60,22 @@ describe 'Change Password', ->
 
   describe 'Can\'t change password if verification fails', ->
     before (done) ->
-      browser = newBrowser()
-      page = browser.changePasswordPage
       cleanDB (error) ->
         return done error if error
         user = generator.user.a()
         user.save()
-        browser.loginPage.navigateAndLoginWith user, ->
-          page.visit (error) ->
-            return done error if error
+        page.loginFor user._id, ->
+          page.visit ->
             page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'otherPassword'
             page.clickChangePasswordButton done
-    it 'does not show the login failed message', ->
-      expect(page.passwordVerifyMessage()).to.equal 'A senha não confere.'
-    it 'is at the change password page', ->
-      expect(browser.location.toString()).to.equal "http://localhost:8000/account/changePassword"
+    it 'does not show the login failed message', (done) ->
+      page.passwordVerifyMessage (message) =>
+        expect(message).to.equal 'A senha não confere.'
+        done()
+    it 'is at the change password page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/account/changePassword"
+        done()
     it 'did not changed the user password', (done) ->
       User.findByEmail user.email, (error, foundUser) ->
         return done error if error

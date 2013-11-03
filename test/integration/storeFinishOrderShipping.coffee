@@ -5,7 +5,7 @@ StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShipp
 StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 AccountUpdateProfilePage        = require  './support/pages/accountUpdateProfilePage'
-LoginPage                       = require  './support/pages/loginPageSelenium'
+LoginPage                       = require  './support/pages/loginPage'
 
 describe 'Store Finish Order: Shipping', ->
   page = productNoShipping = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null

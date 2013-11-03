@@ -3,16 +3,17 @@ HomeLayout = require './homeLayout'
 module.exports = class LoginPage extends HomeLayout
   url: 'account/login'
   setFieldsAs: (values) =>
-    @browser.fill "#loginForm #email", values.email
-    @browser.fill "#loginForm #password", values.password
-  clickLoginButton: (cb) => @browser.pressButton "#loginForm #login", cb
-  errors: => @browser.text '#errors > li'
-  emailRequired: => @browser.text "#loginForm label[for=email]"
-  passwordRequired: => @browser.text "#loginForm label[for=password]"
-  loginWith: (values, cb) =>
+    @type "#loginForm #email", values.email
+    @type "#loginForm #password", values.password
+  clickLoginButton: @::pressButtonAndWait.partial "#loginForm #login"
+  errors: @::getText.partial '#errors > li'
+  hasErrors: @::hasElement.partial '#errors > li'
+  emailRequired: @::getText.partial "#loginForm label[for=email]"
+  passwordRequired: @::getText.partial "#loginForm label[for=password]"
+  showsCaptcha: @::hasElementAndIsVisible.partial '.recaptcha'
+  loginWith: (values, cb) ->
     @setFieldsAs values
     @clickLoginButton cb
   navigateAndLoginWith: (user, cb) ->
     @visit()
-    @waitSelector '#loginForm #email', => @loginWith user, cb
-  showsCaptcha: -> @browser.query('.recaptcha')?
+    @loginWith user, cb

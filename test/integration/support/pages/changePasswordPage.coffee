@@ -3,11 +3,12 @@ HomeLayout = require './homeLayout'
 module.exports = class LoginPage extends HomeLayout
   url: 'account/changePassword'
   setFieldsAs: (values) =>
-    @browser.fill "#changePasswordForm #password", values.password
-    @browser.fill "#changePasswordForm #passwordVerify", values.passwordVerify
-    @browser.fill "#changePasswordForm #newPassword", values.newPassword
-  clickChangePasswordButton: (cb) => @browser.pressButtonWait "#changePasswordForm #changePassword", cb
-  errors: => @browser.text '#errors > p'
-  passwordRequired: => @browser.text "#changePasswordForm label[for=password]"
-  newPasswordRequired: => @browser.text "#changePasswordForm label[for=newPassword]"
-  passwordVerifyMessage: => @browser.text "#changePasswordForm label[for=passwordVerify]"
+    @type "#changePasswordForm #password", values.password
+    @type "#changePasswordForm #passwordVerify", values.passwordVerify
+    @type "#changePasswordForm #newPassword", values.newPassword
+  clickChangePasswordButton: @::pressButtonAndWait.partial "#changePasswordForm #changePassword"
+  errors: @::getText.partial '#errors > p'
+  hasErrors: @::hasElement.partial '#errors > p'
+  passwordRequired: @::getText.partial "#changePasswordForm label[for=password]"
+  newPasswordRequired: @::getText.partial "#changePasswordForm label[for=newPassword]"
+  passwordVerifyMessage: @::getText.partial "#changePasswordForm label[for=passwordVerify]"

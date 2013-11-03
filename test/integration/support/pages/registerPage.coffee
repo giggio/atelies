@@ -3,22 +3,33 @@ HomeLayout = require './homeLayout'
 module.exports = class RegisterPage extends HomeLayout
   url: 'account/register'
   setFieldsAs: (values, cb) =>
-    @browser.fill "#registerForm #email", values.email
-    @browser.fill "#registerForm #password", values.password
-    @browser.fill "#registerForm #passwordVerify", values.passwordVerify
-    @browser.fill "#registerForm #name", values.name
-    @browser.fill "#registerForm #deliveryStreet", values.deliveryStreet
-    @browser.fill "#registerForm #deliveryStreet2", values.deliveryStreet2
-    @browser.fill "#registerForm #deliveryCity", values.deliveryCity
-    @browser.select "#registerForm #deliveryState", values.deliveryState if values.deliveryState?
-    @browser.fill "#registerForm #deliveryZIP", values.deliveryZIP
-    @browser.fill "#registerForm #phoneNumber", values.phoneNumber
-    if values.termsOfUse?
-      if values.termsOfUse then @browser.check "#registerForm #termsOfUse" else @browser.uncheck "#registerForm #termsOfUse"
-    if values.isSeller then @browser.check "#registerForm #isSeller" else @browser.uncheck "#registerForm #isSeller"
-  clickRegisterButton: (cb) => @browser.pressButtonWait "#registerForm #register", cb
-  errors: => @browser.text '#errors > li'
-  emailRequired: => @browser.text "#registerForm label[for=email]"
-  passwordRequired: => @browser.text "#registerForm label[for=password]"
-  passwordVerifyMessage: => @browser.text "#registerForm label[for=passwordVerify]"
-  nameRequired: => @browser.text "#registerForm label[for=name]"
+    selectState = (cb) =>
+      if values.deliveryState?
+        return @select "#registerForm #deliveryState", values.deliveryState, cb
+      cb()
+    selectState =>
+      @type "#registerForm #email", values.email
+      @type "#registerForm #password", values.password
+      @type "#registerForm #passwordVerify", values.passwordVerify
+      @type "#registerForm #name", values.name
+      @type "#registerForm #deliveryStreet", values.deliveryStreet
+      @type "#registerForm #deliveryStreet2", values.deliveryStreet2
+      @type "#registerForm #deliveryCity", values.deliveryCity
+      @type "#registerForm #deliveryZIP", values.deliveryZIP
+      @type "#registerForm #phoneNumber", values.phoneNumber
+      @checkOrUncheck "#registerForm #isSeller", values.isSeller, =>
+        if values.termsOfUse?
+          return @checkOrUncheck "#registerForm #termsOfUse", values.termsOfUse, cb
+        cb()
+  clickRegisterButton: @::pressButtonAndWait.partial "#registerForm #register"
+  clickManualEntry: (cb) ->
+    @pressButtonAndWait "#manualEntry", =>
+      @hasElementAndIsVisible "#registerForm #email", (itIs) =>
+        return cb() if itIs
+        @pressButtonAndWait "#manualEntry", cb
+  errors: @::getText.partial '#errors > li'
+  hasErrors: @::hasElement.partial '#errors > li'
+  emailRequired: @::getText.partial "#registerForm label[for=email]"
+  passwordRequired: @::getText.partial "#registerForm label[for=password]"
+  passwordVerifyMessage: @::getText.partial "#registerForm label[for=passwordVerify]"
+  nameRequired: @::getText.partial "#registerForm label[for=name]"
