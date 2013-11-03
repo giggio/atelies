@@ -1,19 +1,22 @@
-$ = require 'jquery'
-Page = require './page'
+Page = require './seleniumPage'
 
 module.exports = class AdminHomePage extends Page
-  visit: (storeSlug, options, cb) -> super "admin/store/#{storeSlug}", options, cb
-  storeName: => @browser.text("#name")
-  rows: => @browser.queryAll('#products .product')
-  productsQuantity: =>
-    rows = @rows()
-    if rows? then rows.length else 0
-  products: =>
-    rows = @rows()
+  visit: (storeSlug, cb) => super "admin/store/#{storeSlug}", cb
+  storeName: @::getText.partial "#name"
+  rows: @::findElements.partial '#products .product'
+  productsQuantity: (cb) => @rows (rows) -> cb rows.length
+  products: (cb) =>
     products = []
-    for row in rows
-      id = $(row).attr 'data-id'
-      products.push id: id, picture: $('img', row).attr('src'), name: $(".name", row).text(), manageLink: $(".link", row).attr('href')
-    products
-  createProductLink: =>
-    @browser.query('#createProduct')
+    getData = []
+    @findElementsIn '#products', '.product', (els) =>
+      for el in els
+        do (el) =>
+          product = {}
+          products.push product
+          getData.push => @getAttribute el, 'data-id', (t) => product.id = t
+          getData.push => @getAttributeIn el, "img", 'src', (t) => product.picture = t
+          getData.push => @getTextIn el, ".name", (t) => product.name = t
+          getData.push => @getAttributeIn el, ".link", "href", (t) => product.manageLink = t
+      @parallel getData, -> cb(products)
+      undefined
+  createProductLink: @::getAttribute.partial '#createProduct', 'href'
