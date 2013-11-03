@@ -16,10 +16,11 @@ describe 'Register', ->
 
   describe "Can't register as super admin", ->
     before (done) ->
-      page.visit ->
-        page.clickManualEntry ->
-          page.setFieldsAs name: "Some Person", email: config.superAdminEmail, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true, =>
-            page.clickRegisterButton done
+      page.clearCookies =>
+        page.visit ->
+          page.clickManualEntry ->
+            page.setFieldsAs name: "Some Person", email: config.superAdminEmail, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true, =>
+              page.clickRegisterButton done
     it 'shows the register failed message', (done) ->
       page.errors (errors) =>
         expect(errors).to.equal 'E-mail já cadastrado.'
@@ -43,9 +44,10 @@ describe 'Register', ->
 
   describe 'Must supply name, email and password or form is not submitted', ->
     before (done) ->
-      page.visit ->
-        page.clickManualEntry ->
-          page.clickRegisterButton done
+      page.clearCookies =>
+        page.visit ->
+          page.clickManualEntry ->
+            page.clickRegisterButton done
     it 'does not show the register failed message', (done) ->
       page.hasErrors (itHas) ->
         expect(itHas).to.be.false
@@ -65,10 +67,11 @@ describe 'Register', ->
   
   describe "Can't register successfully with existing email information", ->
     before (done) ->
-      page.visit ->
-        page.clickManualEntry ->
-          page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true, =>
-            page.clickRegisterButton done
+      page.clearCookies =>
+        page.visit ->
+          page.clickManualEntry ->
+            page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true, =>
+              page.clickRegisterButton done
     it 'shows the register failed message', (done) ->
       page.errors (errors) ->
         expect(errors).to.equal 'E-mail já cadastrado.'
@@ -92,10 +95,11 @@ describe 'Register', ->
 
   describe "Can't register successfully with weak password", ->
     before (done) ->
-      page.visit ->
-        page.clickManualEntry ->
-          page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true, =>
-            page.clickRegisterButton done
+      page.clearCookies =>
+        page.visit ->
+          page.clickManualEntry ->
+            page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true, =>
+              page.clickRegisterButton done
     it 'is at the register page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/account/register"
