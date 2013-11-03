@@ -40,7 +40,7 @@ append content
             lang: 'pt'
 
         #howToRegister
-          a.facebookLogin(href='/auth/facebook')
+          a.facebookLogin(href='/auth/facebook#{redirectTo}')
             img(src="#{STATIC_PATH}/images/fblogin.png")
             span Cadastre-se via Facebook
           span &nbsp; ou &nbsp;

@@ -90,7 +90,7 @@ describe 'Store Finish Order: Shipping', ->
               storeCartPage.clickFinishOrder done
     it 'should be redirected to login', (done) ->
       page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login?redirectTo=/#{store.slug}%23finishOrder/shipping"
+        url.should.equal "http://localhost:8000/account/login?redirectTo=/#{store.slug}/finishOrder/shipping"
         done()
 
   describe 'logged in user with incomplete address', ->

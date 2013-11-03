@@ -75,9 +75,6 @@ module.exports = (grunt) ->
             NODE_ENV: 'development'
             PORT: 3000
             UPLOAD_FILES: true
-            AWS_REGION: 'us-east-1'
-            RECAPTCHA_PUBLIC_KEY: '6LfzS-QSAAAAAP3ydudINWrhwGAo-X0Vg86F6hf3'
-            FB_APP_ID: '202085769951904'
           cwd: __dirname
 
     concurrent:

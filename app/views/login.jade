@@ -30,7 +30,7 @@ append content
               li.error= error
       .form-group
         .col-lg-offset-2.col-lg-10
-          a.facebookLogin(href='/auth/facebook')
+          a.facebookLogin(href='/auth/facebook#{redirectTo}')
             img(src="#{STATIC_PATH}/images/fblogin.png")
             span Login com Facebook
         .col-lg-offset-2.col-lg-10

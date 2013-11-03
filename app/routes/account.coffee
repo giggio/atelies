@@ -46,7 +46,13 @@ module.exports = class AccountRoutes
     , states: values.states, redirectTo: redirectTo, facebookRegistration: req.query.facebookRegistration?
 
   afterFacebookLogin: (req, res) ->
-    path = if req.session.existingUserLogin then '/#home' else '/account/updateProfile?facebookRegistration'
+    path = if req.session.existingUserLogin
+      if req.query.redirectTo?
+        req.query.redirectTo
+      else
+        '/#home'
+    else
+      '/account/updateProfile?facebookRegistration'
     res.redirect path
 
   updateProfile: (req, res) ->

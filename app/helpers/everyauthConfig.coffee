@@ -35,7 +35,8 @@ exports.configure = (app) ->
           user.save (error, user) ->
             cb.fulfill user
       cb
-    redirectPath: '/account/afterFacebookLogin'
+    redirectPath: (req, res) ->
+      '/account/afterFacebookLogin' + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
   everyauth.password.configure
     logoutPath: '/account/logout'
     loginWith: "email"
@@ -127,6 +128,7 @@ exports.configure = (app) ->
       states: values.states
       userParams: req.body
       recaptchaForm: recaptcha.toHTML()
+      redirectTo: if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ''
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
       password = newUserAttrs.password
