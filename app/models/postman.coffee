@@ -19,14 +19,14 @@ module.exports = class Postman
 
   send: (from, to, subject, body, cb = (->)) ->
     mail =
-      from: "'#{from.name}' <contato@atelies.com.br>"
-      to: "'#{to.name}' <#{to.email}>"
+      from: "#{from.name} <contato@atelies.com.br>"
+      to: "#{to.name} <#{to.email}>"
       subject: subject
       html: body
       generateTextFromHTML: true
       forceEmbeddedImages: true
     if from.email isnt 'contato@atelies.com.br'
-      mail.replyTo = "'#{from.name}' <#{from.email}>"
+      mail.replyTo = "#{from.name} <#{from.email}>"
     if Postman.dryrun
       console.log "NOT sending mail to #{mail.to} with subject #{mail.subject}, dry run"
       Postman.sentMails.push mail

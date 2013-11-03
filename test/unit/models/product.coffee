@@ -144,5 +144,5 @@ describe 'Product', ->
     it 'sent email', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
-      mail.to.should.equal "'#{user.name}' <#{user.email}>"
+      mail.to.should.equal "#{user.name} <#{user.email}>"
       mail.subject.should.equal "Ateliês: O produto #{product.name} da loja #{store.name} recebeu um comentário"
