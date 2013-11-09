@@ -3,6 +3,7 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 config          = require '../helpers/config'
 Err             = require '../models/error'
+url             = require 'url'
 
 module.exports = class RouteFunctions
   _auth: ->
@@ -65,4 +66,5 @@ module.exports = class RouteFunctions
   _convertBodyToEmptyToUndefined: (body, fields...) ->
     body[field] = @_convertEmptyToUndefined body[field] for field in fields
   redirectAddingDash: (req, res) ->
-    res.redirect 301, req.originalUrl + "/"
+    reqUrl = url.parse req.originalUrl
+    res.redirect 301, "#{reqUrl.pathname}/?#{reqUrl.query}"
