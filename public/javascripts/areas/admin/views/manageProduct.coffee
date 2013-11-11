@@ -82,8 +82,10 @@ define [
     _showShippingOptions: ->
       if @model.get 'shippingApplies'
         @$('#shippingInfo').show()
+        @$('#shippingCharge').removeAttr('disabled')
       else
         @$('#shippingInfo').hide()
+        @$('#shippingCharge').attr('disabled', 'disabled')
     _updateProduct: =>
       if @model.isValid true
         @$("#updateProduct").prop "disabled", on

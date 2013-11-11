@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label>Categorias (separe as categorias com vírgula):</label>
+    <label>Categorias (separe as categorias com vírgula, as categorias aparecem na home page da sua loja e agrupam produtos):</label>
     <div class="controls">
       <input type="text" class="form-control" id="categories" name="categories" data-error-style="tooltip" multiple="multiple" data-placeholder="exemplo: blusas, espelhos" />
     </div>
@@ -39,19 +39,22 @@
       <textarea id="description" name="description" class="form-control" rows="8" cols="150" data-error-style="tooltip" ></textarea>
     </div>
   </div>
-  <label>Dimensões:</label>
   <div class="form-group">
-    <label>Altura, largura e profundidade (em centímetros):</label>
-    <div class="controls">
-      <div class="inlineControl1">
-        <input type="text" id="height" name="height" data-error-style="tooltip" placeholder="altura" /> x
-      </div>
-      <div class="inlineControl1">
-        <input type="text" id="width" name="width" data-error-style="tooltip" placeholder="largura" /> x
-      </div>
-      <div class="inlineControl1">
-        <input type="text" id="depth" name="depth" data-error-style="tooltip" placeholder="profund." />
-      </div>
+    <label>Altura (em centímetros):</label>
+    <div class="controls width2">
+      <input type="text" id="height" name="height" data-error-style="tooltip" placeholder="exemplo: 200" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Largura (em centímetros):</label>
+    <div class="controls width2">
+      <input type="text" id="width" name="width" data-error-style="tooltip" placeholder="exemplo: 200" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Profundidade (em centímetros):</label>
+    <div class="controls width2">
+      <input type="text" id="depth" name="depth" data-error-style="tooltip" placeholder="exemplo: 200" />
     </div>
   </div>
   <div class="form-group">
@@ -61,39 +64,39 @@
       <input type="text" id="weight" name="weight" class="input-small" data-error-style="tooltip" placeholder="exemplo: 1.24" />
     </div>
   </div>
-  <label>Dimensões para postagem (se não for informado o frete não poderá ser calculado e a venda deverá ser fechada diretamente, ou o frete informado posteriormente, o que deixará todo o processo mais lento):</label>
   <div class="form-group">
-    Esse produto será postado?
+    <label>Esse produto será postado?</label>
     <div class="controls">
-      <label class="radio inline">
+      <label class="radio">
         <input type="radio" id="shippingDoesApply" name="shippingApplies" value="true" /> Sim
       </label>
+      <label id="shippingChargeLabel" class="checkbox">
+        <input type="checkbox" id="shippingCharge" name="shippingCharge" value="true"/> Cobrar o cliente pela postagem
+      </label>
+      <span id="shippingChargeHelp" class="help-block">(se você não selecionar o cliente não será cobrado e você será responsável pelos custos do frete, onde o cliente poderá selecionar pac ou sedex)</span>
       <label class="radio inline">
         <input type="radio" id="shippingDoesNotApply" name="shippingApplies" value="false" /> Não (produto digital, a ser retirado na loja, etc.)
       </label>
     </div>
   </div>
   <div id="shippingInfo">
+    <label>Dimensões para postagem (esse é o tamanho da embalagem do produto quando você o despacha pelos correios):</label>
     <div class="form-group">
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" id="shippingCharge" name="shippingCharge" value="true"/> Cobrar o cliente pela postagem
-        </label>
-        <span class="help-block">(se você não selecionar o cliente não será cobrado e você será responsável pelos custos do frete, onde o cliente poderá selecionar pac ou sedex)</span>
+      <label>Altura (em centímetros):</label>
+      <div class="controls width2">
+        <input type="text" id="shippingHeight" name="shippingHeight" data-error-style="tooltip" placeholder="exemplo: 200" />
       </div>
     </div>
     <div class="form-group">
-      <label>Altura, largura e profundidade (em centímetros):</label>
-      <div class="controls">
-        <div class="inlineControl1">
-          <input type="text" id="shippingHeight" class="input-mini" name="shippingHeight" data-error-style="tooltip" placeholder="altura" /> x
-        </div>
-        <div class="inlineControl1">
-          <input type="text" id="shippingWidth" class="input-mini" name="shippingWidth" data-error-style="tooltip" placeholder="largura" /> x
-        </div>
-        <div class="inlineControl1">
-          <input type="text" id="shippingDepth" name="shippingDepth" class="input-mini" data-error-style="tooltip" placeholder="profund." />
-        </div>
+      <label>Largura (em centímetros):</label>
+      <div class="controls width2">
+        <input type="text" id="shippingWidth" name="shippingWidth" data-error-style="tooltip" placeholder="exemplo: 200" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Profundidade (em centímetros):</label>
+      <div class="controls width2">
+        <input type="text" id="shippingDepth" name="shippingDepth" data-error-style="tooltip" placeholder="exemplo: 200" />
       </div>
     </div>
     <div class="form-group">
