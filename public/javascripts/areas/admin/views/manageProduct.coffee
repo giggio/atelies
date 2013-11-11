@@ -100,6 +100,8 @@ define [
             if xhr.status is 422
               $('#sizeIsIncorrect .errorMsg', @$el).text JSON.parse(xhr.responseText).smallerThan
               return $('#sizeIsIncorrect').modal()
+            if xhr.status is 409
+              return @showDialog "Já há um produto nessa loja com esse nome. Cada produto da loja deve ter um nome direrente. Troque o nome e salve novamente.", "Erro ao salvar"
             @logXhrError 'admin', xhr
             @showDialogError "Não foi possível salvar o produto. Tente novamente mais tarde."
     _deleteProduct: =>

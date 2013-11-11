@@ -19,7 +19,7 @@ describe 'AdminProductCreateRoute', ->
         storeSlug: 'some_store'
         toSimpleProduct: toSimpleProductStub
         isNew: true
-      createProductSpy = sinon.stub().returns(new ProductStub())
+      createProductSpy = sinon.stub().yields(null, new ProductStub())
       store =
         _id: 9876
         slug: 'some_store'

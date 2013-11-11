@@ -81,6 +81,29 @@ describe 'Admin Create Product page', ->
         errorMsgs.inventory.should.equal 'O estoque é obrigatório quando o produto terá estoque.'
         done()
 
+  describe "can't create duplicate product", ->
+    before (done) ->
+      existingProduct = generator.product.c()
+      existingProduct.storeSlug = store.slug
+      existingProduct.save()
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, ->
+          page.setFieldsAs existingProduct, ->
+            page.clickUpdateProduct done
+    it 'is at the product create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
+        done()
+    it 'did not create the new product', (done) ->
+      Product.find (err, products) ->
+        return done err if err
+        products.length.should.equal 1
+        done()
+    it 'shows error messages', (done) ->
+      page.getDialogMsg (msg) =>
+        msg.should.equal "Já há um produto nessa loja com esse nome. Cada produto da loja deve ter um nome direrente. Troque o nome e salve novamente."
+        done()
+
   describe 'create product', ->
     before (done) ->
       page.loginFor userSeller._id, ->
@@ -92,7 +115,7 @@ describe 'Admin Create Product page', ->
         url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
         done()
     it 'created the product', (done) ->
-      Product.find (err, productsOnDb) ->
+      Product.find name: product.name, (err, productsOnDb) ->
         return done err if err
         productsOnDb.should.have.length 1
         productOnDb = productsOnDb[0]

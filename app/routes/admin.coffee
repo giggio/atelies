@@ -109,8 +109,10 @@ module.exports = class AdminRoutes
       throw new AccessDenied() unless req.user.hasStore store
       @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
       @_convertBodyToEmptyToUndefined req.body, 'name', 'price', 'description', 'weight', 'hasInventory', 'inventory', 'height', 'width', 'depth'
-      product = store.createProduct req.body
-      @_productUpdate req, res, product, store
+      store.createProduct req.body, (err, product) =>
+        return res.json 409, err if err?.nameExists?
+        return @handleError req, res, err if err?
+        @_productUpdate req, res, product, store
 
   _productUpdate: (req, res, product, store) ->
     uploader = new ProductUploader()

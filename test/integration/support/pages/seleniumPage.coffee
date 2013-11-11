@@ -200,8 +200,8 @@ module.exports = class Page
   getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
   getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb
   getDialogMsg: (cb) ->
-    @waitForSelectorClickable '#dialogMsg', =>
-      @getText '#dialogMsg', cb
+    @waitForSelectorClickable '.dialogMsg', =>
+      @getText '.dialogMsg', cb
   getDialogTitle: (cb) ->
     @waitForSelectorClickable '#dialogTitle', =>
       @getText '#dialogTitle', cb
