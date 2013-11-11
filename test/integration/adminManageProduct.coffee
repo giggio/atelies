@@ -115,6 +115,30 @@ describe 'Admin Manage Product page', ->
         errorMsgs.shippingWeight.should.equal 'O peso de postagem é obrigatório.'
         done()
 
+  describe "can't change the name of the product to an existing name", ->
+    existingProduct = null
+    before (done) ->
+      existingProduct = generator.product.c()
+      existingProduct.storeSlug = store.slug
+      existingProduct.save()
+      page.loginFor userSeller._id, ->
+        page.visit store.slug, product._id.toString(), ->
+          page.setFieldsAs existingProduct, ->
+            page.clickUpdateProduct done
+    it 'is at the product create page', (done) ->
+      page.currentUrl (url) ->
+        url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
+        done()
+    it 'did not create the new product', (done) ->
+      Product.find name: existingProduct.name, (err, products) ->
+        return done err if err
+        products.length.should.equal 1
+        done()
+    it 'shows error messages', (done) ->
+      page.getDialogMsg (msg) =>
+        msg.should.equal "Já há um produto nessa loja com esse nome. Cada produto da loja deve ter um nome direrente. Troque o nome e salve novamente."
+        done()
+
   describe 'editing product', ->
     otherProduct = null
     before (done) ->

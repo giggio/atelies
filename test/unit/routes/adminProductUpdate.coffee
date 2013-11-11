@@ -16,7 +16,7 @@ describe 'AdminProductUpdateRoute', ->
       store =
         _id: 9876
         slug: product.storeSlug
-        updateProduct: sinon.spy()
+        updateProduct: sinon.stub().yields()
         save: sinon.stub().yields()
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').yields null, store

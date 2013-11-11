@@ -100,8 +100,10 @@ module.exports = class AdminRoutes
         return @handleError req, res, new Error() if product.storeSlug isnt store.slug
         @_convertBodyToBool req.body, 'shippingApplies', 'shippingCharge', 'hasInventory'
         @_convertBodyToEmptyToUndefined req.body, 'name', 'price', 'description', 'weight', 'hasInventory', 'inventory', 'height', 'width', 'depth'
-        store.updateProduct product, req.body
-        @_productUpdate req, res, product, store
+        store.updateProduct product, req.body, (err) =>
+          return res.json 409, err if err?.nameExists?
+          return @handleError req, res, err if err?
+          @_productUpdate req, res, product, store
   
   adminProductCreate: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>

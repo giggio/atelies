@@ -33,20 +33,26 @@ storeSchema = new mongoose.Schema
   isFlyerAuthorized:      Boolean
   categories:             [ String ]
 
-storeSchema.methods.createProduct = (simple, cb) ->
+storeSchema.methods._isTheOnlyProduct = (product, simple, cb) ->
+  return setImmediate cb if product.name is simple.name
   Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_"), (err, existingProduct) =>
     return cb err if err?
     if existingProduct?
       return cb nameExists: "Name '#{simple.name}' already exists."
-    product = new Product()
-    product.storeName = @name
-    product.storeSlug = @slug
-    @updateProduct product, simple
-    cb null, product
+    cb()
 
-storeSchema.methods.updateProduct = (product, simple) ->
-  product.updateFromSimpleProduct simple
-  @addCategories product.categories
+storeSchema.methods.createProduct = (simple, cb) ->
+  product = new Product()
+  product.storeName = @name
+  product.storeSlug = @slug
+  @updateProduct product, simple, cb
+
+storeSchema.methods.updateProduct = (product, simple, cb) ->
+  @_isTheOnlyProduct product, simple, (err) =>
+    return cb err if err?
+    product.updateFromSimpleProduct simple
+    @addCategories product.categories
+    cb null, product
 
 storeSchema.methods.addCategories = (categoryNames) ->
   newCategoryNames = _.reject categoryNames, (categoryName) => categoryName in @categories
