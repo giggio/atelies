@@ -26,5 +26,5 @@ describe 'Resend Confirmation Email', ->
     it 'sent confirmation email', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
-      mail.to.should.equal "'#{user.name}' <#{user.email}>"
+      mail.to.should.equal "#{user.name} <#{user.email}>"
       mail.subject.should.equal "Bem vindo ao Ateliês"

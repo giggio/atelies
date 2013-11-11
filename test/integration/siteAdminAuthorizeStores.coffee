@@ -64,7 +64,7 @@ describe 'Site Admin Authorize Stores page', ->
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
-      mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+      mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store2.name} teve seu flyer aprovado"
    
   describe 'unauthorizing', ->
@@ -85,5 +85,5 @@ describe 'Site Admin Authorize Stores page', ->
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
-      mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+      mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store1.name} teve seu flyer reprovado"

@@ -145,7 +145,7 @@ describe 'Store product page', ->
       it 'emailed the store admin', ->
         Postman.sentMails.length.should.equal 1
         mail = Postman.sentMails[0]
-        mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+        mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
         mail.subject.should.equal "Ateliês: O produto #{product1.name} da loja #{store.name} recebeu um comentário"
 
     describe "can't create if not logged in", ->

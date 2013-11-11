@@ -111,7 +111,7 @@ describe 'Account order detail page', ->
     it 'should send an e-mail message to the store admins', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
-      mail.to.should.equal "'#{userSeller.name}' <#{userSeller.email}>"
+      mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store.name} recebeu uma avaliação"
     it 'does not show pending evaluation anymore when visited again and shows existing evaluation', (done) ->
       page.reload ->
