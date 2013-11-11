@@ -67,4 +67,5 @@ module.exports = class RouteFunctions
     body[field] = @_convertEmptyToUndefined body[field] for field in fields
   redirectAddingDash: (req, res) ->
     reqUrl = url.parse req.originalUrl
-    res.redirect 301, "#{reqUrl.pathname}/?#{reqUrl.query}"
+    return res.redirect 301, "#{reqUrl.pathname}/?#{reqUrl.query}" unless _.isEmpty req.query
+    res.redirect 301, "#{reqUrl.pathname}/"
