@@ -1,4 +1,5 @@
 pkgInfo = require '../../package.json'
+process.env.NODE_ENV = 'development' unless process.env.NODE_ENV?
 unless process.env.NODE_ENV is 'production'
   process.env.BASE_DOMAIN = 'localhost.com' unless process.env.BASE_DOMAIN?
   process.env.AWS_IMAGES_BUCKET = "ateliesteste"
@@ -17,6 +18,8 @@ switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
     process.env.PORT = 3000 unless process.env.PORT?
+    process.env.AWS_ACCESS_KEY_ID = 'a' unless process.env.AWS_ACCESS_KEY_ID?
+    process.env.AWS_SECRET_KEY = 'b' unless process.env.AWS_SECRET_KEY?
   when 'test'
     process.env.MONGOLAB_URI = "mongodb://localhost/ateliesteste"
     process.env.PORT = 8000 unless process.env.PORT?
