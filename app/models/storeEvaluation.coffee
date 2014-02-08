@@ -23,7 +23,6 @@ Evaluation.create = (evaluationAttrs, cb) ->
 
 Evaluation.getSimpleFromStore = (storeId, cb) ->
   Evaluation.find { store: storeId }, (err, evals) =>
-    console.log err
     return cb err if err?
     simpleEvals = _.map evals, (e) -> body: e.body, rating: e.rating, date: e.date, userName: e.userName, userEmail: e.userEmail
     cb null, simpleEvals
