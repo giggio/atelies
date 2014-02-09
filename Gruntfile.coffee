@@ -32,7 +32,6 @@ module.exports = (grunt) ->
       tests: '<%= tests %>'
 
     coffeelint:
-      base: '<%= base %>'
       client: '<%= client %>'
       server: '<%= server %>'
       tests: '<%= tests %>'
@@ -50,10 +49,11 @@ module.exports = (grunt) ->
         options:
           nospawn: true
       compileAndTest:
-        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
+        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee', 'public/**/*.less', 'public/**/*.html' ]
         tasks: [ 'wait:watch', 'compileAndTest' ]
         options:
           nospawn: true
+          livereload: true
 
     express:
       prod:
@@ -276,7 +276,7 @@ module.exports = (grunt) ->
   _ = grunt.util._
   filterFiles = (files, dir) ->
     _.chain(files)
-     .filter((f) -> _(f).startsWith dir)
+     .filter((f) -> _(f).startsWith(dir) and _(f).endsWith 'coffee')
      .map((f)->_(f).strRight "#{dir}/")
      .value()
 
