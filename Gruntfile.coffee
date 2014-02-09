@@ -51,8 +51,6 @@ module.exports = (grunt) ->
         options:
           livereload: false
           spawn: false
-      html:
-        files: [ 'public/**/*.html' ]
       less:
         files: [ 'public/**/*.less' ]
         tasks: [ 'less:dev' ]
@@ -60,6 +58,10 @@ module.exports = (grunt) ->
           livereload: false
       css:
         files: [ 'public/**/*.css' ]
+      html:
+        files: [ 'public/**/*.html' ]
+      images:
+        files: [ 'public/**/*.jpg', 'public/**/*.png', 'public/**/*.gif' ]
 
     express:
       prod:
