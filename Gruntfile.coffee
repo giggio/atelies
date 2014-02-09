@@ -43,17 +43,23 @@ module.exports = (grunt) ->
           level: 'ignore'
 
     watch:
-      compile:
+      options:
+        livereload: true
+      coffee:
         files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'compile' ]
-        options:
-          nospawn: true
-      compileAndTest:
-        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee', 'public/**/*.less', 'public/**/*.html' ]
         tasks: [ 'wait:watch', 'compileAndTest' ]
         options:
-          nospawn: true
-          livereload: true
+          livereload: false
+          spawn: false
+      html:
+        files: [ 'public/**/*.html' ]
+      less:
+        files: [ 'public/**/*.less' ]
+        tasks: [ 'less:dev' ]
+        options:
+          livereload: false
+      css:
+        files: [ 'public/**/*.css' ]
 
     express:
       prod:
@@ -79,7 +85,7 @@ module.exports = (grunt) ->
 
     concurrent:
       devServer:
-        tasks: [ 'watch:compileAndTest', 'nodemon:dev' ]
+        tasks: [ 'watch', 'nodemon:dev' ]
         options:
           logConcurrentOutput: true
 
@@ -246,6 +252,11 @@ module.exports = (grunt) ->
           report: 'min'
         files:
           "compiledPublic/stylesheets/style.css": "compiledPublic/stylesheets/style.less"
+      dev:
+        options:
+          report: 'min'
+        files:
+          "public/stylesheets/style.css": "public/stylesheets/style.less"
     wait:
       watch:
         options:
@@ -323,6 +334,6 @@ module.exports = (grunt) ->
     home = process.env.HOME
     if home?.substr(0,11) is "/tmp/build_" #trying to identify heroku
       grunt.task.run [ 'compile:server' ]
-  grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less' ]
-  grunt.registerTask 'default', [ 'compileAndTest', 'concurrent:devServer']
+  grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
+  grunt.registerTask 'default', [ 'compileAndTest', 'less:dev', 'concurrent:devServer']
   grunt.registerTask 'quickStart', [ 'concurrent:devServer']
