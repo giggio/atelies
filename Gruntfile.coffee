@@ -65,8 +65,8 @@ module.exports = (grunt) ->
 
     nodemon:
       dev:
+        script: 'server.js'
         options:
-          file: 'server.js'
           watchedExtensions: ['js']
           watchedFolders: ['app']
           nodeArgs: ['--debug']
