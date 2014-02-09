@@ -40,7 +40,7 @@ module.exports = (grunt) ->
       options:
         max_line_length:
           level: 'ignore'
-        coffeescript_error:
+        no_unnecessary_fat_arrows:
           level: 'ignore'
 
     watch:
