@@ -19,7 +19,7 @@ module.exports = (grunt) ->
       src: [ '**/*.coffee' ]
       dest: 'test'
       ext: '.js'
-    dev: [ 'Cakefile', 'Gruntfile.coffee' ]
+    dev: [ 'Gruntfile.coffee' ]
     base:
       files:
         'server.js':'server.coffee'
