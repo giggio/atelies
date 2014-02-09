@@ -67,8 +67,8 @@ module.exports = (grunt) ->
       dev:
         script: 'server.js'
         options:
-          watchedExtensions: ['js']
-          watchedFolders: ['app']
+          ext: 'js'
+          watch: ['app']
           nodeArgs: ['--debug']
           delayTime: 2
           env:
