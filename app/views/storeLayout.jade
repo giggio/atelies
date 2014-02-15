@@ -2,59 +2,59 @@ block variables
   - var title = ""
 extends layout
 append layout
-  block header
-    section#main.container
-      #site-banner.row(style="margin-bottom: 20px")
-        .col-md-12
-          a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
-            if store.banner
-              img#storeBanner(src="#{store.banner}")
-            else
-              h1#storeNameHeader= store.name
-      .navbar.navbar-default(role="navigation")
-        include includes/storeHeader
-        include includes/userInfo
+  #storeLayout
+    block header
+      section#main.container
+        #site-banner.row(style="margin-bottom: 20px")
+          .col-md-12
+            .navbar.navbar-default(role="navigation")
+              include includes/storeHeader
+              include includes/userInfo          
+            a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
+              if store.banner
+                img#storeBanner(src="#{store.banner}")
+              else
+                h1#storeNameHeader= store.name              
+    block content
 
-      block content
+    block footer
+      footer
+        .container-fluid
+          .row
+            .col-md-9
+              .page-header
+                h2 Sobre #{store.name}
+              p= store.description
+              h3 Contato
+              section#otherInfo
+                #storeName= store.name
+                div: span#storePhoneNumber= store.phoneNumber
+                div
+                  span#storeCity= store.city
+                  span#storeState= store.state
+                div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
+                div: a(href="mailto:#{store.email}")= store.email
+                if store.urlFacebook
+                  a.social(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
+                if store.urlTwitter
+                  a.social(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
+            .col-md-3
+              .page-header
+                h2 Está comprando?
+              ul
+                li: a(href="/account/orders") Meus pedidos
+                li: a(href="/IWantToBuy") Quero comprar
+                li: a(href="/faq#whybuyhere") Porque comprar aqui?
+              #fb-root
 
-      block footer
-        footer
-          .container
-            .row
-              .col-md-9
-                .page-header
-                  h2 Sobre #{store.name}
-                p= store.description
-                h3 Contato
-                section#otherInfo
-                  #storeName= store.name
-                  div: span#storePhoneNumber= store.phoneNumber
-                  div
-                    span#storeCity= store.city
-                    span#storeState= store.state
-                  div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
-                  div: a(href="mailto:#{store.email}")= store.email
-                  if store.urlFacebook
-                    a.social(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
-                  if store.urlTwitter
-                    a.social(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
-              .col-md-3
-                .page-header
-                  h2 Está comprando?
-                ul
-                  li: a(href="/account/orders") Meus pedidos
-                  li: a(href="/IWantToBuy") Quero comprar
-                  li: a(href="/faq#whybuyhere") Porque comprar aqui?
-                #fb-root
-
-            p.text-center
-              &copy; 2013 - 
-              a(href="https://www.atelies.com.br/") Ateliês
-              &nbsp;|&nbsp;
-              a(href="/terms") Termos de uso
-              &nbsp;|&nbsp;
-              a(href="/about") Sobre
-              &nbsp;|&nbsp;
-              a(href="mailto:contato@atelies.com.br") Contato
-              &nbsp;|&nbsp;
-              a(href="http://blog.atelies.com.br") Blog
+          p.text-center
+            &copy; 2013 - 
+            a(href="https://www.atelies.com.br/") Ateliês
+            &nbsp;|&nbsp;
+            a(href="/terms") Termos de uso
+            &nbsp;|&nbsp;
+            a(href="/about") Sobre
+            &nbsp;|&nbsp;
+            a(href="mailto:contato@atelies.com.br") Contato
+            &nbsp;|&nbsp;
+            a(href="http://blog.atelies.com.br") Blog

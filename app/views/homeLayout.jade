@@ -1,75 +1,84 @@
 extends layout
 
 append layout
-  block header
-    section#main.container
-      .relative
-        img.beta(src="#{STATIC_PATH}/images/beta.png")
-      #site-banner.row(style="margin-bottom: 20px")
-        .col-md-4
-          if (CONFIG.serverEnvironment == 'production')
-            a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
-          else
-            a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogoTeste.png")
-        .col-md-6
-          h3.nameHeader shopping virtual de artes e afins
-        .col-md-2
-          ul.social
-            li: a(href="https://www.facebook.com/Atelies", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
-            li: a(href="https://plus.google.com/111286901107324902673", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/gplus.png")
-            li: a(href="https://twitter.com/ateliescombr", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
-      .navbar.navbar-default(role="navigation")
-        include includes/commonHeader
-        include includes/userInfo
-
-      block content
-
-      block footer
-        footer
-          .container
-            .row
-              .col-md-5
-                .featured O Ateliês quer ver a comunidade ligada às artes unida e auto organizada<br /> Seja protagonista dessa nova história
-                ul.ideas
-                  li: a(href="/contribute") Junte-se a nossa equipe
-                  li: a(href="/contribute") Partilhe ideias
-                  li: a(href="/contribute") Divulgue eventos na sua área
-                  li: a(href="/contribute") Seja colunista em nosso blog
-                  li: a(href="/contribute") Contribua com material para nossa fanpage
-                  li: a(href="/contribute") Introduza novas ferramentas no site
-                .donation
-                  a(href="/donating").money $
-                  a(href="/donating").accepting Aceitamos doações
-              .col-md-7
-                .featured Sua loja virtual hospedada no portal ideal<br />
-                  | Sem intermediários entre você e o cliente<br />
-                  | Site sem fins lucrativos <br />
-                  | Sem taxas de adesão e manutenção
-                .securityNotice O Ateliês é protegido por criptografia SSL, a mesma usada nos bancos
+  #homeLayout
+    block header
+      #backgroundLine
+      section#main.container
+        #gridHeader
+          #site-banner
+            if (CONFIG.serverEnvironment == 'production')
+              a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
+            else
+              a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/logonovo.png")
+          #headerElements
+            #header1
+              .col-md-8
+                form#searchProducts.input-group
+                  input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos")
+                  span.input-group-btn: button.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
+              .col-md-4
+                #createStore.pull-right
+                  a(href="https://www.atelies.com.br/IWantToSell"): img(src="#{STATIC_PATH}/images/criarloja.png")
+            #header2
+              #blog
+                a(href="http://blog.atelies.com.br") Blog do Ateliês
+              #signIn  
+                include includes/userInfo
+            #header3
+              #socialReferal
+                ul.social
+                  li: a(href="https://www.facebook.com/Atelies", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/facelink.png")
+                  li: a(href="https://plus.google.com/111286901107324902673", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/gpluslink.png")
+                  li: a(href="https://twitter.com/ateliescombr", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/twitterlink.png")
+    block content
+    block footer
+      footer.container-fluid
+        #gridFooter
+          #interaction
+            #contribute
+              a(href="/contribute"): img.images(src="#{STATIC_PATH}/images/colaboredestaque.png")
+            #donation
+              a(href="/donating"): img.images(src="#{STATIC_PATH}/images/aceitamosdoacoes.png")
+            #faq    
+              a(href="/faq"): img.images(src="#{STATIC_PATH}/images/perguntasfrequentes.png")
+          #nameFooter Portal colaborativo - sem intermediários entre o artista e o cliente !
+          #informing
+            #informingA
+              #newsletter
+                form#newsletterForm
+                  .input-group
+                    i#newsletterIcon.glyphicon.glyphicon-envelope
+                    input#newsletterEmail.form-control(type="text", placeholder="Digite aqui seu e-mail e fique por dentro das nossas novidades!")
+                    span.input-group-btn: button.btn.btn-default(type="button")#signNewsletter OK
+              #securityNotice O Ateliês é protegido por criptografia SSL, a mesma usada nos bancos
                 #pagseguro
                   img.pagseguro(src='#{STATIC_PATH}/images/pagsegFooter.png')
-                .links
-                  a.link(href="/about") Sobre
-                  a.link(href="/IWantToBuy") Quero Comprar
-                  a.link(href="/IWantToSell") Quero vender
-                  a.link(href="/faq") Perguntas frequentes
-                #socialContainers
-                  .facebookContainer
-                    #fb-root
-                    .fb-like(data-href="https://www.atelies.com.br", data-width="250", data-height="100", data-colorscheme="light", data-layout="button_count", data-action="like", data-show-faces="true", data-send="false")
-                  .twitterContainer
-                    a.twitter-share-button(href="https://twitter.com/share", data-url="https://www.atelies.com.br", data-text="Ateliês: shopping virtual de artes e afins", data-via="ateliescombr", data-lang="pt", data-size="small", data-related="ateliescombr", data-hashtags="Atelies,Artesanato") Tweetar
-                  .gplusContainer
-                    .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
-                    //-.g-page(data-href="https://plus.google.com/111286901107324902673", data-layout="landscape", data-theme="dark", data-showcoverphoto="false", data-width="273", data-showtagline="false")
-
-            .lastFooter
-              &copy; 2013 - Ateliês
-              &nbsp;|&nbsp;
-              a(href="/terms") Termos de uso
-              &nbsp;|&nbsp;
-              a(href="/about") Sobre
-              &nbsp;|&nbsp;
-              a(href="mailto:contato@atelies.com.br") Contato
-              &nbsp;|&nbsp;
-              a(href="http://blog.atelies.com.br") Blog
+            #informingB
+              #socialContainers
+                .facebookContainer
+                  #fb-root
+                  script .
+                    (function(d, s, id) {
+                      var js, fjs = d.getElementsByTagName(s)[0];
+                      if (d.getElementById(id)) return;
+                      js = d.createElement(s); js.id = id;
+                      js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=618886944811863";
+                      fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+                .twitterContainer
+                  a.twitter-share-button(href="https://twitter.com/share", data-url="https://www.atelies.com.br", data-text="Ateliês: shopping virtual de artes e afins", data-via="ateliescombr", data-lang="pt", data-size="small", data-related="ateliescombr", data-hashtags="Atelies,Artesanato") Tweetar
+                .gplusContainer
+                  .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
+          #lastFooter
+            &copy; 2013 - Ateliês
+            &nbsp;|&nbsp;
+            a(href="/terms") Termos de uso
+            &nbsp;|&nbsp;
+            a(href="/about") Sobre
+            &nbsp;|&nbsp;
+            a(href="mailto:contato@atelies.com.br") Contato
+            &nbsp;|&nbsp;
+            a(href="http://blog.atelies.com.br") Blog
+            &nbsp;|&nbsp;
+            a(href='/technology') Tecnologia

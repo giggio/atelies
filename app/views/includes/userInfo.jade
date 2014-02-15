@@ -1,24 +1,23 @@
-#userInfo.navbar-collapse.collapse.navbar-right
-  ul.nav.navbar-nav
-    if (everyauth.loggedIn)
-      li.dropdown
-        a#greeting.dropdown-toggle(href='#', data-toggle='dropdown')
-          i.icon-user
-          span &nbsp;#{user.name}
-          b.caret
-        ul.dropdown-menu
-          if user.isAdmin
-            li: a#siteAdmin(href='/siteAdmin') Administração do site
-          if user.isSeller
-            li: a#admin2(href='/admin') Administração
-          li: a#account(href="/account") Sua conta
-          li: a#goCheckOrders(href="/account#orders") Pedidos realizados
-          li: a#goChangePassword(href="/account/changePassword") Troque sua senha
-          li: a#goUpdateProfile(href="/account/updateProfile") Atualize seu cadastro
-          li: a#logout(href="/account/logout") Sair
-    else
-      li: a#loginPop.pop(href="#") Entrar
-      li: a(href='#{secureUrl}/account/register') Cadastre-se
+#userInfo
+  if (everyauth.loggedIn)
+    .dropdown
+      a#greeting.dropdown-toggle(href='#', data-toggle='dropdown')
+        i.icon-user
+        span &nbsp;#{user.name}
+        b.caret
+      ul.dropdown-menu
+        if user.isAdmin
+          li: a#siteAdmin(href='/siteAdmin') Administração do site
+        if user.isSeller
+          li: a#admin2(href='/admin') Administração
+        li: a#account(href="/account") Sua conta
+        li: a#goCheckOrders(href="/account#orders") Pedidos realizados
+        li: a#goChangePassword(href="/account/changePassword") Troque sua senha
+        li: a#goUpdateProfile(href="/account/updateProfile") Atualize seu cadastro
+        li: a#logout(href="/account/logout") Sair
+  else
+    a#loginPop.pop(href="#") Entrar
+    //li: a(href='#{secureUrl}/account/register') Cadastre-se
   #loginPop-head.hide Faça seu login
     button.close(type="button") ×
   #loginPop-content.hide
