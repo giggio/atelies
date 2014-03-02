@@ -7,17 +7,18 @@ _               = require 'underscore'
 everyauth       = require 'everyauth'
 AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
-correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 async           = require 'async'
 pagseguro       = require 'pagseguro'
 parseXml        = require('xml2js').parseString
 request         = require 'request'
+PostOffice      = require '../infra/postOffice'
 
 module.exports = class StoreRoutes
   constructor: (@env, @domain) ->
     @_auth 'orderCreate', 'calculateShipping', 'commentCreate'
     @_authVerified 'orderCreate'
+    @postOffice = new PostOffice()
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'store'
@@ -63,7 +64,7 @@ module.exports = class StoreRoutes
               cb err, product: product, quantity: item.quantity
       async.parallel getItems, (errors, items) =>
         return @handleError req, res, err if err?
-        @_calculateShippingForOrder store, req.body, req.user, req.body.shippingType, (err, shippingCost) =>
+        @_calculateShippingForOrder storeZip, req.body.items, req.user.deliveryAddress.zip, req.body.shippingType, (err, shippingCost) =>
           return @handleError req, res, err if err?
           paymentType = req.body.paymentType
           Order.create user, store, items, shippingCost, paymentType, (err, order) =>
@@ -171,55 +172,21 @@ module.exports = class StoreRoutes
         orderId = psTransaction.transaction.reference
         cb null, orderId
 
-  _calculateShippingForOrder: (store, data, user, shippingType, cb) ->
+  _calculateShippingForOrder: (storeZip, items, userZip, shippingType, cb) =>
     return setImmediate(-> cb null, 0) unless shippingType?
-    @_calculateShipping store.slug, data, user, (err, shippingOptions) ->
+    @postOffice.calculateShipping storeZip, items, userZip, (err, shippingOptions) ->
       return cb err if err?
       shippingOption = _.findWhere shippingOptions, type: shippingType
       shippingCost = shippingOption.cost
       cb null, shippingCost
 
   calculateShipping: (req, res) ->
-    @_calculateShipping req.params.storeSlug, req.body, req.user, (err, shippingOptions) =>
-      return @handleError req, res, err if err?
-      res.json shippingOptions
-
-  _calculateShipping: (storeSlug, data, user, cb) ->
-    ids = _.map data.items, (i) -> i._id
-    userZip = user.deliveryAddress.zip
-    pac = type: 'pac', name: 'PAC', cost: 0, days: 0
-    sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
-    shippingOptions = [ pac, sedex ]
-    Store.findBySlug storeSlug, (err, store) ->
+    Store.findBySlug req.params.storeSlug, (err, store) =>
       return cb err if err?
-      storeZip = store.zip
-      Product.getShippingWeightAndDimensions ids, (err, products) ->
-        getShippingPrices = []
-        for p in products
-          do (p) ->
-            if p.hasShippingInfo()
-              shipping = p.shipping
-              quantity = parseInt _.findWhere(data.items, _id: p._id.toString()).quantity
-              getShippingPrices.push (cb) =>
-                deliverySpecs = serviceType: 'pac', from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
-                correios.getPrice deliverySpecs, (err, delivery) ->
-                  #console.log "got price for pac with specs #{JSON.stringify deliverySpecs}, with response #{JSON.stringify delivery}"
-                  return cb err if err?
-                  pac.cost += delivery.GrandTotal * quantity if p.shipping.charge
-                  pac.days = delivery.estimatedDelivery if delivery.estimatedDelivery > pac.days
-                  cb()
-              getShippingPrices.push (cb) =>
-                deliverySpecs = serviceType: 'sedex', from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
-                correios.getPrice deliverySpecs, (err, delivery) ->
-                  #console.log "got price for sedex with specs #{JSON.stringify deliverySpecs}, with response #{JSON.stringify delivery}"
-                  return cb err if err?
-                  sedex.cost += delivery.GrandTotal * quantity if p.shipping.charge
-                  sedex.days = delivery.estimatedDelivery if delivery.estimatedDelivery > sedex.days
-                  cb()
-        async.parallel getShippingPrices, (err) ->
-          return cb "Erro ao obter custo de postagem.\n#{err}" if err?
-          cb null, shippingOptions
-  
+      @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip, (err, shippingOptions) =>
+        return @handleError req, res, err if err?
+        res.json shippingOptions
+
   productsSearch: (req, res) ->
     Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) =>
       return @handleError req, res, err if err?
