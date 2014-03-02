@@ -128,7 +128,7 @@ describe 'Admin create store page', ->
           page.visit ->
             page.setFieldsAs exampleStore, ->
               bannerPath = path.join __dirname, 'support', 'images', '200x200.png'
-              flyerPath = path.join __dirname, 'support', 'images', '600x600.png'
+              flyerPath = path.join __dirname, 'support', 'images', '800x800.png'
               homePageImagePath = path.join __dirname, 'support', 'images', '700x700.png'
               page.setPictureFiles bannerPath, flyerPath, homePageImagePath, ->
                 page.clickUpdateStoreButton done
