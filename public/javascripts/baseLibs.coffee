@@ -22,6 +22,6 @@ define [
     $(document ).ajaxStop ->
       $("#overlay").hide()
     $(document).ajaxError (e, xhr, opt, exception) ->
-      return if opt.url is '/error'
+      return if opt.url is '/api/error'
       ErrorLogger.logError 'ajax', exception, opt.url, opt.type
       logger.log category: 'error', action: "#{opt.type} #{opt.url}", label: "ajax #{exception}", field: page: window?.location?.pathname
