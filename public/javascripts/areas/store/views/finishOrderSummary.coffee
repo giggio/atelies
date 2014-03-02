@@ -24,6 +24,8 @@ define [
     render: =>
       unless @cart.shippingCalculated()
         return Backbone.history.navigate 'finishOrder/shipping', trigger: true
+      unless @cart.paymentTypeSelected()?
+        return Backbone.history.navigate 'cart', trigger: true
       context = Handlebars.compile @template
       numberOfProducts = @cart.items().length
       shippingCost = converters.currency @cart.shippingCost()
