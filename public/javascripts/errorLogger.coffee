@@ -16,6 +16,7 @@ define [
             throw new Error()
           catch e
             stack = e.stack
+        message = "No error message provided." if message is ""
         otherInfo.location = window.location.toString()
         $.post '/api/error',
           module: area
