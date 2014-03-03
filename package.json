@@ -46,7 +46,8 @@
     "marked": "~0.2.10",
     "grunt-wait": "~0.1.0",
     "prerender-node": "~0.1.7",
-    "sitemap": "~0.7.1"
+    "sitemap": "~0.7.1",
+    "q": "~1.0.0"
   },
   "devDependencies": {
     "grunt-coffeelint": "~0.0.8",
