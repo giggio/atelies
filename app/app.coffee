@@ -16,7 +16,9 @@ exports.start = (cb) ->
   config              = require './helpers/config'
   redirectUnlessSecure= require './helpers/middleware/redirectUnlessSecure'
   healthCheck         = require './helpers/middleware/healthCheck'
+  Q                   = require 'q'
 
+  Q.longStackSupport = on
   sessionStore = new MongoStore url:config.connectionString
   if config.isProduction
     Postman.configure config.aws.accessKeyId, config.aws.secretKey

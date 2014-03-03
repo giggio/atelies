@@ -8,6 +8,7 @@ RouteFunctions  = require './routeFunctions'
 async           = require 'async'
 PostOffice      = require '../infra/postOffice'
 PagSeguro       = require '../infra/pagseguro'
+Q               = require 'q'
 
 module.exports = class StoreRoutes
   constructor: (@env, @domain) ->
@@ -50,36 +51,37 @@ module.exports = class StoreRoutes
         res.json simpleProduct
   
   orderCreate: (req, res) ->
-    user = req.user
-    Store.findById req.params.storeId, (err, store) =>
-      return @handleError req, res, err if err?
-      getItems = for item in req.body.items
-        do (item) ->
-          (cb) =>
-            Product.findById item._id, (err, product) =>
-              cb err, product: product, quantity: item.quantity
-      async.parallel getItems, (errors, items) =>
-        return @handleError req, res, err if err?
-        @_calculateShippingForOrder store.zip, req.body.items, req.user.deliveryAddress.zip, req.body.shippingType, (err, shippingCost) =>
-          return @handleError req, res, err if err?
-          paymentType = req.body.paymentType
-          Order.create user, store, items, shippingCost, paymentType, (err, order) =>
-            return @handleError req, res, err if err?
-            order.save (err, order) =>
-              return @handleError req, res, err if err?
-              for item in items
-                p = item.product
-                p.inventory -= item.quantity if p.hasInventory
-                p.save()
-              if store.pagseguro() and paymentType is 'pagseguro'
-                @pagseguro.sendToPagseguro store, order, user, (err, pagseguroCode) =>
-                  return @handleError req, res, err if err?
-                  res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
-              else
-                order.sendMailAfterPurchase (err, mailResponse) =>
-                  return @handleError req, res, err if err?
-                  simpleOrder = order.toSimpleOrder()
-                  res.json 201, simpleOrder
+    Q(Store.findById(req.params.storeId).exec()).then (store) =>
+      Q.fcall =>
+        return 0 unless req.body.shippingType?
+        Q.nfcall @postOffice.calculateShipping, store.zip, req.body.items, req.user.deliveryAddress.zip
+        .then (shippingOptions) ->
+          shippingOption = _.findWhere shippingOptions, type: req.body.shippingType
+          shippingOption.cost
+      .then (shippingCost) =>
+        getItems = for item in req.body.items
+          do (item) ->
+            (cb) ->
+              Product.findById item._id, (err, product) ->
+                cb err, product: product, quantity: item.quantity
+        Q.nfcall async.parallel, getItems
+        .then (items) =>
+          Q.nfcall Order.create, req.user, store, items, shippingCost, req.body.paymentType
+          .then (order) -> Q.ninvoke order, 'save'
+          .spread (order) =>
+            for item in items
+              p = item.product
+              p.inventory -= item.quantity if p.hasInventory
+              p.save()
+            if store.pagseguro() and req.body.paymentType is 'pagseguro'
+              Q.nfcall @pagseguro.sendToPagseguro, store, order, req.user
+              .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
+              .done()
+            else
+              Q.ninvoke order, 'sendMailAfterPurchase'
+              .then (mailResponse) -> res.json 201, order.toSimpleOrder()
+              .done()
+    .catch (err) => @handleError req, res, err
 
   pagseguroStatusChanged: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
