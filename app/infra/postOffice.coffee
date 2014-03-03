@@ -22,8 +22,7 @@ module.exports = class PostOffice
             service.days = delivery.estimatedDelivery if delivery.estimatedDelivery > service.days
             cb()
       getShippingPrices = []
-      productsWithShipping = (product for product in products when product.hasShippingInfo())
-      for product in productsWithShipping
+      for product in products when product.hasShippingInfo()
         quantity = parseInt _.findWhere(items, _id: product._id.toString()).quantity
         getShippingPrices.push getShippingPricesFor pac, product.shipping, quantity
         getShippingPrices.push getShippingPricesFor sedex, product.shipping, quantity
