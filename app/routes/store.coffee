@@ -54,7 +54,7 @@ module.exports = class StoreRoutes
     Q(Store.findById(req.params.storeId).exec()).then (store) =>
       Q.fcall =>
         return 0 unless req.body.shippingType?
-        Q.nfcall @postOffice.calculateShipping, store.zip, req.body.items, req.user.deliveryAddress.zip
+        @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
         .then (shippingOptions) ->
           shippingOption = _.findWhere shippingOptions, type: req.body.shippingType
           shippingOption.cost
@@ -109,20 +109,11 @@ module.exports = class StoreRoutes
               return @handleError req, res, err, false if err?
               res.redirect "/#{order.store.slug}#finishOrder/orderFinished"
 
-  _calculateShippingForOrder: (storeZip, items, userZip, shippingType, cb) =>
-    return setImmediate(-> cb null, 0) unless shippingType?
-    @postOffice.calculateShipping storeZip, items, userZip, (err, shippingOptions) ->
-      return cb err if err?
-      shippingOption = _.findWhere shippingOptions, type: shippingType
-      shippingCost = shippingOption.cost
-      cb null, shippingCost
-
   calculateShipping: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) =>
-      return cb err if err?
-      @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip, (err, shippingOptions) =>
-        return @handleError req, res, err if err?
-        res.json shippingOptions
+    Q.nfcall Store.findBySlug, req.params.storeSlug
+    .then (store) => @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
+    .then (shippingOptions) -> res.json shippingOptions
+    .catch (err) => return @handleError req, res, err if err?
 
   productsSearch: (req, res) ->
     Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) =>

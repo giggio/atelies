@@ -2,13 +2,16 @@ async           = require 'async'
 _               = require 'underscore'
 Product         = require '../models/product'
 correios        = require 'correios'
+Q               = require 'q'
+
 module.exports = class PostOffice
-  calculateShipping: (storeZip, items, userZip, cb) ->
+  calculateShipping: (storeZip, items, userZip) ->
     ids = _.pluck items, '_id'
     pac = type: 'pac', name: 'PAC', cost: 0, days: 0
     sedex = type: 'sedex', name: 'Sedex', cost: 0, days: 0
     shippingOptions = [ pac, sedex ]
-    Product.getShippingWeightAndDimensions ids, (err, products) ->
+    Q.nfcall Product.getShippingWeightAndDimensions, ids
+    .then (products) ->
       getShippingPricesFor = (service, shipping, quantity) =>
         (cb) =>
           deliverySpecs = serviceType: service.type, from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
@@ -24,6 +27,6 @@ module.exports = class PostOffice
         quantity = parseInt _.findWhere(items, _id: product._id.toString()).quantity
         getShippingPrices.push getShippingPricesFor pac, product.shipping, quantity
         getShippingPrices.push getShippingPricesFor sedex, product.shipping, quantity
-      async.parallel getShippingPrices, (err) ->
-        return cb "Erro ao obter custo de postagem.\n#{err}" if err?
-        cb null, shippingOptions
+      Q.nfcall async.parallel, getShippingPrices
+    .then -> shippingOptions
+    .catch (err) -> throw new Error "Erro ao obter custo de postagem.\n#{err}"
