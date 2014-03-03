@@ -19,7 +19,7 @@ exports.start = (cb) ->
   Q                   = require 'q'
 
   Q.longStackSupport = on
-  sessionStore = new MongoStore url:config.connectionString
+  sessionStore = new MongoStore url:config.connectionString, auto_reconnect:on
   if config.isProduction
     Postman.configure config.aws.accessKeyId, config.aws.secretKey
     AmazonFileUploader.configure config.aws.accessKeyId, config.aws.secretKey, config.aws.region, config.aws.imagesBucket
