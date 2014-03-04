@@ -1,9 +1,9 @@
-.navbar-header
+//.navbar-header
   button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
     span.icon-bar
     span.icon-bar
     span.icon-bar
-.navbar-collapse.collapse.navbar-left
+//.navbar-collapse.collapse.navbar-left
   form.navbar-form.navbar-left
     .form-group
       input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos")
@@ -11,14 +11,6 @@
   ul.nav.navbar-nav
     if (everyauth.loggedIn && user.isSeller)
       li: a#admin(href='/admin') Administração
-    li.dropdown
-      a.dropdown-toggle(href='#', data-toggle='dropdown') Sobre
-        b.caret
-      ul.dropdown-menu
-        li: a(href='/about') Sobre o Ateliês
-        li: a(href='/faq') Perguntas frequentes
-        li: a(href='/faq#howmuch') Quanto custa ter uma loja?
-        li: a(href='/technology') Tecnologia
   ul.nav.navbar-nav
     li: a(href="#", onclick="Backbone.history.navigate('cart', true); return false;")
       i.icon-shopping-cart

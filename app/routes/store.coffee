@@ -29,16 +29,17 @@ module.exports = class StoreRoutes
       return @handleError req, res, err, false if err?
       return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-      getUser = (cb) =>
+      getUser = (cb) ->
         if req.user?
           req.user.toSimpleUser (user) -> cb user
         else
           cb undefined
-      getUser (user) ->
+      getUser (user) =>
         if req.session.recentOrder?
           order = req.session.recentOrder
           req.session.recentOrder = null
-        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order}, (err, html) =>
+        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0}, (err, html) =>
+          console.log err if err?
           return @handleError req, res, err, false if err?
           res.send html
 

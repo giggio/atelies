@@ -1,54 +1,17 @@
 <div id="storeHeader" class="row" itemscope itemtype="http://schema.org/Store">
   <meta itemprop="name" content="{{store.name}}" />
-  <div id="homePageImageHolder">
-    <img id="homePageImage" src="{{store.homePageImage}}" itemprop="image"/>
-  </div>
-  <div id="storeDescription">
-    {{#if hasEvaluations}}
-    <div id="evaluation" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-      <div id="ratingStars" data-average="{{evaluationAvgRating}}" data-id="1"></div>
-      <meta itemprop="ratingValue" content="{{evaluationAvgRating}}" />
-      <meta itemprop="worstRating" content="1" />
-      <meta itemprop="bestRating" content="5" />
-      <div id="ratingDescription">(<span itemprop="ratingCount">{{numberOfEvaluations}}</span> avaliações, <a href="evaluations">veja todas</a>)</div>
-    </div>
-    {{/if}}
-    {{#if userOwned}}
-    <p>
-      <a class="btn btn-primary" href="/admin/store/{{store.slug}}" data-not-push-state="true">Editar sua loja</a>
-    </p>
-    {{/if}}
-    <div id="homePageDescription" itemprop="description">{{{homePageDescription}}}</div>
-    {{#if store.urlFacebook}}
-    <a id="urlFacebook" class="social" href="//www.facebook.com/{{store.urlFacebook}}" title="{{store.name}} no Facebook" target="_blank" data-not-push-state="true" rel="me"><img class="img-circle" src="{{staticPath}}/images/facebook.png" /></a>
-    {{/if}}
-    {{#if store.urlTwitter}}
-    <a id="urlTwitter" class="social" href="//twitter.com/{{store.urlTwitter}}" title="{{store.name}} no Twitter" target="_blank" data-not-push-state="true" rel="me"><img class="img-circle" src="{{staticPath}}/images/twitter.png" /></a>
-    {{/if}}
-    {{#if store.otherUrl}}
-    <div>
-      <a id="otherUrl" href="{{store.otherUrl}}" itemprop="sameAs" title="Outro site de {{store.name}}" data-not-push-state="true" rel="me">{{store.otherUrl}}</a>
-    </div>
-    {{/if}}
-    <div class="socialContainers" >
-      <div class="facebookContainer">
-        <div class="fb-like" data-href="https://www.atelies.com.br/{{store.slug}}" data-width="220" data-height="100" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
-      </div>
-      <div class="twitterContainer">
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.atelies.com.br/{{store.slug}}" data-text="{{name}}" data-via="ateliescombr" data-lang="pt" data-related="ateliescombr" data-hashtags="Atelies">Tweetar</a>
-      </div>
-      <div class="gplusContainer">
-        <div class="g-plusone" data-annotation="bubble" data-width="300" data-href="https://www.atelies.com.br/{{store.slug}}"></div>
-      </div>
-    </div>
-    <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-      <meta itemprop="addressLocality" content="{{store.city}}" />
-      <meta itemprop="addressRegion" content="{{store.state}}" />
-      <meta itemprop="postalCode" content="{{store.zip}}" />
-      <meta itemprop="addressCountry" content="BR" />
-      <meta itemprop="email" content="{{store.email}}" />
-      <meta itemprop="telephone" content="{{store.phoneNumber}}" />
-    </div>
+  {{#if userOwned}}
+  <p id="editStore">
+    <a class="btn btn-primary" href="/admin/store/{{store.slug}}" data-not-push-state="true">Editar sua loja</a>
+  </p>
+  {{/if}}
+  <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+    <meta itemprop="addressLocality" content="{{store.city}}" />
+    <meta itemprop="addressRegion" content="{{store.state}}" />
+    <meta itemprop="postalCode" content="{{store.zip}}" />
+    <meta itemprop="addressCountry" content="BR" />
+    <meta itemprop="email" content="{{store.email}}" />
+    <meta itemprop="telephone" content="{{store.phoneNumber}}" />
   </div>
 </div>
 <hr />

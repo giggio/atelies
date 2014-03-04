@@ -57,7 +57,6 @@ p.jRatingInfos {
 }
 body {
   font-family: 'Ubuntu', sans-serif;
-  padding-top: 10px;
   background: white;
   color: @defaultFontColor;
 }
@@ -108,6 +107,7 @@ img {
   }
 }
 #homeLayout {
+  padding-top: 10px;
   #backgroundLine {
     position: absolute;
     border-top: @colorShade12 1px solid;
@@ -154,7 +154,11 @@ img {
           #signIn{
             float: right;
             padding-top: 10px;
+            padding-right: 15px;
             #userInfo {
+              a{
+                color: @colorShade8;
+              }
               #loginPop {
                 font-size: 16px;
                 color: @colorShade8;
@@ -308,6 +312,140 @@ img {
     }
   }
 }
+#storeLayout {
+  #navLine {
+    position: absolute;
+    border-bottom: @colorShade12 1px solid;
+    background-color: #FBF5ED;
+    width: 100%;
+    height: 40px;
+    top: 0px;
+  }
+  section#main {
+    .beta {
+      position: absolute;
+      top: -40px;
+      left: -40px;
+    }
+    #storeHeader {
+      #header1 {
+        .make-row();
+        #signIn {
+          .make-md-column(4);
+          #userInfo {
+            float: left;
+            padding-top: 14px;
+            a{
+              color: @colorShade8;
+            }
+            #loginPop {
+              font-size: 16px;
+              color: @colorShade8;
+            }
+          }
+        }
+        #searchProducts2 {
+          .make-md-column(5);
+          padding-top: 2px;
+        }
+        #shoppingCart {
+          .make-md-column(2);
+          .make-md-column-offset(1);
+          padding-top: 14px;
+          a{
+            float: right;
+            color: @colorShade8;
+          }
+        }
+      }
+      #header2 {
+        padding-top: 4px;
+        #site-banner {
+        }
+      }
+      #header3 {
+        .make-row();
+        #evaluationContainer{
+          .make-md-column(6);
+          #evaluation{
+            #ratingStars{
+              float: left;
+            }
+            #ratingDescription{
+            }
+          }
+        }
+        #socialContainers{
+          .make-md-column(6);
+          float: right;
+          .facebookContainer {
+            float: right;
+            width: 100px;
+          }
+          .twitterContainer {
+            float: right;
+            width: 100px;
+          }
+          .gplusContainer {
+            float: right;
+            width: 64px;
+          }
+        }
+      }
+    }
+  }
+  footer{
+    position: relative;
+    border-top: @colorShade12 1px solid;
+    background-color: #FBF5ED;
+    color: @colorShade8;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    #gridFooter {
+      .make-row();
+      margin: 0px;
+      #aboutStore{        
+        .make-md-column(3);
+        .make-md-column-offset(1);
+        #storeFlyer{
+          width: 100px;
+          float: left;
+          margin-right: 10px;
+        }
+        p {
+          text-align: justify;
+        }
+      }
+      #contactStore {
+        .make-md-column(2);
+        .make-md-column-offset(1);
+        text-align: center;
+        #contact {
+          font-size: 18px;
+          margin-top: 0px;
+        }
+        #otherInfo {
+          font-size: 12px;
+        }
+        #waysToPay {
+          font-size: 18px;
+          margin-top: 0px;
+          p{
+            font-size: 12px;
+          }
+        }
+      }
+      #socialReferal {
+        .make-md-column(3);
+        .make-md-column-offset(1);
+      }
+    }
+    #lastFooter {
+      margin-top: 30px;
+      text-align: center;
+    }
+  } 
+}
 #stores {
   .storesRow{
     @media @largeScreen {
@@ -431,6 +569,39 @@ section#app-container {
     }
   }
   .store {
+    @media (min-width: @screen-lg) {
+     // height: 400px;
+      #evaluation {
+        position: absolute;
+        top: 380px;
+        left: 165px;
+        width: 300px;
+        #ratingStars {
+          float: left;
+        }
+      }
+    }
+    @media (min-width: @screen-md) and (max-width: @screen-lg) {
+      height: 400px;
+      #evaluation {
+        position: absolute;
+        top: 320px;
+        left: 80px;
+        width: 300px;
+        #ratingStars {
+          float: left;
+        }
+      }
+    }
+    @media (min-width: @screen-xs) and (max-width: @screen-md) {
+      #evaluation {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        #ratingStars {
+          float: left;
+        }
+      }
+    }
     #products {
       .categoryHeader {
         margin-bottom: 0px;
@@ -481,71 +652,6 @@ section#app-container {
             background: white;
             padding-left: 13px;
             padding-top: 5px;
-          }
-        }
-      }
-    }
-    #storeHeader {
-      .clearfix();
-      #homePageImageHolder {
-        .make-md-column(7);
-        #homePageImage {
-        }
-      } 
-      #storeDescription {
-        .make-md-column(5);
-        position: relative;
-        @media (min-width: @screen-lg) {
-          height: 400px;
-          #evaluation {
-            position: absolute;
-            top: 380px;
-            left: 165px;
-            width: 300px;
-            #ratingStars {
-              float: left;
-            }
-          }
-        }
-        @media (min-width: @screen-md) and (max-width: @screen-lg) {
-          height: 400px;
-          #evaluation {
-            position: absolute;
-            top: 320px;
-            left: 80px;
-            width: 300px;
-            #ratingStars {
-              float: left;
-            }
-          }
-        }
-        @media (min-width: @screen-xs) and (max-width: @screen-md) {
-          #evaluation {
-            padding-top: 20px;
-            padding-bottom: 20px;
-            #ratingStars {
-              float: left;
-            }
-          }
-        }
-        .social {
-          img {
-            display: inline;
-          }
-        }
-        .socialContainers {
-          padding-top: 20px;
-          .facebookContainer {
-            float: left;
-            width: 100px;
-          }
-          .gplusContainer {
-            float: left;
-            width: 100px;
-          }
-          .twitterContainer {
-            float: left;
-            width: 100px;
           }
         }
       }

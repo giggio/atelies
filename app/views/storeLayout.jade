@@ -4,50 +4,82 @@ extends layout
 append layout
   #storeLayout
     block header
+      #navLine
       section#main.container
-        #site-banner.row(style="margin-bottom: 20px")
-          .col-md-12
-            .navbar.navbar-default(role="navigation")
-              include includes/storeHeader
-              include includes/userInfo          
+        #storeHeader
+          #header1
+            #signIn
+              include includes/userInfo
+            #searchProducts2
+              form#searchProducts.input-group
+                input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos")
+                span.input-group-btn: button.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
+            #shoppingCart
+              a(href="#", onclick="Backbone.history.navigate('cart', true); return false;") 
+                i.glyphicon.glyphicon-shopping-cart
+                | Carrinho  
+          #header2
+            #site-banner
+            //include includes/storeHeader
             a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
               if store.banner
                 img#storeBanner(src="#{store.banner}")
               else
-                h1#storeNameHeader= store.name              
-    block content
+                h1#storeNameHeader= store.name
+          #header3
+            #evaluationContainer
+              if hasEvaluations
+                #evaluation(itemprop="aggregateRating", itemscope, itemtype="http://schema.org/AggregateRating")
+                  #ratingStars(data-average="#{evaluationAvgRating}", data-id="1")
+                  #ratingDescription
+                    | (
+                    span(itemprop="ratingCount") #{numberOfEvaluations} avaliações, 
+                      a(href="evaluations") veja todas
+                    | )
+                  meta(itemprop="ratingValue", content="#{evaluationAvgRating}")
+                  meta(itemprop="worstRating", content="1")
+                  meta(itemprop="bestRating", content="5")
+            #socialContainers
+              .gplusContainer
+                .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br/{store.slug}")        
+              .twitterContainer
+                a(href="https://twitter.com/share", class="twitter-share-button", data-url="https://www.atelies.com.br/#{store.slug}", data-text="#{store.name}", data-via="ateliescombr", data-lang="pt", data-related="ateliescombr", data-hashtags="Atelies") Tweetar
+              .facebookContainer
+                .fb-like(data-href="https://www.atelies.com.br/#{store.slug}", data-width="220", data-height="100", data-colorscheme="light", data-layout="button_count", data-action="like", data-show-faces="true", data-send="false")
 
-    block footer
-      footer
-        .container-fluid
-          .row
-            .col-md-9
-              .page-header
-                h2 Sobre #{store.name}
-              p= store.description
-              h3 Contato
+
+      block content
+
+      block footer
+        footer.container-fluid
+          #gridFooter
+            #aboutStore
+              if store.flyer
+                img#storeFlyer(src="#{store.flyer}")
+              else
+                h1#storeNameHeader= store.name
+              #about 
+              p= store.homePageDescription
+            #contactStore
+              #contact Contato
               section#otherInfo
                 #storeName= store.name
-                div: span#storePhoneNumber= store.phoneNumber
+                div#storePhoneNumber= store.phoneNumber
                 div
                   span#storeCity= store.city
                   span#storeState= store.state
                 div: a#storeOtherUrl(href="#{store.otherUrl}")= store.otherUrl
                 div: a(href="mailto:#{store.email}")= store.email
-                if store.urlFacebook
-                  a.social(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/facebook.png")
-                if store.urlTwitter
-                  a.social(href="https://twitter.com/#{store.urlTwitter}", target="_blank"): img.img-circle(src="#{STATIC_PATH}/images/twitter.png")
-            .col-md-3
-              .page-header
-                h2 Está comprando?
-              ul
-                li: a(href="/account/orders") Meus pedidos
-                li: a(href="/IWantToBuy") Quero comprar
-                li: a(href="/faq#whybuyhere") Porque comprar aqui?
-              #fb-root
-
-          p.text-center
+              #waysToPay Meios de Pagamento
+                p Depósito
+                if store.pagseguro
+                  p PagSeguro
+            #socialReferal
+              ul.social
+                li: a(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/facelink.png")
+                //li: a(href="https://plus.google.com/#{store.urlPlus.google}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/gpluslink.png")
+                li: a(href="https://twitter.com/#{store.urlTwitter}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/twitterlink.png")
+          #lastFooter
             &copy; 2013 - 
             a(href="https://www.atelies.com.br/") Ateliês
             &nbsp;|&nbsp;
@@ -58,3 +90,5 @@ append layout
             a(href="mailto:contato@atelies.com.br") Contato
             &nbsp;|&nbsp;
             a(href="http://blog.atelies.com.br") Blog
+            &nbsp;|&nbsp;
+            a(href='/technology') Tecnologia

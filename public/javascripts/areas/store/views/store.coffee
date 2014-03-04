@@ -18,11 +18,9 @@ define [
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
-      if @store.homePageDescription
-        homePageDescription = @markdown.makeHtml @store.homePageDescription
       userOwned = @user?.isSeller and _.contains @user.stores, @store.slug
-      @$el.html context store: @store, staticPath: @staticPath, homePageDescription: homePageDescription, userOwned: userOwned, evaluationAvgRating: @store.evaluationAvgRating, numberOfEvaluations: @store.numberOfEvaluations, hasEvaluations: @store.numberOfEvaluations > 0
-      @$("#ratingStars").jRating
+      @$el.html context store: @store, staticPath: @staticPath, userOwned: userOwned
+      $("#ratingStars").jRating
         bigStarsPath : "#{staticPath}/images/jrating/stars.png"
         smallStarsPath : "#{staticPath}/images/jrating/small.png"
         sendRequest: off
