@@ -82,3 +82,16 @@ requirejs.config
     'select2en':
       deps: [ 'jquery' ]
       exports: '$.fn.select2'
+
+remoteComponents = if DEBUG
+  ga: [ 'lib/ga/index' ]
+  gplus: [ 'lib/gplus/index' ]
+  facebook: [ 'lib/facebook/index' ]
+  twitter: [ 'lib/twitter/index' ]
+else
+  ga: [ '//www.google-analytics.com/analytics' , 'lib/ga/index' ]
+  gplus: [ '//apis.google.com/js/plusone', 'lib/gplus/index' ]
+  facebook: [ '//connect.facebook.net/pt_BR/all', 'lib/facebook/index' ]
+  twitter: [ '//platform.twitter.com/widgets', 'lib/twitter/index' ]
+
+requirejs.config paths:remoteComponents

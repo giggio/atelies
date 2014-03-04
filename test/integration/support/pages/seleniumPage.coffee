@@ -7,9 +7,15 @@ Q               = require 'q'
 
 before ->
   chromedriver.start()
+  capabilities =
+    'browser': 'chrome',
+    'chromeOptions':
+      'prefs': {"profile.default_content_settings": {'images': 2}}
+      'args': ["--host-rules=MAP * 127.0.0.1"]
+  capabilities =
   Page.driver = new webdriver.Builder()
     .usingServer('http://localhost:9515')
-    #.withCapabilities({'browserName': 'chrome', 'prefs': {"profile.default_content_settings": {'images': 2}}})
+    .withCapabilities(capabilities)
     .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
 after (done) ->

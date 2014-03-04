@@ -14,6 +14,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
   process.env.CLIENT_LIB_VERSION = "."
   process.env.UPLOAD_FILES = true unless process.env.UPLOAD_FILES?
+  process.env.DEBUG = true unless process.env.DEBUG?
 switch process.env.NODE_ENV
   when 'development'
     process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
