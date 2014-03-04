@@ -31,10 +31,11 @@ describe 'Admin Create Product page', ->
 
   describe "can't create invalid product", ->
     before (done) ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs {name:'', price:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'}, ->
-            page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug
+      .then -> page.setFieldsAs name:'', price:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'nn', width: 'oo', depth:'pp'}, weight:'mm'}, inventory: 'hh'
+      .then -> page.clickUpdateProduct()
+      .then done, done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
@@ -63,10 +64,11 @@ describe 'Admin Create Product page', ->
     before (done) ->
       productNoInventory = generator.product.a()
       productNoInventory.inventory = ''
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs productNoInventory, ->
-            page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug
+      .then -> page.setFieldsAs productNoInventory
+      .then page.clickUpdateProduct
+      .then done, done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
@@ -86,10 +88,11 @@ describe 'Admin Create Product page', ->
       existingProduct = generator.product.c()
       existingProduct.storeSlug = store.slug
       existingProduct.save()
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs existingProduct, ->
-            page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then  -> page.visit store.slug
+      .then -> page.setFieldsAs existingProduct
+      .then page.clickUpdateProduct
+      .then done, done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
@@ -106,10 +109,11 @@ describe 'Admin Create Product page', ->
 
   describe 'create product', ->
     before (done) ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs product, ->
-            page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug
+      .then -> page.setFieldsAs product
+      .then page.clickUpdateProduct
+      .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
@@ -139,10 +143,11 @@ describe 'Admin Create Product page', ->
 
   describe 'create a product with no shipping info if product is not posted', ->
     before (done) ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          page.setFieldsAs productNoShippingInfo2, ->
-            page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug
+      .then -> page.setFieldsAs productNoShippingInfo2
+      .then page.clickUpdateProduct
+      .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{store.slug}"
@@ -173,12 +178,14 @@ describe 'Admin Create Product page', ->
       AmazonFileUploader.filesUploaded.length = 0
       product3 = generator.product.e()
       product3.picture = null
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, ->
-          filePath = path.join __dirname, 'support', 'images', '700x700.png'
-          page.setFieldsAs product3, ->
-            page.setPictureFile filePath, ->
-              page.clickUpdateProduct done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug
+      .then -> page.setFieldsAs product3
+      .then ->
+        filePath = path.join __dirname, 'support', 'images', '700x700.png'
+        page.setPictureFile filePath
+      .then page.clickUpdateProduct
+      .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"

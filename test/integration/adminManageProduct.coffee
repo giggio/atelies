@@ -26,8 +26,9 @@ describe 'Admin Manage Product page', ->
   after (done) -> page.closeBrowser done
   describe 'viewing product', ->
     before (done) ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), done
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+      .then done, done
     it 'shows product', (done) ->
       page.product (aproduct) ->
         aproduct._id.should.equal product._id.toString()
@@ -54,9 +55,10 @@ describe 'Admin Manage Product page', ->
   describe "can't update invalid product", ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs {name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'}, ->
-            page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString()
+        .then -> page.setFieldsAs name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'
+        .then page.clickUpdateProduct
+        .then done, done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
@@ -100,9 +102,10 @@ describe 'Admin Manage Product page', ->
   describe "can't delete shipping info on a product that will be posted", ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs shipping: applies: true, ->
-            page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString()
+        .then -> page.setFieldsAs shipping: applies: true
+        .then page.clickUpdateProduct
+        .then done, done
     it 'is at the product manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
@@ -122,9 +125,10 @@ describe 'Admin Manage Product page', ->
       existingProduct.storeSlug = store.slug
       existingProduct.save()
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs existingProduct, ->
-            page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString()
+        .then -> page.setFieldsAs existingProduct
+        .then page.clickUpdateProduct
+        .then done, done
     it 'is at the product create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
@@ -144,9 +148,10 @@ describe 'Admin Manage Product page', ->
     before (done) ->
       otherProduct = generator.product.b()
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setFieldsAs otherProduct, ->
-            page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString()
+        .then -> page.setFieldsAs otherProduct
+        .then page.clickUpdateProduct
+        .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
@@ -175,9 +180,10 @@ describe 'Admin Manage Product page', ->
   describe 'adding category to a product', ->
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString(), ->
-          page.setCategories "Cat1, Cat2", ->
-            page.clickUpdateProduct done
+        page.visit store.slug, product._id.toString()
+        .then -> page.setCategories "Cat1, Cat2"
+        .then page.clickUpdateProduct
+        .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
@@ -201,10 +207,10 @@ describe 'Admin Manage Product page', ->
     otherProduct = null
     before (done) ->
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product2._id.toString(), ->
-          page.clickDeleteProduct ->
-            page.clickConfirmDeleteProduct ->
-              page.waitForUrl "http://localhost:8000/admin/store/#{product2.storeSlug}", done
+        page.visit store.slug, product2._id.toString()
+        .then -> page.clickDeleteProduct ->
+          page.clickConfirmDeleteProduct ->
+            page.waitForUrl "http://localhost:8000/admin/store/#{product2.storeSlug}", done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product2.storeSlug}"
@@ -216,7 +222,7 @@ describe 'Admin Manage Product page', ->
         done()
 
   describe 'editing a product with upload', ->
-    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.png$/
+    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.?\.png$/
     uploadedThumbRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+_thumb150x150\.png$/
     product3 = null
     before (done) ->
@@ -225,10 +231,11 @@ describe 'Admin Manage Product page', ->
       product3.picture = null
       product3.save()
       page.loginFor userSeller._id, ->
-        page.visit store.slug, product3._id.toString(), ->
+        page.visit store.slug, product3._id.toString()
+        .then ->
           filePath = path.join __dirname, 'support', 'images', '700x700.png'
-          page.setPictureFile filePath, ->
-            page.clickUpdateProduct done
+          page.setPictureFile filePath, page.clickUpdateProduct
+        .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"

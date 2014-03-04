@@ -1,5 +1,6 @@
 Page          = require './seleniumPage'
 async         = require 'async'
+Q             = require 'q'
 
 module.exports = class AdminManageStorePage extends Page
   visit: (storeId, cb) ->
@@ -8,8 +9,8 @@ module.exports = class AdminManageStorePage extends Page
     else
       cb = storeId
       super "admin/createStore", cb
-  setFieldsAs: (store, cb) =>
-    async.parallel [
+  setFieldsAs: (store) =>
+    Q.nfcall async.parallel, [
       (pcb) => @select "#manageStoreBlock #state", store.state, pcb
       (pcb) => @hasElement "#manageStoreBlock #pagseguro", (itHas) =>
         if itHas
@@ -22,19 +23,17 @@ module.exports = class AdminManageStorePage extends Page
             @uncheck "#manageStoreBlock #pagseguro", pcb
         else
           pcb()
-    ], =>
-      @type "#manageStoreBlock #name", store.name
-      @type "#manageStoreBlock #email", store.email
-      @type "#manageStoreBlock #description", store.description
-      @type "#manageStoreBlock #homePageDescription", store.homePageDescription
-      @type "#manageStoreBlock #urlFacebook", store.urlFacebook
-      @type "#manageStoreBlock #urlTwitter", store.urlTwitter
-      @type "#manageStoreBlock #phoneNumber", store.phoneNumber
-      @type "#manageStoreBlock #city", store.city
-      @type "#manageStoreBlock #zip", store.zip
-      @type "#manageStoreBlock #otherUrl", store.otherUrl
-      store.pmtGateways = {} unless store.pmtGateways?
-      cb()
+    ]
+    .then => @type "#manageStoreBlock #name", store.name
+    .then => @type "#manageStoreBlock #email", store.email
+    .then => @type "#manageStoreBlock #description", store.description
+    .then => @type "#manageStoreBlock #homePageDescription", store.homePageDescription
+    .then => @type "#manageStoreBlock #urlFacebook", store.urlFacebook
+    .then => @type "#manageStoreBlock #urlTwitter", store.urlTwitter
+    .then => @type "#manageStoreBlock #phoneNumber", store.phoneNumber
+    .then => @type "#manageStoreBlock #city", store.city
+    .then => @type "#manageStoreBlock #zip", store.zip
+    .then => @type "#manageStoreBlock #otherUrl", store.otherUrl
   setPagseguroValuesAs: (val, cb) ->
     @eval "$('#manageStoreBlock #pagseguroEmail').val('#{val.email}').change()", =>
       @eval "$('#manageStoreBlock #pagseguroToken').val('#{val.token}').change()", cb
@@ -56,7 +55,7 @@ module.exports = class AdminManageStorePage extends Page
   storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"
   setName: (name) ->
     @type "#manageStoreBlock #name", name
-    @eval "$('#manageStoreBlock #name').change()"
+    .then => @eval "$('#manageStoreBlock #name').change()"
   setPictureFiles: (bannerPath, flyerPath, homePageImagePath, cb) =>
     @uploadFile '#banner', bannerPath, =>
       @uploadFile '#flyer', flyerPath, =>

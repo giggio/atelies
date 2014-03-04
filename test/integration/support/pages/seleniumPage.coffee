@@ -3,6 +3,7 @@ chromedriver    = require 'chromedriver'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 async           = require 'async'
+Q               = require 'q'
 
 before ->
   chromedriver.start()
@@ -21,18 +22,21 @@ module.exports = class Page
     [url, page] = [page, url] if url instanceof Page
     @url = url if url?
     @driver = Page.driver
+    _.bindAll @, _.functions(@)...
+  _callbackOrPromise: (cb, promise) -> if cb? then promise.then cb else promise
   visit: (url, refresh, cb) ->
     [refresh, cb] = [cb, refresh] if typeof refresh is 'function'
     [cb, url] = [url, cb] if typeof url is 'function'
     refresh = false unless refresh?
     url = @url unless url?
     url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
-    @driver.get('chrome://version/').then => #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
-      @driver.get(url).then =>
-        if refresh
-          @refresh cb
-        else
-          cb() if cb?
+    Q(@driver.get('chrome://version/')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
+    .then => @driver.get(url)
+    .then =>
+      if refresh
+        @refresh cb
+      else
+        cb() if cb?
   closeBrowser: (cb) -> cb() if cb?
   errorMessageFor: (field, cb) -> @errorMessageForSelector "##{field}", cb
   errorMessageForSelector: (selector, cb) ->
@@ -69,12 +73,12 @@ module.exports = class Page
   findElementsIn: (selector, childrenSelector, cb) ->
     el = if typeof selector is 'string' then @findElement(selector) else selector
     el.findElements(webdriver.By.css(childrenSelector)).then cb
-  clearCookies: (cb) -> @driver.manage().deleteAllCookies().then cb
+  clearCookies: (cb) -> @_callbackOrPromise cb, Q(@driver.manage().deleteAllCookies())
   type: (selector, text, cb) ->
-    @findElement(selector).then (el) =>
-      el.clear().then =>
-        el.sendKeys text if text?
-        cb() if cb?
+    text = "" unless text?
+    el = @findElement selector
+    p = Q(el.clear().then -> el.sendKeys text)
+    @_callbackOrPromise cb, p
   select: (selector, text, cb) ->
     return setImmediate cb if text is ''
     @findElement(selector).findElements(webdriver.By.tagName('option')).then (els) ->
@@ -91,12 +95,16 @@ module.exports = class Page
       @check selector, cb
     else
       @uncheck selector, cb
-  check: (selector, cb = (->)) ->
+  check: (selector, cb) ->
     el = @findElement selector
-    el.isSelected().then (itIs) -> if itIs then process.nextTick cb else el.click().then cb
-  uncheck: (selector, cb = (->)) ->
+    p = Q(el.isSelected())
+    .then (itIs) -> Q(el.click()) unless itIs
+    @_callbackOrPromise cb, p
+  uncheck: (selector, cb) ->
     el = @findElement selector
-    el.isSelected().then (itIs) -> if itIs then el.click().then cb else process.nextTick cb
+    p = Q(el.isSelected())
+    .then (itIs) -> Q(el.click()) if itIs
+    @_callbackOrPromise cb, p
   getTextIn: (selector, childSelector, cb) ->
     @findElementIn selector, childSelector, (el) => @getText el, cb
   getAttributeInElements: (selector, attr, cb) ->
@@ -137,12 +145,12 @@ module.exports = class Page
   getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
   getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
   pressButtonLegacy: (selector, cb = (->)) -> @findElement(selector).click().then cb
-  pressButtonJS: (id, cb = (->)) -> @eval "document.getElementById('#{id}').click()", cb
-  click: (selector, cb = (->)) -> @findElement(selector).click().then cb
-  pressButton: (selector, cb = (->)) -> @findElement(selector).sendKeys(webdriver.Key.ENTER).then cb
-  pressButtonAndWait: (selector, cb) -> @pressButton selector, => @waitForAjax => process.nextTick cb
+  pressButtonJS: (id, cb) -> @_callbackOrPromise cb, @eval "document.getElementById('#{id}').click()"
+  click: (selector, cb) -> @_callbackOrPromise cb, Q @findElement(selector).click()
+  pressButton: (selector, cb) -> @_callbackOrPromise cb, Q @findElement(selector).sendKeys(webdriver.Key.ENTER)
+  pressButtonAndWait: (selector, cb) -> @_callbackOrPromise cb, @pressButton(selector).then @waitForAjax
   clickLink: @::pressButton
-  currentUrl: (cb) -> @driver.getCurrentUrl().then cb
+  currentUrl: (cb) -> @_callbackOrPromise cb, Q @driver.getCurrentUrl()
   hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
   hasElementAndIsVisible: (selector, cb) ->
     @hasElement selector, (itHas) =>
@@ -156,46 +164,45 @@ module.exports = class Page
       undefined
     flow.then cb, cb
   waitForAjax: (cb) ->
-    evalFn = => @eval 'return $.active;', (active) -> active is 0
+    evalFn = => @eval 'return typeof($) !== \'undefined\' && $.active === 0;', (noActives) -> noActives
     @wait evalFn, 5000, cb
   waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
   waitForSelectorClickable: (selector, cb) -> @wait (=> @getIsClickable(selector, (itIs) -> itIs)), 3000, cb
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
-  wait: (fn, timeout, cb) -> @driver.wait(fn, timeout).then -> cb()
-  visitBlank: (cb) -> Page::visit.call @, 'blank', false, cb
+  wait: (fn, timeout, cb) -> @_callbackOrPromise cb, Q(@driver.wait fn, timeout).then ->
+  visitBlank: (cb) -> @_callbackOrPromise cb, Q Page::visit.call @, 'blank', false
   loginFor: (_id, cb) ->
-    @currentUrl (url) =>
-      doLogin = =>
-        @driver.manage().getCookie('connect.sid').then (cookie) =>
-          continueLogin = (cookie) =>
-            sessionId = cookie.value
-            sessionStore = getExpressServer().sessionStore
-            sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
-            sessionStore.get sessionId, (err, session) ->
-              session.auth = {} unless session.auth?
-              auth = session.auth
-              auth.userId = _id
-              auth.loggedIn = true
-              sessionStore.set sessionId, session, cb
-          if cookie?
-            continueLogin cookie
-          else
-            @refresh =>
-              @driver.manage().getCookie('connect.sid').then (cookie) =>
-                continueLogin cookie
-      if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
-        @visitBlank doLogin
+    p = @currentUrl()
+    .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
+    .then => @driver.manage().getCookie('connect.sid')
+    .then (cookie) =>
+      if cookie?
+        cookie
       else
-        doLogin()
-  eval: (script, cb) -> @driver.executeScript(script).then cb, cb
+        @refresh().then => @driver.manage().getCookie('connect.sid')
+    .then (cookie) =>
+      sessionId = cookie.value
+      sessionStore = getExpressServer().sessionStore
+      sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
+      Q.ninvoke sessionStore, 'get', sessionId
+      .then (session) ->
+        session.auth = {} unless session.auth?
+        auth = session.auth
+        auth.userId = _id
+        auth.loggedIn = true
+        Q.ninvoke sessionStore, 'set', sessionId, session
+    @_callbackOrPromise cb, p
+  eval: (script, cb) ->
+    p = Q(@driver.executeScript(script))
+    @_callbackOrPromise cb, p
   clearLocalStorage: (cb) ->
-    @currentUrl (url) =>
-      clear = => @eval 'localStorage.clear()', cb
-      if url.substr(0,4) isnt 'http' #need the browser loaded to access localstorage
-        @visitBlank clear
-      else
-        clear()
-  refresh: (cb = (->)) -> @driver.navigate().refresh().then cb, cb
+    p = @currentUrl()
+    .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access localstorage
+    .then => @eval 'localStorage.clear()'
+    @_callbackOrPromise cb, p
+  refresh: (cb) ->
+    p = Q(@driver.navigate().refresh())
+    @_callbackOrPromise cb, p
   reload: @::refresh
   getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
   getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb

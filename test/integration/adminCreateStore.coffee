@@ -20,8 +20,9 @@ describe 'Admin create store page', ->
         exampleStore = generator.store.a()
         page.loginFor userSeller._id, ->
           page.visit ->
-            page.setFieldsAs exampleStore, ->
-              page.clickUpdateStoreButton done
+            page.setFieldsAs exampleStore
+            .then -> page.clickUpdateStoreButton()
+            .then done, done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
@@ -67,8 +68,9 @@ describe 'Admin create store page', ->
             exampleStore.email = "bla"
             exampleStore.zip = 'cep'
             exampleStore.otherUrl = "def"
-            page.setFieldsAs exampleStore, ->
-              page.clickUpdateStoreButton done
+            page.setFieldsAs exampleStore
+            .then page.clickUpdateStoreButton
+            .then done, done
     it 'is at the store create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/createStore"
@@ -100,8 +102,9 @@ describe 'Admin create store page', ->
         exampleStore.save()
         page.loginFor userSeller._id, ->
           page.visit ->
-            page.setFieldsAs exampleStore, ->
-              page.clickUpdateStoreButton done
+            page.setFieldsAs exampleStore
+            .then page.clickUpdateStoreButton
+            .then done, done
     it 'is at the store create page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/createStore"
@@ -126,7 +129,8 @@ describe 'Admin create store page', ->
         exampleStore = generator.store.a()
         page.loginFor userSeller._id, ->
           page.visit ->
-            page.setFieldsAs exampleStore, ->
+            page.setFieldsAs exampleStore
+            .then ->
               bannerPath = path.join __dirname, 'support', 'images', '200x200.png'
               flyerPath = path.join __dirname, 'support', 'images', '800x800.png'
               homePageImagePath = path.join __dirname, 'support', 'images', '700x700.png'

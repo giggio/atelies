@@ -23,8 +23,9 @@ describe 'Admin manage store page', ->
         otherStore = generator.store.d().toJSON()
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
-            page.setFieldsAs otherStore, ->
-              page.clickUpdateStoreButton done
+            page.setFieldsAs otherStore
+            .then page.clickUpdateStoreButton
+            .then done, done
     it 'shows store updated message', (done) ->
       page.message (msg) ->
         msg.endsWith("Loja atualizada com sucesso").should.be.true
@@ -165,8 +166,9 @@ describe 'Admin manage store page', ->
             return done error if error
             emptyStore.email = "bla"
             emptyStore.otherUrl = "def"
-            page.setFieldsAs emptyStore, ->
-              page.clickUpdateStoreButton done
+            page.setFieldsAs emptyStore
+            .then page.clickUpdateStoreButton
+            .then done, done
     it 'is at the store manage page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
@@ -219,7 +221,8 @@ describe 'Admin manage store page', ->
         page.loginFor userSeller._id, ->
           page.visit exampleStore._id.toString(), ->
             page.setName otherName
-            page.clickUpdateStoreButton done
+            .then page.clickUpdateStoreButton
+            .then done, done
     it 'is at the admin store page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{otherSlug}"

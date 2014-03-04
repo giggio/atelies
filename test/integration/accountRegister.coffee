@@ -127,7 +127,8 @@ describe 'Register', ->
         page.visit ->
           page.clickManualEntry ->
             page.setFieldsAs name: "Some Person", email: "some@email.com", password: "P@ssw0rd12", isSeller: false, passwordVerify: 'P@ssw0rd12', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567', termsOfUse: true, =>
-              page.clickRegisterButton done
+              page.clickRegisterButton()
+              .then done, done
     it 'does not show the register failed message', (done) ->
       page.hasErrors (itHas) ->
         expect(itHas).to.be.false

@@ -31,13 +31,14 @@ describe 'Store Finish Order: Payment', ->
         p2Inventory = product2.inventory
         user1 = generator.user.d()
         user1.save()
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder ->
-                  storeFinishOrderShippingPage.clickSedexOption ->
-                    storeFinishOrderShippingPage.clickContinue done
+        page.clearLocalStorage()
+        .then -> page.loginFor user1._id
+        .then -> storeProductPage.visit 'store_1', 'name_1'
+        .then storeProductPage.purchaseItem
+        .then storeCartPage.clickFinishOrder
+        .then storeFinishOrderShippingPage.clickSedexOption
+        .then storeFinishOrderShippingPage.clickContinue
+        .then done, done
     it 'should show options for payment type with PagSeguro already selected', (done) ->
       page.paymentTypes (pts) ->
         pts.length.should.equal 2
@@ -61,13 +62,14 @@ describe 'Store Finish Order: Payment', ->
         product1.save()
         user1 = generator.user.d()
         user1.save()
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_3', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder ->
-                  storeFinishOrderShippingPage.clickSedexOption ->
-                    storeFinishOrderShippingPage.clickContinue done
+        page.clearLocalStorage()
+        .then -> page.loginFor user1._id
+        .then -> storeProductPage.visit 'store_3', 'name_1'
+        .then storeProductPage.purchaseItem
+        .then storeCartPage.clickFinishOrder
+        .then storeFinishOrderShippingPage.clickSedexOption
+        .then storeFinishOrderShippingPage.clickContinue
+        .then done, done
     it 'should show options for payment type with direct payment already selected', (done) ->
       page.paymentTypes (pts) ->
         pts.length.should.equal 1

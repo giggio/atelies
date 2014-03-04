@@ -2,12 +2,11 @@ $             = require 'jquery'
 Page          = require './seleniumPage'
 
 module.exports = class AdminManageProductPage extends Page
-  visit: (storeSlug, productId, cb) ->
+  visit: (storeSlug, productId) ->
     if typeof productId is 'string'
-      super "admin/manageProduct/#{storeSlug}/#{productId}", cb
+      super "admin/manageProduct/#{storeSlug}/#{productId}"
     else
-      cb = productId
-      super "admin/createProduct/#{storeSlug}", cb
+      super "admin/createProduct/#{storeSlug}"
        
   product: (cb) ->
     product =
@@ -34,30 +33,29 @@ module.exports = class AdminManageProductPage extends Page
       => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
       => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
     ], (-> cb(product))
-  setFieldsAs: (product, cb) =>
+  setFieldsAs: (product) =>
     @type "#name", product.name
-    @type "#price", product.price
-    @type "#tags", product.tags?.join ","
-    @type "#description", product.description
-    @type "#height", product.dimensions?.height
-    @type "#width", product.dimensions?.width
-    @type "#depth", product.dimensions?.depth
-    @type "#weight", product.weight
-    if product.shipping?.applies
-      if product.shipping?.charge then @check "#shippingCharge" else @uncheck '#shippingCharge'
-      @type "#shippingHeight", product.shipping?.dimensions?.height
-      @type "#shippingWidth", product.shipping?.dimensions?.width
-      @type "#shippingDepth", product.shipping?.dimensions?.depth
-      @type "#shippingWeight", product.shipping?.weight
-    else
-      @click '#shippingDoesNotApply'
-    if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
-    @type "#inventory", product.inventory
-    @eval "document.getElementById('inventory').blur()", cb
+    .then => @type "#price", product.price
+    .then => @type "#tags", product.tags?.join ","
+    .then => @type "#description", product.description
+    .then => @type "#height", product.dimensions?.height
+    .then => @type "#width", product.dimensions?.width
+    .then => @type "#depth", product.dimensions?.depth
+    .then => @type "#weight", product.weight
+    .then =>
+      if product.shipping?.applies
+        (if product.shipping?.charge then @check "#shippingCharge" else @uncheck '#shippingCharge')
+        .then => @type "#shippingHeight", product.shipping?.dimensions?.height
+        .then => @type "#shippingWidth", product.shipping?.dimensions?.width
+        .then => @type "#shippingDepth", product.shipping?.dimensions?.depth
+        .then => @type "#shippingWeight", product.shipping?.weight
+      else
+        @click '#shippingDoesNotApply'
+    .then => if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
+    .then => @type "#inventory", product.inventory
+    .then => @eval "document.getElementById('inventory').blur()"
   clickUpdateProduct: (cb) => @pressButtonAndWait "#editProduct #updateProduct", cb
   clickDeleteProduct: (cb) => @pressButtonAndWait "#deleteProduct", cb
   clickConfirmDeleteProduct: (cb) => @eval "$('#confirmDeleteProduct').click()", cb
-  setCategories: (categories, cb) =>
-    @type "#categories", categories
-    cb()
+  setCategories: (categories) => @type "#categories", categories
   setPictureFile: @::uploadFile.partial '#picture'

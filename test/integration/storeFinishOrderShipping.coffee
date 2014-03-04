@@ -36,11 +36,12 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'logged in user with full address', ->
     before (done) ->
-      page.clearLocalStorage ->
-        page.loginFor user1._id, ->
-          storeProductPage.visit 'store_1', 'name_1', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder done
+      page.clearLocalStorage()
+      .then -> page.loginFor user1._id
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then done, done
     it 'should show address', (done) ->
       page.address (a) ->
         userAddress = user1.deliveryAddress
@@ -65,11 +66,12 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'product without shipping charge', ->
     before (done) ->
-      page.clearLocalStorage ->
-        page.loginFor user1._id, ->
-          storeProductPage.visit 'store_1', 'name_2', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder done
+      page.clearLocalStorage()
+      .then -> page.loginFor user1._id
+      .then -> storeProductPage.visit 'store_1', 'name_2'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then done, done
     it 'should show calculated shipping', (done) ->
       page.shippingInfo (s) ->
         s.options.length.should.equal 2
@@ -83,11 +85,12 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'not logged in user', (done) ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          storeProductPage.visit 'store_1', 'name_1', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder done
+      page.clearCookies()
+      .then -> page.clearLocalStorage
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then done, done
     it 'should be redirected to login', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/account/login?redirectTo=/#{store.slug}/finishOrder/shipping"
@@ -107,15 +110,16 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'logged in user with incomplete address completes address and comes back to the store and cart', ->
     before (done) ->
-      page.clearLocalStorage ->
-        page.loginFor userIncompleteAddress._id, ->
-          storeProductPage.visit 'store_1', 'name_1', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder ->
-                page.pressButton "#updateProfile", ->
-                  accountUpdateProfilePage.setFieldsAs user1, ->
-                    accountUpdateProfilePage.clickUpdateProfileButton ->
-                      page.pressButton "#redirectTo", done
+      page.clearLocalStorage()
+      .then -> page.loginFor userIncompleteAddress._id
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then -> page.pressButton "#updateProfile"
+      .then -> accountUpdateProfilePage.setFieldsAs user1
+      .then accountUpdateProfilePage.clickUpdateProfileButton
+      .then -> page.pressButton "#redirectTo"
+      .then done, done
     it 'should take back to the shipping page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
@@ -132,12 +136,13 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'a not logged in user logs in and comes back to the store and cart', ->
     before (done) ->
-      page.clearCookies ->
-        page.clearLocalStorage ->
-          storeProductPage.visit 'store_1', 'name_1', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder ->
-                loginPage.loginWith user1, done
+      page.clearCookies()
+      .then page.clearLocalStorage
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then -> loginPage.loginWith user1
+      .then done, done
     it 'should take back to the shipping page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
@@ -154,11 +159,12 @@ describe 'Store Finish Order: Shipping', ->
 
   describe 'store with only products without shipping', ->
     before (done) ->
-      page.clearLocalStorage ->
-        page.loginFor user1._id, ->
-          storeProductPage.visit productNoShipping.storeSlug, productNoShipping.slug, ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder done
+      page.clearLocalStorage()
+      .then -> page.loginFor user1._id
+      .then -> storeProductPage.visit productNoShipping.storeSlug, productNoShipping.slug
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+      .then done, done
     it 'should take directly to payment page', (done) ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/#{productNoShipping.storeSlug}/finishOrder/payment"
