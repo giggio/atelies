@@ -334,8 +334,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
   grunt.registerTask 'heroku', ->
     home = process.env.HOME
-    if home?.substr(0,11) is "/tmp/build_" #trying to identify heroku
+    if home is "/app" #trying to identify heroku
       grunt.task.run [ 'compile:server' ]
+    else
+      grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{home.blue}."
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
   grunt.registerTask 'default', [ 'compileAndTest', 'less:dev', 'concurrent:devServer']
   grunt.registerTask 'quickStart', [ 'concurrent:devServer']

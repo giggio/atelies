@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "postinstall": "node node_modules/grunt-cli/bin/grunt heroku",
+    "postinstall": "node node_modules/grunt-cli/bin/grunt heroku --verbose",
     "test": "grunt test:smoke",
     "blanket": {
       "pattern": [
