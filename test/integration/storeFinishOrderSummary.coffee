@@ -6,22 +6,21 @@ StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShipp
 StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 StoreFinishOrderSummaryPage     = require './support/pages/storeFinishOrderSummaryPage'
+Q                               = require 'q'
 
 describe 'Store Finish Order: Summary', ->
   page = storeFinishOrderPaymentPage = storeFinishOrderShippingPage = storeCartPage = storeProductPage = store = product1 = product2 = product3 = store2 = user1 = p1Inventory = p2Inventory = null
-  after (done) -> page.closeBrowser done
-  before (done) =>
+  before ->
     storeFinishOrderPaymentPage = new StoreFinishOrderPaymentPage
     page = new StoreFinishOrderSummaryPage
     storeFinishOrderShippingPage = new StoreFinishOrderShippingPage page
     storeCartPage = new StoreCartPage page
     storeProductPage = new StoreProductPage page
-    whenServerLoaded done
+    whenServerLoaded()
 
   describe 'payment info', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB().then ->
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()
@@ -32,18 +31,18 @@ describe 'Store Finish Order: Summary', ->
         p2Inventory = product2.inventory
         user1 = generator.user.d()
         user1.save()
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeProductPage.visit 'store_1', 'name_2', ->
-                  storeProductPage.purchaseItem ->
-                    storeCartPage.clickFinishOrder ->
-                      storeFinishOrderShippingPage.clickSedexOption ->
-                        storeFinishOrderShippingPage.clickContinue ->
-                          storeFinishOrderPaymentPage.clickSelectPaymentType done
-    it 'should show summary of sale', (done) ->
-      page.summaryOfSale (s) ->
+        page.clearLocalStorage()
+        .then page.loginFor user1._id
+        .then -> storeProductPage.visit 'store_1', 'name_1'
+        .then storeProductPage.purchaseItem
+        .then -> storeProductPage.visit 'store_1', 'name_2'
+        .then storeProductPage.purchaseItem
+        .then storeCartPage.clickFinishOrder
+        .then storeFinishOrderShippingPage.clickSedexOption
+        .then storeFinishOrderShippingPage.clickContinue
+        .then storeFinishOrderPaymentPage.clickSelectPaymentType
+    it 'should show summary of sale', ->
+      page.summaryOfSale().then (s) ->
         s.shippingCost.should.equal 'R$ 20,10'
         s.productsInfo.should.equal '2 produtos'
         s.totalProductsPrice.should.equal 'R$ 33,30'
@@ -55,16 +54,11 @@ describe 'Store Finish Order: Summary', ->
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
-        done()
-    it 'should be at summary page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/summary"
-        done()
+    it 'should be at summary page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/summary"
 
   describe 'completing the payment with products with and without inventory and with products with and without shipping', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB().then ->
         store2 = generator.store.b()
         store2.save()
         product1 = generator.product.a()
@@ -76,20 +70,20 @@ describe 'Store Finish Order: Summary', ->
         product3.save()
         user1 = generator.user.d()
         user1.save()
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_2', 'name_3', ->
-              storeProductPage.purchaseItem ->
-                storeProductPage.visit 'store_2', 'name_1', ->
-                  storeProductPage.purchaseItem ->
-                    storeCartPage.clickFinishOrder ->
-                      storeFinishOrderShippingPage.clickSedexOption ->
-                        storeFinishOrderShippingPage.clickContinue ->
-                          storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                            page.clickCompleteOrder done
-    it 'should have stored a new order on db', (done) ->
-      Order.find (err, orders) ->
-        throw err if err
+        page.clearLocalStorage()
+        .then page.loginFor user1._id
+        .then -> storeProductPage.visit 'store_2', 'name_3'
+        .then storeProductPage.purchaseItem
+        .then -> storeProductPage.visit 'store_2', 'name_1'
+        .then storeProductPage.purchaseItem
+        .then storeCartPage.clickFinishOrder
+        .then storeFinishOrderShippingPage.clickSedexOption
+        .then storeFinishOrderShippingPage.clickContinue
+        .then storeFinishOrderPaymentPage.clickSelectPaymentType
+        .then page.clickCompleteOrder
+    it 'should have stored a new order on db', ->
+      Q.ninvoke Order, "find"
+      .then (orders) ->
         orders.length.should.equal 1
         order = orders[0]
         order.customer.toString().should.equal user1._id.toString()
@@ -110,26 +104,16 @@ describe 'Store Finish Order: Summary', ->
         p1.price.should.equal product1.price
         p1.quantity.should.equal 1
         p1.totalPrice.should.equal product1.price
-        done()
-    it 'did not touch the inventory', (done) ->
-      Product.findById product3._id, (err, p) ->
-        throw err if err
-        expect(p.inventory).to.be.undefined
-        done()
-    it 'subtracted one item from the inventory of each product', (done) ->
-      Product.findById product1._id, (err, p1) ->
-        throw err if err
-        p1.inventory.should.equal p1Inventory - 1
-        done()
-    it 'should be at order completed page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store2.slug}/finishOrder/orderFinished"
-        done()
+    it 'did not touch the inventory', ->
+      Q.ninvoke Product, "findById", product3._id
+      .then (p) -> expect(p.inventory).to.be.undefined
+    it 'subtracted one item from the inventory of each product', ->
+      Q.ninvoke(Product, "findById", product1._id).then (p1) -> p1.inventory.should.equal p1Inventory - 1
+    it 'should be at order completed page', -> page.currentUrl().should.become "http://localhost:8000/#{store2.slug}/finishOrder/orderFinished"
 
   describe 'completing the payment with product without shipping', ->
-    before (done) ->
+    before ->
       cleanDB (error) ->
-        return done error if error
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()
@@ -138,17 +122,17 @@ describe 'Store Finish Order: Summary', ->
         p1Inventory = product1.inventory
         user1 = generator.user.d()
         user1.save()
-        page.clearLocalStorage ->
-          page.loginFor user1._id, ->
-            storeProductPage.visit 'store_1', 'name_1', ->
-              storeProductPage.purchaseItem ->
-                storeCartPage.clickFinishOrder ->
-                  storeFinishOrderPaymentPage.clickSelectDirectPayment ->
-                    storeFinishOrderPaymentPage.clickSelectPaymentType ->
-                      page.clickCompleteOrder done
-    it 'should have stored a new order on db with direct payment', (done) ->
-      Order.find (err, orders) ->
-        throw err if err
+        page.clearLocalStorage()
+        .then -> page.loginFor user1._id
+        .then -> storeProductPage.visit 'store_1', 'name_1'
+        .then storeProductPage.purchaseItem
+        .then storeCartPage.clickFinishOrder
+        .then storeFinishOrderPaymentPage.clickSelectDirectPayment
+        .then storeFinishOrderPaymentPage.clickSelectPaymentType
+        .then page.clickCompleteOrder
+    it 'should have stored a new order on db with direct payment', ->
+      Q.ninvoke Order, "find"
+      .then (orders) ->
         orders.length.should.equal 1
         order = orders[0]
         order.customer.toString().should.equal user1._id.toString()
@@ -164,13 +148,6 @@ describe 'Store Finish Order: Summary', ->
         p1.price.should.equal product1.price
         p1.quantity.should.equal 1
         p1.totalPrice.should.equal product1.price
-        done()
-    it 'subtracted one item from the inventory of the product', (done) ->
-      Product.findById product1._id, (err, p1) ->
-        throw err if err
-        p1.inventory.should.equal p1Inventory - 1
-        done()
-    it 'should be at order completed page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/orderFinished"
-        done()
+    it 'subtracted one item from the inventory of the product', ->
+      Q.ninvoke(Product, "findById", product1._id).then (p1) -> p1.inventory.should.equal p1Inventory - 1
+    it 'should be at order completed page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/orderFinished"

@@ -1,37 +1,43 @@
 mongoose    = require 'mongoose'
 app         = require '../../../app/app'
+Q           = require 'q'
 
 exports.localMongoDB = "mongodb://localhost/ateliesteste"
 
 exports.startServer = (cb) ->
-  app.start (server) ->
+  app.start()
+  .then (server) ->
     exports.expressServer = server
-    cb null, server if cb
+    cb null, server if cb?
+  .catch (err) ->
+    if cb?
+      cb err, null if cb?
+    else
+      throw err
 
 exports.whenServerLoaded = (cb) ->
-  if exports.expressServer
-    setImmediate cb
-    return
-  exports.whenDone((-> exports.expressServer isnt null), -> cb())
+  whenDone (-> exports.expressServer isnt null), cb
 
-exports.openNewConnection = (cb) ->
+exports.openNewConnection = ->
+  d = Q.defer()
   conn = mongoose.createConnection exports.localMongoDB
   conn.on 'error', (err) ->
     console.error "connection error:#{err.stack}"
-    cb err, null
-  conn.once 'open', -> cb null, conn
-
+    d.reject err
+  conn.once 'open', -> d.resolve conn
+  d.promise
 
 exports.cleanDB = (cb) ->
-  exports.openNewConnection (err, conn) ->
-    return cb err if err
-    conn.db.collections (err, cols) ->
+  exports.openNewConnection()
+  .then (conn) ->
+    Q.ninvoke conn.db, "collections"
+    .then (cols) ->
       for col in cols
         unless col.collectionName.substring(0,6) is 'system'
           #console.info "dropping #{col.collectionName}" if process.env.DEBUG
           col.drop()
       conn.close()
-      cb()
+      cb() if cb?
 
 before (done) ->
   exports.cleanDB (err) ->

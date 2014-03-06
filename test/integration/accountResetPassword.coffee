@@ -1,88 +1,67 @@
 require './support/_specHelper'
-User     = require '../../app/models/user'
-bcrypt   = require 'bcrypt'
-AccountResetPasswordPage = require './support/pages/accountResetPasswordPage'
+User                      = require '../../app/models/user'
+bcrypt                    = require 'bcrypt'
+AccountResetPasswordPage  = require './support/pages/accountResetPasswordPage'
+Q                         = require 'q'
 
 describe 'Reset Password', ->
-  user = page = null
-  before (done) -> whenServerLoaded done
+  user = resetKey = page = null
+  before whenServerLoaded
 
   describe 'Can reset password', ->
-    before (done) ->
+    before ->
       page = new AccountResetPasswordPage()
-      cleanDB (error) ->
-        return done error if error
+      cleanDB()
+      .then ->
         user = generator.user.a()
         resetKey = user.createResetKey()
         user.save()
-        page.visit user._id, resetKey, ->
-          page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
-          page.clickChangePasswordButton done
-    it 'is at the password changed page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/passwordChanged"
-        done()
-    it 'changed the user password', (done) ->
-      User.findByEmail user.email, (error, foundUser) ->
-        return done error if error
+      .then -> page.visit user._id, resetKey
+      .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
+      .then page.clickChangePasswordButton
+    it 'is at the password changed page', -> page.currentUrl().should.become "http://localhost:8000/account/passwordChanged"
+    it 'changed the user password', ->
+      Q.ninvoke User, "findByEmail", user.email
+      .then (foundUser) ->
         bcrypt.compareSync('newPassword1@', foundUser.passwordHash).should.be.true
-        done()
-    it 'deleted reset key', (done) ->
-      User.findByEmail user.email, (error, foundUser) ->
-        return done error if error
-        expect(foundUser.resetKey).to.be.undefined
-        done()
+    it 'deleted reset key', ->
+      Q.ninvoke User, "findByEmail", user.email
+      .then (foundUser) -> expect(foundUser.resetKey).to.be.undefined
 
   describe 'Shows error message if reset key not set', ->
     passwordHash = resetKey = null
-    before (done) ->
+    before ->
       page = new AccountResetPasswordPage()
-      cleanDB (error) ->
-        return done error if error
+      resetKey = 12345
+      cleanDB()
+      .then ->
         user = generator.user.a()
-        user.save()
         passwordHash = user.passwordHash
-        resetKey = 12345
-        page.visit user._id, resetKey, ->
-          page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
-          page.clickChangePasswordButton done
-    it 'is at the reset password page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/resetPassword?_id=#{user._id}&resetKey=#{resetKey}"
-        done()
-    it 'did not change the user password', (done) ->
-      User.findByEmail user.email, (error, foundUser) ->
-        return done error if error
-        foundUser.passwordHash.should.equal passwordHash
-        done()
-    it 'shows an error message', (done) ->
-      page.errorMsg (msg) ->
-        msg.should.equal "Não foi possível trocar a senha."
-        done()
+        user.save()
+      .then -> page.visit user._id, resetKey
+      .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
+      .then page.clickChangePasswordButton
+    it 'is at the reset password page', -> page.currentUrl().should.become "http://localhost:8000/account/resetPassword?_id=#{user._id}&resetKey=#{resetKey}"
+    it 'did not change the user password', ->
+      Q.ninvoke User, "findByEmail", user.email
+      .then (foundUser) -> foundUser.passwordHash.should.equal passwordHash
+    it 'shows an error message', -> page.errorMsg().should.become "Não foi possível trocar a senha."
 
   describe 'Shows error message if reset key is wrong', ->
     passwordHash = resetKey = null
-    before (done) ->
+    before ->
       page = new AccountResetPasswordPage()
-      cleanDB (error) ->
-        return done error if error
+      cleanDB()
+      .then ->
         user = generator.user.a()
+        passwordHash = user.passwordHash
         resetKey = user.createResetKey()
         user.save()
-        passwordHash = user.passwordHash
-        page.visit user._id, resetKey + '123', ->
-          page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
-          page.clickChangePasswordButton done
-    it 'is at the reset password page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/resetPassword?_id=#{user._id}&resetKey=#{resetKey}123"
-        done()
-    it 'did not change the user password', (done) ->
-      User.findByEmail user.email, (error, foundUser) ->
-        return done error if error
-        foundUser.passwordHash.should.equal passwordHash
-        done()
-    it 'shows an error message', (done) ->
-      page.errorMsg (msg) ->
-        msg.should.equal "Não foi possível trocar a senha."
-        done()
+      .then -> page.visit user._id, resetKey + '123'
+      .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
+      .then page.clickChangePasswordButton
+    it 'is at the reset password page', -> page.currentUrl().should.become "http://localhost:8000/account/resetPassword?_id=#{user._id}&resetKey=#{resetKey}123"
+    it 'did not change the user password', ->
+      Q.ninvoke User, "findByEmail", user.email
+      .then (foundUser) -> foundUser.passwordHash.should.equal passwordHash
+    it 'shows an error message', -> page.errorMsg (msg) -> msg.should.equal "Não foi possível trocar a senha."

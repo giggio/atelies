@@ -29,7 +29,7 @@ module.exports = class Page
     @url = url if url?
     @driver = Page.driver
     _.bindAll @, _.functions(@)...
-  _callbackOrPromise: (cb, promise) -> if cb? then promise.then cb else promise
+  _callbackOrPromise: (cb, promise) -> if cb? then promise.then(cb, cb) else promise
   visit: (url, refresh, cb) ->
     [refresh, cb] = [cb, refresh] if typeof refresh is 'function'
     [cb, url] = [url, cb] if typeof url is 'function'
@@ -52,84 +52,106 @@ module.exports = class Page
       else
         return cb null
       @getText el, cb
-  errorMessagesIn: (selector, cb) -> @findElement(selector).findElements(webdriver.By.css('.tooltip-inner')).then (els) =>
+  errorMessagesIn: (selector, cb, i) ->
+    d = Q.defer()
+    i = 0 unless i?
+    @_errorMessagesIn selector
+    .then (errorMsgs) -> d.resolve errorMsgs
+    .catch (err) => #retry if stale elements
+      throw err if i > 1
+      @errorMessagesIn(selector, cb, ++i).then (errorMsgs) -> d.resolve errorMsgs
+    @_callbackOrPromise cb, d.promise
+
+  _errorMessagesIn: (selector) ->
     errorMsgs = {}
-    actions =
-      for el in els
-        do (el) -> (cb2) =>
-          success = (text) ->
-            el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
-              errorMsgs[id] = text
-              cb2()
-          el.getText().then success, -> cb2("error") #needs to have a fail callback to be able to deal with stale elements
-    async.parallel actions, (err) =>
-      if err? #retry if stale elements
-        return setImmediate => @errorMessagesIn(selector, cb)
-      cb(errorMsgs)
-  findElement: (selector) -> if typeof selector is 'string' then @driver.findElement(webdriver.By.css(selector)) else selector
-  findElements: (selector, cb) ->
-    find = @driver.findElements(webdriver.By.css(selector))
-    if cb?
-      find.then cb
-    else
-      find
+    @findElement(selector)
+    .then (el) -> el.findElements(webdriver.By.css('.tooltip-inner'))
+    .then (els) =>
+      actions =
+        for el in els
+          do (el) -> (cb2) =>
+            success = (text) ->
+              el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
+                errorMsgs[id] = text
+                cb2()
+            el.getText().then success, -> cb2("error") #needs to have a fail callback to be able to deal with stale elements
+      Q.nfcall async.parallel, actions
+    .then -> errorMsgs
+  findElement: (selector) ->
+    return selector unless typeof selector is 'string'
+    d = Q.defer()
+    @driver.findElement(webdriver.By.css(selector))
+    .then ((el) -> d.fulfill el), (err) -> d.reject err
+    d.promise
+  findElements: (selector, cb) -> @_callbackOrPromise cb, Q @driver.findElements(webdriver.By.css(selector))
   findElementIn: (selector, childSelector, cb) ->
-    el = if typeof selector is 'string' then @findElement(selector) else selector
-    el.findElement(webdriver.By.css(childSelector)).then cb, cb
+    p = @findElement(selector)
+    .then (el) -> el.findElement(webdriver.By.css(childSelector))
+    @_callbackOrPromise cb, p
   findElementsIn: (selector, childrenSelector, cb) ->
-    el = if typeof selector is 'string' then @findElement(selector) else selector
-    el.findElements(webdriver.By.css(childrenSelector)).then cb
+    p = @findElement(selector)
+    .then (el) -> el.findElements(webdriver.By.css(childrenSelector))
+    @_callbackOrPromise cb, p
   clearCookies: (cb) -> @_callbackOrPromise cb, Q(@driver.manage().deleteAllCookies())
   type: (selector, text, cb) ->
     text = "" unless text?
-    el = @findElement selector
-    p = Q(el.clear().then -> el.sendKeys text)
+    p = @findElement selector
+    .then (el) ->
+      Q el.clear()
+      .then -> el.sendKeys text
     @_callbackOrPromise cb, p
   select: (selector, text, cb) ->
-    return setImmediate cb if text is ''
-    @findElement(selector).findElements(webdriver.By.tagName('option')).then (els) ->
+    if text is ''
+      return setImmediate cb if cb?
+      return Q.fcall ->
+    p = @findElement(selector)
+    .then (el) -> el.findElements(webdriver.By.tagName('option'))
+    .then (els) ->
       elsWithText = []
       flow = webdriver.promise.createFlow (f) ->
         for el in els
           do (el) -> f.execute -> el.getText().then (text) -> elsWithText.push {text: text, el: el}
         undefined
-      flow.then ->
-        _.findWhere(elsWithText, text:text).el.click().then cb
-      , cb
+      Q(flow).then -> _.findWhere(elsWithText, text:text).el.click()
+    @_callbackOrPromise cb, p
   checkOrUncheck: (selector, check, cb) ->
     if check
       @check selector, cb
     else
       @uncheck selector, cb
   check: (selector, cb) ->
-    el = @findElement selector
-    p = Q(el.isSelected())
-    .then (itIs) -> Q(el.click()) unless itIs
+    p = @findElement selector
+    .then (el) ->
+      Q el.isSelected()
+      .then (itIs) -> Q(el.click()) unless itIs
     @_callbackOrPromise cb, p
   uncheck: (selector, cb) ->
-    el = @findElement selector
-    p = Q(el.isSelected())
-    .then (itIs) -> Q(el.click()) if itIs
+    p = @findElement selector
+    .then (el) ->
+      Q el.isSelected()
+      .then (itIs) -> Q(el.click()) if itIs
     @_callbackOrPromise cb, p
   getTextIn: (selector, childSelector, cb) ->
     @findElementIn selector, childSelector, (el) => @getText el, cb
   getAttributeInElements: (selector, attr, cb) ->
-    @findElements selector, (els) =>
+    Q @_callbackOrPromise cb, @findElements(selector)
+    .then (els) =>
       getActions =
         for el in els
           do (el) =>
             (cb) => @getAttribute el, attr, (t) -> cb null, t
-      async.parallel getActions, (err, vals) -> cb vals
+      Q.nfcall async.parallel, getActions
   getAttributeIn: (selector, childSelector, attr, cb) ->
     @findElementIn selector, childSelector, (el) =>
       @getAttribute el, attr, cb
-  getTextIfExists: (selector, cb) ->
-    @hasElement selector, (itHas) =>
-      return cb null unless itHas
-      @getText selector, cb
+  getTextIfExists: (selector) ->
+    @hasElement selector
+    .then (itHas) =>
+      return null unless itHas
+      @getText selector
   getText: (selector, cb) ->
-    el = if typeof selector is 'string' then @findElement(selector) else selector
-    el.getText().then cb
+    p = @findElement(selector).then (el) -> el.getText()
+    @_callbackOrPromise cb, p
   getTexts: (selector, cb) ->
     texts = []
     flow = webdriver.promise.createFlow (f) =>
@@ -138,42 +160,53 @@ module.exports = class Page
           do (el) -> f.execute -> el.getText().then (text) -> texts.push text
         undefined
     flow.then (-> cb(texts)), cb
-  getAttribute: (selector, attribute, cb) ->
-    el = if typeof selector is 'string' then @findElement(selector) else selector
-    el.getAttribute(attribute).then cb
+  getAttribute: (selector, attribute, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.getAttribute(attribute)
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getSrcIn: @::getAttributeIn.partial(undefined, undefined, 'src', undefined)
-  getIsClickable: (selector, cb) ->
-    @isVisible selector, (itIs) =>
-      return cb false unless itIs
-      @getIsEnabled selector, cb
-  getIsChecked: (selector, cb) -> @findElement(selector).isSelected().then cb
-  getIsEnabled: (selector, cb) -> @findElement(selector).isEnabled().then cb
-  pressButtonLegacy: (selector, cb = (->)) -> @findElement(selector).click().then cb
+  getIsClickable: (selector) ->
+    @isVisible selector
+    .then (itIs) =>
+      return false unless itIs
+      @getIsEnabled selector
+  getIsChecked: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.isSelected()
+  getIsEnabled: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.isEnabled()
+  pressButtonLegacy: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.click()
   pressButtonJS: (id, cb) -> @_callbackOrPromise cb, @eval "document.getElementById('#{id}').click()"
-  click: (selector, cb) -> @_callbackOrPromise cb, Q @findElement(selector).click()
-  pressButton: (selector, cb) -> @_callbackOrPromise cb, Q @findElement(selector).sendKeys(webdriver.Key.ENTER)
+  click: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.click()
+  clickAndWait: (selector, cb) -> @_callbackOrPromise cb, @click(selector).then @waitForAjax
+  pressButton: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.sendKeys(webdriver.Key.ENTER)
   pressButtonAndWait: (selector, cb) -> @_callbackOrPromise cb, @pressButton(selector).then @waitForAjax
   clickLink: @::pressButton
   currentUrl: (cb) -> @_callbackOrPromise cb, Q @driver.getCurrentUrl()
-  hasElement: (selector, cb) -> @driver.isElementPresent(webdriver.By.css(selector)).then cb
+  hasElement: (selector, cb) -> @_callbackOrPromise cb, Q @driver.isElementPresent(webdriver.By.css(selector))
   hasElementAndIsVisible: (selector, cb) ->
-    @hasElement selector, (itHas) =>
-      return cb false unless itHas
-      @isVisible selector, cb
-  isVisible: (selector, cb) -> @findElement(selector).isDisplayed().then cb
-  parallel: (actions, cb) ->
+    p = @hasElement selector
+    .then (itHas) =>
+      return false unless itHas
+      @isVisible selector
+    @_callbackOrPromise cb, p
+  isVisible: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.isDisplayed()
+  parallel: (actions) ->
     flow = webdriver.promise.createFlow (f) =>
       for action in actions
         do (action) -> f.execute action
       undefined
-    flow.then cb, cb
+    Q flow
   waitForAjax: (cb) ->
     evalFn = => @eval 'return typeof($) !== \'undefined\' && $.active === 0;', (noActives) -> noActives
     @wait evalFn, 5000, cb
-  waitForSelector: (selector, cb) -> @wait (=> @hasElement(selector, (itHas) -> itHas)), 3000, cb
-  waitForSelectorClickable: (selector, cb) -> @wait (=> @getIsClickable(selector, (itIs) -> itIs)), 3000, cb
+  waitForSelector: (selector) -> @wait (=> @hasElement(selector).then (itHas) -> itHas), 3000
+  waitForSelectorClickable: (selector, i) ->
+    tryWait = => @wait (=> @getIsClickable(selector).then (itIs) -> itIs), 3000
+    d = Q.defer()
+    i = 0 unless i?
+    tryWait selector
+    .then -> d.resolve()
+    .catch (err) => #retry if stale elements
+      throw err if i > 1
+      @waitForSelectorClickable(selector, ++i).then -> d.resolve()
+    d.promise
   waitForUrl: (url, cb) -> @wait (=> @currentUrl().then((currentUrl) -> currentUrl is url)), 3000, cb
   wait: (fn, timeout, cb) -> @_callbackOrPromise cb, Q(@driver.wait fn, timeout).then ->
   visitBlank: (cb) -> @_callbackOrPromise cb, Q Page::visit.call @, 'blank', false
@@ -182,14 +215,13 @@ module.exports = class Page
     .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
     .then => @driver.manage().getCookie('connect.sid')
     .then (cookie) =>
-      if cookie?
-        cookie
-      else
-        @refresh().then => @driver.manage().getCookie('connect.sid')
+      return cookie if cookie?
+      @refresh().then => @driver.manage().getCookie('connect.sid')
     .then (cookie) =>
-      sessionId = cookie.value
-      sessionStore = getExpressServer().sessionStore
-      sessionId = connectUtils.parseSignedCookie decodeURIComponent(sessionId), getExpressServer().cookieSecret
+      server = getExpressServer()
+      sessionStore = server.sessionStore
+      cookieSecret = server.cookieSecret
+      sessionId = connectUtils.parseSignedCookie decodeURIComponent(cookie.value), cookieSecret
       Q.ninvoke sessionStore, 'get', sessionId
       .then (session) ->
         session.auth = {} unless session.auth?
@@ -210,24 +242,30 @@ module.exports = class Page
     p = Q(@driver.navigate().refresh())
     @_callbackOrPromise cb, p
   reload: @::refresh
-  getHtml: (selector, cb) -> @findElement(selector).getOuterHtml().then cb
-  getInnerHtml: (selector, cb) -> @findElement(selector).getInnerHtml().then cb
-  getDialogMsg: (cb) ->
-    @waitForSelectorClickable '.dialogMsg', =>
-      @getText '.dialogMsg', cb
-  getDialogTitle: (cb) ->
-    @waitForSelectorClickable '#dialogTitle', =>
-      @getText '#dialogTitle', cb
-  getDialogTexts: (cb) ->
-    @waitForSelectorClickable '#dialogTitle', =>
-      @getText '.dialogMsg', (dialogMsg) =>
-        @getText '#dialogTitle', (dialogTitle) =>
-          cb dialogMsg: dialogMsg, dialogTitle: dialogTitle
-  getParent: (el) -> el.findElement(webdriver.By.xpath('..'))
+  getHtml: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.getOuterHtml()
+  getInnerHtml: (selector, cb) -> @_callbackOrPromise cb, @findElement(selector).then (el) -> el.getInnerHtml()
+  getDialogMsg: ->
+    @waitForSelectorClickable '.dialogMsg'
+    .then => @getText '.dialogMsg'
+  getDialogTitle: ->
+    @waitForSelectorClickable '#dialogTitle'
+    .then => @getText '#dialogTitle'
+  getDialogTexts: ->
+    @waitForSelectorClickable '#dialogTitle'
+    .then => @getText '.dialogMsg'
+    .then (dialogMsg) => @getText '#dialogTitle'
+      .then (dialogTitle) => dialogMsg: dialogMsg, dialogTitle: dialogTitle
+  closeDialog: @::pressButton.partial ".dialogClose"
+  getParent: (el) ->
+    d = Q.defer()
+    el.findElement(webdriver.By.xpath('..'))
+    .then ((el) -> d.fulfill el), (err) -> d.reject err
+    d.promise
   uploadFile: (selector, path, cb) ->
-    @findElement(selector).then (el) =>
-      el.sendKeys path if path?
-      cb() if cb?
+    p = @findElement(selector)
+    .then (el) => el.sendKeys path if path?
+    @_callbackOrPromise cb, p
   waitForReady: (cb) ->
     evalFn = => @eval "return document.readyState === 'complete';", (itIs) -> itIs
     @wait evalFn, 5000, cb
+  captureAttribute: captureAttribute

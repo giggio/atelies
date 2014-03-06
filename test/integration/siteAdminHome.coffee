@@ -3,9 +3,8 @@ SiteAdminHomePage                = require './support/pages/siteAdminHomePage'
 
 describe 'Site Admin home page', ->
   page = regularUser = adminUser = superAdmin = null
-  before (done) ->
+  before ->
     cleanDB (error) ->
-      return done error if error
       page = new SiteAdminHomePage()
       regularUser = generator.user.a()
       regularUser.save()
@@ -14,25 +13,22 @@ describe 'Site Admin home page', ->
       adminUser = generator.user.a()
       adminUser.isAdmin = true
       adminUser.save()
-      whenServerLoaded done
+      whenServerLoaded()
 
   describe 'accessing with a non admin (regular) user', ->
-    before (done) ->
-      page.loginFor regularUser._id, ->
-        page.visit done
-    it 'shows access denied message', (done) ->
-      page.accessDeniedMessageIsVisible (itIs) -> itIs.should.be.true; done()
+    before ->
+      page.loginFor regularUser._id
+      .then page.visit
+    it 'shows access denied message', -> page.accessDeniedMessageIsVisible().should.eventually.be.true
 
   describe 'accessing with a admin user allows access', ->
-    before (done) ->
-      page.loginFor adminUser._id, ->
-        page.visit done
-    it 'allows access', (done) ->
-      page.accessDeniedMessageIsVisible (itIs) -> itIs.should.be.false; done()
+    before ->
+      page.loginFor adminUser._id
+      .then page.visit
+    it 'allows access', -> page.accessDeniedMessageIsVisible().should.eventually.be.false
 
   describe 'accessing with super admin user', ->
-    before (done) ->
-      page.loginFor superAdmin._id, ->
-        page.visit done
-    it 'allows access', (done) ->
-      page.accessDeniedMessageIsVisible (itIs) -> itIs.should.be.false; done()
+    before ->
+      page.loginFor superAdmin._id
+      .then page.visit
+    it 'allows access', -> page.accessDeniedMessageIsVisible().should.eventually.be.false

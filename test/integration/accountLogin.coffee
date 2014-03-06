@@ -1,140 +1,90 @@
 require './support/_specHelper'
-Page = require './support/pages/loginPage'
+Page    = require './support/pages/loginPage'
+Q       = require 'q'
 
 describe 'Login', ->
   userA = userB = userSellerC = page = null
-  before (done) ->
+  before ->
     page = new Page()
-    cleanDB (error) ->
-      return done error if error
+    cleanDB().then ->
       userA = generator.user.a()
       userA.save()
       userB = generator.user.b()
       userB.save()
       userSellerC = generator.user.c()
       userSellerC.save()
-      whenServerLoaded done
+    .then whenServerLoaded
 
   describe 'Login in with unknown user fails', ->
-    before (done) ->
-      page.visit ->
-        page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
-        page.clickLoginButton done
-    it 'shows login link', (done) ->
-      page.loginLinkExists (itDoes) ->
-        itDoes.should.be.true
-        done()
-    it 'does not show logout link', (done) ->
-      page.logoutLinkExists (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows the login failed message', (done) ->
-      page.errors (errors) ->
-        errors.should.equal 'Login falhou'
-        done()
-    it 'is at the login page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login"
-        done()
-    it 'does not show admin link', (done) ->
-      page.adminLinkExists (itDoes) ->
-        itDoes.should.be.false
-        done()
+    before ->
+      page.visit()
+      .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+      .then page.clickLoginButton
+    it 'shows login link', -> page.loginLinkExists().should.eventually.be.true
+    it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
+    it 'shows the login failed message', -> page.errors().should.become 'Login falhou'
+    it 'is at the login page', -> page.currentUrl().should.become "http://localhost:8000/account/login"
+    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
 
   describe 'Must supply name and password or form is not submitted', ->
-    before (done) ->
-      page.visit ->
-        page.clickLoginButton done
-    it 'does not show the login failed message', (done) ->
-      page.hasErrors (itHas) ->
-        itHas.should.be.false
-        done()
-    it 'is at the login page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login"
-        done()
-    it 'Required messages are shown', (done) ->
-      page.emailRequired (emailRequired) ->
-        emailRequired.should.equal "Informe seu e-mail."
-        page.passwordRequired (passwordRequired) ->
-          passwordRequired.should.equal "Informe sua senha."
-          done()
+    before ->
+      page.visit()
+      .then page.clickLoginButton
+    it 'does not show the login failed message', -> page.hasErrors().should.eventually.be.false
+    it 'is at the login page', -> page.currentUrl().should.become "http://localhost:8000/account/login"
+    it 'Required messages are shown', ->
+      Q.all [
+        page.emailRequired().should.become "Informe seu e-mail."
+        page.passwordRequired().should.become "Informe sua senha."
+      ]
 
   describe 'Can login successfully with regular user', ->
-    before (done) ->
-      page.clearCookies =>
-        page.visit ->
-          page.setFieldsAs userA
-          page.clickLoginButton done
-    it 'does not show the login failed message', (done) ->
-      page.hasErrors (itHas) ->
-        itHas.should.be.false
-        done()
-    it 'is at the home page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/"
-        done()
-    it 'does not show login link', (done) ->
-      page.loginLinkExists (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows logout link', (done) ->
-      page.logoutLinkExists (itDoes) ->
-        itDoes.should.be.true
-        done()
-    it 'does not show admin link', (done) ->
-      page.adminLinkExists (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows user name', (done) ->
-      page.userGreeting (userGreeting) ->
-        userGreeting.should.equal userA.name
-        done()
+    before ->
+      page.clearCookies()
+      .then page.visit
+      .then -> page.setFieldsAs userA
+      .then page.clickLoginButton
+    it 'does not show the login failed message', -> page.hasErrors().should.eventually.be.false
+    it 'is at the home page', -> page.currentUrl().should.become "http://localhost:8000/"
+    it 'does not show login link', -> page.loginLinkExists().should.eventually.be.false
+    it 'shows logout link', -> page.logoutLinkExists().should.eventually.be.true
+    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
+    it 'shows user name', -> page.userGreeting().should.become userA.name
 
   describe 'Trying to access admin page redirects to login with redirectTo query string set', ->
-    before (done) ->
-      page.clearCookies =>
-        page.visit "http://localhost:8000/admin", done
-    it 'is at the login page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login?redirectTo=/admin/"
-        done()
+    before ->
+      page.clearCookies()
+      .then -> page.visit "http://localhost:8000/admin"
+    it 'is at the login page', -> page.currentUrl().should.become "http://localhost:8000/account/login?redirectTo=/admin/"
 
   describe 'Login with admin user redirects to original url', ->
-    before (done) ->
-      page.clearCookies =>
-        page.visit "http://localhost:8000/admin", ->
-          page.setFieldsAs userSellerC
-          page.clickLoginButton done
-    it 'is at the admin page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/"
-        done()
+    before ->
+      page.clearCookies()
+      .then -> page.visit "http://localhost:8000/admin"
+      .then -> page.setFieldsAs userSellerC
+      .then page.clickLoginButton
+    it 'is at the admin page', -> page.currentUrl().should.become "http://localhost:8000/admin/"
 
   describe 'Three errors on login does not show captcha if user does not exist', ->
-    it 'does not show login link', (done) ->
-      page.clearCookies =>
-        page.visit ->
-          page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
-          page.clickLoginButton ->
-            page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
-            page.clickLoginButton ->
-              page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
-              page.clickLoginButton ->
-                page.showsCaptcha (itShows) ->
-                  itShows.should.be.false
-                  done()
+    it 'does not show login link', ->
+      page.clearCookies()
+      .then page.visit
+      .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then page.showsCaptcha().should.eventually.be.false
 
   describe 'Three errors on login shows captcha if user exists', ->
-    it 'shows login link', (done) ->
-      page.clearCookies =>
-        page.visit ->
-          page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
-          page.clickLoginButton ->
-            page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
-            page.clickLoginButton ->
-              page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
-              page.clickLoginButton ->
-                page.showsCaptcha (itShows) ->
-                  itShows.should.be.true
-                  done()
+    it 'shows login link', ->
+      page.clearCookies()
+      .then page.visit
+      .then -> page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then -> page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then -> page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
+      .then page.clickLoginButton
+      .then page.showsCaptcha().should.eventually.be.true

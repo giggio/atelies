@@ -8,31 +8,32 @@ module.exports = class AdminManageProductPage extends Page
     else
       super "admin/createProduct/#{storeSlug}"
        
-  product: (cb) ->
+  product: ->
     product =
       dimensions: {}
       shipping: dimensions: {}
     @parallel [
-      => @getText "#editProduct #_id", (text) -> product._id = text
-      => @getValue "#editProduct #name", (text) -> product.name = text
-      => @getValue "#editProduct #price", (text) -> product.price = text
-      => @getText "#editProduct #slug", (text) -> product.slug = text
-      => @getSrc "#editProduct #showPicture", (text) -> product.picture = text
-      => @getValue "#editProduct #tags", (text) -> product.tags = text
-      => @getValue "#editProduct #description", (text) -> product.description = text
-      => @getValue "#editProduct #height", (text) -> product.dimensions.height = parseInt text
-      => @getValue "#editProduct #width", (text) -> product.dimensions.width = parseInt text
-      => @getValue "#editProduct #depth", (text) -> product.dimensions.depth = parseInt text
-      => @getValue "#editProduct #weight", (text) -> product.weight = parseFloat text
-      => @getIsChecked "#editProduct #shippingDoesApply", (itIs) -> product.shipping.applies = itIs
-      => @getIsChecked "#editProduct #shippingCharge", (itIs) -> product.shipping.charge = itIs
-      => @getValue "#editProduct #shippingHeight", (text) -> product.shipping.dimensions.height = parseInt text
-      => @getValue "#editProduct #shippingWidth", (text) -> product.shipping.dimensions.width = parseInt text
-      => @getValue "#editProduct #shippingDepth", (text) -> product.shipping.dimensions.depth = parseInt text
-      => @getValue "#editProduct #shippingWeight", (text) -> product.shipping.weight = parseFloat text
-      => @getIsChecked "#editProduct #hasInventory", (itIs) -> product.hasInventory = itIs
-      => @getValue "#editProduct #inventory", (text) -> product.inventory = parseInt text
-    ], (-> cb(product))
+      => @getText("#editProduct #_id").then (text) -> product._id = text
+      => @getValue("#editProduct #name").then (text) -> product.name = text
+      => @getValue("#editProduct #price").then (text) -> product.price = text
+      => @getText("#editProduct #slug").then (text) -> product.slug = text
+      => @getSrc("#editProduct #showPicture").then (text) -> product.picture = text
+      => @getValue("#editProduct #tags").then (text) -> product.tags = text
+      => @getValue("#editProduct #description").then (text) -> product.description = text
+      => @getValue("#editProduct #height").then (text) -> product.dimensions.height = parseInt text
+      => @getValue("#editProduct #width").then (text) -> product.dimensions.width = parseInt text
+      => @getValue("#editProduct #depth").then (text) -> product.dimensions.depth = parseInt text
+      => @getValue("#editProduct #weight").then (text) -> product.weight = parseFloat text
+      => @getIsChecked("#editProduct #shippingDoesApply").then (itIs) -> product.shipping.applies = itIs
+      => @getIsChecked("#editProduct #shippingCharge").then (itIs) -> product.shipping.charge = itIs
+      => @getValue("#editProduct #shippingHeight").then (text) -> product.shipping.dimensions.height = parseInt text
+      => @getValue("#editProduct #shippingWidth").then (text) -> product.shipping.dimensions.width = parseInt text
+      => @getValue("#editProduct #shippingDepth").then (text) -> product.shipping.dimensions.depth = parseInt text
+      => @getValue("#editProduct #shippingWeight").then (text) -> product.shipping.weight = parseFloat text
+      => @getIsChecked("#editProduct #hasInventory").then (itIs) -> product.hasInventory = itIs
+      => @getValue("#editProduct #inventory").then (text) -> product.inventory = parseInt text
+    ]
+    .then -> product
   setFieldsAs: (product) =>
     @type "#name", product.name
     .then => @type "#price", product.price
@@ -54,8 +55,8 @@ module.exports = class AdminManageProductPage extends Page
     .then => if product.hasInventory then @check "#hasInventory" else @uncheck '#hasInventory'
     .then => @type "#inventory", product.inventory
     .then => @eval "document.getElementById('inventory').blur()"
-  clickUpdateProduct: (cb) => @pressButtonAndWait "#editProduct #updateProduct", cb
-  clickDeleteProduct: (cb) => @pressButtonAndWait "#deleteProduct", cb
-  clickConfirmDeleteProduct: (cb) => @eval "$('#confirmDeleteProduct').click()", cb
-  setCategories: (categories) => @type "#categories", categories
+  clickUpdateProduct: @::pressButtonAndWait.partial "#editProduct #updateProduct"
+  clickDeleteProduct: @::pressButtonAndWait.partial "#deleteProduct"
+  clickConfirmDeleteProduct: @::eval.partial "$('#confirmDeleteProduct').click()"
+  setCategories: @::type.partial "#categories"
   setPictureFile: @::uploadFile.partial '#picture'

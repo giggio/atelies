@@ -3,12 +3,12 @@ async         = require 'async'
 Q             = require 'q'
 
 module.exports = class AdminManageStorePage extends Page
-  visit: (storeId, cb) ->
+  visit: (storeId) ->
     if typeof storeId is 'string'
-      super "admin/manageStore/#{storeId}", cb
+      super "admin/manageStore/#{storeId}"
     else
       cb = storeId
-      super "admin/createStore", cb
+      super "admin/createStore"
   setFieldsAs: (store) =>
     Q.nfcall async.parallel, [
       (pcb) => @select "#manageStoreBlock #state", store.state, pcb
@@ -34,29 +34,35 @@ module.exports = class AdminManageStorePage extends Page
     .then => @type "#manageStoreBlock #city", store.city
     .then => @type "#manageStoreBlock #zip", store.zip
     .then => @type "#manageStoreBlock #otherUrl", store.otherUrl
-  setPagseguroValuesAs: (val, cb) ->
-    @eval "$('#manageStoreBlock #pagseguroEmail').val('#{val.email}').change()", =>
-      @eval "$('#manageStoreBlock #pagseguroToken').val('#{val.token}').change()", cb
-  clickUpdateStoreButton: @::pressButton.partial "#updateStore"
+  setPagseguroValuesAs: (val) ->
+    @eval "$('#manageStoreBlock #pagseguroEmail').val('#{val.email}').change()"
+    .then => @eval "$('#manageStoreBlock #pagseguroToken').val('#{val.token}').change()"
+  clickUpdateStoreButton: @::pressButtonAndWait.partial "#updateStore"
   message: @::getText.partial '#message'
   hasMessage: @::hasElement.partial '#message'
-  clickSetPagseguroButton: (cb) ->
-    @pressButton "#setPagseguro", =>
-      @waitForSelectorClickable "#confirmSetPagseguro", cb
-  clickConfirmSetPagseguroButton: (cb) ->
-    @pressButtonAndWait "#confirmSetPagseguro", => waitMilliseconds 500, cb
-  clickUnsetPagseguroButton: (cb) ->
-    @pressButton "#unsetPagseguro", =>
-      @waitForSelectorClickable "#confirmUnsetPagseguro", cb
-  clickConfirmUnsetPagseguroButton: (cb) ->
-    @pressButtonAndWait "#confirmUnsetPagseguro", => waitMilliseconds 500, cb
+  clickSetPagseguroButton: ->
+    @waitForSelectorClickable "#setPagseguro"
+    .then => @pressButton "#setPagseguro"
+    .then => @waitForSelectorClickable "#confirmSetPagseguro"
+  clickConfirmSetPagseguroButton: ->
+    @waitForSelectorClickable "#confirmSetPagseguro"
+    .then => @pressButtonAndWait "#confirmSetPagseguro"
+    .then => waitMilliseconds 500
+  clickUnsetPagseguroButton: ->
+    @waitForSelectorClickable("#unsetPagseguro")
+    .then => @pressButtonAndWait "#unsetPagseguro"
+    .then => @waitForSelectorClickable "#confirmUnsetPagseguro"
+  clickConfirmUnsetPagseguroButton: ->
+    @waitForSelectorClickable "#confirmUnsetPagseguro"
+    .then => @pressButtonAndWait("#confirmUnsetPagseguro")
+    .then => waitMilliseconds 500
   pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
   pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"
   storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"
   setName: (name) ->
     @type "#manageStoreBlock #name", name
     .then => @eval "$('#manageStoreBlock #name').change()"
-  setPictureFiles: (bannerPath, flyerPath, homePageImagePath, cb) =>
-    @uploadFile '#banner', bannerPath, =>
-      @uploadFile '#flyer', flyerPath, =>
-        @uploadFile '#homePageImage', homePageImagePath, cb
+  setPictureFiles: (bannerPath, flyerPath, homePageImagePath) =>
+    @uploadFile '#banner', bannerPath
+    .then => @uploadFile '#flyer', flyerPath
+    .then => @uploadFile '#homePageImage', homePageImagePath

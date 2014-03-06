@@ -1,30 +1,30 @@
 Page          = require './seleniumPage'
 async         = require 'async'
+webdriver       = require 'selenium-webdriver'
+Q               = require 'q'
 
 module.exports = class HomePage extends Page
   url: ''
-  clickSearchStores: (cb) ->
-    @waitForReady => @pressButton ".searchStores", cb
-  searchStoresText: (text, cb) ->
-    @waitForSelectorClickable '#storeSearchTerm', =>
-      @type "#storeSearchTerm", text, cb
+  clickSearchStores: -> @waitForReady().then => @pressButton ".searchStores"
+  searchStoresText: (text) ->
+    @waitForSelectorClickable '#storeSearchTerm'
+    .then => @type "#storeSearchTerm", text
   clickDoSearchStores: @::pressButton.partial "#doSearch"
   searchProductsText: @::type.partial "#productSearchTerm"
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
-  storesWithoutFlyersLength: (cb) -> @findElements '#storesWithoutFlyer .storeWithoutFlyer', (els) -> cb els.length
-  storesLength: (cb) -> @findElements '#stores .store', (els) -> cb els.length
-  storeLink: (_id, cb) -> @getAttribute "#store#{_id} .link", 'href', cb
-  searchProductsLength: (cb) -> @findElements '#productsSearchResults .product', (els) -> cb els.length
-  productLink: (_id, cb) -> @getAttribute "#product#{_id} .link", 'href', cb
-  productsLength: (cb) -> @findElements '#products .product', (els) -> cb els.length
-  product: (_id, cb) ->
+  storesWithoutFlyersLength: -> @findElements('#storesWithoutFlyer .storeWithoutFlyer').then @captureAttribute 'length'
+  storesLength: -> @findElements('#stores .store').then @captureAttribute 'length'
+  storeLink: (_id) -> @getAttribute "#store#{_id} .link", 'href'
+  searchProductsLength: -> @findElements('#productsSearchResults .product').then @captureAttribute 'length'
+  productLink: (_id) -> @getAttribute "#product#{_id} .link", 'href'
+  productsLength: -> @findElements('#products .product').then (els) -> els.length
+  product: (_id) ->
     product = {}
-    actions = [
-      (cb) => @getAttribute "#product#{_id}", "data-id", (t) -> product._id = t;cb()
-      (cb) => @getInnerHtml "#product#{_id} .storeName", (t) -> product.storeName = t;cb()
-      (cb) => @getAttribute "#product#{_id}_picture img", "src", (t) -> product.picture = t;cb()
-      (cb) => @getAttribute "#product#{_id}_picture", "href", (t) -> product.slug = t;cb()
+    Q.nfcall async.parallel, [
+      (cb) => @getAttribute("#product#{_id}", "data-id").then (t) -> product._id = t;cb()
+      (cb) => @getInnerHtml("#product#{_id} .storeName").then (t) -> product.storeName = t;cb()
+      (cb) => @getAttribute("#product#{_id}_picture img", "src").then (t) -> product.picture = t;cb()
+      (cb) => @getAttribute("#product#{_id}_picture", "href").then (t) -> product.slug = t;cb()
     ]
-    async.parallel actions, ->
-      cb product
+    .then -> product
   storesIds: @::getAttributeInElements.partial '#stores .store', "data-id"

@@ -4,10 +4,9 @@ AdminOrdersPage     = require './support/pages/adminOrdersPage'
 
 describe 'Admin orders page', ->
   page = store = product1 = product2 = user =  userSeller = order1 = order2 = null
-  before (done) =>
+  before =>
     page = new AdminOrdersPage()
-    cleanDB (error) ->
-      return done error if error
+    cleanDB().then ->
       store = generator.store.a()
       store.save()
       user = generator.user.a()
@@ -32,14 +31,14 @@ describe 'Admin orders page', ->
       userSeller = generator.user.c()
       userSeller.stores.push store
       userSeller.save()
-      whenServerLoaded done
+      whenServerLoaded()
 
   describe 'with two orders', ->
-    before (done) =>
-      page.loginFor userSeller._id, ->
-        page.visit done
-    it 'shows orders', (done) ->
-      page.orders (orders) ->
+    before ->
+      page.loginFor userSeller._id
+      .then page.visit
+    it 'shows orders', ->
+      page.orders().then (orders) ->
         orders.length.should.equal 2
         o1 = orders[0]
         o2 = orders[1]
@@ -54,4 +53,3 @@ describe 'Admin orders page', ->
         o2.numberOfItems.should.equal order2.items.length
         o2.totalSaleAmount.should.equal 'R$ 23,20'
         o2.orderLink.should.equal "http://localhost:8000/admin/orders/#{o2._id.toString()}"
-        done()

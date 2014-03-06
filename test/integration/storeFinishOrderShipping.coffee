@@ -9,15 +9,13 @@ LoginPage                       = require  './support/pages/loginPage'
 
 describe 'Store Finish Order: Shipping', ->
   page = productNoShipping = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
-  after (done) -> page.closeBrowser done
-  before (done) =>
+  before ->
     page = new StoreFinishOrderShippingPage()
     storeCartPage = new StoreCartPage page
     storeProductPage = new StoreProductPage page
     accountUpdateProfilePage = new AccountUpdateProfilePage page
     loginPage = new LoginPage page
-    cleanDB (error) ->
-      return done error if error
+    cleanDB().then ->
       store = generator.store.a()
       store.save()
       product1 = generator.product.a()
@@ -32,84 +30,66 @@ describe 'Store Finish Order: Shipping', ->
       store2.save()
       productNoShipping = generator.product.c()
       productNoShipping.save()
-      whenServerLoaded done
+      whenServerLoaded()
 
   describe 'logged in user with full address', ->
-    before (done) ->
+    before ->
       page.clearLocalStorage()
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit 'store_1', 'name_1'
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder
-      .then done, done
-    it 'should show address', (done) ->
-      page.address (a) ->
+    it 'should show address', ->
+      page.address().then (a) ->
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
         a.street2.should.equal userAddress.street2
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
-        done()
-    it 'should show calculated shipping', (done) ->
-      page.shippingInfo (s) ->
-        s.options.length.should.equal 2
-        done()
-    it 'does not have next button enabled', (done) ->
-      page.finishOrderButtonIsEnabled (itIs) ->
-        itIs.should.equal false
-        done()
-    it 'does not show message about shipping manual calculation', (done) ->
-      page.manualShippingCalculationMessage (m) ->
-        expect(m).to.be.null
-        done()
+    it 'should show calculated shipping', ->
+      page.shippingInfo().then (s) ->
+        s.length.should.equal 2
+        s[0].should.be.like value: 'pac', text: '3 dia(s) - PAC - R$ 16,10'
+        s[1].should.be.like value: 'sedex', text: '1 dia(s) - Sedex - R$ 20,10'
+
+    it 'does not have next button enabled', -> page.finishOrderButtonIsEnabled().should.eventually.be.false
+    it 'does not show message about shipping manual calculation', -> page.manualShippingCalculationMessage().then (m) -> expect(m).to.be.null
 
   describe 'product without shipping charge', ->
-    before (done) ->
+    before ->
       page.clearLocalStorage()
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit 'store_1', 'name_2'
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder
-      .then done, done
-    it 'should show calculated shipping', (done) ->
-      page.shippingInfo (s) ->
-        s.options.length.should.equal 2
-        s.options[0].text.should.equal "3 dia(s) - PAC - R$ 0,00"
-        s.options[1].text.should.equal "1 dia(s) - Sedex - R$ 0,00"
-        done()
-    it 'does not show message about shipping manual calculation', (done) ->
-      page.manualShippingCalculationMessage (m) ->
-        expect(m).to.be.null
-        done()
+    it 'should show calculated shipping', ->
+      page.shippingInfo().then (s) ->
+        s.length.should.equal 2
+        s[0].text.should.equal "3 dia(s) - PAC - R$ 0,00"
+        s[1].text.should.equal "1 dia(s) - Sedex - R$ 0,00"
+    it 'does not show message about shipping manual calculation', -> page.manualShippingCalculationMessage().then (m) -> expect(m).to.be.null
 
-  describe 'not logged in user', (done) ->
-    before (done) ->
+  describe 'not logged in user', ->
+    before ->
       page.clearCookies()
       .then -> page.clearLocalStorage
       .then -> storeProductPage.visit 'store_1', 'name_1'
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder
-      .then done, done
-    it 'should be redirected to login', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login?redirectTo=/#{store.slug}/finishOrder/shipping"
-        done()
+    it 'should be redirected to login', -> page.currentUrl().should.become "http://localhost:8000/account/login?redirectTo=/#{store.slug}/finishOrder/shipping"
 
   describe 'logged in user with incomplete address', ->
-    before (done) ->
-      page.clearLocalStorage ->
-        page.loginFor userIncompleteAddress._id, ->
-          storeProductPage.visit 'store_1', 'name_1', ->
-            storeProductPage.purchaseItem ->
-              storeCartPage.clickFinishOrder done
-    it 'should redirect to update profile page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/updateProfile"
-        done()
+    before ->
+      page.clearLocalStorage()
+      .then -> page.loginFor userIncompleteAddress._id
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then storeCartPage.clickFinishOrder
+    it 'should redirect to update profile page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/updateProfile"
 
   describe 'logged in user with incomplete address completes address and comes back to the store and cart', ->
-    before (done) ->
+    before ->
       page.clearLocalStorage()
       .then -> page.loginFor userIncompleteAddress._id
       .then -> storeProductPage.visit 'store_1', 'name_1'
@@ -119,53 +99,39 @@ describe 'Store Finish Order: Shipping', ->
       .then -> accountUpdateProfilePage.setFieldsAs user1
       .then accountUpdateProfilePage.clickUpdateProfileButton
       .then -> page.pressButton "#redirectTo"
-      .then done, done
-    it 'should take back to the shipping page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
-        done()
-    it 'should show address', (done) ->
-      page.address (a) ->
+    it 'should take back to the shipping page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/shipping"
+    it 'should show address', ->
+      page.address().then (a) ->
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
         a.street2.should.equal userAddress.street2
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
-        done()
 
   describe 'a not logged in user logs in and comes back to the store and cart', ->
-    before (done) ->
+    before ->
       page.clearCookies()
       .then page.clearLocalStorage
       .then -> storeProductPage.visit 'store_1', 'name_1'
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder
       .then -> loginPage.loginWith user1
-      .then done, done
-    it 'should take back to the shipping page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{store.slug}/finishOrder/shipping"
-        done()
-    it 'should show address', (done) ->
-      page.address (a) ->
+    it 'should take back to the shipping page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/shipping"
+    it 'should show address', ->
+      page.address().then (a) ->
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
         a.street2.should.equal userAddress.street2
         a.city.should.equal userAddress.city
         a.state.should.equal userAddress.state
         a.zip.should.equal userAddress.zip
-        done()
 
   describe 'store with only products without shipping', ->
-    before (done) ->
+    before ->
       page.clearLocalStorage()
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit productNoShipping.storeSlug, productNoShipping.slug
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder
-      .then done, done
-    it 'should take directly to payment page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/#{productNoShipping.storeSlug}/finishOrder/payment"
-        done()
+    it 'should take directly to payment page', -> page.currentUrl().should.become "http://localhost:8000/#{productNoShipping.storeSlug}/finishOrder/payment"

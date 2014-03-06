@@ -5,23 +5,23 @@ ProductComment        = require '../../app/models/productComment'
 StoreProductPage      = require './support/pages/storeProductPage'
 md5                   = require("blueimp-md5").md5
 Postman               = require '../../app/models/postman'
+Q                     = require 'q'
 
 describe 'Store product page', ->
   page = store = product1 = null
-  before (done) ->
+  before ->
     page = new StoreProductPage()
-    whenServerLoaded done
+    whenServerLoaded()
   describe 'regular product', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB().then ->
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()
         product1.save()
-        page.visit "store_1", "name_1", done
-    it 'should show the product info', (done) ->
-      page.product (product) ->
+        page.visit "store_1", "name_1"
+    it 'should show the product info', ->
+      page.product().then (product) ->
         product.name.should.equal product1.name
         product.price.should.equal product1.price.toString()
         product.tags.should.be.like ['abc', 'def']
@@ -38,47 +38,35 @@ describe 'Store product page', ->
         product.storeOtherUrl.should.equal store.otherUrl
         product.banner.should.equal store.banner
         product.picture.should.equal product1.picture
-        page.storeNameHeaderExists (itDoes) ->
-          itDoes.should.be.false
-          done()
+        page.storeNameHeaderExists().should.eventually.be.false
 
   describe 'store without banner', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB().then ->
         store = generator.store.b()
         store.save()
         product1 = generator.product.c()
         product1.save()
-        page.visit "store_2", "name_3", done
-    it 'does not show the store banner', (done) ->
-      page.storeBannerExists (itDoes) -> itDoes.should.be.false;done()
-    it 'shows store name header', (done) ->
-      page.storeNameHeader (header) ->
-        header.should.equal store.name
-        done()
+        page.visit "store_2", "name_3"
+    it 'does not show the store banner', -> page.storeBannerExists().should.eventually.be.false
+    it 'shows store name header', -> page.storeNameHeader().should.become store.name
 
   describe 'product with no inventory available', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB().then ->
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()
         product1.inventory = 0
         product1.save()
-        page.visit "store_1", "name_1", done
-    it 'has add cart button disabled', (done) ->
-      page.purchaseItemButtonEnabled (itIs) ->
-        itIs.should.be.false
-        done()
+        page.visit "store_1", "name_1"
+    it 'has add cart button disabled', -> page.purchaseItemButtonEnabled().should.eventually.be.false
 
   describe 'comments', ->
     describe 'showing', ->
       userCommenting1 = userCommenting2 = body1 = body2 = null
-      before (done) ->
-        cleanDB (error) ->
-          return done error if error
+      before ->
+        cleanDB().then ->
           store = generator.store.a()
           store.save()
           product1 = generator.product.a()
@@ -87,13 +75,15 @@ describe 'Store product page', ->
           userCommenting2 = generator.user.b()
           body1 = "body1"
           body2 = "body2"
-          product1.addComment user: userCommenting1, body: body1, (err, comment) =>
+          Q.ninvoke product1, "addComment", user: userCommenting1, body: body1
+          .then (comment) ->
             comment.save()
-            product1.addComment user: userCommenting2, body: body2, (err, comment) =>
-              comment.save()
-              page.visit "store_1", "name_1", done
-      it 'shows comments', (done) ->
-        page.comments (comments) ->
+            Q.ninvoke product1, "addComment", user: userCommenting2, body: body2
+          .then (comment) ->
+            comment.save()
+            page.visit "store_1", "name_1"
+      it 'shows comments', ->
+        page.comments().then (comments) ->
           comments.length.should.equal 2
           comments[0].userName.should.equal userCommenting1.name
           comments[0].userPicture.should.equal "https://secure.gravatar.com/avatar/#{md5(userCommenting1.email.toLowerCase())}?d=mm&r=pg&s=50"
@@ -101,12 +91,10 @@ describe 'Store product page', ->
           comments[1].userName.should.equal userCommenting2.name
           comments[1].userPicture.should.equal "https://secure.gravatar.com/avatar/#{md5(userCommenting2.email.toLowerCase())}?d=mm&r=pg&s=50"
           comments[1].body.should.equal body2
-          done()
     describe 'creating', ->
       userCommenting = userSeller = body = null
-      before (done) ->
-        cleanDB (error) ->
-          return done error if error
+      before ->
+        cleanDB().then ->
           Postman.sentMails.length = 0
           store = generator.store.a()
           store.save()
@@ -118,11 +106,12 @@ describe 'Store product page', ->
           userCommenting.save()
           product1.save()
           body = "body1"
-          page.loginFor userCommenting._id, ->
-            page.visit "store_1", "name_1", ->
-              page.writeComment body, done
-      it 'created the comment on the database', (done) ->
-        ProductComment.findByProduct product1._id, (err, comments) ->
+          page.loginFor userCommenting._id
+          .then -> page.visit "store_1", "name_1"
+          .then -> page.writeComment body
+      it 'created the comment on the database', ->
+        Q.ninvoke ProductComment, "findByProduct", product1._id
+        .then (comments) ->
           comments.length.should.equal 1
           comm = comments[0]
           comm.user.toString().should.equal userCommenting._id.toString()
@@ -130,18 +119,13 @@ describe 'Store product page', ->
           comm.body.should.equal body
           comm.userName.should.equal userCommenting.name
           comm.userEmail.should.equal userCommenting.email
-          done()
-      it 'displayed the comment', (done) ->
-        page.comments (comments) ->
+      it 'displayed the comment', ->
+        page.comments().then (comments) ->
           comments.length.should.equal 1
           comments[0].userName.should.equal userCommenting.name
           comments[0].userPicture.should.equal "https://secure.gravatar.com/avatar/#{md5(userCommenting.email.toLowerCase())}?d=mm&r=pg&s=50"
           comments[0].body.should.equal body
-          done()
-      it 'cleared the comment area', (done) ->
-        page.newCommentBodyText (t) ->
-          t.should.equal ''
-          done()
+      it 'cleared the comment area', -> page.newCommentBodyText().should.become ''
       it 'emailed the store admin', ->
         Postman.sentMails.length.should.equal 1
         mail = Postman.sentMails[0]
@@ -149,25 +133,16 @@ describe 'Store product page', ->
         mail.subject.should.equal "Ateliês: O produto #{product1.name} da loja #{store.name} recebeu um comentário"
 
     describe "can't create if not logged in", ->
-      before (done) ->
-        cleanDB (error) ->
-          return done error if error
-          page.clearCookies =>
-            Postman.sentMails.length = 0
-            store = generator.store.a()
-            store.save()
-            product1 = generator.product.a()
-            product1.save()
-            page.visit "store_1", "name_1", done
-      it "comment text is invisible", (done) ->
-        page.commentBodyIsVisible (itIs) ->
-          itIs.should.be.false
-          done()
-      it 'comment button is invisible', (done) ->
-        page.commentButtonIsVisible (itIs) ->
-          itIs.should.be.false
-          done()
-      it 'has a message stating user must login to comment', (done) ->
-        page.mustLoginToCommentMessageIsVisible (itIs) ->
-          itIs.should.be.true
-          done()
+      before ->
+        cleanDB().then ->
+          page.clearCookies()
+        .then ->
+          Postman.sentMails.length = 0
+          store = generator.store.a()
+          store.save()
+          product1 = generator.product.a()
+          product1.save()
+          page.visit "store_1", "name_1"
+      it "comment text is invisible", -> page.commentBodyIsVisible().should.eventually.be.false
+      it 'comment button is invisible', -> page.commentButtonIsVisible().should.eventually.be.false
+      it 'has a message stating user must login to comment', -> page.mustLoginToCommentMessageIsVisible().should.eventually.be.true

@@ -1,20 +1,18 @@
 Page          = require './seleniumPage'
+Q             = require 'q'
 
 module.exports = class StoreFinishOrderPaymentPage extends Page
-  visit: (storeSlug, cb) => super "#{storeSlug}/finishOrder/payment", cb
-  clickSelectDirectPayment: (cb) ->
-    @waitForSelector '#directSell', =>
-      @click '#directSell', cb
+  visit: (storeSlug) => super "#{storeSlug}/finishOrder/payment"
+  clickSelectDirectPayment: ->
+    @waitForSelector '#directSell'
+    .then => @click '#directSell'
   clickSelectPaymentType: @::pressButton.partial '#selectPaymentType'
-  paymentTypes: (cb) ->
-    options = []
-    getData = []
-    @findElementsIn '#paymentTypesHolder', 'input[type="radio"]', (els) =>
-      for el in els
-        do (el) =>
-          option = {}
-          options.push option
-          getData.push => @getValue el, (t) => option.value = t
-          getData.push => @getIsChecked el, (itIs) => option.selected = itIs
-      @parallel getData, -> cb options
-      undefined
+  paymentTypes: ->
+    @findElementsIn '#paymentTypesHolder', 'input[type="radio"]'
+    .then (els) =>
+      Q.all els.map (el) =>
+        Q.all [
+          @getValue el
+          @getIsChecked el
+        ]
+        .spread (value, selected) -> value:value, selected:selected

@@ -3,9 +3,8 @@ AdminHomePage                = require './support/pages/adminHomePage'
 
 describe 'Admin home page', ->
   userSeller = userNonSeller = store1 = store2 = null
-  before (done) ->
-    cleanDB (error) ->
-      return done error if error
+  before ->
+    cleanDB().then ->
       store1 = generator.store.a()
       store1.save()
       store2 = generator.store.b()
@@ -18,44 +17,33 @@ describe 'Admin home page', ->
       userSeller.stores.push store1
       userSeller.stores.push store2
       userSeller.save()
-      whenServerLoaded done
+    .then whenServerLoaded
 
   describe 'accessing with a logged in and seller user', ->
     page = null
-    before (done) ->
+    before ->
       page = new AdminHomePage()
-      page.loginFor userSeller._id, ->
-        page.visit done
-    it 'allows to create a new store', (done) ->
-      page.createStoreText (t) ->
-        t.should.equal 'Crie uma nova loja'
-        done()
-    it 'shows existing user stores to manage', (done) ->
-      page.storesQuantity (q) -> q.should.equal 2; done()
-    it 'links to store manage pages', (done) ->
-      page.stores (stores) =>
+      page.loginFor userSeller._id
+      .then page.visit
+    it 'allows to create a new store', -> page.createStoreText().should.become 'Crie uma nova loja'
+    it 'shows existing user stores to manage', -> page.storesQuantity().should.become 2
+    it 'links to store manage pages', ->
+      page.stores().then (stores) ->
         stores[0].url.should.equal "http://localhost:8000/admin/store/#{store1.slug}"
         stores[1].url.should.equal "http://localhost:8000/admin/store/#{store2.slug}"
-        done()
 
   describe 'accessing with a logged in but not a seller user', ->
     page = null
-    before (done) ->
+    before ->
       page = new AdminHomePage()
-      page.loginFor userNonSeller._id, ->
-        page.visit done
-    it 'redirects user to login', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/notseller"
-        done()
+      page.loginFor userNonSeller._id
+      .then page.visit
+    it 'redirects user to login', -> page.currentUrl().should.become "http://localhost:8000/notseller"
 
   describe 'accessing with an anonymous user', ->
     page = null
-    before (done) ->
+    before ->
       page = new AdminHomePage()
-      page.clearCookies ->
-        page.visit done
-    it 'redirects user to login', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/login?redirectTo=/admin/"
-        done()
+      page.clearCookies()
+      .then page.visit
+    it 'redirects user to login', -> page.currentUrl().should.become "http://localhost:8000/account/login?redirectTo=/admin/"

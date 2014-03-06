@@ -6,23 +6,20 @@ Postman = require '../../app/models/postman'
 
 describe 'Resend Confirmation Email', ->
   user = page = null
-  before (done) -> whenServerLoaded done
+  before whenServerLoaded
 
   describe 'Can resend confirmation email', ->
-    before (done) ->
+    before ->
       Postman.sentMails.length = 0
       page = new AccountPage()
-      cleanDB (error) ->
-        return done error if error
+      cleanDB()
+      .then ->
         user = generator.user.e()
         user.save()
-        page.loginFor user._id, ->
-          page.visit ->
-            page.clickResendConfirmationEmail done
-    it 'shows email sent message', (done) ->
-      page.confirmationEmailSentMessage (msg) ->
-        msg.should.equal "E-mail enviado"
-        done()
+        page.loginFor user._id
+      .then page.visit
+      .then page.clickResendConfirmationEmail
+    it 'shows email sent message', -> page.confirmationEmailSentMessage().should.become "E-mail enviado"
     it 'sent confirmation email', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]

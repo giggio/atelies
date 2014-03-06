@@ -4,13 +4,14 @@ Store                   = require '../../app/models/store'
 StoreEvaluation         = require '../../app/models/storeEvaluation'
 AccountOrderDetailPage  = require './support/pages/accountOrderDetailPage'
 Postman                 = require '../../app/models/postman'
+Q                       = require 'q'
 
 describe 'Account order detail page', ->
   page = store = product1 = product2 = user = order1 = userSeller = null
-  before (done) =>
+  before =>
     page = new AccountOrderDetailPage()
-    cleanDB (error) ->
-      return done error if error
+    cleanDB()
+    .then ->
       store = generator.store.a()
       store.save()
       userSeller = generator.user.c()
@@ -27,18 +28,19 @@ describe 'Account order detail page', ->
         { product: product2, quantity: 2 }
       ]
       shippingCost = 1
-      Order.create user, store, items, shippingCost, 'directSell', (err, order) ->
-        order1 = order
-        order.orderDate = new Date(2013,0,1)
-        order1.save()
-        whenServerLoaded done
+      Q.nfcall Order.create, user, store, items, shippingCost, 'directSell'
+    .then (order) ->
+      order1 = order
+      order.orderDate = new Date(2013,0,1)
+      order1.save()
+    .then whenServerLoaded
 
   describe 'show order with two products', ->
-    before (done) =>
-      page.loginFor user._id, ->
-        page.visit order1._id, done
-    it 'shows order', (done) ->
-      page.order (order) ->
+    before =>
+      page.loginFor user._id
+      .then -> page.visit order1._id
+    it 'shows order', ->
+      page.order().then (order) ->
         order._id.should.equal order._id.toString()
         order.orderDate.should.equal '01/01/2013'
         order.storeName.should.equal store.name
@@ -69,54 +71,43 @@ describe 'Account order detail page', ->
         i2.picture.should.equal product2.picture
         i2.quantity.should.equal 2
         i2.url.should.equal "http://localhost:8000/#{product2.url()}"
-        done()
-    it 'shows pending evaluation', (done) ->
-      page.newEvaluationVisible (itIs) ->
-        itIs.should.be.true
-        done()
+    it 'shows pending evaluation', -> page.newEvaluationVisible().should.eventually.be.true
 
   describe 'evaluation order and store', ->
     evaluationBody = rating = null
-    before (done) =>
+    before =>
       Postman.sentMails.length = 0
       evaluationBody = "body1"
       rating = 4
-      page.loginFor user._id, ->
-        page.visit order1._id, ->
-          page.evaluateOrderWith {body: evaluationBody, rating: rating}, done
-    it 'should record the evaluation on the store', (done) ->
-      Store.findById store._id, (err, st) ->
+      page.loginFor user._id
+      .then -> page.visit order1._id
+      .then -> page.evaluateOrderWith body: evaluationBody, rating: rating
+    it 'should record the evaluation on the store', ->
+      Q.ninvoke Store, "findById", store._id
+      .then (st) ->
         st.numberOfEvaluations.should.equal 1
         st.evaluationAvgRating.should.equal 4
-        done()
-    it 'should have stored the evaluation and set it on the order', (done) ->
-      StoreEvaluation.findOne order: order1._id, (err, ev) ->
+    it 'should have stored the evaluation and set it on the order', ->
+      Q.ninvoke StoreEvaluation, "findOne", order: order1._id
+      .then (ev) ->
         ev.body.should.equal evaluationBody
         ev.rating.should.equal rating
         ev.date.should.equalDate new Date()
         ev.store.toString().should.equal order1.store.toString()
         ev.order.toString().should.equal order1._id.toString()
         ev.user.toString().should.equal user._id.toString()
-        Order.findById order1._id, (err, o) ->
-          o.evaluation.toString().should.equal ev._id.toString()
-          done()
-    it 'should make the evaluation field disappear', (done) ->
-      page.newEvaluationVisible (itIs) ->
-        itIs.should.be.false
-        done()
-    it 'should show existing evaluation', (done) ->
-      page.existingEvaluation (ev) ->
-        ev.rating.should.equal rating
-        done()
+        Q.ninvoke Order, "findById", order1._id
+        .then (o) -> o.evaluation.toString().should.equal ev._id.toString()
+    it 'should make the evaluation field disappear', -> page.newEvaluationVisible().should.eventually.be.false
+    it 'should show existing evaluation', -> page.existingEvaluation().should.become rating
     it 'should send an e-mail message to the store admins', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
       mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store.name} recebeu uma avaliação"
-    it 'does not show pending evaluation anymore when visited again and shows existing evaluation', (done) ->
-      page.reload ->
-        page.newEvaluationVisible (itIs) ->
-          itIs.should.be.false
-          page.existingEvaluation (ev) ->
-            ev.rating.should.equal rating
-            done()
+    it 'does not show pending evaluation anymore when visited again and shows existing evaluation', ->
+      page.reload().then ->
+        Q.all [
+          page.newEvaluationVisible().should.eventually.be.false
+          page.existingEvaluation().should.become rating
+        ]

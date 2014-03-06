@@ -1,39 +1,36 @@
 Page          = require './seleniumPage'
 async         = require 'async'
+Q             = require 'q'
+_             = require 'underscore'
 
 module.exports = class StoreCartPage extends Page
-  visit: (storeSlug, cb) => super "#{storeSlug}/finishOrder/shipping", cb
-  address: (cb) ->
-    @waitForSelectorClickable '#deliveryAddress #street', =>
-      address = {}
-      actions = [
-        (cb) => @getText "#deliveryAddress #street", (t) -> address.street = t;cb()
-        (cb) => @getText "#deliveryAddress #street2", (t) -> address.street2 = t;cb()
-        (cb) => @getText "#deliveryAddress #city", (t) -> address.city = t;cb()
-        (cb) => @getText "#deliveryAddress #state", (t) -> address.state = t;cb()
-        (cb) => @getText "#deliveryAddress #zip", (t) -> address.zip = t;cb()
+  visit: (storeSlug) => super "#{storeSlug}/finishOrder/shipping"
+  address: ->
+    @waitForSelectorClickable '#deliveryAddress #street'
+    .then =>
+      Q.all [
+        @getText("#deliveryAddress #street").then (t) -> street:t
+        @getText("#deliveryAddress #street2").then (t) -> street2:t
+        @getText("#deliveryAddress #city").then (t) -> city:t
+        @getText("#deliveryAddress #state").then (t) -> state:t
+        @getText("#deliveryAddress #zip").then (t) -> zip:t
       ]
-      async.parallel actions, ->
-        #print address
-        cb address
+    .then (vals) -> vals.reduce ((o, v) -> _.extend o, v), {}
   clickContinue: @::pressButton.partial '#finishOrderShipping'
-  clickSedexOption: (cb) ->
-    @waitForSelector '#shippingOptions_sedex', =>
-      @click '#shippingOptions_sedex', cb
-  shippingInfo: (cb) ->
-    @waitForSelector '#shippingInfo' , =>
-      options = []
-      getData = []
-      @findElementsIn '#shippingInfo', 'input[type="radio"]', (els) =>
-        for el in els
-          do (el) =>
-            option = {}
-            options.push option
-            getData.push =>
-              @getValue el, (t) => option.value = t
-              @getText @getParent(el), (t) => option.text = t
-        @parallel getData, -> cb(options: options)
-        undefined
+  clickSedexOption: ->
+    @waitForSelector '#shippingOptions_sedex'
+    .then => @click '#shippingOptions_sedex'
+  shippingInfo: ->
+    @waitForSelector '#shippingInfo'
+    .then =>
+      @findElementsIn '#shippingInfo', 'input[type="radio"]'
+      .then (els) =>
+        Q.all els.map (el) =>
+          Q.all [
+            @getValue el
+            @getParent(el).then (parent) => @getText parent
+          ]
+          .spread (value, text) -> value:value, text:text
   finishOrderButtonIsEnabled: @::getIsEnabled.partial '#finishOrderShipping'
   manualShippingCalculationMessage: @::getTextIfExists.partial '#manualShippingCalculationMessage'
   shippingInfoExists: @::hasElement.partial '#shippingInfo'

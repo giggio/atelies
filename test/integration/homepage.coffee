@@ -5,13 +5,12 @@ _         = require 'underscore'
 
 describe 'Home page', ->
   page = store1 = store2 = product1 = product2 = null
-  before (done) ->
+  before ->
     page = new HomePage()
-    whenServerLoaded done
+    whenServerLoaded()
   describe "only authorized stores", ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error?
+    before ->
+      cleanDB().then ->
         product1 = generator.product.b()
         product2 = generator.product.c()
         product1.save()
@@ -31,32 +30,27 @@ describe 'Home page', ->
           s.name+=i
           s.isFlyerAuthorized = true
           s.save()
-        page.visit done
-    it 'has twelve products', (done) ->
+        page.visit()
+    it 'has twelve products', ->
       page.productsLength (l) ->
         l.should.equal 12
-        done()
-    it 'shows product 1', (done) ->
+    it 'shows product 1', ->
       page.product product1._id, (p) ->
         p._id.should.equal product1._id.toString()
         p.storeName.should.equal product1.storeName
         p.picture.should.equal product1.picture + "_thumb150x150"
         p.slug.endsWith(product1.slug).should.be.true
-        done()
-    it 'shows stores', (done) ->
+    it 'shows stores', ->
       page.storesLength (l) ->
         l.should.equal 12
-        done()
-    it 'links picture to store 1', (done) ->
+    it 'links picture to store 1', ->
       page.storeLink store1._id, (href) ->
         href.endsWith(store1.slug).should.be.true
-        done()
 
   describe "with some stores authorized and some unauthorized flyers", ->
     unauthorizedStores = authorizedStores = null
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error?
+    before ->
+      cleanDB().then ->
         product1 = generator.product.b()
         product2 = generator.product.c()
         product1.save()
@@ -82,16 +76,12 @@ describe 'Home page', ->
             s.isFlyerAuthorized = true
             s.save()
             s
-        page.visit done
-    it 'shows stores', (done) ->
-      page.storesLength (l) ->
-        l.should.equal 12
-        done()
-    it 'shows only authorized stores', (done) ->
+        page.visit()
+    it 'shows stores', -> page.storesLength().should.become 12
+    it 'shows only authorized stores', ->
       authorizedIds = _.map authorizedStores, (s) -> s._id.toString()
       unauthorizedIds = _.map unauthorizedStores, (s) -> s._id.toString()
-      page.storesIds (ids) =>
+      page.storesIds().then (ids) =>
         for id in ids
           authorizedIds.should.contain id
           unauthorizedIds.should.not.contain id
-        done()

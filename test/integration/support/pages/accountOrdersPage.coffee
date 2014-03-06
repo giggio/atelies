@@ -2,10 +2,11 @@ Page          = require './seleniumPage'
 
 module.exports = class AccountOrdersPage extends Page
   url: 'account/orders'
-  orders: (cb) ->
+  orders: ->
     orders = []
     getData = []
-    @findElementsIn '#orders tbody', 'tr', (els) =>
+    @findElementsIn '#orders tbody', 'tr'
+    .then (els) =>
       for el in els
         do (el) =>
           order = {}
@@ -17,5 +18,5 @@ module.exports = class AccountOrdersPage extends Page
           getData.push => @getTextIn el, ".storeLink", (t) => order.storeName = t
           getData.push => @getAttributeIn el, ".orderLink", 'href', (t) => order.orderLink = t
           getData.push => @getAttributeIn el, ".storeLink", 'href', (t) => order.storeLink = t
-      @parallel getData, -> cb(orders)
-      undefined
+      @parallel getData
+    .then -> orders

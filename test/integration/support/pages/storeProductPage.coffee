@@ -1,10 +1,11 @@
 Page          = require './seleniumPage'
 async         = require 'async'
+Q             = require 'q'
 
 module.exports = class StoreProductPage extends Page
-  visit: (storeSlug, productSlug, cb) => super "#{storeSlug}/#{productSlug}", cb
-  purchaseItem: (cb) => @pressButton "#purchaseItem", cb
-  product: (cb) ->
+  visit: (storeSlug, productSlug) -> super "#{storeSlug}/#{productSlug}"
+  purchaseItem: -> @pressButton "#purchaseItem"
+  product: ->
     product = {}
     @parallel [
       => @getText "#product #name", (text) -> product.name = text
@@ -23,12 +24,13 @@ module.exports = class StoreProductPage extends Page
       => @getText "#storeOtherUrl", (text) -> product.storeOtherUrl = text
       => @getSrc "#storeBanner", (text) -> product.banner = text
       => @getSrc "#product #picture", (text) -> product.picture = text
-    ], (-> cb(product))
+    ]
+    .then -> product
   storeNameHeader: @::getText.partial "#storeNameHeader"
   storeNameHeaderExists: @::hasElement.partial '#storeNameHeader'
   storeBannerExists: @::hasElement.partial '#storeBanner'
   purchaseItemButtonEnabled: @::getIsEnabled.partial "#purchaseItem"
-  comments: (cb) ->
+  comments: ->
     @findElementsIn('#comments', '.comment').then (els) =>
       getCommentsAction =
         for el in els
@@ -40,10 +42,11 @@ module.exports = class StoreProductPage extends Page
                 body: (cb) => @getTextIn el, ".body", (t) -> cb null, t
                 date: (cb) => @getTextIn el, ".date", (t) -> cb null, t
               async.parallel getCommentActions, getCommentCb
-      async.parallel getCommentsAction, (err, comments) -> cb comments
-  writeComment: (comm, cb) ->
-    @type "#newCommentBody", comm, =>
-      @pressButtonAndWait "#createComment", cb
+      Q.nfcall async.parallel, getCommentsAction
+  writeComment: (comm) ->
+    @type "#newCommentBody", comm
+    .then => @pressButtonAndWait "#createComment"
+    .then @closeDialog
   newCommentBodyText: @::getValue.partial "#newCommentBody"
   commentBodyIsVisible: @::hasElement.partial "#newCommentBody"
   commentButtonIsVisible: @::hasElement.partial "#createComment"

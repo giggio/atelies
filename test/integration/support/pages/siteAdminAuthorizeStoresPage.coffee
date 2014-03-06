@@ -6,7 +6,5 @@ module.exports = class SiteAdminAuthorizeStoresPage extends Page
   accessDeniedMessageIsVisible: @::hasElementAndIsVisible.partial "#accessDeniedMessage"
   storesToAuthorize: @::findElements.partial "#stores .store.toAuthorize"
   storesToUnauthorize: @::findElements.partial "#stores .store.toUnauthorize"
-  clickAuthorize: (store, cb) ->
-    @pressButtonAndWait "#store#{store._id} .authorize", cb
-  clickUnauthorize: (store, cb) ->
-    @pressButtonAndWait "#store#{store._id} .unauthorize", cb
+  clickAuthorize: (store) -> @pressButtonAndWait "#store#{store._id} .authorize"
+  clickUnauthorize: (store) -> @pressButtonAndWait "#store#{store._id} .unauthorize"

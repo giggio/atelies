@@ -1,28 +1,27 @@
 require './support/_specHelper'
-User     = require '../../app/models/user'
-bcrypt   = require 'bcrypt'
+User                      = require '../../app/models/user'
+bcrypt                    = require 'bcrypt'
 AccountForgotPasswordPage = require './support/pages/accountForgotPasswordPage'
+Q                         = require 'q'
 
 describe 'Account Forgot password', ->
   user = page = null
-  before (done) -> whenServerLoaded done
+  before whenServerLoaded
 
   describe 'Can request password reset', ->
-    before (done) ->
+    before ->
       page = new AccountForgotPasswordPage()
-      cleanDB (error) ->
-        return done error if error
+      cleanDB()
+      .then ->
         user = generator.user.a()
         user.save()
-        page.visit ->
-          page.setEmail user.email
-          page.clickRequestPasswordReset done
-    it 'is at the password request sent page', (done) ->
+      .then page.visit
+      .then -> page.setEmail user.email
+      .then page.clickRequestPasswordReset
+    it 'is at the password request sent page', ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/account/passwordResetSent"
-        done()
-    it 'set reset key', (done) ->
-      User.findByEmail user.email, (error, foundUser) ->
-        return done error if error
+    it 'set reset key', ->
+      Q.nfcall User.findByEmail, user.email
+      .then (foundUser) ->
         foundUser.resetKey.should.not.be.undefined
-        done()

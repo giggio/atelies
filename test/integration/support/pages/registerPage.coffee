@@ -2,31 +2,24 @@ HomeLayout = require './homeLayout'
 
 module.exports = class RegisterPage extends HomeLayout
   url: 'account/register'
-  setFieldsAs: (values, cb) =>
-    selectState = (cb) =>
-      if values.deliveryState?
-        return @select "#registerForm #deliveryState", values.deliveryState, cb
-      cb()
-    selectState =>
-      @type "#registerForm #email", values.email
-      @type "#registerForm #password", values.password
-      @type "#registerForm #passwordVerify", values.passwordVerify
-      @type "#registerForm #name", values.name
-      @type "#registerForm #deliveryStreet", values.deliveryStreet
-      @type "#registerForm #deliveryStreet2", values.deliveryStreet2
-      @type "#registerForm #deliveryCity", values.deliveryCity
-      @type "#registerForm #deliveryZIP", values.deliveryZIP
-      @type "#registerForm #phoneNumber", values.phoneNumber
-      @checkOrUncheck "#registerForm #isSeller", values.isSeller, =>
-        if values.termsOfUse?
-          return @checkOrUncheck "#registerForm #termsOfUse", values.termsOfUse, cb
-        cb()
+  setFieldsAs: (values) =>
+    @type "#registerForm #email", values.email
+    .then => @type "#registerForm #password", values.password
+    .then => @type "#registerForm #passwordVerify", values.passwordVerify
+    .then => @type "#registerForm #name", values.name
+    .then => @type "#registerForm #deliveryStreet", values.deliveryStreet
+    .then => @type "#registerForm #deliveryStreet2", values.deliveryStreet2
+    .then => @type "#registerForm #deliveryCity", values.deliveryCity
+    .then => @type "#registerForm #deliveryZIP", values.deliveryZIP
+    .then => @type "#registerForm #phoneNumber", values.phoneNumber
+    .then => @checkOrUncheck "#registerForm #isSeller", values.isSeller
+    .then => if values.termsOfUse? then @checkOrUncheck "#registerForm #termsOfUse", values.termsOfUse
+    .then => if values.deliveryState? then @select "#registerForm #deliveryState", values.deliveryState
   clickRegisterButton: @::pressButtonAndWait.partial "#registerForm #register"
-  clickManualEntry: (cb) ->
-    @pressButtonAndWait "#manualEntry", =>
-      @hasElementAndIsVisible "#registerForm #email", (itIs) =>
-        return cb() if itIs
-        @pressButtonAndWait "#manualEntry", cb
+  clickManualEntry: ->
+    @pressButtonAndWait "#manualEntry"
+    .then => @hasElementAndIsVisible "#registerForm #email"
+    .then (itIs) => @pressButtonAndWait "#manualEntry" unless itIs
   errors: @::getText.partial '#errors > li'
   hasErrors: @::hasElement.partial '#errors > li'
   emailRequired: @::getText.partial "#registerForm label[for=email]"

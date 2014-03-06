@@ -81,10 +81,18 @@ exports.start = (cb) ->
     server.sessionStore = sessionStore
     server.cookieSecret = config.appCookieSecret
   exports.server = server
+  d = Q.defer()
   server.listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
     console.log "Mongo database connection string: #{config.connectionString}" if app.get("env") isnt 'production'
-    cb(exports.server) if cb
+    if cb?
+      cb exports.server
+    else
+      d.resolve exports.server
+  if cb?
+    return
+  else
+    return d.promise
 
 exports.stop = ->
   exports.server.close()

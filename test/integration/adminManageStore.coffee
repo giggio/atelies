@@ -3,36 +3,30 @@ Store                     = require '../../app/models/store'
 Product                   = require '../../app/models/product'
 User                      = require '../../app/models/user'
 AdminManageStorePage      = require './support/pages/adminManageStorePage'
+Q                         = require 'q'
 
 describe 'Admin manage store page', ->
   page = exampleStore = otherStore = userSeller = null
-  after (done) -> page.closeBrowser done
-  before (done) ->
+  before ->
     page = new AdminManageStorePage()
-    whenServerLoaded done
+    whenServerLoaded()
 
-  describe 'updates a store', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+  describe 'updates a store', ->
+    before ->
+      cleanDB().then ->
         exampleStore = generator.store.a()
         exampleStore.save()
         userSeller = generator.user.c()
         userSeller.save()
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.setFieldsAs otherStore
-            .then page.clickUpdateStoreButton
-            .then done, done
-    it 'shows store updated message', (done) ->
-      page.message (msg) ->
-        msg.endsWith("Loja atualizada com sucesso").should.be.true
-        done()
-    it 'updated a new store with correct information', (done) ->
-      Store.find (error, stores) ->
-        return done error if error
+        page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then -> page.setFieldsAs otherStore
+      .then page.clickUpdateStoreButton
+    it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
+    it 'updated a new store with correct information', ->
+      Q.ninvoke(Store, "find").then (stores) ->
         stores.length.should.equal 1
         store = stores[0]
         expect(store).not.to.be.null
@@ -48,146 +42,103 @@ describe 'Admin manage store page', ->
         expect(store.state).to.equal otherStore.state
         expect(store.zip).to.equal otherStore.zip
         expect(store.otherUrl).to.equal otherStore.otherUrl
-        done()
-    it 'kept the store to the user', (done) ->
-      User.findById userSeller.id, (err, user) ->
-        return done err if err
-        user.stores.length.should.equal 1
-        done()
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/store/#{otherStore.slug}"
-        done()
+    it 'kept the store to the user', -> Q.ninvoke(User, "findById", userSeller.id).then (user) -> user.stores.length.should.equal 1
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{otherStore.slug}"
 
-  describe 'updates to use pagseguro', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+  describe 'updates to use pagseguro', ->
+    before ->
+      cleanDB()
+      .then ->
         exampleStore = generator.store.c()
         exampleStore.save()
         userSeller = generator.user.c()
         userSeller.save()
         userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickSetPagseguroButton ->
-              page.setPagseguroValuesAs email: 'pagseguro@a.com', token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA', ->
-                page.clickConfirmSetPagseguroButton done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
-        done()
-    it 'shows store updated message', (done) ->
-      page.message (msg) ->
-        msg.endsWith("Loja atualizada com sucesso").should.be.true
-        done()
-    it 'updated the store and set pagseguro', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickSetPagseguroButton
+      .then -> page.setPagseguroValuesAs email: 'pagseguro@a.com', token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+      .then page.clickConfirmSetPagseguroButton
+      .then waitSeconds 5
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
+    it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
+    it 'updated the store and set pagseguro', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
         store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
-        done()
 
-  describe 'does not update a store to use pagseguro if information is missing', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+  describe 'does not update a store to use pagseguro if information is missing', ->
+    before ->
+      cleanDB().then ->
         exampleStore = generator.store.c()
         exampleStore.save()
         userSeller = generator.user.c()
         userSeller.save()
         userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickSetPagseguroButton ->
-              page.setPagseguroValuesAs email: '', token: '', ->
-                page.clickConfirmSetPagseguroButton done
-    it 'is at the store manage page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
-        done()
-    it 'does not show store updated message', (done) ->
-      page.hasMessage (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows error messages', (done) ->
-      page.pagseguroEmailErrorMsg (emailMsg) ->
-        emailMsg.should.equal "O e-mail deve existir e ser válido."
-        page.pagseguroTokenErrorMsg (tokenMsg) ->
-          tokenMsg.should.equal 'O token do PagSeguro é obrigatório e deve possuir 32 caracteres.'
-          done()
-    it 'did not update the store and set pagseguro', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickSetPagseguroButton
+      .then -> page.setPagseguroValuesAs email: '', token: ''
+      .then page.clickConfirmSetPagseguroButton
+    it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
+    it 'does not show store updated message', -> page.hasMessage().should.eventually.be.false
+    it 'shows error messages', ->
+      Q.all [
+        page.pagseguroEmailErrorMsg().should.become "O e-mail deve existir e ser válido."
+        page.pagseguroTokenErrorMsg().should.become 'O token do PagSeguro é obrigatório e deve possuir 32 caracteres.'
+      ]
+    it 'did not update the store and set pagseguro', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
-        done()
 
   describe 'updates to do not use pagseguro', ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+    before ->
+      cleanDB()
+      .then ->
         exampleStore = generator.store.a()
         exampleStore.save()
         userSeller = generator.user.c()
         userSeller.save()
         userSeller.stores.push exampleStore
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.clickUnsetPagseguroButton ->
-              page.clickConfirmUnsetPagseguroButton done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/store/#{exampleStore.slug}"
-        done()
-    it 'shows store updated message', (done) ->
-      page.message (msg) ->
-        msg.endsWith("Loja atualizada com sucesso").should.be.true
-        done()
-    it 'updated the store and unset pagseguro', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickUnsetPagseguroButton
+      .then page.clickConfirmUnsetPagseguroButton
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
+    it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
+    it 'updated the store and unset pagseguro', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
-        done()
 
-  describe 'does not update a store (missing or wrong info)', (done) ->
-    before (done) ->
-      cleanDB (error) ->
-        return done error if error
+  describe 'does not update a store (missing or wrong info)', ->
+    before ->
+      cleanDB().then ->
         exampleStore = generator.store.a()
         exampleStore.save()
         userSeller = generator.user.c()
         userSeller.stores.push exampleStore
         userSeller.save()
+        page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then ->
         emptyStore = generator.store.empty()
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), (error) ->
-            return done error if error
-            emptyStore.email = "bla"
-            emptyStore.otherUrl = "def"
-            page.setFieldsAs emptyStore
-            .then page.clickUpdateStoreButton
-            .then done, done
-    it 'is at the store manage page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
-        done()
-    it 'does not show store updated message', (done) ->
-      page.hasMessage (itDoes) ->
-        itDoes.should.be.false
-        done()
-    it 'shows validation messages', (done) ->
-      page.errorMessagesIn "#manageStoreBlock", (msgs) ->
+        emptyStore.email = "bla"
+        emptyStore.otherUrl = "def"
+        page.setFieldsAs emptyStore
+      .then page.clickUpdateStoreButton
+    it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
+    it 'does not show store updated message', -> page.hasMessage().should.eventually.be.false
+    it 'shows validation messages', ->
+      page.errorMessagesIn("#manageStoreBlock").then (msgs) ->
         msgs.name.should.equal "Informe o nome da loja."
         msgs.email.should.equal "O e-mail deve ser válido."
         msgs.city.should.equal "Informe a cidade."
         msgs.zip.should.equal "Informe o CEP no formato 99999-999."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
-        done()
-    it 'did not update the store with wrong info', (done) ->
-      Store.findBySlug exampleStore.slug, (error, store) ->
-        return done error if error
+    it 'did not update the store with wrong info', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         expect(store).not.to.be.null
         expect(store.slug).to.equal exampleStore.slug
         expect(store.name).to.equal exampleStore.name
@@ -201,15 +152,13 @@ describe 'Admin manage store page', ->
         expect(store.state).to.equal exampleStore.state
         expect(store.zip).to.equal exampleStore.zip
         expect(store.otherUrl).to.equal exampleStore.otherUrl
-        done()
 
-  describe 'updating a store keeps products connected to store', (done) ->
+  describe 'updating a store keeps products connected to store', ->
     otherName = otherSlug = null
-    before (done) ->
+    before ->
       otherName = "My Super Cool Store"
       otherSlug = "my_super_cool_store"
-      cleanDB (error) ->
-        return done error if error
+      cleanDB().then ->
         exampleStore = generator.store.a()
         exampleStore.save()
         product = generator.product.a()
@@ -218,28 +167,20 @@ describe 'Admin manage store page', ->
         userSeller.stores.push exampleStore
         userSeller.save()
         otherStore = generator.store.d().toJSON()
-        page.loginFor userSeller._id, ->
-          page.visit exampleStore._id.toString(), ->
-            page.setName otherName
-            .then page.clickUpdateStoreButton
-            .then done, done
-    it 'is at the admin store page', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/store/#{otherSlug}"
-        done()
-    it 'updated the store name and slug', (done) ->
-      Store.find (error, stores) ->
-        return done error if error
+        page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then -> page.setName otherName
+      .then page.clickUpdateStoreButton
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{otherSlug}"
+    it 'updated the store name and slug', ->
+      Q.ninvoke(Store, "find").then (stores) ->
         stores.length.should.equal 1
         store = stores[0]
         store.name.should.equal otherName
         store.slug.should.equal otherSlug
-        done()
-    it 'updated the product name and slug', (done) ->
-      Product.find (error, products) ->
-        return done error if error?
+    it 'updated the product name and slug', ->
+      Q.ninvoke(Product, "find").then (products) ->
         products.length.should.equal 1
         product = products[0]
         product.storeSlug.should.to.equal otherSlug
         product.storeName.should.to.equal otherName
-        done()

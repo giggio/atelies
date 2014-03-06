@@ -2,15 +2,15 @@ require './support/_specHelper'
 SiteAdminAuthorizeStoresPage    = require './support/pages/siteAdminAuthorizeStoresPage'
 Postman                         = require '../../app/models/postman'
 Store                           = require '../../app/models/store'
+Q                               = require 'q'
 
 describe 'Site Admin Authorize Stores page', ->
   page = adminUser = user = store2 = store1 = userSeller = null
-  before (done) ->
+  before ->
     page = new SiteAdminAuthorizeStoresPage()
-    whenServerLoaded done
-  setDb = (done) ->
-    cleanDB (error) ->
-      return done error if error
+    whenServerLoaded()
+  setDb = ->
+    cleanDB().then ->
       adminUser = generator.user.a()
       adminUser.isAdmin = true
       adminUser.save()
@@ -30,37 +30,25 @@ describe 'Site Admin Authorize Stores page', ->
       userSeller.stores.push store1
       userSeller.stores.push store2
       userSeller.save()
-      done()
 
   describe 'shows stores to authorize', ->
-    before (done) ->
-      setDb ->
-        page.loginFor adminUser._id, ->
-          page.visit done
-    it 'shows one store to authorize', (done) ->
-      page.storesToAuthorize (stores) ->
-        stores.length.should.equal 2
-        done()
-    it 'shows one store to unauthorize', (done) ->
-      page.storesToUnauthorize (stores) ->
-        stores.length.should.equal 2
-        done()
+    before ->
+      setDb()
+      .then -> page.loginFor adminUser._id
+      .then page.visit
+    it 'shows one store to authorize', => page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 2
+    it 'shows one store to unauthorize', => page.storesToUnauthorize().then(captureAttribute "length").should.eventually.equal 2
    
   describe 'authorizing', ->
-    before (done) ->
-      setDb ->
+    before ->
+      setDb()
+      .then ->
         Postman.sentMails.length = 0
-        page.loginFor adminUser._id, ->
-          page.visit ->
-            page.clickAuthorize store2, done
-    it 'removed the store from the view', (done) ->
-      page.storesToAuthorize (stores) ->
-        stores.length.should.equal 1
-        done()
-    it 'unauthorized the store on the db', (done) ->
-      Store.findById store2._id, (err, store) ->
-        store.isFlyerAuthorized.should.be.true
-        done()
+        page.loginFor adminUser._id
+      .then page.visit
+      .then -> page.clickAuthorize store2
+    it 'removed the store from the view', => page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 1
+    it 'unauthorized the store on the db', -> Q.ninvoke(Store, "findById", store2._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.true
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
@@ -68,20 +56,14 @@ describe 'Site Admin Authorize Stores page', ->
       mail.subject.should.equal "Ateliês: A loja #{store2.name} teve seu flyer aprovado"
    
   describe 'unauthorizing', ->
-    before (done) ->
-      setDb ->
+    before ->
+      setDb().then ->
         Postman.sentMails.length = 0
-        page.loginFor adminUser._id, ->
-          page.visit ->
-            page.clickUnauthorize store1, done
-    it 'removed the store from the view', (done) ->
-      page.storesToUnauthorize (stores) ->
-        stores.length.should.equal 1
-        done()
-    it 'authorized the store on the db', (done) ->
-      Store.findById store1._id, (err, store) ->
-        store.isFlyerAuthorized.should.be.false
-        done()
+        page.loginFor adminUser._id
+      .then page.visit
+      .then -> page.clickUnauthorize store1
+    it 'removed the store from the view', => page.storesToUnauthorize(captureAttribute "length").should.eventually.equal 1
+    it 'authorized the store on the db', => Q.ninvoke(Store, "findById", store1._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.false
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]

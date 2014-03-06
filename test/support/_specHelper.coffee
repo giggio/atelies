@@ -21,3 +21,6 @@ Postman = require '../../app/models/postman'
 Postman.dryrun = on
 AmazonFileUploader = require '../../app/helpers/amazonFileUploader'
 AmazonFileUploader.dryrun = on
+Q = require 'q'
+global.captureAttribute = (attr) -> (valueOrPromise) -> Q(valueOrPromise).then (v) -> v[attr]
+global.runFn = (fn) -> (valueOrPromise) -> Q(valueOrPromise).then (v) -> fn v

@@ -6,82 +6,54 @@ StoreProductPage    = require './support/pages/storeProductPage'
 
 describe 'Store shopping cart page (manage)', ->
   page = storeProductPage = store = product1 = product2 = store2 = product3 = null
-  after (done) -> page.closeBrowser done
-  before (done) =>
+  before ->
     page = new StoreCartPage()
     storeProductPage = new StoreProductPage page
     cleanDB (error) ->
-      return done error if error
       store = generator.store.a()
       store.save()
       product1 = generator.product.a()
       product1.save()
       product2 = generator.product.b()
       product2.save()
-      whenServerLoaded done
+      whenServerLoaded()
 
   describe 'with two items, when remove one item', ->
-    before (done) ->
-      page.clearLocalStorage ->
-        storeProductPage.visit 'store_1', 'name_1', ->
-          storeProductPage.purchaseItem ->
-            storeProductPage.visit 'store_1', 'name_2', ->
-              storeProductPage.purchaseItem ->
-                page.itemsQuantity (q) ->
-                  q.should.equal 2
-                  page.removeItem product1, done
-    it 'shows a cart with one item', (done) ->
-      page.itemsQuantity (q) ->
-        q.should.equal 1
-        done()
-    it 'shows item id', (done) ->
-      page.id (id) ->
-        id.should.equal product2._id.toString()
-        done()
+    before ->
+      page.clearLocalStorage()
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then -> storeProductPage.visit 'store_1', 'name_2'
+      .then storeProductPage.purchaseItem
+      #.then -> page.itemsQuantity (q) -> q.should.equal 2
+      .then -> page.removeItem product1
+    it 'shows a cart with one item', -> page.itemsQuantity().should.become 1
+    it 'shows item id', -> page.id().should.become product2._id.toString()
 
   describe 'when setting quantity', ->
-    before (done) ->
-      page.clearLocalStorage ->
-        storeProductPage.visit 'store_1', 'name_1', ->
-          storeProductPage.purchaseItem ->
-            page.updateQuantity product1, 3, ->
-              page.visit 'store_1', done
-    it 'is at the cart location', (done) ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/store_1/cart"
-        done()
-    it 'shows a cart with one item', (done) ->
-      page.itemsQuantity (q) ->
-        q.should.equal 1
-        done()
-    it 'shows quantity of three', (done) ->
-      page.quantity (q) ->
-        q.should.equal 3
-        done()
+    before ->
+      page.clearLocalStorage()
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then -> page.updateQuantity product1, 3
+      .then -> page.visit 'store_1'
+    it 'is at the cart location', -> page.currentUrl().should.become "http://localhost:8000/store_1/cart"
+    it 'shows a cart with one item', -> page.itemsQuantity().should.become 1
+    it 'shows quantity of three', -> page.quantity().should.become 3
 
   describe 'when setting quantity to incorrect value', ->
-    before (done) ->
-      page.clearLocalStorage ->
-        storeProductPage.visit 'store_1', 'name_1', ->
-          storeProductPage.purchaseItem ->
-            page.updateQuantity product1, 'abc', done
-    it 'shows error message', (done) ->
-      page.errorMessageForSelector '.quantity', (t) ->
-        t.should.equal "A quantidade deve ser um número."
-        done()
-    it 'shows original quantity', (done) ->
-      page.visit 'store_1', ->
-        page.quantity (q) ->
-          q.should.equal 1
-          done()
+    before ->
+      page.clearLocalStorage()
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then -> page.updateQuantity product1, 'abc'
+    it 'shows error message', -> page.errorMessageForSelector('.quantity').should.become "A quantidade deve ser um número."
+    it 'shows original quantity', -> page.visit('store_1').then page.quantity().should.become 1
 
   describe 'clearing cart', ->
-    before (done) ->
-      page.clearLocalStorage ->
-        storeProductPage.visit 'store_1', 'name_1', ->
-          storeProductPage.purchaseItem ->
-            page.clearCart done
-    it 'shows an empty cart', (done) ->
-      page.itemsQuantity (q) ->
-        q.should.equal 0
-        done()
+    before ->
+      page.clearLocalStorage()
+      .then -> storeProductPage.visit 'store_1', 'name_1'
+      .then storeProductPage.purchaseItem
+      .then page.clearCart
+    it 'shows an empty cart', -> page.itemsQuantity().should.become 0
