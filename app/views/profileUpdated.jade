@@ -9,5 +9,5 @@ append content
       | &nbsp;Seu perfil foi atualizado com sucesso!
       if typeof(redirectTo) !== 'undefined'
         p Você será redirecionado em instantes para a página de origem. Ou <a id="redirectTo" href="#{redirectTo}">clique aqui</a> e seja redirecionado agora.
-        script.
+        script(type='text/javascript').
           setTimeout(function() {window.location="#{redirectTo}"}, 5000);

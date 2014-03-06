@@ -10,7 +10,7 @@ append content
       .alert.alert-warning
         strong Você já irá continuar comprando!
         | &nbsp;Você está sendo redirecionado agora para o seu carrinho para prosseguir com a sua compra!
-        script.
+        script(type='text/javascript').
           setTimeout(function() {
             window.location.pathname = "#{redirectTo}";
           }, 9000);

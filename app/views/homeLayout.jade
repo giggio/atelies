@@ -58,27 +58,27 @@ append layout
               #socialContainers
                 .facebookContainer
                   #fb-root
-                  script .
+                  script(type='text/javascript').
                     (function(d, s, id) {
                       var js, fjs = d.getElementsByTagName(s)[0];
                       if (d.getElementById(id)) return;
                       js = d.createElement(s); js.id = id;
                       js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=618886944811863";
                       fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
+                    }(document, 'script', 'facebook-jssdk'))
                 .twitterContainer
                   a.twitter-share-button(href="https://twitter.com/share", data-url="https://www.atelies.com.br", data-text="Ateliês: shopping virtual de artes e afins", data-via="ateliescombr", data-lang="pt", data-size="small", data-related="ateliescombr", data-hashtags="Atelies,Artesanato") Tweetar
                 .gplusContainer
                   .g-plusone(data-annotation="bubble", data-width="300", data-href="https://www.atelies.com.br")
           #lastFooter
-            &copy; 2013 - Ateliês
-            &nbsp;|&nbsp;
+            | &copy; 2013 - Ateliês
+            | &nbsp;|&nbsp;
             a(href="/terms") Termos de uso
-            &nbsp;|&nbsp;
+            | &nbsp;|&nbsp;
             a(href="/about") Sobre
-            &nbsp;|&nbsp;
+            | &nbsp;|&nbsp;
             a(href="mailto:contato@atelies.com.br") Contato
-            &nbsp;|&nbsp;
+            | &nbsp;|&nbsp;
             a(href="http://blog.atelies.com.br") Blog
-            &nbsp;|&nbsp;
+            | &nbsp;|&nbsp;
             a(href='/technology') Tecnologia

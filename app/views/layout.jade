@@ -1,7 +1,7 @@
 block variables
   - var title = "Ateliês - "
   - var pageSchema = "http://schema.org/WebPage"
-doctype 5
+doctype html
 html
   head
     title=title
@@ -9,7 +9,7 @@ html
     link(rel='stylesheet', href='#{STATIC_PATH}/stylesheets/style.css')
     link(href="https://plus.google.com/111286901107324902673", rel="publisher")
     include includes/shims
-    script.
+    script(type='text/javascript').
       window.prerenderReady = false;
       var staticPath = '!{STATIC_PATH}';
       var clientLibPath = '!{CLIENT_LIB_PATH}'; //not used anywhere, but is here so we remember clientLibPath and staticPath are different
@@ -19,16 +19,16 @@ html
     block layout
     block scriptsFooter
       if DEBUG
-        script .
+        script(type='text/javascript').
           window.DEBUG = true
       else
-        script .
+        script(type='text/javascript').
           window.DEBUG = false
-      script .
+      script(type='text/javascript').
       <!-- UserVoice JavaScript SDK (only needed once on a page) -->
-      script .
+      script(type='text/javascript').
         (function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/jNBpyNyNkKBnCxUMJjJziw.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
-      script .
+      script(type='text/javascript').
         UserVoice = window.UserVoice || [];
         UserVoice.push(['showTab', 'classic_widget', {
           mode: 'full',
