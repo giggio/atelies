@@ -13,14 +13,13 @@ append layout
             #searchProducts2
               form#searchProducts.input-group
                 input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos")
-                span.input-group-btn: button.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
+                span.input-group-btn: button#doSearchProduct.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
             #shoppingCart
               a(href="#", onclick="Backbone.history.navigate('cart', true); return false;") 
                 i.glyphicon.glyphicon-shopping-cart
                 | Carrinho  
           #header2
             #site-banner
-            //include includes/storeHeader
             a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
               if store.banner
                 img#storeBanner(src="#{store.banner}")
