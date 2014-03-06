@@ -8,22 +8,22 @@ module.exports = class StoreProductPage extends Page
   product: ->
     product = {}
     @parallel [
-      => @getText "#product #name", (text) -> product.name = text
-      => @getText "#product #price", (text) -> product.price = text
-      => @getTexts "#product .tag", (texts) -> product.tags = texts
-      => @getText "#product #description", (text) -> product.description = text
-      => @getText "#product #dimensions #height", (text) -> product.height = text
-      => @getText "#product #dimensions #width", (text) -> product.width = text
-      => @getText "#product #dimensions #depth", (text) -> product.depth = text
-      => @getText "#product #weight", (text) -> product.weight = text
-      => @getText "#product #inventory", (text) -> product.inventory = text
-      => @getText "#storeName", (text) -> product.storeName = text
-      => @getText "#storePhoneNumber", (text) -> product.storePhoneNumber = text
-      => @getText "#storeCity", (text) -> product.storeCity = text
-      => @getText "#storeState", (text) -> product.storeState = text
-      => @getText "#storeOtherUrl", (text) -> product.storeOtherUrl = text
-      => @getSrc "#storeBanner", (text) -> product.banner = text
-      => @getSrc "#product #picture", (text) -> product.picture = text
+      => @getText("#product #name").then (text) -> product.name = text
+      => @getText("#product #price").then (text) -> product.price = text
+      => @getTexts("#product .tag").then (texts) -> product.tags = texts
+      => @getText("#product #description").then (text) -> product.description = text
+      => @getText("#product #dimensions #height").then (text) -> product.height = text
+      => @getText("#product #dimensions #width").then (text) -> product.width = text
+      => @getText("#product #dimensions #depth").then (text) -> product.depth = text
+      => @getText("#product #weight").then (text) -> product.weight = text
+      => @getText("#product #inventory").then (text) -> product.inventory = text
+      => @getText("#storeName").then (text) -> product.storeName = text
+      => @getText("#storePhoneNumber").then (text) -> product.storePhoneNumber = text
+      => @getText("#storeCity").then (text) -> product.storeCity = text
+      => @getText("#storeState").then (text) -> product.storeState = text
+      => @getText("#storeOtherUrl").then (text) -> product.storeOtherUrl = text
+      => @getSrc("#storeBanner").then (text) -> product.banner = text
+      => @getSrc("#product #picture").then (text) -> product.picture = text
     ]
     .then -> product
   storeNameHeader: @::getText.partial "#storeNameHeader"
@@ -37,10 +37,10 @@ module.exports = class StoreProductPage extends Page
           do (el) =>
             (getCommentCb) =>
               getCommentActions =
-                userName: (cb) => @getTextIn el, ".userName", (t) -> cb null, t
-                userPicture: (cb) => @getSrcIn el, ".userPicture", (t) -> cb null, t
-                body: (cb) => @getTextIn el, ".body", (t) -> cb null, t
-                date: (cb) => @getTextIn el, ".date", (t) -> cb null, t
+                userName: (cb) => @getTextIn(el, ".userName").then (t) -> cb null, t
+                userPicture: (cb) => @getSrcIn(el, ".userPicture").then (t) -> cb null, t
+                body: (cb) => @getTextIn(el, ".body").then (t) -> cb null, t
+                date: (cb) => @getTextIn(el, ".date").then (t) -> cb null, t
               async.parallel getCommentActions, getCommentCb
       Q.nfcall async.parallel, getCommentsAction
   writeComment: (comm) ->

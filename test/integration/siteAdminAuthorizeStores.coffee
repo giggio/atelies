@@ -62,7 +62,7 @@ describe 'Site Admin Authorize Stores page', ->
         page.loginFor adminUser._id
       .then page.visit
       .then -> page.clickUnauthorize store1
-    it 'removed the store from the view', => page.storesToUnauthorize(captureAttribute "length").should.eventually.equal 1
+    it 'removed the store from the view', => page.storesToUnauthorize().then (ss) -> ss.length.should.equal 1
     it 'authorized the store on the db', => Q.ninvoke(Store, "findById", store1._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.false
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1

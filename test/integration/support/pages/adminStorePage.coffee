@@ -8,7 +8,8 @@ module.exports = class AdminHomePage extends Page
   products: =>
     products = []
     getData = []
-    @findElementsIn '#products', '.product', (els) =>
+    @findElementsIn '#products', '.product'
+    .then (els) =>
       for el in els
         do (el) =>
           product = {}

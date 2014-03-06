@@ -9,20 +9,18 @@ module.exports = class AdminManageStorePage extends Page
     else
       cb = storeId
       super "admin/createStore"
-  setFieldsAs: (store) =>
+  setFieldsAs: (store) ->
     Q.nfcall async.parallel, [
-      (pcb) => @select "#manageStoreBlock #state", store.state, pcb
-      (pcb) => @hasElement "#manageStoreBlock #pagseguro", (itHas) =>
-        if itHas
-          if store.pmtGateways.pagseguro?
-            @check "#manageStoreBlock #pagseguro", =>
-              @type "#manageStoreBlock #pagseguroEmail", store.pmtGateways.pagseguro.email
-              @type "#manageStoreBlock #pagseguroToken", store.pmtGateways.pagseguro.token
-              pcb()
-          else
-            @uncheck "#manageStoreBlock #pagseguro", pcb
+      (pcb) => @select("#manageStoreBlock #state", store.state).then pcb
+      (pcb) => @hasElement("#manageStoreBlock #pagseguro").then (itHas) =>
+        return pcb() unless itHas
+        if store.pmtGateways.pagseguro?
+          @check("#manageStoreBlock #pagseguro")
+          .then => @type "#manageStoreBlock #pagseguroEmail", store.pmtGateways.pagseguro.email
+          .then => @type "#manageStoreBlock #pagseguroToken", store.pmtGateways.pagseguro.token
+          .then pcb
         else
-          pcb()
+          @uncheck("#manageStoreBlock #pagseguro").then pcb
     ]
     .then => @type "#manageStoreBlock #name", store.name
     .then => @type "#manageStoreBlock #email", store.email

@@ -51,10 +51,10 @@ describe 'Admin Manage Product page', ->
 
   describe "can't update invalid product", ->
     before ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        .then -> page.setFieldsAs name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'
-        .then page.clickUpdateProduct
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+      .then -> page.setFieldsAs name:'', price:'', tags:[], description:'', dimensions: {height:'dd', width: 'ee', depth:'ff'}, weight: 'gg', shipping: { applies: true, dimensions: {height:'edd', width: 'eee', depth:'eff'}, weight: 'egg'}, inventory: 'hh'
+      .then page.clickUpdateProduct
     it 'is at the product manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
     it 'did not update the product', ->
       Q.ninvoke Product, "findById", product._id
@@ -93,10 +93,10 @@ describe 'Admin Manage Product page', ->
 
   describe "can't delete shipping info on a product that will be posted", ->
     before ->
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        .then -> page.setFieldsAs shipping: applies: true
-        .then page.clickUpdateProduct
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+      .then -> page.setFieldsAs shipping: applies: true
+      .then page.clickUpdateProduct
     it 'is at the product manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
     it 'shows error messages', ->
       page.errorMessagesIn('#editProduct').then (errorMsgs) ->
@@ -111,10 +111,10 @@ describe 'Admin Manage Product page', ->
       existingProduct = generator.product.c()
       existingProduct.storeSlug = store.slug
       existingProduct.save()
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        .then -> page.setFieldsAs existingProduct
-        .then page.clickUpdateProduct
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+      .then -> page.setFieldsAs existingProduct
+      .then page.clickUpdateProduct
     it 'is at the product create page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageProduct/#{product.storeSlug}/#{product._id}"
     it 'did not create the new product', ->
       Q.ninvoke Product, "find", name: existingProduct.name
@@ -125,10 +125,10 @@ describe 'Admin Manage Product page', ->
     otherProduct = null
     before ->
       otherProduct = generator.product.b()
-      page.loginFor userSeller._id, ->
-        page.visit store.slug, product._id.toString()
-        .then -> page.setFieldsAs otherProduct
-        .then page.clickUpdateProduct
+      page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+      .then -> page.setFieldsAs otherProduct
+      .then page.clickUpdateProduct
     it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{product.storeSlug}"
     it 'updated the product', ->
       Q.ninvoke Product, "findById", product._id
@@ -192,7 +192,8 @@ describe 'Admin Manage Product page', ->
       .then -> page.visit store.slug, product3._id.toString()
       .then ->
         filePath = path.join __dirname, 'support', 'images', '700x700.png'
-        page.setPictureFile filePath, page.clickUpdateProduct
+        page.setPictureFile filePath
+      .then page.clickUpdateProduct
     it 'is at the store manage page', ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"

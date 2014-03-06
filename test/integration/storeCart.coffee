@@ -7,7 +7,6 @@ Q                   = require 'q'
 
 describe 'Store shopping cart page', ->
   page = storeProductPage = store = product1 = product2 = store2 = product3 = null
-  after -> page.closeBrowser()
   before ->
     page = new StoreCartPage()
     storeProductPage = new StoreProductPage page

@@ -12,5 +12,5 @@ module.exports = class StoreHomePage extends Page
   productLink: (_id) -> @getAttribute "#product#{_id} .link", 'href'
   evaluation: ->
     @findElement('#evaluation').then (el) => Q.nfcall async.parallel,
-      ratingStars: (cb) => @getAttributeIn el, "#ratingStars", "data-average", (t) -> cb null, parseFloat t
-      ratingDescription: (cb) => @getTextIn el, "#ratingDescription", (t) -> cb null, t
+      ratingStars: (cb) => @getAttributeIn(el, "#ratingStars", "data-average").then (t) -> cb null, parseFloat t
+      ratingDescription: (cb) => @getTextIn(el, "#ratingDescription").then (t) -> cb null, t

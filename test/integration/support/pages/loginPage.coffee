@@ -11,5 +11,5 @@ module.exports = class LoginPage extends HomeLayout
   emailRequired: @::getText.partial "#loginForm label[for=email]"
   passwordRequired: @::getText.partial "#loginForm label[for=password]"
   showsCaptcha: @::hasElementAndIsVisible.partial '.recaptcha'
-  loginWith: (values, cb) -> @_callbackOrPromise cb, @setFieldsAs(values).then @clickLoginButton
-  navigateAndLoginWith: (user, cb) -> @_callbackOrPromise cb, @visit().then => @loginWith user
+  loginWith: (values) -> @setFieldsAs(values).then @clickLoginButton
+  navigateAndLoginWith: (user) -> @visit().then => @loginWith user

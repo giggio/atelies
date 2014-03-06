@@ -12,10 +12,10 @@ module.exports = class HomePage extends Page
   clickDoSearchStores: @::pressButton.partial "#doSearch"
   searchProductsText: @::type.partial "#productSearchTerm"
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
-  storesWithoutFlyersLength: -> @findElements('#storesWithoutFlyer .storeWithoutFlyer').then @captureAttribute 'length'
-  storesLength: -> @findElements('#stores .store').then @captureAttribute 'length'
+  storesWithoutFlyersLength: -> @findElements('#storesWithoutFlyer .storeWithoutFlyer').then captureAttribute 'length'
+  storesLength: -> @findElements('#stores .store').then captureAttribute 'length'
   storeLink: (_id) -> @getAttribute "#store#{_id} .link", 'href'
-  searchProductsLength: -> @findElements('#productsSearchResults .product').then @captureAttribute 'length'
+  searchProductsLength: -> @findElements('#productsSearchResults .product').then captureAttribute 'length'
   productLink: (_id) -> @getAttribute "#product#{_id} .link", 'href'
   productsLength: -> @findElements('#products .product').then (els) -> els.length
   product: (_id) ->
