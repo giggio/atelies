@@ -56,6 +56,9 @@ define [
       name:
         required:true
         msg: 'O nome é obrigatório.'
+      description:
+        [{maxLength: 800, msg: 'A descrição deve ser de até 800 caracteres.'}
+         {required: false}]
       price:
         [{required: true, msg: 'O preço é obrigatório.'}
          {pattern:'number', msg: 'O preço deve ser um número.'}]
