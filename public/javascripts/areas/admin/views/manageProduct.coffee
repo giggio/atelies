@@ -56,7 +56,7 @@ define [
         tokenSeparators: [","]
         formatNoMatches: -> ""
       $.ajax
-        url: "/admin/#{@store.get '_id'}/categories"
+        url: "/api/admin/#{@store.get '_id'}/categories"
         success: (data, status, jqxhr) =>
           cats = @$('#categories')
           cats.select2

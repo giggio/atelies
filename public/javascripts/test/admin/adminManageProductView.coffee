@@ -49,7 +49,7 @@ define [
           expect($("#inventory", el).val()).to.equal product.inventory.toString()
         it 'loaded categories', ->
           expect(ajaxSpy).to.have.been.calledOnce
-          dataPosted.url.should.equal "/admin/1/categories"
+          dataPosted.url.should.equal "/api/admin/1/categories"
         after ->
           ajaxSpy.restore()
           manageProductView.close()
@@ -58,7 +58,7 @@ define [
         before ->
           productPosted = null
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success()
@@ -115,7 +115,7 @@ define [
       describe 'Does not update product when invalid', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [product], storeSlug: product.storeSlug
@@ -160,7 +160,7 @@ define [
       describe 'Creates product', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success(_id: '456')
@@ -215,7 +215,7 @@ define [
       describe 'Does not create product when invalid', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [newproduct], storeSlug: newproduct.storeSlug
@@ -259,7 +259,7 @@ define [
       describe 'Does not create product when missing shipping info when product has shipping info', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             opt.success()
           historySpy = sinon.spy Backbone.history, "navigate"
           products = new Products [newproduct], storeSlug: newproduct.storeSlug
@@ -298,7 +298,7 @@ define [
       describe 'Creates a product when missing shipping info on a product that does not require it', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/2/categories"
+            return if opt.url is "/api/admin/2/categories"
             dataPosted = opt
             productPosted = JSON.parse opt.data
             opt.success(_id: '456')
@@ -356,7 +356,7 @@ define [
       describe 'Deletes product', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             dataPosted = opt
             opt.success()
           products = new Products [product], storeSlug: store.slug
@@ -381,7 +381,7 @@ define [
       describe 'does not confirm product deletion', ->
         before ->
           ajaxSpy = sinon.stub $, 'ajax', (opt) =>
-            return if opt.url is "/admin/1/categories"
+            return if opt.url is "/api/admin/1/categories"
             opt.success()
           products = new Products [product], storeSlug: store.slug
           productModel = products.at 0
