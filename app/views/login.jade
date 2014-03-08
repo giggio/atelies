@@ -7,20 +7,21 @@ append scriptsFooter
     require(['loginBootstrap']);
 append content
   .container
-    :coffeescript
-      window.RecaptchaOptions =
-        custom_translations:
-          instructions_visual : "Escreva as duas palavras:",
-          instructions_audio : "Escreva o que ouviu:",
-          play_again : "Toque de novo",
-          cant_hear_this : "Baixar em MP3",
-          visual_challenge : "Desafio visual",
-          audio_challenge : "Desafio auditivo",
-          refresh_btn : "Novo desafio"
-          help_btn : "Ajuda",
-          incorrect_try_again : "Incorreto, tente novamente.",
-        theme: 'clean'
-        lang: 'pt'
+    script
+      :coffeescript
+        window.RecaptchaOptions =
+          custom_translations:
+            instructions_visual : "Escreva as duas palavras:",
+            instructions_audio : "Escreva o que ouviu:",
+            play_again : "Toque de novo",
+            cant_hear_this : "Baixar em MP3",
+            visual_challenge : "Desafio visual",
+            audio_challenge : "Desafio auditivo",
+            refresh_btn : "Novo desafio"
+            help_btn : "Ajuda",
+            incorrect_try_again : "Incorreto, tente novamente.",
+          theme: 'clean'
+          lang: 'pt'
     form#loginForm.validatable.form-horizontal(action='#{secureUrl}/account/login#{redirectTo}', method='post')
       h2 Login
       if ('undefined' !== typeof errors && errors.length)
