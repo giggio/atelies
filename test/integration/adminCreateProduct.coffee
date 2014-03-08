@@ -134,8 +134,8 @@ describe 'Admin Create Product page', ->
         productOnDb.inventory.should.equal productNoShippingInfo2.inventory
 
   describe 'create a product with upload', ->
-    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.png$/
-    uploadedThumbRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+_thumb150x150\.png$/
+    uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.?\d*\.png$/
+    uploadedThumbRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.?\d*_thumb150x150\.png$/
     product3 = null
     before ->
       AmazonFileUploader.filesUploaded.length = 0
