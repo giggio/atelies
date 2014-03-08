@@ -8,9 +8,9 @@ append layout
         #gridHeader
           #site-banner
             if (CONFIG.serverEnvironment == 'production')
-              a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
+              a(href="/"): img(src="#{STATIC_PATH}/images/ateliesLogo.png")
             else
-              a(href="/", onclick="Backbone.history.navigate('', true); return false;"): img(src="#{STATIC_PATH}/images/logonovo.png")
+              a(href="/"): img(src="#{STATIC_PATH}/images/logonovo.png")
           #headerElements
             #header1
               .col-md-8
