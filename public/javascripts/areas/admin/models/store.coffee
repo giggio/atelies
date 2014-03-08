@@ -36,6 +36,9 @@ define [
       name:
         required: true
         msg: 'Informe o nome da loja.'
+      description:
+        [{maxLength: 550, msg: 'A descrição deve ser de até 550 caracteres.'}
+         {required: false}]
       email:
         [{pattern:'email', msg:'O e-mail deve ser válido.'}
         {required: false}]
