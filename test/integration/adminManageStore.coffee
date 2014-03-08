@@ -34,7 +34,6 @@ describe 'Admin manage store page', ->
         expect(store.name).to.equal otherStore.name
         expect(store.email).to.equal otherStore.email
         expect(store.description).to.equal otherStore.description
-        expect(store.homePageDescription).to.equal otherStore.homePageDescription
         expect(store.urlFacebook).to.be.undefined
         expect(store.urlTwitter).to.be.undefined
         expect(store.phoneNumber).to.equal otherStore.phoneNumber
@@ -144,7 +143,6 @@ describe 'Admin manage store page', ->
         expect(store.name).to.equal exampleStore.name
         expect(store.email).to.equal exampleStore.email
         expect(store.description).to.equal exampleStore.description
-        expect(store.homePageDescription).to.equal exampleStore.homePageDescription
         expect(store.urlFacebook).to.equal exampleStore.urlFacebook
         expect(store.urlTwitter).to.equal exampleStore.urlTwitter
         expect(store.phoneNumber).to.equal exampleStore.phoneNumber

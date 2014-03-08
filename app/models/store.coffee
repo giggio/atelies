@@ -12,7 +12,6 @@ storeSchema = new mongoose.Schema
   slug:                   String
   email:                  String
   description:            String
-  homePageDescription:    String
   homePageImage:          String
   urlFacebook:            String
   urlTwitter:             String
@@ -67,7 +66,6 @@ storeSchema.methods.toSimple = ->
     slug: @slug
     email: @email
     description: @description
-    homePageDescription: @homePageDescription
     homePageImage: @homePageImage
     urlFacebook: @urlFacebook
     urlTwitter: @urlTwitter
@@ -104,7 +102,7 @@ storeSchema.methods.setPagseguro = (set) ->
   else
     @pmtGateways.pagseguro = set
 storeSchema.methods.updateFromSimple = (simple) ->
-  for attr in [ 'email', 'description', 'homePageDescription', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl' ]
+  for attr in [ 'email', 'description', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl' ]
     if simple[attr]? and simple[attr] isnt ''
       @[attr] = simple[attr]
     else

@@ -154,7 +154,6 @@ exports.generator =
       slug: 'store_1'
       email: 'a@a.com'
       description: "Store Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris."
-      homePageDescription: "HP Store Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois."
       homePageImage: 'http://lorempixel.com/400/400/nightlife/1'
       urlFacebook: 'fbstore1'
       urlTwitter: 'twstore1'
@@ -177,7 +176,6 @@ exports.generator =
       slug: 'store_2'
       email: 'b@a.com'
       description: "Store Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
-      homePageDescription: "HP Store Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis."
       homePageImage: 'http://lorempixel.com/400/400/nightlife/2'
       urlFacebook: 'fbstore2'
       urlTwitter: 'twstore2'
@@ -196,7 +194,6 @@ exports.generator =
       slug: 'store_3'
       email: 'c@a.com'
       description: "Store Casamentiss faiz malandris se pirulitá."
-      homePageDescription: "HP Store Casamentiss faiz malandris se pirulitá."
       homePageImage: 'http://lorempixel.com/400/400/nightlife/3'
       urlFacebook: 'fbstore3'
       urlTwitter: 'twstore3'
@@ -216,7 +213,6 @@ exports.generator =
       phoneNumber: '(77) 9999-9999'
       email: 'd@a.com'
       description: "Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
-      homePageDescription: "HP Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
       homePageImage: 'http://lorempixel.com/400/400/nightlife/4'
       urlFacebook: ''
       urlTwitter: ''
@@ -236,7 +232,6 @@ exports.generator =
       phoneNumber: '(66) 9999-9999'
       email: 'e@a.com'
       description: "Uma Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
-      homePageDescription: "IHP Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz."
       homePageImage: 'http://lorempixel.com/400/400/nightlife/5'
       urlFacebook: ''
       urlTwitter: ''
@@ -254,7 +249,6 @@ exports.generator =
       slug: ''
       email: ''
       description: ''
-      homePageDescription: ''
       homePageImage: ''
       urlFacebook: ''
       urlTwitter: ''

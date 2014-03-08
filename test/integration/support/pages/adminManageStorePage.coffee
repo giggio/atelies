@@ -25,7 +25,6 @@ module.exports = class AdminManageStorePage extends Page
     .then => @type "#manageStoreBlock #name", store.name
     .then => @type "#manageStoreBlock #email", store.email
     .then => @type "#manageStoreBlock #description", store.description
-    .then => @type "#manageStoreBlock #homePageDescription", store.homePageDescription
     .then => @type "#manageStoreBlock #urlFacebook", store.urlFacebook
     .then => @type "#manageStoreBlock #urlTwitter", store.urlTwitter
     .then => @type "#manageStoreBlock #phoneNumber", store.phoneNumber
