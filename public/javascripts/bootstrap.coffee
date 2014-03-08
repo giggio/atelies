@@ -8,7 +8,7 @@ requirejs.config
     text: 'lib/requirejs-text/text'
     twitterBootstrap: 'lib/bootstrap/dist/js/bootstrap'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd'
-    epoxy: 'lib/backbone.epoxy/index'
+    epoxy: 'lib/backbone.epoxy/backbone.epoxy'
     caroufredsel: 'lib/carouFredSel/jquery.carouFredSel-6.2.1'
     imagesloaded: 'lib/imagesloaded/jquery.imagesloaded'
     jqform: 'lib/jquery-form/jquery.form'
