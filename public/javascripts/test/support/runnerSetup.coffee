@@ -31,6 +31,7 @@ configureRequireJS = ->
       ga: 'test/support/gaStub'
       gplus: 'test/support/gplusStub'
   global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
+  global.Handlebars = require('handlebars')
 
 initDOM()
 configureRequireJS()

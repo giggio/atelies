@@ -4,7 +4,7 @@ requirejs.config
     jqval: 'lib/jquery.validation/jquery.validate'
     underscore: 'lib/underscore/underscore'
     backbone: 'lib/backbone/backbone'
-    handlebars: 'lib/handlebars/index'
+    handlebars: 'lib/handlebars/handlebars'
     text: 'lib/requirejs-text/text'
     twitterBootstrap: 'lib/bootstrap/dist/js/bootstrap'
     backboneValidation: 'lib/backbone-validation/dist/backbone-validation-amd'
