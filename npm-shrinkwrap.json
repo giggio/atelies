@@ -1041,8 +1041,8 @@
       }
     },
     "requirejs": {
-      "version": "2.1.8",
-      "from": "requirejs@2.1.8"
+      "version": "2.1.11",
+      "from": "requirejs@latest"
     },
     "connect-mongo": {
       "version": "0.4.0",
