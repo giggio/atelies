@@ -59,7 +59,7 @@
     "grunt-nodemon": "~0.2.0",
     "grunt-concurrent": "~0.4.3",
     "grunt-bower-task": "~0.3.4",
-    "jsdom": "~0.10.1",
+    "jsdom": "~0.10.2",
     "backbone": "~1.1.2",
     "underscore.string": "~2.3.3",
     "node-localstorage": "~0.3.4",
