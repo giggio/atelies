@@ -1,7 +1,7 @@
 require './support/_specHelper'
 User     = require '../../app/models/user'
 bcrypt   = require 'bcrypt'
-Page     = require './support/pages/changePasswordPage'
+Page     = require './support/pages/accountChangePasswordPage'
 Q        = require 'q'
 
 describe 'Change Password', ->

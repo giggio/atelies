@@ -2,7 +2,7 @@ require './support/_specHelper'
 User      = require '../../app/models/user'
 bcrypt    = require 'bcrypt'
 config    = require '../../app/helpers/config'
-Page      = require './support/pages/registerPage'
+Page      = require './support/pages/accountRegisterPage'
 Q         = require 'q'
 
 describe 'Register', ->

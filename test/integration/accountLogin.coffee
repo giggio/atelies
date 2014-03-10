@@ -1,5 +1,5 @@
 require './support/_specHelper'
-Page    = require './support/pages/loginPage'
+Page    = require './support/pages/accountLoginPage'
 Q       = require 'q'
 
 describe 'Login', ->
