@@ -34,7 +34,7 @@ storeSchema = new mongoose.Schema
 
 storeSchema.methods._isTheOnlyProduct = (product, simple, cb) ->
   return setImmediate cb if product.name is simple.name
-  Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_"), (err, existingProduct) =>
+  Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_"), (err, existingProduct) ->
     return cb err if err?
     if existingProduct?
       return cb nameExists: "Name '#{simple.name}' already exists."
@@ -161,7 +161,7 @@ Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized, cb) ->
     return cb err if err?
     cb null, _.map stores, (s) -> s.toSimple()
 Store.findWithProductsBySlug = (slug, cb) ->
-  Store.findBySlug slug, (err, store) =>
+  Store.findBySlug slug, (err, store) ->
     return cb err if err?
     return cb(null, null) if store is null
     Product.findByStoreSlug slug, (err, products) ->

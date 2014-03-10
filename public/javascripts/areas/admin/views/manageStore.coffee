@@ -44,7 +44,7 @@ define [
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
       _.defer =>
-        @model.bind 'validated', (isValid, model, errors) =>
+        @model.bind 'validated', (isValid, model, errors) ->
           if isValid
             validationErrorsEl.hide()
           else
@@ -85,7 +85,7 @@ define [
         adminStoresBootstrapModel.stores.splice index, 1
       adminStoresBootstrapModel.stores.push store.attributes
       @_goToStoreManagePage store, update
-    _goToStoreManagePage: (store, update) =>
+    _goToStoreManagePage: (store, update) ->
       StoreView.justCreated = !update
       StoreView.justUpdated = update
       Backbone.history.navigate "store/#{store.get('slug')}", trigger: true

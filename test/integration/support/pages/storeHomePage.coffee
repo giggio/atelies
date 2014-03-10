@@ -3,7 +3,7 @@ async         = require 'async'
 Q             = require 'q'
 
 module.exports = class StoreHomePage extends Page
-  visit: (storeSlug) => super storeSlug
+  visit: (storeSlug) -> super storeSlug
   products: @::findElements.partial '.storeContainer #products .product'
   notExistentText: @::getText.partial "#notExistent"
   searchProductsText: @::type.partial "#productSearchTerm"

@@ -8,7 +8,7 @@ Q                       = require 'q'
 
 describe 'Account order detail page', ->
   page = store = product1 = product2 = user = order1 = userSeller = null
-  before =>
+  before ->
     page = new AccountOrderDetailPage()
     cleanDB()
     .then ->
@@ -36,7 +36,7 @@ describe 'Account order detail page', ->
     .then whenServerLoaded
 
   describe 'show order with two products', ->
-    before =>
+    before ->
       page.loginFor user._id
       .then -> page.visit order1._id
     it 'shows order', ->
@@ -75,7 +75,7 @@ describe 'Account order detail page', ->
 
   describe 'evaluation order and store', ->
     evaluationBody = rating = null
-    before =>
+    before ->
       Postman.sentMails.length = 0
       evaluationBody = "body1"
       rating = 4

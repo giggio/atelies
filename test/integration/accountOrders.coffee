@@ -4,7 +4,7 @@ AccountOrdersPage   = require './support/pages/accountOrdersPage'
 
 describe 'Account orders page', ->
   page = store = product1 = product2 = user = order1 = order2 = null
-  before =>
+  before ->
     page = new AccountOrdersPage()
     cleanDB()
     .then ->
@@ -31,7 +31,7 @@ describe 'Account orders page', ->
     .then whenServerLoaded
 
   describe 'with two orders', ->
-    before =>
+    before ->
       page.loginFor user._id
       .then page.visit
     it 'shows orders', ->

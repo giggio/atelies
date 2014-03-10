@@ -30,7 +30,7 @@ define [
       stores = new StoresForAuthorization status: status
       stores.fetch
         reset:true
-        success: =>
+        success: ->
           approveStoresView = new ApproveStoresView stores: stores
           viewsManager.show approveStoresView
         error: (col, xhr, opt) =>

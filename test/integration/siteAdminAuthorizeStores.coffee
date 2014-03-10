@@ -36,8 +36,8 @@ describe 'Site Admin Authorize Stores page', ->
       setDb()
       .then -> page.loginFor adminUser._id
       .then page.visit
-    it 'shows one store to authorize', => page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 2
-    it 'shows one store to unauthorize', => page.storesToUnauthorize().then(captureAttribute "length").should.eventually.equal 2
+    it 'shows one store to authorize', -> page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 2
+    it 'shows one store to unauthorize', -> page.storesToUnauthorize().then(captureAttribute "length").should.eventually.equal 2
    
   describe 'authorizing', ->
     before ->
@@ -47,7 +47,7 @@ describe 'Site Admin Authorize Stores page', ->
         page.loginFor adminUser._id
       .then page.visit
       .then -> page.clickAuthorize store2
-    it 'removed the store from the view', => page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 1
+    it 'removed the store from the view', -> page.storesToAuthorize().then(captureAttribute "length").should.eventually.equal 1
     it 'unauthorized the store on the db', -> Q.ninvoke(Store, "findById", store2._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.true
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
@@ -62,8 +62,8 @@ describe 'Site Admin Authorize Stores page', ->
         page.loginFor adminUser._id
       .then page.visit
       .then -> page.clickUnauthorize store1
-    it 'removed the store from the view', => page.storesToUnauthorize().then (ss) -> ss.length.should.equal 1
-    it 'authorized the store on the db', => Q.ninvoke(Store, "findById", store1._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.false
+    it 'removed the store from the view', -> page.storesToUnauthorize().then (ss) -> ss.length.should.equal 1
+    it 'authorized the store on the db', -> Q.ninvoke(Store, "findById", store1._id).then(captureAttribute "isFlyerAuthorized").should.eventually.be.false
     it 'sent an email to store admins informing', ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]

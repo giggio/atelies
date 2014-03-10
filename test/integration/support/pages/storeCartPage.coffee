@@ -1,7 +1,7 @@
 Page          = require './seleniumPage'
 
 module.exports = class StoreCartPage extends Page
-  visit: (storeSlug) => super "#{storeSlug}/cart"
+  visit: (storeSlug) -> super "#{storeSlug}/cart"
   quantity: -> @getValue('#cartItems > tbody > tr > td:nth-child(3) input').then runFn parseInt
   name: @::getText.partial '#cartItems > tbody > tr > td:nth-child(2)'
   itemTotalPrice: @::getText.partial '#cartItems > tbody > tr .totalPrice'

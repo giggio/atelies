@@ -8,7 +8,7 @@ define [
       methodMap = create:'POST', update:'PUT', patch:'PATCH', delete:'DELETE', read:'GET'
       type = methodMap[method]
       options = type: type, url: @url()
-      options.success = (data, code, xhr) =>
+      options.success = (data, code, xhr) ->
         opt.success data if opt.success?
       options.error = (xhr, error, type) ->
         opt.error xhr if opt.error?

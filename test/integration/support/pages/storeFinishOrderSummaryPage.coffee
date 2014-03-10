@@ -3,7 +3,7 @@ Q             = require 'q'
 _             = require 'underscore'
 
 module.exports = class StoreFinishOrderPaymentPage extends Page
-  visit: (storeSlug) => super "#{storeSlug}/finishOrder/summary"
+  visit: (storeSlug) -> super "#{storeSlug}/finishOrder/summary"
   summaryOfSale: ->
     Q.all [
       @getText("#shippingCost").then (t) -> shippingCost: t

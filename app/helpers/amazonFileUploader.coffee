@@ -35,7 +35,7 @@ module.exports = class AmazonFileUploader
       AmazonFileUploader.im.resizeAndCrop file.path, dimensions, (err, newFileName) =>
         return cb err if err?
         fileParams = Bucket: AmazonFileUploader.bucket, Key: fileName, Body: fs.createReadStream(newFileName), ContentType: file.headers['content-type']
-        @s3.putObject fileParams, (err, data) =>
+        @s3.putObject fileParams, (err, data) ->
           return cb err if err?
           url = "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/#{fileName}"
           cb null, url
@@ -43,7 +43,7 @@ module.exports = class AmazonFileUploader
   delete: (fileName, cb) ->
     key = fileName.replace "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/", ""
     fileParams = Bucket: AmazonFileUploader.bucket, Key: key
-    @s3.deleteObject fileParams, (err, data) => cb err
+    @s3.deleteObject fileParams, (err, data) -> cb err
   getFileNameFromFullName: (fileName) ->
     key = fileName.replace "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/", ""
     key

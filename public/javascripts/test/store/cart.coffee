@@ -185,7 +185,7 @@ define [
         { type: 'pac', name: 'PAC', cost: 3.33, days: 3 }
         { type: 'sedex', name: 'Sedex', cost: 4.44, days: 1 }
       ]
-      expect(=> cart.chooseShippingOption('oops')).to.throw Error
+      expect(-> cart.chooseShippingOption('oops')).to.throw Error
     it 'when two products are added and shipping calculated it has correct total sale amount', ->
       cart = Cart.get('store_1')
       item = _id: 1, price: 11.1, shippingApplies: true

@@ -2,7 +2,7 @@ Page          = require './seleniumPage'
 Q             = require 'q'
 
 module.exports = class StoreFinishOrderPaymentPage extends Page
-  visit: (storeSlug) => super "#{storeSlug}/finishOrder/payment"
+  visit: (storeSlug) -> super "#{storeSlug}/finishOrder/payment"
   clickSelectDirectPayment: ->
     @waitForSelector '#directSell'
     .then => @click '#directSell'

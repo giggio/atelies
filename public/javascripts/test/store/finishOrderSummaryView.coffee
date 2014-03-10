@@ -87,7 +87,7 @@ define [
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
-        ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+        ajaxSpy = sinon.stub $, 'ajax', (opt) ->
           dataPosted = opt
           orderPosted = JSON.parse opt.data
           opt.success redirect: 'http://pagsegurourl', order:_id: '1456'
@@ -137,7 +137,7 @@ define [
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store2, user: user, cart: cart
-        ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+        ajaxSpy = sinon.stub $, 'ajax', (opt) ->
           dataPosted = opt
           orderPosted = JSON.parse opt.data
           opt.success _id: '1456'
@@ -185,7 +185,7 @@ define [
         deliveryAddress = street: 'Rua A', street2: 'Bairro', city: 'Cidade', state: 'PA', zip: '98741-789'
         user = name: 'Joao Silva', deliveryAddress: deliveryAddress, phoneNumber: '4654456454'
         view = new FinishOrderSummaryView el:el, store: store1, user: user, cart: cart
-        ajaxSpy = sinon.stub $, 'ajax', (opt) =>
+        ajaxSpy = sinon.stub $, 'ajax', (opt) ->
           opt.error status:400
         historySpy = sinon.spy Backbone.history, "navigate"
         view.render()

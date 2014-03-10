@@ -51,7 +51,7 @@ define [
       products = new Products store.slug, slug
       products.fetch
         reset: true
-        success: =>
+        success: ->
           product = products.first()
           productView = new ProductView store: store, product: product, user: user, products: otherProducts
           viewsManager.show productView
@@ -102,7 +102,7 @@ define [
       evaluations = new StoreEvaluations storeId: store._id
       evaluations.fetch
         reset: true
-        success: =>
+        success: ->
           evaluationsView = new EvaluationsView store: store, evaluations: evaluations.toJSON()
           viewsManager.show evaluationsView
         error: (col, xhr, opt) =>

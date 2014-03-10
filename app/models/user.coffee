@@ -49,7 +49,7 @@ userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
         return cb null, true
     else
       @loginError++
-    @save (err, u) =>
+    @save (err, u) ->
       cb error, succeeded
 userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'

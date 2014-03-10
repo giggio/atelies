@@ -59,14 +59,14 @@ module.exports = class StoreRoutes
         .then (shippingOptions) ->
           shippingOption = _.findWhere shippingOptions, type: req.body.shippingType
           shippingOption.cost
-      .then (shippingCost) =>
+      .then (shippingCost) ->
         getItems = for item in req.body.items
           do (item) ->
             (cb) ->
               Product.findById item._id, (err, product) ->
                 cb err, product: product, quantity: item.quantity
         Q.nfcall async.parallel, getItems
-        .then (items) =>
+        .then (items) ->
           Q.nfcall Order.create, req.user, store, items, shippingCost, req.body.paymentType
           .then (order) -> Q.ninvoke order, 'save'
           .spread (order) =>

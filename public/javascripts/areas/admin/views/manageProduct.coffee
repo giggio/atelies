@@ -72,7 +72,7 @@ define [
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
       _.defer =>
-        @model.bind 'validated', (isValid, model, errors) =>
+        @model.bind 'validated', (isValid, model, errors) ->
           if isValid
             validationErrorsEl.empty()
             validationErrorsEl.hide()

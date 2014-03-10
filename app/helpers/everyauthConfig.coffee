@@ -54,7 +54,7 @@ exports.configure = (app) ->
           redirectTo: "?redirectTo=#{req.query.redirectTo}"
         else
           redirectTo: ''
-      addRecaptcha = =>
+      addRecaptcha = ->
         recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, true
         locals.recaptchaForm = recaptcha.toHTML()
       if req.session.carefulLogin
@@ -81,12 +81,12 @@ exports.configure = (app) ->
       else
         [req.body.email, req.body.password]
     authenticate: (email, password) ->
-      validatePassword = (user, p, cb) =>
+      validatePassword = (user, p, cb) ->
         p = p.password unless typeof p is 'string'
         user.verifyPassword p, (error, success) ->
           return cb false if error?
           cb success
-      validateCaptcha = (data, cb) =>
+      validateCaptcha = (data, cb) ->
         return cb "O valor da imagem não foi informado." unless typeof data.remoteip?
         recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, {remoteip: data.remoteip, challenge: data.captchaChallenge, response: data.captchaResponse}, true
         recaptcha.verify (success, errorCode) ->

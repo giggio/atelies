@@ -4,7 +4,7 @@ Q             = require 'q'
 _             = require 'underscore'
 
 module.exports = class StoreCartPage extends Page
-  visit: (storeSlug) => super "#{storeSlug}/finishOrder/shipping"
+  visit: (storeSlug) -> super "#{storeSlug}/finishOrder/shipping"
   address: ->
     @waitForSelectorClickable '#goBackToCart'
     .then => waitMilliseconds 500 #small wait necessary so we dont get a stale element exception

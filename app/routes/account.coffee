@@ -66,7 +66,7 @@ module.exports = class AccountRoutes
     user.deliveryAddress.zip = body.deliveryZIP
     user.phoneNumber = body.phoneNumber
     user.isSeller = true if body.isSeller
-    user.save (err, user) =>
+    user.save (err, user) ->
       return res.render 'updateProfile', errors: error.errors, user: body, states: values.states if err?
       redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
       res.redirect "account/profileUpdated#{redirectTo}"

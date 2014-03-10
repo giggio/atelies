@@ -4,7 +4,7 @@ AdminOrdersPage     = require './support/pages/adminOrdersPage'
 
 describe 'Admin orders page', ->
   page = store = product1 = product2 = user =  userSeller = order1 = order2 = null
-  before =>
+  before ->
     page = new AdminOrdersPage()
     cleanDB().then ->
       store = generator.store.a()

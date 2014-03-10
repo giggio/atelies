@@ -81,7 +81,7 @@ describe 'Home page', ->
     it 'shows only authorized stores', ->
       authorizedIds = _.map authorizedStores, (s) -> s._id.toString()
       unauthorizedIds = _.map unauthorizedStores, (s) -> s._id.toString()
-      page.storesIds().then (ids) =>
+      page.storesIds().then (ids) ->
         for id in ids
           authorizedIds.should.contain id
           unauthorizedIds.should.not.contain id

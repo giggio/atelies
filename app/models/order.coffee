@@ -33,7 +33,7 @@ orderSchema.methods.addEvaluation = (evaluation, cb) ->
   StoreEvaluation.create evaluation, (err, evaluation) =>
     return cb err, evaluation if err?
     @evaluation = evaluation
-    Store.findById @store, (err, store) =>
+    Store.findById @store, (err, store) ->
       return cb err if err?
       store.evaluationAdded evaluation
       cb null, evaluation, store
@@ -104,7 +104,7 @@ Order.create = (user, store, items, shippingCost, paymentType, cb) ->
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
   order.paymentType = paymentType
-  order.validate (err) =>
+  order.validate (err) ->
     cb err, order
 Order.getSimpleByUser = (user, cb) ->
   Order.find(customer: user).populate('store', 'name slug').exec (err, orders) ->

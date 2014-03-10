@@ -24,9 +24,9 @@ ProductComment.create = (commentAttr, cb) ->
   product = commentAttr.product
   comment.userName = user.name
   comment.userEmail = user.email
-  comment.validate (err) =>
+  comment.validate (err) ->
     return cb err if err?
-    product.findAdmins (err, users) =>
+    product.findAdmins (err, users) ->
       return cb err if err?
       body = "<html>
         <h1>Olá!</h1>
@@ -44,6 +44,6 @@ ProductComment.create = (commentAttr, cb) ->
         </html>"
       sendMailActions =
         for user in users
-          (cb) => postman.sendFromContact user, "Ateliês: O produto #{product.name} da loja #{product.storeName} recebeu um comentário", body, cb
-      async.parallel sendMailActions, =>
+          (cb) -> postman.sendFromContact user, "Ateliês: O produto #{product.name} da loja #{product.storeName} recebeu um comentário", body, cb
+      async.parallel sendMailActions, ->
         cb null, comment

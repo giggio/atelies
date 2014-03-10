@@ -57,10 +57,10 @@ module.exports = class Page
     errorMsgs = {}
     @findElement(selector)
     .then (el) -> el.findElements webdriver.By.css '.tooltip-inner'
-    .then (els) =>
+    .then (els) ->
       actions =
         for el in els
-          do (el) -> (cb) =>
+          do (el) -> (cb) ->
             success = (text) ->
               el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
                 errorMsgs[id] = text
@@ -168,7 +168,7 @@ module.exports = class Page
       @isVisible selector
   isVisible: (selector) -> @findElement(selector).then (el) -> el.isDisplayed()
   parallel: (actions) ->
-    flow = webdriver.promise.createFlow (f) =>
+    flow = webdriver.promise.createFlow (f) ->
       for action in actions
         do (action) -> f.execute action
       undefined
@@ -195,7 +195,7 @@ module.exports = class Page
     .then (cookie) =>
       return cookie if cookie?
       @refresh().then => @driver.manage().getCookie('connect.sid')
-    .then (cookie) =>
+    .then (cookie) ->
       server = getExpressServer()
       sessionStore = server.sessionStore
       cookieSecret = server.cookieSecret
@@ -223,13 +223,13 @@ module.exports = class Page
     .then => @getText '.dialogMsg'
     .then (dialogMsg) =>
       @getText '#dialogTitle'
-      .then (dialogTitle) => dialogMsg: dialogMsg, dialogTitle: dialogTitle
+      .then (dialogTitle) -> dialogMsg: dialogMsg, dialogTitle: dialogTitle
   closeDialog: @::pressButton.partial ".dialogClose"
   getParent: (el) ->
     d = Q.defer()
     el.findElement(webdriver.By.xpath('..'))
     .then ((el) -> d.fulfill el), (err) -> d.reject err
     d.promise
-  uploadFile: (selector, path) -> @findElement(selector).then (el) => el.sendKeys path if path?
+  uploadFile: (selector, path) -> @findElement(selector).then (el) -> el.sendKeys path if path?
   waitForReady: -> @wait (=> @eval "return document.readyState === 'complete';"), 5000
   captureAttribute: captureAttribute

@@ -44,7 +44,7 @@ module.exports = class AdminManageStorePage extends Page
   clickConfirmSetPagseguroButton: ->
     @waitForSelectorClickable "#confirmSetPagseguro"
     .then => @pressButtonAndWait "#confirmSetPagseguro"
-    .then => waitMilliseconds 500
+    .then -> waitMilliseconds 500
   clickUnsetPagseguroButton: ->
     @waitForSelectorClickable("#unsetPagseguro")
     .then => @pressButtonAndWait "#unsetPagseguro"
@@ -52,7 +52,7 @@ module.exports = class AdminManageStorePage extends Page
   clickConfirmUnsetPagseguroButton: ->
     @waitForSelectorClickable "#confirmUnsetPagseguro"
     .then => @pressButtonAndWait("#confirmUnsetPagseguro")
-    .then => waitMilliseconds 500
+    .then -> waitMilliseconds 500
   pagseguroEmailErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroEmail"
   pagseguroTokenErrorMsg: @::errorMessageForSelector.partial "#modalConfirmPagseguro #pagseguroToken"
   storeNameExistsModalVisible: @::isVisible.partial "#nameAlreadyExists"

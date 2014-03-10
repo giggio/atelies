@@ -58,10 +58,10 @@ module.exports = class PagSeguro
     pag.buyer
       name: user.name
       email: user.email
-    pag.send (err, pagseguroResult) =>
+    pag.send (err, pagseguroResult) ->
       return cb err if err?
       return cb errorMsg: 'Loja não autorizada no PagSeguro' if pagseguroResult is 'Unauthorized'
-      parseXml pagseguroResult, (err, pagseguroResult) =>
+      parseXml pagseguroResult, (err, pagseguroResult) ->
         return cb err if err?
         return cb pagseguroResult.errors if pagseguroResult.errors?
         cb null, pagseguroResult.checkout.code

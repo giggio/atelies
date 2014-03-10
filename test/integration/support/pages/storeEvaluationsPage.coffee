@@ -3,7 +3,7 @@ async         = require 'async'
 Q             = require 'q'
 
 module.exports = class StoreEvaluationsPage extends Page
-  visit: (storeSlug) => super "#{storeSlug}/evaluations"
+  visit: (storeSlug) -> super "#{storeSlug}/evaluations"
   evaluations: ->
     @findElementsIn('#evaluations', '.evaluation').then (els) =>
       getEvaluationsAction =

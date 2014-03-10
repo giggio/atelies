@@ -23,7 +23,7 @@ describe 'Admin Show Store page', ->
         page.loginFor userSeller._id
       .then -> page.visit store.slug
     it 'shows store products', ->
-      page.products().then (products) =>
+      page.products().then (products) ->
         products.length.should.equal 2
         products[0].name.should.equal product1.name
         products[0].picture.should.equal product1.picture + "_thumb150x150"

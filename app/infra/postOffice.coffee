@@ -12,8 +12,8 @@ module.exports = class PostOffice
     shippingOptions = [ pac, sedex ]
     Q.nfcall Product.getShippingWeightAndDimensions, ids
     .then (products) ->
-      getShippingPricesFor = (service, shipping, quantity) =>
-        (cb) =>
+      getShippingPricesFor = (service, shipping, quantity) ->
+        (cb) ->
           deliverySpecs = serviceType: service.type, from: storeZip, to: userZip, weight: shipping.weight, height: shipping.dimensions.height, width: shipping.dimensions.width, length: shipping.dimensions.depth
           correios.getPrice deliverySpecs, (err, delivery) ->
             #console.log "got price for #{service.type} with specs #{JSON.stringify deliverySpecs}, with response #{JSON.stringify delivery}"

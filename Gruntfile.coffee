@@ -39,8 +39,6 @@ module.exports = (grunt) ->
       options:
         max_line_length:
           level: 'ignore'
-        no_unnecessary_fat_arrows:
-          level: 'ignore'
 
     watch:
       options:

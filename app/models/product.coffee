@@ -53,7 +53,7 @@ productSchema.methods.addComment = (comment, cb) ->
   ProductComment.create comment, cb
 
 productSchema.methods.findAdmins = (cb) ->
-  Store.findBySlug @storeSlug, (err, store) =>
+  Store.findBySlug @storeSlug, (err, store) ->
     return cb if err?
     User.findAdminsFor store, cb
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
@@ -78,7 +78,7 @@ productSchema.methods.toSimpleProduct = ->
   categories: @categories.join ','
 productSchema.methods.toSimpleProductWithComments = (cb) ->
   simple = @toSimpleProduct()
-  ProductComment.findByProduct @, (err, comments) =>
+  ProductComment.findByProduct @, (err, comments) ->
     return cb err if err?
     simple.comments = _.map comments, (c) -> c.toSimple()
     cb null, simple
