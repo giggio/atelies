@@ -46,8 +46,8 @@ exports.configure = (app) ->
     registerSuccessRedirect: "/account/registered"
     getRegisterPath: "/account/register"
     postRegisterPath: "/account/register"
-    registerView: path.join app.get('views'), "register.jade"
-    loginView: path.join app.get('views'), "login.jade"
+    registerView: path.join app.get('views'), "account/register.jade"
+    loginView: path.join app.get('views'), "account/login.jade"
     loginLocals: (req, res, cb) ->
       locals =
         if req.query.redirectTo?

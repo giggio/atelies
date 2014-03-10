@@ -12,7 +12,7 @@ describe 'AdminRoute', ->
       req.user.populate = (path, cb) -> cb null, req.user
       res = render: sinon.spy()
       routes.admin req, res
-      res.render.should.have.been.calledWith 'admin', stores:stores, user:simpleUser
+      res.render.should.have.been.calledWith 'admin/admin', stores:stores, user:simpleUser
     it 'denies access if the user isnt a seller and shows a message page', ->
       stores = []
       res = redirect:sinon.spy()
@@ -39,4 +39,4 @@ describe 'AdminRoute', ->
       res = render: sinon.spy()
       routes.admin req, res
       user.populate.should.have.been.calledWith 'stores'
-      res.render.should.have.been.calledWith 'admin', stores:stores, user: simpleUser
+      res.render.should.have.been.calledWith 'admin/admin', stores:stores, user: simpleUser

@@ -31,7 +31,7 @@
     "underscore": "~1.6.0",
     "bcrypt": "~0.7.7",
     "mongoose": "~3.7.2",
-    "everyauth": "~0.4.x",
+    "everyauth": "~0.4.5",
     "correios": "0.0.4",
     "nodemailer": "~0.4.4",
     "async": "~0.2.10",

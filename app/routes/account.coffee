@@ -23,7 +23,7 @@ module.exports = class AccountRoutes
     Order.getSimpleByUser user, (err, orders) =>
       return @handleError req, res, err, false if err?
       user.toSimpleUser (user) ->
-        res.render 'account', user: user, orders: orders
+        res.render 'account/account', user: user, orders: orders
 
   resendConfirmationEmail: (req, res) ->
     user = req.user
@@ -34,7 +34,7 @@ module.exports = class AccountRoutes
   updateProfileShow: (req, res) ->
     user = req.user
     redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
-    res.render 'updateProfile', user:
+    res.render 'account/updateProfile', user:
       name: user.name
       deliveryStreet: user.deliveryAddress.street
       deliveryStreet2: user.deliveryAddress.street2
@@ -67,34 +67,34 @@ module.exports = class AccountRoutes
     user.phoneNumber = body.phoneNumber
     user.isSeller = true if body.isSeller
     user.save (err, user) ->
-      return res.render 'updateProfile', errors: error.errors, user: body, states: values.states if err?
+      return res.render 'account/updateProfile', errors: error.errors, user: body, states: values.states if err?
       redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
       res.redirect "account/profileUpdated#{redirectTo}"
 
   profileUpdated: (req, res) ->
-    res.render 'profileUpdated', redirectTo: req.query.redirectTo
+    res.render 'account/profileUpdated', redirectTo: req.query.redirectTo
   
   changePasswordShow: (req, res) ->
-    res.render 'changePassword'
+    res.render 'account/changePassword'
   
   changePassword: (req, res) ->
     user = req.user
     email = user.email.toLowerCase()
     user.verifyPassword req.body.password, (err, succeeded) ->
-      return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ] if err?
+      return res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ] if err?
       if succeeded
-        return res.render 'changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
+        return res.render 'account/changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (err, user) ->
-          return res.render 'changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ] if err?
+          return res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ] if err?
           res.redirect 'account/passwordChanged'
       else
-        res.render 'changePassword', errors: [ 'Senha inválida.' ]
+        res.render 'account/changePassword', errors: [ 'Senha inválida.' ]
   
   passwordChanged: (req, res) ->
-    res.render 'passwordChanged'
+    res.render 'account/passwordChanged'
   
-  notSeller: (req, res) -> res.render 'notseller'
+  notSeller: (req, res) -> res.render 'account/notseller'
 
   
   order: (req, res) ->
@@ -111,41 +111,41 @@ module.exports = class AccountRoutes
         return @handleError req, res, err if err?
         res.redirect 'account/verified' + if req.query?.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
 
-  verified: (req, res) -> res.render 'accountVerified', redirectTo: if req.query?.redirectTo? then req.query.redirectTo else undefined
+  verified: (req, res) -> res.render 'account/accountVerified', redirectTo: if req.query?.redirectTo? then req.query.redirectTo else undefined
 
-  mustVerifyUser: (req, res) -> res.render 'accountMustVerifyUser'
+  mustVerifyUser: (req, res) -> res.render 'account/mustVerifyUser'
 
-  registered: (req, res) -> res.render 'accountRegistered', redirectTo: req.query.redirectTo?
+  registered: (req, res) -> res.render 'account/registered', redirectTo: req.query.redirectTo?
 
-  forgotPasswordShow: (req, res) -> res.render 'forgotPassword'
+  forgotPasswordShow: (req, res) -> res.render 'account/forgotPassword'
 
   forgotPassword: (req, res) ->
-    return res.render 'forgotPassword' unless req.body.email?
+    return res.render 'account/forgotPassword' unless req.body.email?
     User.findByEmail req.body.email, (err, user) =>
       return @handleError req, res, err, false if err?
-      return res.render 'forgotPassword', error: 'Usuário não encontrado.' if !user?
+      return res.render 'account/forgotPassword', error: 'Usuário não encontrado.' if !user?
       user.sendMailPasswordReset (err, mailResponse) =>
         @logError req, err if err?
-        return res.render 'forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.' if err?
+        return res.render 'account/forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.' if err?
         user.save()
         res.redirect '/account/passwordResetSent'
 
-  passwordResetSent: (req, res) -> res.render 'passwordResetSent'
+  passwordResetSent: (req, res) -> res.render 'account/passwordResetSent'
 
-  resetPasswordShow: (req, res) -> res.render 'resetPassword'
+  resetPasswordShow: (req, res) -> res.render 'account/resetPassword'
 
   resetPassword: (req, res) ->
     User.findById req.query._id, (err, user) =>
       return @handleError req, res, err, false if err?
-      return res.render 'resetPassword', error: 'Não foi possível trocar a senha.' unless user?.resetKey?
+      return res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.' unless user?.resetKey?
       if user.resetKey.toString() is req.query.resetKey
-        return res.render 'resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
+        return res.render 'account/resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
         user.save (err, user) =>
           return @handleError req, res, err, false if err?
           res.redirect 'account/passwordChanged'
       else
-        return res.render 'resetPassword', error: 'Não foi possível trocar a senha.'
+        return res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.'
 
   evaluationCreate: (req, res) ->
     Order.findById req.params._id, (err, order) =>

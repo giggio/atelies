@@ -1,0 +1,97 @@
+append variables
+  - title += "Registre-se"
+extends ../shared/homeLayout
+append scriptsFooter
+  script(type='text/javascript', src='#{CLIENT_LIB_PATH}/lib/requirejs/require.js', data-main='#{CLIENT_LIB_PATH}/bootstrap.js')
+  script(type='text/javascript').
+    require(['registerBootstrap']);
+append content
+  .container
+    section#app-container
+      #registerSection
+        h2 Cadastro
+        .alert
+          :markdown
+            **Atenção!**
+            O Ateliês está em *em soft opening*.
+            Isso quer dizer que já estamos funcionando, mas ainda estamos verificando se tudo funciona direitinho.
+            Caso queira nos ajudar e dar feedback e sugestões entre em contato conosco em contato@atelies.com.br,
+            ou via [Facebook](https://www.facebook.com/Atelies).
+            Temos ainda uma página de sugestões no [UserVoice](https://atelies.uservoice.com).  
+            **Bem vindo!**
+        if ('undefined' !== typeof errors && errors.length)
+          .alert.alert-warning
+            ul#errors
+              - each error in errors
+                li.error= error
+        script
+          :coffeescript
+            window.RecaptchaOptions =
+              custom_translations:
+                instructions_visual : "Escreva as duas palavras:",
+                instructions_audio : "Escreva o que ouviu:",
+                play_again : "Toque de novo",
+                cant_hear_this : "Baixar em MP3",
+                visual_challenge : "Desafio visual",
+                audio_challenge : "Desafio auditivo",
+                refresh_btn : "Novo desafio"
+                help_btn : "Ajuda",
+                incorrect_try_again : "Incorreto, tente novamente.",
+              theme: 'clean'
+              lang: 'pt'
+
+        #howToRegister
+          a.facebookLogin(href='/auth/facebook#{redirectTo}')
+            img(src="#{STATIC_PATH}/images/fblogin.png")
+            span Cadastre-se via Facebook
+          span &nbsp; ou &nbsp;
+          button#manualEntry.btn.btn-primary Preencha os dados de cadastro
+
+        form#registerForm.validatable.form-horizontal.hide2(action='#{secureUrl}/account/register#{redirectTo}', method='post', role="form")
+          .form-group
+            label.control-label.col-lg-2 Nome:
+            .col-lg-10: input#name(type='text', name="name", value=userParams.name, class="required", title="Informe seu nome.", maxlength="50")
+          .form-group
+            label.control-label.col-lg-2 Email:
+            .col-lg-4: input#email(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName], class="required email", title="Informe seu e-mail.", placeholder="nome@provedor.com", maxlength="50")
+          .form-group
+            label.col-lg-offset-2.col-lg-10
+              input#isSeller(type='checkbox', name="isSeller", value=userParams.isSeller, checked)
+              | registrar-se como vendedor
+          .form-group
+            label.control-label.col-lg-2 Senha (8 caracteres, no mínimo uma letra e um número:
+            .col-lg-4: input#password(type='password', name=everyauth.password.passwordFormFieldName, class="required strongPassword", title="Informe uma senha correta.", maxlength="50")
+          .form-group
+            label.control-label.col-lg-2 Confirme sua senha:
+            .col-lg-4: input#passwordVerify(type='password', name='passwordVerify', title="A senha não confere.", matches="password", maxlength="50")
+          .help-block.col-lg-offset-2.col-lg-10 Os dados de endereço são opcionais no registro, mas são obrigatórios para completar uma compra. Você não precisa preenchê-los agora, mas precisará preenchê-los antes de fechar sua primeira compra.
+          .form-group
+            label.control-label.col-lg-2 Endereço:
+            .col-lg-6: input#deliveryStreet(type='text', name="deliveryStreet", value=userParams.deliveryStreet, title="Informe sua rua.", maxlength="50")
+          .form-group
+            label.control-label.col-lg-2 Endereço (complemento):
+            .col-lg-6: input#deliveryStreet2(type='text', name="deliveryStreet2", value=userParams.deliveryStreet2, class="", title="Informe o complemento do seu endereço (apto, etc).", maxlength="30")
+          .form-group
+            label.control-label.col-lg-2 Cidade:
+            .col-lg-4: input#deliveryCity(type='text', name="deliveryCity", value=userParams.deliveryCity, class="", title="Informe sua cidade.", maxlength="30")
+          .form-group
+            label.control-label.col-lg-2 Estado:
+            .col-lg-2: select#deliveryState(title="Informe seu estado.", name="deliveryState")
+              each state in states
+                option(value=state, selected=state===userParams.deliveryState)= state
+          .form-group
+            label.control-label.col-lg-2 CEP:
+            .col-lg-10: input#deliveryZIP.zip(type='text', name="deliveryZIP", value=userParams.deliveryZIP, title="Informe o CEP no formato 99999-999.", placeholder="01234-567", maxlength="9")
+          .form-group
+            label.control-label.col-lg-2 Telefone:
+            .col-lg-10: input#phoneNumber(type='text', name="phoneNumber", value=userParams.phoneNumber, title="Informe seu telefone.", placeholder="(11) 5647-7897", maxlength="20")
+          .form-group
+            .col-lg-offset-2.col-lg-10
+              != recaptchaForm
+          .form-group
+            label.col-lg-offset-2.col-lg-10
+              input#termsOfUse.required(type='checkbox', name="termsOfUse", title="Você precisa aceitar os termos de uso.")
+              | Aceito os <a href="/terms">termos de uso</a>
+          .form-group
+            .col-lg-offset-2.col-lg-10
+              input#register(type='submit',class='btn btn-primary', value='Cadastre-se')

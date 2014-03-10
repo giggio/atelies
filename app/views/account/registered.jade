@@ -1,0 +1,13 @@
+append variables
+  - title += "Usuário registrado"
+extends ../shared/baseBootstrap
+append content
+  .container
+    .alert.alert-success
+      strong Usuário registrado com sucesso!
+      | &nbsp;Acesse o e-mail informado e valide seu cadastro para fazer sua primeira compra ou,
+      | caso tenha se registrado com vendedor, criar sua primeira loja.
+    if redirectTo
+      .alert.alert-warning
+        strong Continue esta compra!
+        | &nbsp;Acesse o e-mail informado e valide seu cadastro para concluir esta compra.

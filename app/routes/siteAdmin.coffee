@@ -15,7 +15,7 @@ module.exports = class AdminRoutes
 
   siteAdmin: (req, res) ->
     req.user.toSimpleUser (user) ->
-      res.render 'siteAdmin', user: user
+      res.render 'siteAdmin/siteAdmin', user: user
 
   storesForAuthorization: (req, res) ->
     isFlyerAuthorized = switch req.params.isFlyerAuthorized

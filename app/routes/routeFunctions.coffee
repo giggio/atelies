@@ -36,7 +36,7 @@ module.exports = class RouteFunctions
         original = @[fn]
         @[fn] = (req, res) ->
           unless req.loggedIn and req.user?.isAdmin
-            return res.render 'accessDenied', (err, html) ->
+            return res.render 'home/accessDenied', (err, html) ->
               res.send 403, html
           original.apply @, arguments
   _getSubdomain: (domain, host) ->

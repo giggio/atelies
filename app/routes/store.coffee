@@ -27,7 +27,7 @@ module.exports = class StoreRoutes
     return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
     Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) =>
       return @handleError req, res, err, false if err?
-      return res.renderWithCode 404, 'storeNotFound', store: null, products: [] if store is null
+      return res.renderWithCode 404, 'store/storeNotFound', store: null, products: [] if store is null
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
       getUser = (cb) ->
         if req.user?
@@ -38,7 +38,7 @@ module.exports = class StoreRoutes
         if req.session.recentOrder?
           order = req.session.recentOrder
           req.session.recentOrder = null
-        res.render "store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0}, (err, html) =>
+        res.render "store/store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0}, (err, html) =>
           console.log err if err?
           return @handleError req, res, err, false if err?
           res.send html

@@ -30,26 +30,26 @@ module.exports = class HomeRoutes
         Store.findRandomForHome 12, (err, stores) =>
           return @handleError req, res, err, false if err?
           viewModelStores = _.map stores, (s) -> s.toSimpler()
-          res.render "index", products: viewModelProducts, stores: viewModelStores
+          res.render "home/index", products: viewModelProducts, stores: viewModelStores
     route
 
-  blank: (req, res) -> res.render 'blank'
+  blank: (req, res) -> res.render 'home/blank'
 
-  about: (req, res) -> res.render 'about'
+  about: (req, res) -> res.render 'home/about'
 
-  terms: (req, res) -> res.render 'terms'
+  terms: (req, res) -> res.render 'home/terms'
 
-  faq: (req, res) -> res.render 'faq'
+  faq: (req, res) -> res.render 'home/faq'
 
-  technology: (req, res) -> res.render 'technology'
+  technology: (req, res) -> res.render 'home/technology'
 
-  iWantToBuy: (req, res) -> res.render 'iWantToBuy'
+  iWantToBuy: (req, res) -> res.render 'home/iWantToBuy'
 
-  iWantToSell: (req, res) -> res.render 'iWantToSell'
+  iWantToSell: (req, res) -> res.render 'home/iWantToSell'
 
-  contribute: (req, res) -> res.render 'contribute'
+  contribute: (req, res) -> res.render 'home/contribute'
 
-  donating: (req, res) -> res.render 'donating'
+  donating: (req, res) -> res.render 'home/donating'
   
   storesSearch: (req, res) ->
     Store.searchByName req.params.searchTerm, (err, stores) =>

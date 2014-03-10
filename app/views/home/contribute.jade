@@ -1,0 +1,11 @@
+append variables
+  - title += "Contribuindo"
+extends ../shared/baseBootstrap
+append content
+  section#app-container
+    .container
+      #contribute
+        h3 Mande o seu 
+          a(href="javascript:void(0)", data-uv-lightbox="classic_widget", data-uv-mode="full", data-uv-primary-color="#cc6d00", data-uv-link-color="#007dbf", data-uv-default-mode="feedback", data-uv-forum-id="216427") feedback
+          !
+        a(href="mailto:contato@atelies.com.br?subject=Gostaria de contribuir com o Ateliês"): img.contributeIdeas(src="#{STATIC_PATH}/images/ideas.jpg", alt="Contribuindo com o Ateliês")

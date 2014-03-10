@@ -26,7 +26,7 @@ module.exports = class AdminRoutes
       return @handleError req, res, err, false if err?
       stores = _.map user.stores, (s) -> s.toSimple()
       req.user.toSimpleUser (user) ->
-        res.render 'admin', stores: stores, user: user
+        res.render 'admin/admin', stores: stores, user: user
 
   adminStoreCreate: (req, res) ->
     body = req.body
