@@ -30,7 +30,7 @@
     "coffee-script": "~1.7.1",
     "underscore": "~1.6.0",
     "bcrypt": "~0.7.7",
-    "mongoose": "~3.7.2",
+    "mongoose": "~3.8.8",
     "everyauth": "~0.4.5",
     "correios": "0.0.4",
     "nodemailer": "~0.4.4",
