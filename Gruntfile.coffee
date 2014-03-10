@@ -27,7 +27,7 @@ module.exports = (grunt) ->
     coffee:
       base: '<%= base %>'
       client:
-        files: ['<%= client %>'], options: {sourceMap: true}
+        files: ['<%= client %>'], options: sourceMap: true
       server: '<%= server %>'
       tests: '<%= tests %>'
 
@@ -86,6 +86,10 @@ module.exports = (grunt) ->
     concurrent:
       devServer:
         tasks: [ 'watch', 'nodemon:dev' ]
+        options:
+          logConcurrentOutput: true
+      devServerAndLintAndTest:
+        tasks: [ 'watch', 'nodemon:dev', 'lintAndTest' ]
         options:
           logConcurrentOutput: true
 
@@ -316,16 +320,17 @@ module.exports = (grunt) ->
       tasks.push 'test:client'
       grunt.log.writeln "Running #{'client'.blue} unit tests"
     if grunt.config(['server', 'src']).length isnt 0 or grunt.config(['tests', 'src']).length isnt 0
-      tasks.push 'test:unit'
+      tasks.push 'test:server'
       grunt.log.writeln "Running #{'server'.blue} unit tests"
     grunt.task.run tasks
   grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
   grunt.registerTask 'test:travis', [ 'mochacov:travis_server_unit_coverage', 'mochacov:travis_client_unit_coverage' ]
   grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
-  grunt.registerTask 'test:nocompile', [ 'test:unit', 'test:client', 'test:integration' ]
-  grunt.registerTask 'test:nocompile:smoke', [ 'test:unit', 'test:client' ]
-  grunt.registerTask 'test:unit', ['mochacov:server_unit']
+  grunt.registerTask 'test:nocompile', [ 'test:server', 'test:client', 'test:integration' ]
+  grunt.registerTask 'test:nocompile:smoke', [ 'test:server', 'test:client' ]
+  grunt.registerTask 'test:server', ['mochacov:server_unit']
   grunt.registerTask 'test:integration', ['mochacov:server_integration']
+  grunt.registerTask 'test:unit', ['test:client', 'test:server']
   grunt.registerTask 'test:client', ['mochacov:client']
   grunt.registerTask 'compile', [ 'coffee', 'lint' ]
   grunt.registerTask 'compile:server', [ 'coffee:base', 'coffee:server' ]
@@ -337,5 +342,6 @@ module.exports = (grunt) ->
     else
       grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{home.blue}."
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
-  grunt.registerTask 'default', [ 'compileAndTest', 'less:dev', 'concurrent:devServer']
+  grunt.registerTask 'lintAndTest', [ 'lint', 'test:unit' ]
+  grunt.registerTask 'default', [ 'coffee', 'less:dev', 'concurrent:devServerAndLintAndTest' ]
   grunt.registerTask 'quickStart', [ 'concurrent:devServer']
