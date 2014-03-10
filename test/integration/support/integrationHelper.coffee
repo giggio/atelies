@@ -15,8 +15,7 @@ exports.startServer = (cb) ->
     else
       throw err
 
-exports.whenServerLoaded = (cb) ->
-  whenDone (-> exports.expressServer isnt null), cb
+exports.whenServerLoaded = -> whenDone (-> exports.expressServer isnt null)
 
 exports.openNewConnection = ->
   d = Q.defer()

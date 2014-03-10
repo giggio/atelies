@@ -6,7 +6,8 @@ _             = require 'underscore'
 module.exports = class StoreCartPage extends Page
   visit: (storeSlug) => super "#{storeSlug}/finishOrder/shipping"
   address: ->
-    @waitForSelectorClickable '#deliveryAddress #street'
+    @waitForSelectorClickable '#goBackToCart'
+    .then => waitMilliseconds 500 #small wait necessary so we dont get a stale element exception
     .then =>
       Q.all [
         @getText("#deliveryAddress #street").then (t) -> street:t
