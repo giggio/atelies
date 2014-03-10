@@ -33,7 +33,7 @@
     "mongoose": "~3.8.8",
     "everyauth": "~0.4.5",
     "correios": "0.0.4",
-    "nodemailer": "~0.4.4",
+    "nodemailer": "~0.6.1",
     "async": "~0.2.10",
     "pagseguro": "0.0.4",
     "xml2js": "~0.2.8",
