@@ -3,7 +3,7 @@
   "version": "1.16.7",
   "dependencies": {
     "grunt": {
-      "version": "0.4.2",
+      "version": "0.4.3",
       "from": "grunt@latest",
       "dependencies": {
         "async": {
@@ -20,8 +20,7 @@
         },
         "dateformat": {
           "version": "1.0.2-1.2.3",
-          "from": "dateformat@1.0.2-1.2.3",
-          "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.2-1.2.3.tgz"
+          "from": "dateformat@1.0.2-1.2.3"
         },
         "eventemitter2": {
           "version": "0.4.13",
@@ -84,14 +83,8 @@
           }
         },
         "rimraf": {
-          "version": "2.0.3",
-          "from": "rimraf@~2.0.3",
-          "dependencies": {
-            "graceful-fs": {
-              "version": "1.1.14",
-              "from": "graceful-fs@~1.1"
-            }
-          }
+          "version": "2.2.6",
+          "from": "rimraf@~2.2.6"
         },
         "lodash": {
           "version": "0.9.2",
@@ -136,6 +129,11 @@
         "getobject": {
           "version": "0.1.0",
           "from": "getobject@~0.1.0"
+        },
+        "grunt-legacy-util": {
+          "version": "0.1.2",
+          "from": "grunt-legacy-util@~0.1.2",
+          "resolved": "https://registry.npmjs.org/grunt-legacy-util/-/grunt-legacy-util-0.1.2.tgz"
         }
       }
     },
@@ -568,6 +566,10 @@
       "version": "1.6.0",
       "from": "underscore@latest",
       "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
+    },
+    "underscore.string": {
+      "version": "2.3.3",
+      "from": "underscore.string@latest"
     },
     "bcrypt": {
       "version": "0.7.7",

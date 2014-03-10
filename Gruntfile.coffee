@@ -1,3 +1,6 @@
+_           = require 'underscore'
+_.str = require 'underscore.string'
+_.mixin _.str.exports()
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -266,7 +269,7 @@ module.exports = (grunt) ->
         options:
           delay: 1000
           after: ->
-            return true unless grunt.util._.isEmpty changedFiles
+            return true unless _.isEmpty changedFiles
             undefined
     copy:
       fonts:
@@ -288,7 +291,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-wait'
   grunt.loadNpmTasks 'grunt-contrib-copy'
 
-  _ = grunt.util._
   filterFiles = (files, dir) ->
     _.chain(files)
      .filter((f) -> _(f).startsWith(dir) and _(f).endsWith 'coffee')
@@ -296,7 +298,7 @@ module.exports = (grunt) ->
      .value()
 
   changedFiles = {}
-  onChange = grunt.util._.debounce ->
+  onChange = _.debounce ->
     files = Object.keys(changedFiles)
     serverFiles = filterFiles files, 'app'
     clientFiles = filterFiles files, 'public'
