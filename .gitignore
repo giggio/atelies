@@ -9,5 +9,6 @@ compiledPublic
 .elasticbeanstalk/
 seed/*
 .uploadPublicFiles
+.idea
 TAGS
 public/fonts/bootstrap/*
