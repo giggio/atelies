@@ -74,10 +74,19 @@ append layout
                 if store.pagseguro
                   p PagSeguro
             #socialReferal
-              ul.social
-                li: a(href="https://www.facebook.com/#{store.urlFacebook}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/facelink.png")
-                //li: a(href="https://plus.google.com/#{store.urlPlus.google}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/gpluslink.png")
-                li: a(href="https://twitter.com/#{store.urlTwitter}", target="_blank", rel="me"): img.img-circle(src="#{STATIC_PATH}/images/twitterlink.png")
+              .facebookContainerFooter
+                #fb-root
+                script(type='text/javascript').
+                  (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=618886944811863";
+                    fjs.parentNode.insertBefore(js, fjs);
+                  }(document, 'script', 'facebook-jssdk'))
+                .fb-like-box(data-href="https://www.facebook.com/#{store.urlFacebook}", data-width="290px", data-colorscheme="light", data-show-faces="true", data-header="false", data-stream="false", data-show-border="false")
+              .twitterContainerFooter
+                a.twitter-share-button(href="https://twitter.com/share", data-url="https://www.atelies.com.br/#{store.slug}", data-text="#{store.name}", data-via="#{store.urlTwitter}", data-lang="pt", data-size="small", data-related="#{store.urlTwitter}", data-hashtags="Atelies") Tweetar
           #lastFooter
             | &copy; 2013 - 
             a(href="https://www.atelies.com.br/") Ateliês

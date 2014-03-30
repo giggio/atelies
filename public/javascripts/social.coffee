@@ -7,6 +7,5 @@ define [
     @renderGooglePlus: ->
       gplus.go()
     @renderFacebook: ->
-      facebook.XFBML.parse()
     @renderTwitter: ->
       twitter.widgets.load()
