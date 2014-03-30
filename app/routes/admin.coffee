@@ -39,7 +39,7 @@ module.exports = class AdminRoutes
       store.name = body.name
       if body.pagseguro is on then store.setPagseguro email: body.pagseguroEmail, token: body.pagseguroToken
       uploader = new StoreUploader store
-      imageFields = homePageImage: Store.homePageImageDimension, banner: null, flyer: Store.flyerDimension
+      imageFields = banner: null, flyer: Store.flyerDimension
       uploader.upload req.files, imageFields, (err, fileUrls) =>
         if err?
           return res.json 422, err if err.smallerThan?
@@ -70,7 +70,7 @@ module.exports = class AdminRoutes
       checkIfNameCanBelongToStore =>
         store.updateFromSimple req.body
         uploader = new StoreUploader store
-        imageFields = homePageImage: Store.homePageImageDimension, banner: null, flyer: Store.flyerDimension
+        imageFields = banner: null, flyer: Store.flyerDimension
         uploader.upload req.files, imageFields, (err, fileUrls) =>
           if err?
             return res.json 422, err if err.smallerThan?

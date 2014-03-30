@@ -18,7 +18,6 @@ define [
       name:undefined
       email:undefined
       description:undefined
-      homePageImage:undefined
       urlFacebook:undefined
       urlTwitter:undefined
       city:undefined

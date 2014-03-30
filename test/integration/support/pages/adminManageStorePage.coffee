@@ -59,7 +59,6 @@ module.exports = class AdminManageStorePage extends Page
   setName: (name) ->
     @type "#manageStoreBlock #name", name
     .then => @eval "$('#manageStoreBlock #name').change()"
-  setPictureFiles: (bannerPath, flyerPath, homePageImagePath) =>
+  setPictureFiles: (bannerPath, flyerPath) =>
     @uploadFile '#banner', bannerPath
     .then => @uploadFile '#flyer', flyerPath
-    .then => @uploadFile '#homePageImage', homePageImagePath

@@ -12,7 +12,6 @@ storeSchema = new mongoose.Schema
   slug:                   String
   email:                  String
   description:            String
-  homePageImage:          String
   urlFacebook:            String
   urlTwitter:             String
   phoneNumber:            String
@@ -66,7 +65,6 @@ storeSchema.methods.toSimple = ->
     slug: @slug
     email: @email
     description: @description
-    homePageImage: @homePageImage
     urlFacebook: @urlFacebook
     urlTwitter: @urlTwitter
     phoneNumber: @phoneNumber
@@ -87,7 +85,6 @@ storeSchema.methods.toSimpler = ->
     _id: @_id
     name: @name
     slug: @slug
-    homePageImage: @homePageImage
     flyer: @flyer
   store.pagseguro = @pagseguro()
   store
@@ -190,7 +187,6 @@ Store.searchByName = (searchTerm, cb) ->
   Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
     return cb err if err?
     cb null, stores
-Store.homePageImageDimension = '600x400'
 Store.flyerDimension = '350x350'
 #Store.bannerDimension = '1200x300'
 

@@ -24,7 +24,6 @@ define [
       @bindings = @initializeBindings
         '#pagseguro':'checked:pagseguro'
         "#showFlyer": "attr:{src:flyer}"
-        "#showHomePageImage": "attr:{src:homePageImage}"
         "#showBanner": "attr:{src:banner}"
       if isnew
         @model.on 'change:pagseguro', => @_pagseguroChanged()
@@ -59,8 +58,7 @@ define [
       $("#updateStore").prop "disabled", on
       bannerVal = $('#banner').val()
       flyerVal = $('#flyer').val()
-      homePageImageVal = $('#homePageImage').val()
-      if (typeof bannerVal isnt 'undefined' and bannerVal isnt '') or (typeof flyerVal isnt 'undefined' and flyerVal isnt '') or (typeof homePageImageVal isnt 'undefined' and homePageImageVal isnt '')
+      if (typeof bannerVal isnt 'undefined' and bannerVal isnt '') or (typeof flyerVal isnt 'undefined' and flyerVal isnt '')
         @model.hasFiles = true
         @model.form = $('#manageStore')
       else

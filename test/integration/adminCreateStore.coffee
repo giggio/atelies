@@ -94,19 +94,16 @@ describe 'Admin create store page', ->
       .then ->
         bannerPath = path.join __dirname, 'support', 'images', '200x200.png'
         flyerPath = path.join __dirname, 'support', 'images', '800x800.png'
-        homePageImagePath = path.join __dirname, 'support', 'images', '700x700.png'
-        page.setPictureFiles bannerPath, flyerPath, homePageImagePath
+        page.setPictureFiles bannerPath, flyerPath
       .then page.clickUpdateStoreButton
     it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
     it 'shows store created message', -> page.message().then (msg) -> msg.endsWith("Loja criada com sucesso").should.be.true
     it 'tried to upload the file', ->
       AmazonFileUploader.filesUploaded[0].should.match uploadedRegexMatch
       AmazonFileUploader.filesUploaded[1].should.match uploadedRegexMatch
-      AmazonFileUploader.filesUploaded[2].should.match uploadedRegexMatch
     it 'created a new store with correct information and file uploads', ->
       Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         expect(store).not.to.be.null
-        store.homePageImage.should.match uploadedRegexMatch
         store.flyer.should.match uploadedRegexMatch
         store.banner.should.match uploadedRegexMatch
         expect(store.slug).to.equal exampleStore.slug

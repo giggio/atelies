@@ -330,7 +330,6 @@ db.stores.insert
   slug: 'store_1'
   email: 'a@a.com'
   description: "Store Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
-  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_1/store/808719296241179100238743254682049150.jpg'
   urlFacebook: 'fbstore1'
   urlTwitter: 'twstore1'
   phoneNumber: '(11) 98745-7894'
@@ -357,7 +356,6 @@ db.stores.insert
   slug: 'store_2'
   email: 'b@a.com'
   description: "Store Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
-  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_2/store/309018768602982140848002398153767000.jpg'
   urlFacebook: 'fbstore2'
   urlTwitter: 'twstore2'
   phoneNumber: '(85) 7788-1111'
@@ -379,7 +377,6 @@ db.stores.insert
   slug: 'store_3'
   email: 'c@a.com'
   description: "Store Casamentiss faiz malandris se pirulitá, Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer Ispecialista im mé intende tudis nuam golada, vinho, uiski, carirí, rum da jamaikis, só num pode ser mijis. Adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat."
-  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_3/store/396625304594635970890163169475272300.jpg'
   urlFacebook: 'fbstore3'
   urlTwitter: 'twstore3'
   phoneNumber: '(77) 9999-9999'
@@ -400,7 +397,6 @@ db.stores.insert
   slug: 'some_fancy_name'
   email: 'd@a.com'
   description: "Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
-  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_4/store/465055665234103800952865870436653400.jpg'
   urlFacebook: 'fbsomefancyname'
   urlTwitter: 'twsomefancyname'
   phoneNumber: '(37) 9999-9999'
@@ -421,7 +417,6 @@ db.stores.insert
   slug: 'some_other_fancy_name'
   email: 'e@a.com'
   description: "A Store Muito other suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac mauris lectus, non scelerisque augue. Aenean justo massa."
-  homePageImage: 'https://s3.amazonaws.com/ateliesteste/store_4/store/465055665234103800952865870436653400.jpg'
   urlFacebook: 'fbsomeotherfancyname'
   urlTwitter: 'twsomeotherfancyname'
   phoneNumber: '(47) 9999-9999'
@@ -444,7 +439,6 @@ for i in [4..15]
     slug: "store_#{i}"
     email: "a#{i}@a.com"
     description: "Store#{i} Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
-    homePageImage: "https://s3.amazonaws.com/ateliesteste/store_5/store/802396552870050000798405606066808000.jpg"
     urlFacebook: "fbstore#{i}"
     urlTwitter: "twstore#{i}"
     phoneNumber: "(#{i}) 98745-7894"
