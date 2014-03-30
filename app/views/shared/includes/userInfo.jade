@@ -17,7 +17,6 @@
         li: a#logout(href="/account/logout") Sair
   else
     a#loginPop.pop(href="#") Entrar
-    //li: a(href='#{secureUrl}/account/register') Cadastre-se
   #loginPop-head.hide Faça seu login
     button.close(type="button") ×
   #loginPop-content.hide
@@ -29,7 +28,8 @@
         input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.", placeholder="E-mail")
       .form-group
         input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", placeholder="Senha")
-      .form-group
-        input(type='submit', class='btn btn-primary', value='Entrar')
-        | 
-        a#forgotPasswordLink(href="/account/forgotPassword") Esqueci minha senha
+      #forgotPasswordHolder: a#forgotPasswordLink(href="/account/forgotPassword") Esqueci minha senha
+      #loginButtons.form-group
+        input.btn.btn-primary(type='submit', value='Entrar')
+        | &nbsp;ou&nbsp;
+        a.btn.btn-primary(href='#{secureUrl}/account/register') Cadastre-se!

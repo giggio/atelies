@@ -154,12 +154,22 @@ img {
             padding-top: 10px;
             padding-right: 15px;
             #userInfo {
-              a{
+              a:not(.btn){
                 color: @colorShade8;
               }
               #loginPop {
                 font-size: 16px;
                 color: @colorShade8;
+              }
+              #popupLoginForm {
+                width: 244px;
+                #forgotPasswordHolder {
+                  text-align: center;
+                }
+                #loginButtons {
+                  margin-top: 12px;
+                  text-align: center;
+                }
               }
             }
           }
@@ -333,12 +343,22 @@ img {
           #userInfo {
             float: left;
             padding-top: 14px;
-            a{
+            a:not(.btn){
               color: @colorShade8;
             }
             #loginPop {
               font-size: 16px;
               color: @colorShade8;
+            }
+            #popupLoginForm {
+              width: 244px;
+              #forgotPasswordHolder {
+                text-align: center;
+              }
+              #loginButtons {
+                margin-top: 12px;
+                text-align: center;
+              }
             }
           }
         }
