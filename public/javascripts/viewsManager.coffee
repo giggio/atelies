@@ -9,6 +9,4 @@ define [
       @$el.html view.el
       view.render ->
         new SEOLoadManager().done()
-        Social.renderGooglePlus()
-        Social.renderFacebook()
-        Social.renderTwitter()
+        Social.renderAll()

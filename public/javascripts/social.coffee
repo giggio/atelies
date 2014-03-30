@@ -4,6 +4,10 @@ define [
   'twitter'
 ], (gplus, facebook, twitter) ->
   class Social
+    @renderAll: ->
+      @renderFacebook()
+      @renderTwitter()
+      @renderGooglePlus()
     @renderGooglePlus: ->
       gplus.go()
     @renderFacebook: ->
