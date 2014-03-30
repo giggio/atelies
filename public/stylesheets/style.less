@@ -13,6 +13,7 @@ p.jRatingInfos {
 /*@btnWarningBackgroundHighlight: @pink;*/
 @minWidthPC: 981px;
 @maxWidthPhone: 980px;
+@font-size-xlarge: ceil(@font-size-base * 1.6);
 @stdColor: #ffffff;
 @colorShade12: #110e0c;
 @colorShade11: #28211c;
@@ -252,8 +253,7 @@ img {
       }
       #nameFooter {
         .make-row();
-        font-size: @font-size-large;
-        font-weight: bold;
+        font-size: @font-size-xlarge;
         color:@colorShade8;
         text-align: center;
         font-family: 'Ubuntu', sans-serif;
@@ -297,7 +297,6 @@ img {
         #informingB{
           .make-md-column(5);
           #socialContainers {
-            padding-top: 20px;
             .facebookContainer {
               padding-left: 50px;
             }
