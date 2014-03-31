@@ -20,7 +20,7 @@ module.exports = class HomeRoutes
   
   index: (domain) ->
     route = (req, res) =>
-      subdomain = @_getSubdomain domain, req.host.toLowerCase()
+      subdomain = @_getSubdomain domain, req.headers.host.toLowerCase()
       if subdomain?
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res

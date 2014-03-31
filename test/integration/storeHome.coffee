@@ -51,7 +51,7 @@ describe 'store home page', ->
         product2 = generator.product.b()
         product1.save()
         product2.save()
-        page.visit "http://store_1.localhost.com:8000"
+        page.visit "http://store_1.localhost:8000"
     it 'should display the products', -> page.products().then (p) -> p.length.should.equal 2
 
   describe 'evaluation', ->

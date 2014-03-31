@@ -40,7 +40,6 @@ module.exports = class RouteFunctions
               res.send 403, html
           original.apply @, arguments
   _getSubdomain: (domain, host) ->
-    return undefined if @env isnt 'production' and host is 'localhost'
     if host isnt domain and host isnt "www.#{domain}"
       subdomain = host.replace ".#{domain}", ''
     subdomain

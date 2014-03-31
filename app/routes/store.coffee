@@ -23,7 +23,7 @@ module.exports = class StoreRoutes
   logError: @::_logError.partial 'store'
   
   store: (req, res) ->
-    subdomain = @_getSubdomain @domain, req.host.toLowerCase()
+    subdomain = @_getSubdomain @domain, req.headers.host.toLowerCase()
     return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
     Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) =>
       return @handleError req, res, err, false if err?
