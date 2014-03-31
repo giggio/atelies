@@ -7,7 +7,7 @@ Postman     = require '../../../app/models/postman'
 Q           = require 'q'
 _           = require 'underscore'
 
-describe.only 'Order', ->
+describe 'Order', ->
   order = store = user = p1 = p2 = shippingCost = null
   before ->
     user = new User()

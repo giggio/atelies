@@ -52,7 +52,7 @@ orderSchema.methods.sendMailAfterEvaluation = (cb) ->
                 O cliente <a href=\"mailto:#{@evaluation.userEmail}\">#{@evaluation.userName}</a> fez uma
                 avaliação de #{@evaluation.rating} estrelas, com o comentário '#{@evaluation.body}'.
               </div>
-              <div>Você pode vê-lo <a href=\"https://www.atelies.com.br/#{@store.slug}#evaluations\">aqui</a>.</div>
+              <div>Você pode vê-lo <a href='#{CONFIG.secureUrl}/#{@store.slug}/evaluations'>aqui</a>.</div>
               </html>"
             (cb) => postman.sendFromContact user, "Ateliês: A loja #{@store.name} recebeu uma avaliação", body, cb
       async.parallel sendMailActions, cb
@@ -73,6 +73,8 @@ orderSchema.methods.toSimpleOrder = ->
 orderSchema.methods.sendMailAfterPurchase = (cb) ->
   @populate 'store customer', (err, order) ->
     return cb err if err?
+    dataPedido = new Date()
+    dataPedido = "#{dataPedido.getDate()}/#{dataPedido.getMonth()+1}/#{dataPedido.getFullYear()}"
     clientMail = (cb) ->
       body = "<html>
         <h1>#{order.store.name}</h1>
@@ -81,10 +83,10 @@ orderSchema.methods.sendMailAfterPurchase = (cb) ->
         <div>Total da venda: R$ #{order.totalSaleAmount}</div>
         <div>
           Não deixe de avaliar o vendedor e sua loja quando receber seu pedido. Você pode fazer isso
-          clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='https://www.atelies.com.br/account'>página da sua conta</a>.
+          clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>.
         </div>
         <div>
-          Você pode ver o seu pedido e também avaliá-lo clicando <a href='https://www.atelies.com.br/account#orders/#{order._id.toString()}'>aqui</a>.
+          Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.
         </div>
         <div>&nbsp;</div>
         <div>
@@ -97,15 +99,16 @@ orderSchema.methods.sendMailAfterPurchase = (cb) ->
       postman.send order.store, order.customer, "Pedido realizado", body, cb
     storeMail = (cb)->
       body = "<html>
-        <h1>#{order.store.name}</h1>
-        <h2>Um pedido foi realizado</h2>
+        <h2>Sua loja #{order.store.name} recebeu um novo pedido.</h2>
+        <div></div>
+        <div>Veja detalhes dessa venda no Ateliês <a href='#{CONFIG.secureUrl}/admin/orders/#{order._id.toString()}'>clicando aqui</a>.</div>
+        <div>&nbsp;</div>
+        <div>Cliente: <a href='mailto:#{order.customer.email}'>#{order.customer.name}</a></div>
+        <div>Data: #{dataPedido}</div>
         <div>Total da venda: R$ #{order.totalSaleAmount}</div>
-        <div>
-          Obrigado!
-        </div>
-        <div>
-          #{order.store.name}
-        </div>
+        <div>&nbsp;</div>
+        <div>Obrigado!</div>
+        <div>Equipe Ateliês</div>
         </html>"
       postman.sendFromContact order.store, "Novo Pedido", body, cb
     async.parallel [clientMail, storeMail], cb

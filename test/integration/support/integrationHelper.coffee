@@ -41,7 +41,6 @@ exports.cleanDB = (cb) ->
 before (done) ->
   exports.cleanDB (err) ->
     return done err if err?
-    process.env.DEBUG = on
     exports.startServer (err, server) ->
       done err if err?
       done()

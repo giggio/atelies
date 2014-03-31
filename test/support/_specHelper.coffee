@@ -1,6 +1,9 @@
 process.env.NODE_ENV = 'test'
+process.env.DEBUG = on
+process.env.BASE_DOMAIN = "localhost:8000"
 global.DEBUG = true
 global.CONFIG = require '../../app/helpers/config'
+
 require '../../app/helpers/languageExtensions'
 require '../../app/globals'
 require './_addLibsHelper'

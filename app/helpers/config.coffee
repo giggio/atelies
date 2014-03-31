@@ -55,7 +55,7 @@ values =
   superAdminEmail: process.env.SUPER_ADMIN_EMAIL?.toLowerCase()
   clientLibVersion: process.env.CLIENT_LIB_VERSION
   clientLibPath: "#{process.env.STATIC_PATH}/javascripts/#{process.env.CLIENT_LIB_VERSION}"
-values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else ""
+values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else "http://#{values.baseDomain}"
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and
