@@ -37,7 +37,7 @@
     </div>
     {{/if}}
     <div class="form-group">
-      <label>Descrição:</label>
+      <label>Descrição (até 550 caracteres):</label>
       <div class="controls">
         <textarea id="description" name="description" class="form-control" rows="8" cols="150" data-error-style="tooltip" maxlength="550"></textarea>
       </div>
@@ -101,19 +101,23 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label" for="name">Imagem do banner:</label>
-      <span class="help-block">Imagem que fica na parte de cima da loja, visível em todas as páginas da loja, esta imagem não será redimensionada, use do tamanho que preferir, recomendamos 1200x300</span>
+      <label class="control-label" for="name">Banner:</label>
+      <span class="help-block">
+        Este é o banner da sua loja. Ele terá no máximo 1200x300 e será cortado se for maior que isso. Recomenadamos que você use
+        nessas dimensões, que é como ele fica melhor na loja.</span>
       <div class="controls">
         Substitua: <input type="file" id="banner" name="banner" /><br />
-        <img id="showBanner" />
+        <div id="bannerHolder">
+          <img id="showBanner"/>
+        </div>
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label" for="name">Imagem do flyer</label>
+      <label class="control-label" for="name">Logotipo:</label>
       <span class="help-block">
-        Imagem que é exibida na home page do site, deve ter no mínimo 350x350 e será redimensionada para esses valores se for maior.
-        Para que sua loja apareça você deve colocar um arquivo que represente sua identidade visual e contenha o nome do seu aletiê de
-        maneira legível, este arquivo será aprovado em até 48 horas por um administrador do portal.</span>
+        Imagem que é exibida na home page do Ateliês, deve ter no mínimo 350x350 e será redimensionada para esses valores se for maior.
+        Para que sua loja apareça você deve colocar um arquivo que represente sua identidade visual e contenha o nome do seu ateliê de
+        maneira legível. Este arquivo será aprovado em até 48 horas por um administrador do portal.</span>
       <div class="controls">
         Substitua: <input type="file" id="flyer" name="flyer" /><br />
         <img id="showFlyer" />

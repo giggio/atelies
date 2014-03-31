@@ -20,11 +20,11 @@ append layout
                 | Carrinho  
           #header2
             #site-banner
-            a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
-              if store.banner
-                img#storeBanner(src="#{store.banner}")
-              else
-                h1#storeNameHeader= store.name
+              a(href="/#{store.slug}/", onclick="Backbone.history.navigate('/home', true); return false;")
+                if store.banner
+                  img#storeBanner(src="#{store.banner}")
+                else
+                  h1#storeNameHeader= store.name
           #header3
             #evaluationContainer
               if hasEvaluations
