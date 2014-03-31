@@ -46,7 +46,7 @@
     "gm": "~1.14.2",
     "marked": "~0.3.1",
     "grunt-wait": "~0.1.0",
-    "prerender-node": "~0.1.7",
+    "prerender-node": "~0.1.18",
     "sitemap": "~0.7.1",
     "q": "~1.0.0"
   },
