@@ -4,11 +4,12 @@ User        = require '../../../app/models/user'
 Store       = require '../../../app/models/store'
 Product     = require '../../../app/models/product'
 Postman     = require '../../../app/models/postman'
+Q           = require 'q'
+_           = require 'underscore'
 
-describe 'Order', ->
-
+describe.only 'Order', ->
   order = store = user = p1 = p2 = shippingCost = null
-  before (done) ->
+  before ->
     user = new User()
     deliveryAddress =
       street: 'a'
@@ -17,16 +18,19 @@ describe 'Order', ->
       state: 'SP'
       zip: '12345-678'
     user.deliveryAddress = deliveryAddress
+    user.name = "Jose Silva"
+    user.email = "a@a.com"
     store = new Store()
-    p1 = new Product price: 10
-    p2 = new Product price: 20
-    item1 = product: p1, quantity: 1
-    item2 = product: p2, quantity: 2
+    store.name = "O Lojista"
+    store.email = "a@store.com"
+    p1 = new Product price: 10, name: 'p1name'
+    p2 = new Product price: 20, name: 'p2name'
+    item1 = product: p1, quantity: 1, name: p1.name
+    item2 = product: p2, quantity: 2, name: p2.name
     items = [ item1, item2 ]
     shippingCost = 1
-    Order.create user, store, items, shippingCost, 'directSell', (err, o) ->
-      order = o
-      done()
+    Q.nfcall Order.create, user, store, items, shippingCost, 'directSell'
+    .then (o) -> order = o
 
   describe 'creating', ->
     it 'assigned customer', ->
@@ -58,10 +62,13 @@ describe 'Order', ->
       order.paymentType.should.equal 'directSell'
 
   describe 'sending client and seller e-mail after purchase', ->
-
-    before (done) ->
+    before ->
+      order.populate = (path, cb) ->
+        orderStub = order.toObject()
+        orderStub.store = store
+        orderStub.customer = user
+        cb null, orderStub
       Postman.sentMails.length = 0
-      order.sendMailAfterPurchase done
-
+      Q.ninvoke order, 'sendMailAfterPurchase'
     it 'shoud have sent the e-mails', ->
       Postman.sentMails.length.should.equal 2
