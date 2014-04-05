@@ -40,8 +40,7 @@ module.exports = (grunt) ->
       tests: '<%= tests %>'
       dev: '<%= dev %>'
       options:
-        max_line_length:
-          level: 'ignore'
+        configFile: 'coffeelint.json'
 
     watch:
       options:
