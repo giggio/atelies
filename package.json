@@ -51,7 +51,7 @@
     "q": "~1.0.0"
   },
   "devDependencies": {
-    "grunt-coffeelint": "~0.0.8",
+    "grunt-coffeelint": "git://github.com/vojtajina/grunt-coffeelint.git#v0.0.9",
     "grunt-contrib-requirejs": "~0.4.3",
     "grunt-contrib-less": "~0.10.0",
     "grunt-contrib-watch": "~0.5.3",
