@@ -5,6 +5,7 @@ _        = require 'underscore'
 Evaluation = require './storeEvaluation'
 Postman  = require './postman'
 postman = new Postman()
+Q         = require 'q'
 
 storeSchema = new mongoose.Schema
   name:                   type: String, required: true
@@ -183,10 +184,7 @@ Store.findRandomForHome = (howMany, cb) ->
     else
       cb null, stores
 
-Store.searchByName = (searchTerm, cb) ->
-  Store.find nameKeywords:searchTerm.toLowerCase(), (err, stores) ->
-    return cb err if err?
-    cb null, stores
+Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Store.flyerDimension = '350x350'
 #Store.bannerDimension = '1200x300'
 

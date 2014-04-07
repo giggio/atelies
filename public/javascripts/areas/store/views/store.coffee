@@ -34,7 +34,6 @@ define [
       document.title = @store.name
       super
     showProductsSearchResults: (searchTerm, products) ->
-      $('#productSearchTerm').val searchTerm
       productsSearchResultsView = new ProductsSearchResultsView products:products
       @$('#productsPlaceHolder').html productsSearchResultsView.el
       document.title = "#{@store.name} - busca por: #{searchTerm}"

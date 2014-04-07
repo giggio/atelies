@@ -114,11 +114,12 @@ module.exports = class StoreRoutes
     Q.nfcall Store.findBySlug, req.params.storeSlug
     .then (store) => @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
     .then (shippingOptions) -> res.json shippingOptions
-    .catch (err) => return @handleError req, res, err if err?
+    .catch (err) => return @handleError req, res, err
 
   productsSearch: (req, res) ->
-    Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm, (err, products) =>
-      return @handleError req, res, err if err?
+    Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm
+    .catch (err) => @handleError req, res, err
+    .then (products) ->
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
 

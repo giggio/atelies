@@ -9,6 +9,7 @@ values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 Err             = require '../models/error'
+Q               = require 'q'
 
 module.exports = class HomeRoutes
   constructor: (@env) ->
@@ -51,16 +52,18 @@ module.exports = class HomeRoutes
 
   donating: (req, res) -> res.render 'home/donating'
   
-  storesSearch: (req, res) ->
-    Store.searchByName req.params.searchTerm, (err, stores) =>
-      return @handleError req, res, err if err?
-      res.json stores
-  
-  productsSearch: (req, res) ->
-    Product.searchByName req.params.searchTerm, (err, products) =>
-      return @handleError req, res, err if err?
-      viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
-      res.json viewModelProducts
+  search: (req, res) ->
+    Q.all [
+      Store.searchByName req.params.searchTerm
+      Product.searchByName req.params.searchTerm
+      Product.searchByTag req.params.searchTerm
+      Product.searchByCategory req.params.searchTerm
+    ]
+    .catch (err) => @handleError req, res, err
+    .spread (stores, products, productsTag, productsCat) ->
+      toSimple = (ps) -> _.map ps, (p) -> p.toSimpleProduct()
+      viewModelProducts = _.union toSimple(products), toSimple(productsTag), toSimple productsCat
+      res.json products: viewModelProducts, stores: stores
 
   errorCreate: (req, res) ->
     err = req.body

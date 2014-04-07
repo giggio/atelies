@@ -3,6 +3,7 @@ slug      = require '../helpers/slug'
 _         = require 'underscore'
 path      = require 'path'
 async     = require 'async'
+Q         = require 'q'
 
 productSchema = new mongoose.Schema
   name:           type: String, required: true
@@ -114,14 +115,10 @@ Product.findRandom = (howMany, cb) ->
 
 Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne {storeSlug: storeSlug, slug: productSlug}, cb
-Product.searchByName = (searchTerm, cb) ->
-  Product.find nameKeywords:searchTerm.toLowerCase(), (err, products) ->
-    return cb err if err
-    cb null, products
-Product.searchByStoreSlugAndByName = (storeSlug, searchTerm, cb) ->
-  Product.find storeSlug: storeSlug, nameKeywords:searchTerm.toLowerCase(), (err, products) ->
-    return cb err if err
-    cb null, products
+Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()
+Product.searchByTag = (searchTerm) -> Q Product.find(tags: ///^#{searchTerm}///i).exec()
+Product.searchByCategory = (searchTerm) -> Q Product.find(categories: ///^#{searchTerm}///i).exec()
+Product.searchByStoreSlugAndByName = (storeSlug, searchTerm) -> Q Product.find(storeSlug: storeSlug, nameKeywords: ///^#{searchTerm}///i).exec()
 Product.getShippingWeightAndDimensions = (ids, cb) ->
   Product.find '_id': '$in': ids, '_id shipping', (err, products) ->
     cb err if err?

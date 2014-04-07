@@ -40,11 +40,9 @@ exports.route = (app) ->
   app.get     "/facebookChannel.html",                                      home.staticFile 'javascripts/areas/shared/views/templates/facebookChannel.html'
   app.get     "/sitemap.xml",                                               home.sitemap()
   #home client routes
-  app.get     "/searchProducts/:searchTerm?",                               home.index domain
-  app.get     "/searchStores/:searchTerm?",                                 home.index domain
+  app.get     "/search/:searchTerm?",                                       home.index domain
   #home search
-  app.get     "/api/stores/search/:searchTerm",                             home.storesSearch
-  app.get     "/api/products/search/:searchTerm",                           home.productsSearch
+  app.get     "/api/search/:searchTerm",                                    home.search
   #account
   app.get     "/account/registered",                                        account.registered
   app.get     "/account/mustVerifyUser",                                    account.mustVerifyUser

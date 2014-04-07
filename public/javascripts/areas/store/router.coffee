@@ -89,6 +89,10 @@ define [
       viewsManager.show finishOrderOrderFinishedView
     searchProducts: (searchTerm) =>
       @home() unless @storeView?
+      $('#productSearchTerm').val searchTerm
+      if searchTerm.length < 3
+        $('#doSearchProduct').popover 'show'
+        return setTimeout (-> $('#doSearchProduct').popover 'hide'), 5000
       storeSlug = storeBootstrapModel.store.slug
       productsSearch = new ProductsSearch storeSlug: storeSlug, searchTerm:searchTerm
       productsSearch.fetch

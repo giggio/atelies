@@ -4,10 +4,9 @@ define [
   'backboneConfig'
   '../../viewsManager'
   './views/home'
-  './models/storesSearch'
-  './models/productsSearch'
+  './models/search'
   '../shared/views/dialog'
-],($, _, Backbone, viewsManager, HomeView, StoresSearch, ProductsSearch, Dialog) ->
+],($, _, Backbone, viewsManager, HomeView, Search, Dialog) ->
   class Router extends Backbone.Open.Router
     logCategory: 'home'
     area: 'home'
@@ -15,38 +14,23 @@ define [
       @_createRoutes
         '': @home
         'home': @home
-        'searchStores': @searchStores
-        'closeSearchStore': @closeSearchStore
-        'searchStores/:searchTerm': @searchStore
-        'searchProducts/:searchTerm': @searchProducts
+        'search/:searchTerm': @search
       viewsManager.$el = $ "#app-container > .home"
       _.bindAll @, _.functions(@)...
       super
     home: ->
       @homeView = new HomeView products: homeProductsBootstrapModel, stores: homeStoresBootstrapModel
       viewsManager.show @homeView
-    searchStores: ->
+    search: (searchTerm) ->
       @home() unless @homeView?
-      @homeView.searchStores()
-    closeSearchStore: ->
-      @homeView.closeSearchStore()
-    searchStore: (searchTerm) =>
-      unless @homeView?
-        @home()
-        @searchStores()
-      storesSearch = new StoresSearch searchTerm:searchTerm
-      storesSearch.fetch
-        reset:true
-        success: => @homeView.showStoresSearchResults searchTerm, storesSearch.toJSON()
-        error: (col, xhr, opt) =>
-          @logXhrError xhr
-          Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
-    searchProducts: (searchTerm) ->
-      @home() unless @homeView?
-      productsSearch = new ProductsSearch searchTerm:searchTerm
-      productsSearch.fetch
-        reset:true
-        success: => @homeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
-        error: (col, xhr, opt) =>
+      $('#productSearchTerm').val searchTerm
+      if searchTerm.length < 3
+        $('#doSearchProduct').popover 'show'
+        return setTimeout (-> $('#doSearchProduct').popover 'hide'), 5000
+      $('#doSearchProduct').popover 'hide'
+      search = new Search searchTerm:searchTerm
+      search.fetch
+        success: (data, textStatus, xhr) => @homeView.showSearchResults searchTerm, data
+        error: (xhr, textStatus, errorThrown) =>
           @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."

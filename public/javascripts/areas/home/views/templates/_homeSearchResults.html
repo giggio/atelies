@@ -1,0 +1,62 @@
+<h3>Produtos:
+  {{#if hasMoreThanOneProductGroup}}
+  <span id="seeAllProductsHolder">(<a href="javascript:void(0);" id="seeAllProducts" data-not-push-state="true">ver todos</a>)</span>
+  {{/if}}
+</h3>
+{{#if hasProducts}}
+<div id="productsSearchResults">
+  {{#each productGroups}}
+  <div class="row productsRow {{isFirst}} fade">
+    {{#each products}}
+    <div id="product{{_id}}" data-id="{{_id}}" class="product">
+      <a href="/{{url}}" class="link" data-not-push-state="true">
+        {{#if pictureThumb}}
+        <img src="{{pictureThumb}}" />
+        {{else}}
+        <img src="http://dummyimage.com/200x200/000/fff&text=%3F" />
+        {{/if}}
+      </a>
+      <a href="/{{url}}" data-not-push-state="true">
+        <div class="productInfoBox">
+          <span id="product{{_id}}_productName" class="name">{{name}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
+      </a>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>
+{{else}}
+<div id="productsNotFound" class="alert">
+  <strong>Nenhum produto encontrado.</strong>
+</div>
+{{/if}}
+<h3>Lojas:
+  {{#if hasMoreThanOneStoreGroup}}
+  <span id="seeAllStoresHolder">(<a href="javascript:void(0);" id="seeAllStores" data-not-push-state="true">ver todas</a>)</span>
+  {{/if}}
+</h3>
+{{#if hasStores}}
+<div id="storesSearchResults">
+  {{#each storeGroups}}
+  <div class="row storesRow {{isFirst}} fade">
+    {{#each stores}}
+    <div id="store{{_id}}" data-id="{{_id}}" class="store">
+      <a href="/{{slug}}" class="link" data-not-push-state="true">
+        {{#if flyer}}
+        <img src="{{flyer}}" />
+        {{else}}
+        <div class="storeNoFlyer">{{name}}</div>
+        {{/if}}
+      </a>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>
+{{else}}
+<div id="storesNotFound" class="alert">
+  <strong>Nenhuma loja encontrada.</strong>
+</div>
+{{/if}}

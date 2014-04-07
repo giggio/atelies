@@ -15,8 +15,10 @@ append layout
             #header1
               .col-md-8
                 form#searchProducts.input-group
-                  input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos", onkeydown="if (event.keyCode !== 13){return true;};Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;")
-                  span.input-group-btn: button#doSearchProduct.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
+                  input#productSearchTerm.form-control(type="text", placeholder="Busca produtos e lojas", onkeydown="if (event.keyCode !== 13){return true;};Backbone.history.navigate('search/'+document.getElementById('productSearchTerm').value, true);return false;")
+                  span.input-group-btn
+                    button#doSearchProduct.btn.btn-default(type="button", data-container="body", data-trigger="manual", data-content="A busca deve conter ao menos 3 letras.", onclick="Backbone.history.navigate('search/'+document.getElementById('productSearchTerm').value, true);return false;")
+                      i.glyphicon.glyphicon-search
               .col-md-4
                 #createStoreCallOut.pull-right
                   a(href="https://www.atelies.com.br/IWantToSell"): img(src="#{STATIC_PATH}/images/criarloja.png")

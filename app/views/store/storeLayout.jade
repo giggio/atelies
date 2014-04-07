@@ -12,8 +12,10 @@ append layout
               include ../shared/includes/userInfo
             #searchProducts2
               form#searchProducts.input-group
-                input#productSearchTerm.form-control(type="text",placeholder="Busca Produtos")
-                span.input-group-btn: button#doSearchProduct.btn.btn-default(type="button",onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;"): i.glyphicon.glyphicon-search
+                input#productSearchTerm.form-control(type="text", placeholder="Busca Produtos", onkeydown="if (event.keyCode !== 13){return true;};Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;")
+                span.input-group-btn
+                  button#doSearchProduct.btn.btn-default(type="button", data-container="body", data-trigger="manual", data-content="A busca deve conter ao menos 3 letras.", onclick="Backbone.history.navigate('searchProducts/'+document.getElementById('productSearchTerm').value, true);return false;")
+                    i.glyphicon.glyphicon-search
             #shoppingCart
               a(href="#", onclick="Backbone.history.navigate('cart', true); return false;") 
                 i.glyphicon.glyphicon-shopping-cart

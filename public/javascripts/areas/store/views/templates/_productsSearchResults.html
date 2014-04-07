@@ -1,11 +1,30 @@
+<h3>Produtos encontrados:</h3>
+{{#if hasProducts}}
 <div id="productsSearchResults">
   {{#each productGroups}}
-  <div class="row-fluid productsRow">
+  <div class="row productsRow">
     {{#each products}}
-    <div id="product{{_id}}" data-id="{{_id}}" class="product col-md-2">
-      <a href="{{slug}}" class="link"><img src="{{pictureThumb}}" /></a>
+    <div id="product{{_id}}" data-id="{{_id}}" class="product">
+      <a href="{{slug}}" class="link">
+        {{#if pictureThumb}}
+        <img src="{{pictureThumb}}" />
+        {{else}}
+        <img src="http://dummyimage.com/200x200/000/fff&text=%3F" />
+        {{/if}}
+      </a>
+      <a href="{{slug}}">
+        <div class="productInfoBox">
+          <span id="product{{_id}}_productName" class="name">{{name}}</span>
+          <span id="product{{_id}}_price" class="price">R$ {{price}}</span>
+        </div>
+      </a>
     </div>
     {{/each}}
   </div>
   {{/each}}
 </div>
+{{else}}
+<div id="productsNotFound" class="alert">
+  <strong>Nenhum produto encontrado.</strong>
+</div>
+{{/if}}
