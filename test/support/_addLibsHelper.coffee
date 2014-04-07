@@ -1,4 +1,3 @@
-require("mocha-as-promised")()
 chai = require 'chai'
 chai.should()
 chai.use require 'chai-fuzzy'
