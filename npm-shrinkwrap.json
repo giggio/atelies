@@ -1239,9 +1239,8 @@
       "resolved": "https://registry.npmjs.org/prerender-node/-/prerender-node-0.1.18.tgz"
     },
     "q": {
-      "version": "1.0.0",
-      "from": "https://registry.npmjs.org/q/-/q-1.0.0.tgz",
-      "resolved": "https://registry.npmjs.org/q/-/q-1.0.0.tgz"
+      "version": "1.0.1",
+      "from": "q@latest"
     },
     "recaptcha": {
       "version": "1.2.0",
