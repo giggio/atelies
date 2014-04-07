@@ -102,7 +102,7 @@ module.exports = (grunt) ->
         src: 'test/unit/**/*.js'
         options:
           require: ['test/support/_specHelper.js']
-          reporter: 'spec'
+          reporter: 'nyan'
           ui: 'bdd'
       server_integration:
         src: 'test/integration/**/*.js'
@@ -115,7 +115,7 @@ module.exports = (grunt) ->
         src: 'public/javascripts/test/**/*.js'
         options:
           require: ['public/javascripts/test/support/runnerSetup.js']
-          reporter: 'spec'
+          reporter: 'nyan'
           ui: 'bdd'
       server_unit_coverage:
         src: 'test/unit/**/*.js'
@@ -345,4 +345,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
   grunt.registerTask 'lintAndTest', [ 'lint', 'test:unit' ]
   grunt.registerTask 'default', [ 'coffee', 'less:dev', 'concurrent:devServerAndLintAndTest' ]
-  grunt.registerTask 'quickStart', [ 'concurrent:devServer']
+  grunt.registerTask 'quickstart', [ 'concurrent:devServer']
