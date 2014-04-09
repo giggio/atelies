@@ -1,26 +1,36 @@
 webdriver       = require 'selenium-webdriver'
 chromedriver    = require 'chromedriver'
+phantomjs       = require 'phantomjs'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 async           = require 'async'
 Q               = require 'q'
+useChrome = on
 
 before ->
-  chromedriver.start()
-  capabilities =
-    'browser': 'chrome',
-    'chromeOptions':
-      'prefs': {"profile.default_content_settings": {'images': 2}}
-      'args': ["--host-rules=MAP * 127.0.0.1"]
-  capabilities =
-  Page.driver = new webdriver.Builder()
-    .usingServer('http://localhost:9515')
-    .withCapabilities(capabilities)
-    .build()
+  if useChrome
+    chromedriver.start()
+    capabilities =
+      'browser': 'chrome',
+      'chromeOptions':
+        'prefs': {"profile.default_content_settings": {'images': 2}}
+        'args': ["--host-rules=MAP * 127.0.0.1"]
+    Page.driver = new webdriver.Builder()
+      .usingServer('http://localhost:9515')
+      .withCapabilities(capabilities)
+      .build()
+  else
+    capabilities = webdriver.Capabilities.phantomjs()
+    capabilities.set 'phantomjs.binary.path', phantomjs.path
+    Page.driver = new webdriver.Builder()
+      .withCapabilities(capabilities)
+      .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
 after ->
-  Page.driver.quit()
-  .then -> chromedriver.stop()
+  if useChrome
+    Page.driver.quit().then -> chromedriver.stop()
+  else
+    Page.driver.quit()
 
 module.exports = class Page
   constructor: (url, page) ->
@@ -28,8 +38,7 @@ module.exports = class Page
     @url = url if url?
     @driver = Page.driver
     _.bindAll @, _.functions(@)...
-  visit: (url, refresh) ->
-    refresh = false unless refresh?
+  visit: (url, refresh = false) ->
     url = @url unless url?
     url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
     Q(@driver.get('data:,')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
@@ -81,7 +90,7 @@ module.exports = class Page
   findElementsIn: (selector, childrenSelector) ->
     @findElement(selector)
     .then (el) -> el.findElements webdriver.By.css childrenSelector
-  clearCookies: -> Q @driver.manage().deleteAllCookies()
+  clearCookies: -> Q(@driver.manage().deleteAllCookies()).then(->)
   type: (selector, text) ->
     text = "" unless text?
     @findElement selector
@@ -215,6 +224,7 @@ module.exports = class Page
   refresh: -> Q @driver.navigate().refresh()
   reload: @::refresh
   getHtml: (selector) -> @findElement(selector).then (el) -> el.getOuterHtml()
+  getPageHtml: -> @findElement('html').then (el) -> el.getOuterHtml()
   getInnerHtml: (selector) -> @findElement(selector).then (el) -> el.getInnerHtml()
   getDialogMsg: -> @waitForSelectorClickable('.dialogMsg').then => @getText '.dialogMsg'
   getDialogTitle: -> @waitForSelectorClickable('#dialogTitle').then => @getText '#dialogTitle'

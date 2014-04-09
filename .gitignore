@@ -12,3 +12,4 @@ seed/*
 .idea
 TAGS
 public/fonts/bootstrap/*
+*.log
