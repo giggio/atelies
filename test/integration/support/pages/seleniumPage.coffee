@@ -1,36 +1,31 @@
 webdriver       = require 'selenium-webdriver'
-chromedriver    = require 'chromedriver'
-phantomjs       = require 'phantomjs'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 async           = require 'async'
 Q               = require 'q'
+
 useChrome = on
 
 before ->
   if useChrome
-    chromedriver.start()
-    capabilities =
-      'browser': 'chrome',
-      'chromeOptions':
-        'prefs': {"profile.default_content_settings": {'images': 2}}
-        'args': ["--host-rules=MAP * 127.0.0.1"]
-    Page.driver = new webdriver.Builder()
-      .usingServer('http://localhost:9515')
-      .withCapabilities(capabilities)
-      .build()
+    chromedriver = require 'chromedriver'
+    chrome = require "selenium-webdriver/chrome"
+    chromeServiceBuilder = new chrome.ServiceBuilder chromedriver.path
+    capabilities = webdriver.Capabilities.chrome()
+    capabilities.set 'chromeOptions',
+      'prefs': {"profile.default_content_settings": {'images': 2}}
+      'args': ["--host-rules=MAP * 127.0.0.1"]
+    Page.driver = chrome.createDriver capabilities, chromeServiceBuilder.build()
   else
+    phantomjs = require 'phantomjs'
     capabilities = webdriver.Capabilities.phantomjs()
     capabilities.set 'phantomjs.binary.path', phantomjs.path
     Page.driver = new webdriver.Builder()
       .withCapabilities(capabilities)
       .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
-after ->
-  if useChrome
-    Page.driver.quit().then -> chromedriver.stop()
-  else
-    Page.driver.quit()
+
+after -> Page.driver.quit()
 
 module.exports = class Page
   constructor: (url, page) ->
