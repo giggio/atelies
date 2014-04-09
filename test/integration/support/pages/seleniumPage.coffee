@@ -32,7 +32,7 @@ module.exports = class Page
     refresh = false unless refresh?
     url = @url unless url?
     url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
-    Q(@driver.get('chrome://version/')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
+    Q(@driver.get('data:,')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
     .then => @driver.get(url)
     .then => @refresh() if refresh
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
