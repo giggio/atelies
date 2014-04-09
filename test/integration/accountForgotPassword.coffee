@@ -16,7 +16,7 @@ describe 'Account Forgot password', ->
         user = generator.user.a()
         user.save()
       .then page.visit
-      .then -> page.setEmail user.email
+      .then -> page.setEmail user.email.toUpperCase()
       .then page.clickRequestPasswordReset
     it 'is at the password request sent page', ->
       page.currentUrl (url) ->

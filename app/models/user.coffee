@@ -116,7 +116,7 @@ userSchema.methods.sendMailPasswordReset = (cb) ->
   postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body, cb
   
 module.exports = User = mongoose.model 'user', userSchema
-User.findByEmail = (email, cb) -> User.findOne email: email, cb
+User.findByEmail = (email, cb) -> User.findOne email: email.toLowerCase(), cb
 User.findAdminsFor = (store, cb) -> User.find stores: store, cb
 User.findByFacebookId = (facebookId, cb) -> User.findOne facebookId: facebookId, cb
 
