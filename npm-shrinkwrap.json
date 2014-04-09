@@ -1,6 +1,6 @@
 {
   "name": "atelies",
-  "version": "1.18.0",
+  "version": "1.18.1",
   "dependencies": {
     "async": {
       "version": "0.2.10",
