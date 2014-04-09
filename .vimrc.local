@@ -1,1 +1,8 @@
 let NERDTreeIgnore=['\~$', '\.js$', '\.css$', '\.map', 'node_modules$', 'compiledPublic']
+let currDir=fnamemodify('', ':p')
+if has("win32")
+  let ignore=','.currDir.'node_modules\\*,'.currDir.'compiledPublic\\*,'.currDir.'public\\javascripts\\lib\\*,*.js,*.map,*.css,'
+else
+  let ignore=','.currDir.'node_modules/*,'.currDir.'compiledPublic/*,'.currDir.'public/javascripts/lib/*,*.js,*.map,*.css,'
+endif
+let &wildignore = &wildignore . ignore
