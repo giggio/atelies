@@ -16,20 +16,22 @@
         li: a#goUpdateProfile(href="/account/updateProfile") Atualize seu cadastro
         li: a#logout(href="/account/logout") Sair
   else
-    a#loginPop.pop(href="#") Entrar
-  #loginPop-head.hide Faça seu login
-    button.close(type="button") ×
-  #loginPop-content.hide
-    form#popupLoginForm(action='#{secureUrl}/account/login', method='post')
-      a.facebookLogin(href='/auth/facebook')
-        img(src="#{STATIC_PATH}/images/fblogin.png")
-        span Login com Facebook
-      .form-group
-        input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.", placeholder="E-mail")
-      .form-group
-        input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", placeholder="Senha")
-      #forgotPasswordHolder: a#forgotPasswordLink(href="/account/forgotPassword") Esqueci minha senha
-      #loginButtons.form-group
-        input.btn.btn-primary(type='submit', value='Entrar')
-        | &nbsp;ou&nbsp;
-        a.btn.btn-primary(href='#{secureUrl}/account/register') Cadastre-se!
+    unless dontShowLoginPopup
+      a#loginPop.pop(href="#") Entrar
+  unless dontShowLoginPopup
+    #loginPop-head.hide Faça seu login
+      button.close(type="button") ×
+    #loginPop-content.hide
+      form#popupLoginForm(action='#{secureUrl}/account/login', method='post')
+        a.facebookLogin(href='/auth/facebook')
+          img(src="#{STATIC_PATH}/images/fblogin.png")
+          span Login com Facebook
+        .form-group
+          input(type='text', id="email", name='email', value='', class="required email", title="Informe seu email.", placeholder="E-mail")
+        .form-group
+          input(type='password', name=everyauth.password.passwordFormFieldName, class="required", title="Informe sua senha.", placeholder="Senha")
+        #forgotPasswordHolder: a#forgotPasswordLink(href="/account/forgotPassword") Esqueci minha senha
+        #loginButtons.form-group
+          input.btn.btn-primary(type='submit', value='Entrar')
+          | &nbsp;ou&nbsp;
+          a.btn.btn-primary(href='#{secureUrl}/account/register') Cadastre-se!

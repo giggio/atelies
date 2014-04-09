@@ -23,7 +23,6 @@ describe 'Register', ->
       .then page.clickRegisterButton
     it 'shows the register failed message', -> page.errors().should.become 'E-mail já cadastrado.'
     it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does shows login link', -> page.loginLinkExists().should.eventually.be.true
     it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
     it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
 
@@ -51,7 +50,6 @@ describe 'Register', ->
       .then page.clickRegisterButton
     it 'shows the register failed message', -> page.errors().should.become 'E-mail já cadastrado.'
     it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does show login link', -> page.loginLinkExists().should.eventually.be.true
     it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
     it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
 
@@ -63,7 +61,6 @@ describe 'Register', ->
       .then -> page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true
       .then page.clickRegisterButton
     it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does show login link', -> page.loginLinkExists().should.eventually.be.true
     it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
     it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
     it 'Shows invalid password message', -> page.passwordRequired().should.become "Informe uma senha correta."

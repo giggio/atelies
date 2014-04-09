@@ -20,7 +20,6 @@ describe 'Login', ->
       page.visit()
       .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
       .then page.clickLoginButton
-    it 'shows login link', -> page.loginLinkExists().should.eventually.be.true
     it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
     it 'shows the login failed message', -> page.errors().should.become 'Login falhou'
     it 'is at the login page', -> page.currentUrl().should.become "http://localhost:8000/account/login"
