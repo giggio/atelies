@@ -16,7 +16,7 @@ module.exports = (grunt) ->
       src: [ '**/*.coffee' ]
       dest: 'app'
       ext: '.js'
-    tests:
+    test:
       expand: true
       cwd: 'test'
       src: [ '**/*.coffee' ]
@@ -29,15 +29,14 @@ module.exports = (grunt) ->
 
     coffee:
       base: '<%= base %>'
-      client:
-        files: ['<%= client %>'], options: sourceMap: true
+      client: '<%= client %>'
       server: '<%= server %>'
-      tests: '<%= tests %>'
+      test: '<%= test %>'
 
     coffeelint:
       client: '<%= client %>'
       server: '<%= server %>'
-      tests: '<%= tests %>'
+      test: '<%= test %>'
       dev: '<%= dev %>'
       options:
         configFile: 'coffeelint.json'
@@ -45,12 +44,16 @@ module.exports = (grunt) ->
     watch:
       options:
         livereload: true
-      coffee:
-        files: [ 'app/**/*.coffee', 'public/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'wait:watch', 'compileAndTest' ]
+      coffeeClient:
+        files: [ 'public/**/*.coffee' ]
+        tasks: [ 'compileLintAndTest:client' ]
         options:
           livereload: false
-          spawn: false
+      coffeeServer:
+        files: [ 'app/**/*.coffee', 'test/**/*.coffee' ]
+        tasks: [ 'compileLintAndTest:server' ]
+        options:
+          livereload: false
       less:
         files: [ 'public/**/*.less' ]
         tasks: [ 'less:dev' ]
@@ -76,9 +79,10 @@ module.exports = (grunt) ->
         script: 'server.js'
         options:
           ext: 'js'
+          ignore: ['node_modules/**', 'public/**']
           watch: ['app']
           nodeArgs: ['--debug']
-          delayTime: 2
+          delay: 2000
           env:
             NODE_ENV: 'development'
             PORT: 3000
@@ -86,69 +90,73 @@ module.exports = (grunt) ->
           cwd: __dirname
 
     concurrent:
-      devServer:
+      watchAndDevServer:
         tasks: [ 'watch', 'nodemon:dev' ]
         options:
           logConcurrentOutput: true
-      devServerAndLintAndTest:
-        tasks: [ 'watch', 'nodemon:dev', 'lintAndTest' ]
+      completeDefaultStart:
+        tasks: [ 'watch', 'nodemon:dev', 'completeDefaultStart' ]
         options:
           logConcurrentOutput: true
 
-    mochacov:
-      options:
-        ignoreLeaks: true
+    mochaTest:
       server_unit:
         src: 'test/unit/**/*.js'
         options:
-          require: ['test/support/_specHelper.js']
+          require: 'test/support/_specHelper.js'
           reporter: 'nyan'
           ui: 'bdd'
       server_integration:
         src: 'test/integration/**/*.js'
         options:
-          require: ['test/support/_specHelper.js']
+          require: 'test/support/_specHelper.js'
           reporter: 'spec'
           ui: 'bdd'
           timeout: 20000
       client:
-        src: 'public/javascripts/test/**/*.js'
+        src: [ 'public/javascripts/test/**/*.js', '!public/javascripts/test/support/_instrumentForCoverage.js' ]
         options:
-          require: ['public/javascripts/test/support/runnerSetup.js']
+          require: 'public/javascripts/test/support/runnerSetup.js'
           reporter: 'nyan'
           ui: 'bdd'
       server_unit_coverage:
         src: 'test/unit/**/*.js'
         options:
-          require: ['test/support/_specHelper.js']
-          reporter: 'html-cov'
+          require: ['test/support/_instrumentForCoverage.js', 'test/support/_specHelper.js']
           ui: 'bdd'
-          coverage: true
-          output: 'servercoveragereport.html'
+          quiet: on
+          reporter: 'html-cov'
+          captureFile: 'coverage-serverUnit.html'
       client_unit_coverage:
         src: 'public/javascripts/test/**/*.js'
         options:
-          require: ['public/javascripts/test/support/runnerSetup.js']
+          require: [ 'public/javascripts/test/support/_instrumentForCoverage.js', 'public/javascripts/test/support/runnerSetup.js' ]
           reporter: 'html-cov'
           ui: 'bdd'
-          coverage: true
-          output: 'clientcoveragereport.html'
-      travis_server_unit_coverage:
+          quiet: on
+          captureFile: 'coverage-client.html'
+      server_unit_coverage_lcov:
         src: 'test/unit/**/*.js'
         options:
-          require: ['test/support/_specHelper.js']
+          require: ['test/support/_instrumentForCoverage.js', 'test/support/_specHelper.js']
           ui: 'bdd'
-          reporter: 'html-cov'
-          coveralls:
-            serviceName: 'travis-ci'
-      travis_client_unit_coverage:
+          reporter: 'mocha-lcov-reporter'
+          quiet: on
+          captureFile: 'coverage-serverUnit.lcov.info'
+      client_unit_coverage_lcov:
         src: 'public/javascripts/test/**/*.js'
         options:
-          require: ['public/javascripts/test/support/runnerSetup.js']
+          require: [ 'public/javascripts/test/support/_instrumentForCoverage.js', 'public/javascripts/test/support/runnerSetup.js' ]
           ui: 'bdd'
-          reporter: 'html-cov'
-          coveralls:
-            serviceName: 'travis-ci'
+          reporter: 'mocha-lcov-reporter'
+          quiet: on
+          captureFile: 'coverage-client.lcov.info'
+
+    coveralls:
+      server_unit_coverage:
+        src: 'coverage-serverUnit.lcov.info'
+      client_unit_coverage:
+        src: 'coverage-client.lcov.info'
 
     bower:
       install:
@@ -278,11 +286,16 @@ module.exports = (grunt) ->
           src: ['**'], dest: 'public/fonts/bootstrap/', cwd: 'public/javascripts/lib/bootstrap/fonts/', expand: true
         ]
 
+    shell:
+      browserCoverageClient:
+        command: 'google-chrome coverage-client.html'
+      browserCoverageServer:
+        command: 'google-chrome coverage-serverUnit.html'
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
-  grunt.loadNpmTasks 'grunt-mocha-cov'
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-nodemon'
@@ -291,60 +304,43 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-wait'
   grunt.loadNpmTasks 'grunt-contrib-copy'
-
-  filterFiles = (files, dir) ->
-    _.chain(files)
-     .filter((f) -> _(f).startsWith(dir) and _(f).endsWith 'coffee')
-     .map((f)->_(f).strRight "#{dir}/")
-     .value()
-
-  changedFiles = {}
-  onChange = _.debounce ->
-    files = Object.keys(changedFiles)
-    serverFiles = filterFiles files, 'app'
-    clientFiles = filterFiles files, 'public'
-    testFiles = filterFiles files, 'test'
-    grunt.config ['server', 'src'], serverFiles
-    grunt.config ['client', 'src'], clientFiles
-    grunt.config ['tests', 'src'], testFiles
-    grunt.config ['dev'], []
-    changedFiles = {}
-  , 1000
-  grunt.event.on 'watch', (action, filepath) ->
-    changedFiles[filepath] = action
-    onChange()
+  grunt.loadNpmTasks 'grunt-mocha-test'
+  grunt.loadNpmTasks 'grunt-coveralls'
 
   #TASKS:
-  grunt.registerTask 'lint', [ 'coffeelint' ]
   grunt.registerTask 'server', [ 'express:prod' ]
-  grunt.registerTask 'compileAndTest', ->
-    tasks = [ 'compile' ]
-    if grunt.config(['client', 'src']).length isnt 0
-      tasks.push 'test:client'
-      grunt.log.writeln "Running #{'client'.blue} unit tests"
-    if grunt.config(['server', 'src']).length isnt 0 or grunt.config(['tests', 'src']).length isnt 0
-      tasks.push 'test:server'
-      grunt.log.writeln "Running #{'server'.blue} unit tests"
-    grunt.task.run tasks
   grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
-  grunt.registerTask 'test:travis', [ 'mochacov:travis_server_unit_coverage', 'mochacov:travis_client_unit_coverage' ]
+  grunt.registerTask 'test:travis', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage'  ]
   grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
   grunt.registerTask 'test:nocompile', [ 'test:server', 'test:client', 'test:integration' ]
   grunt.registerTask 'test:nocompile:smoke', [ 'test:server', 'test:client' ]
-  grunt.registerTask 'test:server', ['mochacov:server_unit']
-  grunt.registerTask 'test:integration', ['mochacov:server_integration']
+  grunt.registerTask 'test:server', ['mochaTest:server_unit']
+  grunt.registerTask 'test:integration', ['mochaTest:server_integration']
   grunt.registerTask 'test:unit', ['test:client', 'test:server']
-  grunt.registerTask 'test:client', ['mochacov:client']
-  grunt.registerTask 'compile', [ 'coffee', 'lint' ]
+  grunt.registerTask 'test:client', ['mochaTest:client']
+  grunt.registerTask 'test:coverage', ['test:coverage:client', 'test:coverage:server']
+  grunt.registerTask 'test:coverage:client', ['mochaTest:client_unit_coverage', 'shell:browserCoverageClient']
+  grunt.registerTask 'test:coverage:server', ['mochaTest:server_unit_coverage', 'shell:browserCoverageServer']
+  grunt.registerTask 'compile', [ 'coffee' ]
   grunt.registerTask 'compile:server', [ 'coffee:base', 'coffee:server' ]
+  grunt.registerTask 'compile:test', [ 'coffee:test' ]
+  grunt.registerTask 'compile:client', [ 'coffee:client' ]
+  grunt.registerTask 'compileAndLint', [ 'compileAndLint:server', 'compileAndLint:test', 'compileAndLint:client' ]
+  grunt.registerTask 'compileAndLint:client', [ 'compile:client', 'coffeelint:client' ]
+  grunt.registerTask 'compileAndLint:test', [ 'compile:test', 'coffeelint:test' ]
+  grunt.registerTask 'compileAndLint:server', [ 'compile:server', 'coffeelint:server' ]
+  grunt.registerTask 'compileLintAndTest:client', [ 'compileAndLint:client', 'test:client' ]
+  grunt.registerTask 'compileLintAndTest:server', [ 'compileAndLint:server', 'compileAndLint:test' , 'test:server' ]
   grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
   grunt.registerTask 'heroku', ->
     home = process.env.HOME
     if home is "/app" #trying to identify heroku
+      grunt.log.writeln "#{'IS'.blue} running in heroku, home is #{home.blue}."
       grunt.task.run [ 'compile:server' ]
     else
       grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{home.blue}."
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
-  grunt.registerTask 'lintAndTest', [ 'lint', 'test:unit' ]
-  grunt.registerTask 'default', [ 'coffee', 'less:dev', 'concurrent:devServerAndLintAndTest' ]
-  grunt.registerTask 'quickstart', [ 'concurrent:devServer']
+  grunt.registerTask 'lintAndTest', [ 'coffeelint', 'test:unit' ]
+  grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'compileAndLint:client', 'compileAndLint:test', 'test:unit' ]
+  grunt.registerTask 'default', [ 'compile:server', 'concurrent:completeDefaultStart' ]
+  grunt.registerTask 'quickstart', [ 'concurrent:watchAndDevServer']
