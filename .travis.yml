@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
+- mkdir artifacts
 - gem install --version 0.8.9 faraday | tee artifacts/gemInstall.log #necessary for travis-artifacts work
 - gem install travis-artifacts | tee -a artifacts/gemInstall.log
 - npm install bower | tee artifacts/npmInstall.log
