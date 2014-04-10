@@ -138,6 +138,7 @@ module.exports = (grunt) ->
         options:
           require: ['test/support/_specHelper.js']
           ui: 'bdd'
+          reporter: 'html-cov'
           coveralls:
             serviceName: 'travis-ci'
       travis_client_unit_coverage:
@@ -145,6 +146,7 @@ module.exports = (grunt) ->
         options:
           require: ['public/javascripts/test/support/runnerSetup.js']
           ui: 'bdd'
+          reporter: 'html-cov'
           coveralls:
             serviceName: 'travis-ci'
 

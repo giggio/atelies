@@ -1,28 +1,19 @@
----
 language: node_js
 node_js:
 - '0.10'
 before_script:
 - npm install bower
 - node_modules/bower/bin/bower install
-after_success:
-- if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then echo "This is a pull request. No deployment will be done."; exit 0; fi
-- if [[ "$TRAVIS_BRANCH" == "master" ]]; then git remote add heroku git@heroku.com:ateliesteste.git; fi
-- wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-- echo "Host heroku.com" >> ~/.ssh/config
-- echo "   StrictHostKeyChecking no" >> ~/.ssh/config
-- echo "   CheckHostIP no" >> ~/.ssh/config
-- echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
-- yes | heroku keys:add
-- yes | git push heroku "$TRAVIS_BRANCH":master
 script: node_modules/grunt-cli/bin/grunt travis
 branches:
   only:
     - master
+deploy:
+  provider: heroku
+  api_key:
+    secure: A6IgZ68oxRaIk3VA9yUaWODlgJ4qA8EGP4yD4cHfzJU/qkZhaBoYjUcQW5uMyfQ5WyPaJp2L4xS8LgXZ3bkbgrYkmv6zwCJI7eTNoN7AV8WPtWd3FHs0wVdx0Z5YRId7TXBVkgIQP9Gon2tOeYHYmQHkg8BcSd3qD3xYKHEisp0=
+  app: ateliesteste
 env:
   global:
-  - secure: ! 'nRhjqK0d3ttsH5d2mt0mODYBgcwSDpLMTi55ga8iawP2f6dshqNTjWrWzgkA
-
-      iuV48hiLY7y1HWB3Vdyb5SvdhfzwrFlFVB5yRcEBAlC9rwvBWzia63yk3ePu
-
-      KDtLFkRLBQ0oWWX8hZlkFjseVckXi5Ec4BiGgpU3PmSXcPw0JjE='
+    #COVERALLS_REPO_TOKEN
+    - secure: "Yad7YuAOmrknS9pb49D5rPf5pR3MRbEPgvJG0Omd5aYH3i5ps43RkkoQvtVi+P+HDtoIQA20a2LADirN9Lhanm75xXDldftGR85JFolzRBP/atxVyaG49ip5ylU/i3j07EYyEjopY1eBEnmPe7L7dES7vDBZXXE16MJDAizaZhI="
