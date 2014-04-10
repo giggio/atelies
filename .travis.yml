@@ -2,15 +2,13 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
-- gem install --version 0.8.0 faraday #necessary for travis-artifacts work
-- gem install travis-artifacts
-- npm install bower
-- node_modules/bower/bin/bower install
+- gem install --version 0.8.9 faraday | tee artifacts/gemInstall.log #necessary for travis-artifacts work
+- gem install travis-artifacts | tee -a artifacts/gemInstall.log
+- npm install bower | tee artifacts/npmInstall.log
+- node_modules/bower/bin/bower install | tee artifacts/bowerInstall.log
 after_script:
-- travis-artifacts upload --path build/build.tar.gz
-after_failure:
-- travis-artifacts upload --path debug/debug.log
-script: node_modules/grunt-cli/bin/grunt travis
+- travis-artifacts upload --path artifacts --target-path $TRAVIS_BUILD_ID
+script: node_modules/grunt-cli/bin/grunt travis | tee artifacts/grunt.log
 branches:
   only:
     - master

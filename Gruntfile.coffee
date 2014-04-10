@@ -138,7 +138,7 @@ module.exports = (grunt) ->
           ui: 'bdd'
           quiet: on
           reporter: 'html-cov'
-          captureFile: 'coverage-serverUnit.html'
+          captureFile: 'artifacts/coverage-serverUnit.html'
       client_unit_coverage:
         src: 'public/javascripts/test/**/*.js'
         options:
@@ -146,7 +146,7 @@ module.exports = (grunt) ->
           reporter: 'html-cov'
           ui: 'bdd'
           quiet: on
-          captureFile: 'coverage-client.html'
+          captureFile: 'artifacts/coverage-client.html'
       server_unit_coverage_lcov:
         src: 'test/unit/**/*.js'
         options:
@@ -154,7 +154,7 @@ module.exports = (grunt) ->
           ui: 'bdd'
           reporter: 'mocha-lcov-reporter'
           quiet: on
-          captureFile: 'coverage-serverUnit.lcov.info'
+          captureFile: 'artifacts/coverage-serverUnit.lcov.info'
       client_unit_coverage_lcov:
         src: 'public/javascripts/test/**/*.js'
         options:
@@ -162,13 +162,13 @@ module.exports = (grunt) ->
           ui: 'bdd'
           reporter: 'mocha-lcov-reporter'
           quiet: on
-          captureFile: 'coverage-client.lcov.info'
+          captureFile: 'artifacts/coverage-client.lcov.info'
 
     coveralls:
       server_unit_coverage:
-        src: 'coverage-serverUnit.lcov.info'
+        src: 'artifacts/coverage-serverUnit.lcov.info'
       client_unit_coverage:
-        src: 'coverage-client.lcov.info'
+        src: 'artifacts/coverage-client.lcov.info'
 
     bower:
       install:
@@ -300,9 +300,9 @@ module.exports = (grunt) ->
 
     shell:
       browserCoverageClient:
-        command: 'google-chrome coverage-client.html'
+        command: 'google-chrome artifacts/coverage-client.html'
       browserCoverageServer:
-        command: 'google-chrome coverage-serverUnit.html'
+        command: 'google-chrome artifacts/coverage-serverUnit.html'
 
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
