@@ -18,6 +18,7 @@ deploy:
   api_key:
     secure: A6IgZ68oxRaIk3VA9yUaWODlgJ4qA8EGP4yD4cHfzJU/qkZhaBoYjUcQW5uMyfQ5WyPaJp2L4xS8LgXZ3bkbgrYkmv6zwCJI7eTNoN7AV8WPtWd3FHs0wVdx0Z5YRId7TXBVkgIQP9Gon2tOeYHYmQHkg8BcSd3qD3xYKHEisp0=
   app: ateliesteste
+  strategy: git
 env:
   global:
     #COVERALLS_REPO_TOKEN
