@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
+- gem install --version 0.8.0 faraday #necessary for travis-artifacts work
 - gem install travis-artifacts
 - npm install bower
 - node_modules/bower/bin/bower install
