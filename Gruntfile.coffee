@@ -106,6 +106,12 @@ module.exports = (grunt) ->
           require: 'test/support/_specHelper.js'
           reporter: 'nyan'
           ui: 'bdd'
+      server_unit_spec:
+        src: 'test/unit/**/*.js'
+        options:
+          require: 'test/support/_specHelper.js'
+          reporter: 'spec'
+          ui: 'bdd'
       server_integration:
         src: 'test/integration/**/*.js'
         options:
@@ -118,6 +124,12 @@ module.exports = (grunt) ->
         options:
           require: 'public/javascripts/test/support/runnerSetup.js'
           reporter: 'nyan'
+          ui: 'bdd'
+      client_spec:
+        src: [ 'public/javascripts/test/**/*.js', '!public/javascripts/test/support/_instrumentForCoverage.js' ]
+        options:
+          require: 'public/javascripts/test/support/runnerSetup.js'
+          reporter: 'spec'
           ui: 'bdd'
       server_unit_coverage:
         src: 'test/unit/**/*.js'
@@ -309,11 +321,10 @@ module.exports = (grunt) ->
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
-  grunt.registerTask 'test', [ 'compile', 'test:nocompile' ]
+  grunt.registerTask 'test', [ 'test:server', 'test:client', 'test:integration' ]
   grunt.registerTask 'test:travis', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage'  ]
-  grunt.registerTask 'test:smoke', [ 'compile', 'test:nocompile:smoke' ]
-  grunt.registerTask 'test:nocompile', [ 'test:server', 'test:client', 'test:integration' ]
-  grunt.registerTask 'test:nocompile:smoke', [ 'test:server', 'test:client' ]
+  grunt.registerTask 'test:smoke', [ 'test:server', 'test:client' ]
+  grunt.registerTask 'test:smoke:spec', [ 'mochaTest:server_unit_spec', 'mochaTest:client_spec' ]
   grunt.registerTask 'test:server', ['mochaTest:server_unit']
   grunt.registerTask 'test:integration', ['mochaTest:server_integration']
   grunt.registerTask 'test:unit', ['test:client', 'test:server']
@@ -331,7 +342,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'compileAndLint:server', [ 'compile:server', 'coffeelint:server' ]
   grunt.registerTask 'compileLintAndTest:client', [ 'compileAndLint:client', 'test:client' ]
   grunt.registerTask 'compileLintAndTest:server', [ 'compileAndLint:server', 'compileAndLint:test' , 'test:server' ]
-  grunt.registerTask 'travis', [ 'test:smoke', 'test:travis' ]
+  grunt.registerTask 'travis', [ 'compile', 'test:smoke:spec', 'test:travis' ]
   grunt.registerTask 'heroku', ->
     home = process.env.HOME
     if home is "/app" #trying to identify heroku
