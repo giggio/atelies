@@ -318,6 +318,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-coveralls'
+  grunt.loadNpmTasks 'grunt-notify'
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
