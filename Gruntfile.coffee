@@ -304,6 +304,12 @@ module.exports = (grunt) ->
       browserCoverageServer:
         command: 'google-chrome artifacts/coverage-serverUnit.html'
 
+    notify_hooks:
+      options:
+        enabled: on
+        duration: 1
+        title: 'Atelies'
+
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -319,6 +325,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-coveralls'
   grunt.loadNpmTasks 'grunt-notify'
+  grunt.task.run 'notify_hooks'
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
