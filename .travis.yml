@@ -1,15 +1,19 @@
 language: node_js
 node_js:
 - '0.10'
+before_install:
+- echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+- echo "Travis build id is $TRAVIS_BUILD_ID"
 before_script:
-- mkdir artifacts
-- gem install --version 0.8.9 faraday | tee artifacts/gemInstall.log #necessary for travis-artifacts work
-- gem install travis-artifacts | tee -a artifacts/gemInstall.log
-- npm install bower | tee artifacts/npmInstall.log
-- node_modules/bower/bin/bower install | tee artifacts/bowerInstall.log
-after_script:
-- travis-artifacts upload --path artifacts --target-path $TRAVIS_BUILD_ID
-script: node_modules/grunt-cli/bin/grunt travis | tee artifacts/grunt.log
+- node_modules/bower/bin/bower install
+- ls -la
+script:
+- node_modules/grunt-cli/bin/grunt travis:compileAndTest --no-color --verbose
+- node_modules/grunt-cli/bin/grunt travis:reportCoverage --no-color --verbose
+- ls -la
+- gem install --version 0.8.9 faraday #necessary for travis-artifacts to work
+- gem install travis-artifacts
+- travis-artifacts upload --path log --target-path $TRAVIS_BUILD_ID
 branches:
   only:
     - master

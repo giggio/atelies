@@ -13,4 +13,4 @@ seed/*
 TAGS
 public/fonts/bootstrap/*
 *.log
-artifacts/*
+log/*

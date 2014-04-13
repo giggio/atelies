@@ -138,7 +138,7 @@ module.exports = (grunt) ->
           ui: 'bdd'
           quiet: on
           reporter: 'html-cov'
-          captureFile: 'artifacts/coverage-serverUnit.html'
+          captureFile: 'log/coverage-serverUnit.html'
       client_unit_coverage:
         src: 'public/javascripts/test/**/*.js'
         options:
@@ -146,7 +146,7 @@ module.exports = (grunt) ->
           reporter: 'html-cov'
           ui: 'bdd'
           quiet: on
-          captureFile: 'artifacts/coverage-client.html'
+          captureFile: 'log/coverage-client.html'
       server_unit_coverage_lcov:
         src: 'test/unit/**/*.js'
         options:
@@ -154,7 +154,7 @@ module.exports = (grunt) ->
           ui: 'bdd'
           reporter: 'mocha-lcov-reporter'
           quiet: on
-          captureFile: 'artifacts/coverage-serverUnit.lcov.info'
+          captureFile: 'log/coverage-serverUnit.lcov.info'
       client_unit_coverage_lcov:
         src: 'public/javascripts/test/**/*.js'
         options:
@@ -162,13 +162,13 @@ module.exports = (grunt) ->
           ui: 'bdd'
           reporter: 'mocha-lcov-reporter'
           quiet: on
-          captureFile: 'artifacts/coverage-client.lcov.info'
+          captureFile: 'log/coverage-client.lcov.info'
 
     coveralls:
       server_unit_coverage:
-        src: 'artifacts/coverage-serverUnit.lcov.info'
+        src: 'log/coverage-serverUnit.lcov.info'
       client_unit_coverage:
-        src: 'artifacts/coverage-client.lcov.info'
+        src: 'log/coverage-client.lcov.info'
 
     bower:
       install:
@@ -300,9 +300,9 @@ module.exports = (grunt) ->
 
     shell:
       browserCoverageClient:
-        command: 'google-chrome artifacts/coverage-client.html'
+        command: 'google-chrome log/coverage-client.html'
       browserCoverageServer:
-        command: 'google-chrome artifacts/coverage-serverUnit.html'
+        command: 'google-chrome log/coverage-serverUnit.html'
 
     notify_hooks:
       options:
@@ -331,7 +331,6 @@ module.exports = (grunt) ->
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
   grunt.registerTask 'test', [ 'test:server', 'test:client', 'test:integration' ]
-  grunt.registerTask 'test:travis', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage'  ]
   grunt.registerTask 'test:smoke', [ 'test:server', 'test:client' ]
   grunt.registerTask 'test:smoke:spec', [ 'mochaTest:server_unit_spec', 'mochaTest:client_spec' ]
   grunt.registerTask 'test:server', ['mochaTest:server_unit']
@@ -351,7 +350,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'compileAndLint:server', [ 'compile:server', 'coffeelint:server' ]
   grunt.registerTask 'compileLintAndTest:client', [ 'compileAndLint:client', 'test:client' ]
   grunt.registerTask 'compileLintAndTest:server', [ 'compileAndLint:server', 'compileAndLint:test' , 'test:server' ]
-  grunt.registerTask 'travis', [ 'compile', 'test:smoke:spec', 'test:travis' ]
+  grunt.registerTask 'travis:compileAndTest', [ 'compile', 'test:smoke:spec' ]
+  grunt.registerTask 'travis:reportCoverage', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage' ]
   grunt.registerTask 'heroku', ->
     if isHeroku() #trying to identify heroku
       grunt.log.writeln "#{'IS'.blue} running in heroku, home is #{process.env.HOME.blue}."
