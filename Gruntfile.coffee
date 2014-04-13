@@ -325,7 +325,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-coveralls'
   grunt.loadNpmTasks 'grunt-notify'
-  grunt.task.run 'notify_hooks'
+  isHeroku = -> process.env.HOME is "/app"
+  grunt.task.run 'notify_hooks' unless isHeroku()
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
@@ -352,12 +353,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'compileLintAndTest:server', [ 'compileAndLint:server', 'compileAndLint:test' , 'test:server' ]
   grunt.registerTask 'travis', [ 'compile', 'test:smoke:spec', 'test:travis' ]
   grunt.registerTask 'heroku', ->
-    home = process.env.HOME
-    if home is "/app" #trying to identify heroku
-      grunt.log.writeln "#{'IS'.blue} running in heroku, home is #{home.blue}."
+    if isHeroku() #trying to identify heroku
+      grunt.log.writeln "#{'IS'.blue} running in heroku, home is #{process.env.HOME.blue}."
       grunt.task.run [ 'compile:server' ]
     else
-      grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{home.blue}."
+      grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{process.env.HOME.blue}."
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
   grunt.registerTask 'lintAndTest', [ 'coffeelint', 'test:unit' ]
   grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'compileAndLint:client', 'compileAndLint:test', 'test:unit' ]
