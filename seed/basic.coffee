@@ -2,7 +2,7 @@ server2 = if server? then server else 'localhost'
 dbName2 = if dbName? then dbName else 'openstore'
 db = connect "#{server2}/#{dbName2}"
 db.auth user, password if password?
-db.users.remove()
+db.users.remove {}
 db.users.insert
   email: 'admin@atelies.com.br'
   passwordHash: '$2a$10$ZZeLx95w4DiOEq7yixmfdeK7p02C7.mROlGe7w7mAgbGiMZpfhP9a' # hash for 'abc'
@@ -65,7 +65,7 @@ user2 = db.users.findOne email:'c@a.com'
 db.users.ensureIndex { email: 1 }
 db.users.ensureIndex { facebookId: 1 }
 
-db.products.remove()
+db.products.remove {}
 db.products.insert
   name: 'name 1'
   nameKeywords: ['name', '1']
@@ -312,7 +312,7 @@ db.products.ensureIndex { nameKeywords: 1 }
 db.products.ensureIndex { slug: 1 }
 db.products.ensureIndex { tags: 1 }
 db.products.ensureIndex { categories: 1 }
-db.productcomments.remove()
+db.productcomments.remove {}
 db.productcomments.insert
   body: "Some really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\n***Again*** really long comment. Aenean vel dui dui. Nullam leo erat, aliquet quis tempus a, posuere ut mi. Ut scelerisque neque et turpis posuere pulvinar pellentesque nibh ullamcorper. Pharetra in mattis molestie, volutpat elementum justo. Aenean ut ante turpis. Pellentesque laoreet mé vel lectus scelerisque interdum cursus velit auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   date: new Date(2013, 0, 1)
@@ -328,7 +328,7 @@ db.productcomments.insert
   userEmail: user2.email
   product: product1._id
 db.productcomments.ensureIndex { product: 1 }
-db.stores.remove()
+db.stores.remove {}
 db.stores.insert
   name: 'Store 1'
   nameKeywords: ['store', '1']
@@ -463,7 +463,7 @@ for i in [4..15]
   userSeller.stores.push store._id
 db.stores.ensureIndex { slug: 1 }
 db.users.save userSeller
-db.orders.remove()
+db.orders.remove {}
 db.orders.insert
   store: store1._id
   items: [
@@ -499,7 +499,7 @@ db.orders.insert
   paymentType: 'directSell'
 order2 = db.orders.findOne shippingCost: 2
 db.orders.ensureIndex customer: 1
-db.storeevaluations.remove()
+db.storeevaluations.remove {}
 db.storeevaluations.insert
   body: 'Alguma avaliacao sobre a loja, muito legal e tal. \n\n **E agora** em outra linha.'
   rating: 3.4
