@@ -147,6 +147,7 @@ module.exports = class Page
     Q(flow).then -> texts
   getAttribute: (selector, attribute) -> @findElement(selector).then (el) -> el.getAttribute(attribute)
   getValue: @::getAttribute.partial(undefined, 'value', undefined)
+  getHrefIn: @::getAttributeIn.partial(undefined, undefined, 'href')
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getSrcIn: @::getAttributeIn.partial(undefined, undefined, 'src', undefined)
   getIsClickable: (selector) ->
@@ -238,3 +239,19 @@ module.exports = class Page
   uploadFile: (selector, path) -> @findElement(selector).then (el) -> el.sendKeys path if path?
   waitForReady: -> @wait (=> @eval "return document.readyState === 'complete';"), 5000
   captureAttribute: captureAttribute
+  resolveObj: (obj) ->
+    cbObj = {}
+    for key, promise of obj
+      if Q.isPromiseAlike promise
+        do (key, promise) ->
+          cbObj[key] = (cb) ->
+            Q(promise)
+            .then (result) -> cb null, result
+            .catch (err) -> cb err
+    d = Q.defer()
+    async.parallel cbObj, (err, resultObj) ->
+      d.reject err if err?
+      for key, value of resultObj
+        obj[key] = value
+      d.resolve obj
+    d.promise

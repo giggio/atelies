@@ -1,0 +1,33 @@
+<h2>Relatório de lojas</h2>
+<table id="storesReport">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Telefone</th>
+      <th>Produtos</th>
+      <th>Pedidos</th>
+      <th>Avaliação</th>
+      <th>Categorias</th>
+      <th>Pagseguro</th>
+      <th>Responsável</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each stores}}
+    <tr class="store">
+      <td class="name"><a href="/{{slug}}">{{name}}</a></td>
+      <td class="email"><a href="mailto:{{email}}" />{{email}}</a></td>
+      <td class="phoneNumber">{{phoneNumber}}</td>
+      <td class="numberOfProducts">{{#if numberOfProducts}}{{numberOfProducts}}{{else}}0{{/if}}</td>
+      <td class="numberOfOrders">{{#if numberOfOrders}}{{numberOfOrders}}{{else}}0{{/if}}</td>
+      <td class="evaluations"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{evaluationAvgRating}} ({{numberOfEvaluations}}){{/if}}</a></td>
+      <td class="categories">{{categories}}</td>
+      <td class="pagseguro">{{#if pagseguro}}S{{else}}N{{/if}}</td>
+      <td class="ownerName">{{ownerName}}</td>
+      <td class="ownerEmail">{{ownerEmail}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

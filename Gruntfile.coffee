@@ -42,29 +42,30 @@ module.exports = (grunt) ->
         configFile: 'coffeelint.json'
 
     watch:
-      options:
-        livereload: true
+      options: livereload: true
       coffeeClient:
         files: [ 'public/**/*.coffee' ]
         tasks: [ 'compileLintAndTest:client' ]
-        options:
-          livereload: false
+        options: livereload: false
       coffeeServer:
+        files: [ 'app/**/*.coffee' ]
+        tasks: [ 'compileAndLint:server' ]
+        options: livereload: false
+      coffeeTest:
+        files: [ 'test/**/*.coffee' ]
+        tasks: [ 'compileAndLint:test' ]
+        options: livereload: false
+      coffeeServerOrTest:
         files: [ 'app/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'compileLintAndTest:server' ]
-        options:
-          livereload: false
+        tasks: [ 'test:server' ]
+        options: livereload: false
       less:
         files: [ 'public/**/*.less' ]
         tasks: [ 'less:dev' ]
-        options:
-          livereload: false
-      css:
-        files: [ 'public/**/*.css' ]
-      html:
-        files: [ 'public/**/*.html' ]
-      images:
-        files: [ 'public/**/*.jpg', 'public/**/*.png', 'public/**/*.gif' ]
+        options: livereload: false
+      css: files: [ 'public/**/*.css' ]
+      html: files: [ 'public/**/*.html' ]
+      images: files: [ 'public/**/*.jpg', 'public/**/*.png', 'public/**/*.gif' ]
 
     express:
       prod:
@@ -349,7 +350,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'compileAndLint:test', [ 'compile:test', 'coffeelint:test' ]
   grunt.registerTask 'compileAndLint:server', [ 'compile:server', 'coffeelint:server' ]
   grunt.registerTask 'compileLintAndTest:client', [ 'compileAndLint:client', 'test:client' ]
-  grunt.registerTask 'compileLintAndTest:server', [ 'compileAndLint:server', 'compileAndLint:test' , 'test:server' ]
   grunt.registerTask 'travis:compileAndTest', [ 'compile', 'test:smoke:spec' ]
   grunt.registerTask 'travis:reportCoverage', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage' ]
   grunt.registerTask 'heroku', ->

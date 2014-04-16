@@ -186,7 +186,17 @@ Store.findRandomForHome = (howMany, cb) ->
 
 Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Store.flyerDimension = '350x350'
-#Store.bannerDimension = '1200x300'
+Store.ordersPerStore = ->
+  Q.ninvoke Order, "mapReduce",
+    map: -> emit @store, 1
+    reduce: (key, values) -> Array.sum values
+  .spread (res, stats) -> res
+Store.productsPerStore = ->
+  Q.ninvoke Product, "mapReduce",
+    map: -> emit @storeSlug, 1
+    reduce: (key, values) -> Array.sum values
+  .spread (res, stats) -> res
 
 Product  = require './product'
-User  = require './user'
+User     = require './user'
+Order    = require './order'

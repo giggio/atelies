@@ -69,6 +69,7 @@ exports.route = (app) ->
   #site admin
   app.get     "/siteAdmin",                                                 siteAdmin.redirectAddingDash
   app.get     /^\/siteAdmin\/.*/,                                           siteAdmin.siteAdmin
+  app.get     "/api/siteAdmin/stores",                                      siteAdmin.stores
   app.get     "/api/siteAdmin/storesForAuthorization/:isFlyerAuthorized?",  siteAdmin.storesForAuthorization
   app.put     "/api/siteAdmin/storesForAuthorization/:_id/isFlyerAuthorized/:isFlyerAuthorized", siteAdmin.updateStoreFlyerAuthorization
   #admin
