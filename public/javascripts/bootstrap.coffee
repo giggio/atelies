@@ -27,7 +27,7 @@ requirejs.config
     moment: 'lib/moment/moment'
   shim:
     'boostrap-sortable':
-      deps: [ 'moment' ]
+      deps: [ 'jquery', 'moment' ]
       exports: '$.fn.TinySort'
     'handlebars':
       deps: ['jquery']

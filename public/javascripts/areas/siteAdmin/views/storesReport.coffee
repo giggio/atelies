@@ -47,7 +47,7 @@ define [
       for store in @stores
         csv += "\"#{store['_id']}\";\"#{store['name']}\";\"#{store['slug']}\";\"#{store['email']}\";\"#{store['description']}\";\"#{store['urlFacebook']}\";\"#{store['urlTwitter']}\";\"#{store['phoneNumber']}\";\"#{store['city']}\";\"#{store['state']}\";\"#{store['zip']}\";\"#{store['otherUrl']}\";\"#{store['numberOfEvaluations']}\";\"#{store['evaluationAvgRating']}\";\"#{store['isFlyerAuthorized']}\";\"#{store['categories']}\";\"#{store['pagseguro']}\";\"#{store['ownerName']}\";\"#{store['ownerEmail']}\";\"#{store['hasEvaluations']}\";\"#{store['dateCreated']}\"\n"
       csv.substr 0, csv.length - 1
-      blob = new Blob [csv], type: "text/csv"
+      blob = new Blob ["\ufeff", csv], type: "text/csv;charset=UTF-8"
       url = URL.createObjectURL(blob)
       a = $('<a target="_blank" download="stores.csv" data-not-push-state="true"></a>')[0]
       a.href = url

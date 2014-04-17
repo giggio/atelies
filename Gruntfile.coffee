@@ -230,6 +230,8 @@ module.exports = (grunt) ->
                 'imagesloaded'
                 'jqform'
                 'jqexpander'
+                'boostrap-sortable'
+                'moment'
                 'backboneConfig'
                 'baseLibs'
                 'converters'
