@@ -9,7 +9,7 @@ Q               = require 'q'
 
 module.exports = class AdminRoutes
   constructor: (@env) ->
-    @_authSiteAdmin 'siteAdmin', 'storesForAuthorization', 'updateStoreFlyerAuthorization'
+    @_authSiteAdmin 'siteAdmin', 'storesForAuthorization', 'updateStoreFlyerAuthorization', 'stores'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'siteAdmin'

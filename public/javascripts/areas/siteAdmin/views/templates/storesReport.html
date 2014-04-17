@@ -1,33 +1,61 @@
 <h2>Relatório de lojas</h2>
-<table id="storesReport">
+<table id="storesReport" class="table table-bordered table-striped sortable" style="table-layout:fixed;">
+  <colgroup>
+    <col style="width: 200px">
+    <col style="width: 50px">
+    <col style="width: 50px">
+    <col style="width: 50px">
+    <col style="width: 50px">
+    <col style="width: 50px">
+    <col style="width: 50px">
+    <col style="width: 100px">
+    <col style="width: 200px">
+    <col style="width: 100px">
+  </colgroup>
   <thead>
     <tr>
       <th>Nome</th>
-      <th>Email</th>
-      <th>Telefone</th>
-      <th>Produtos</th>
-      <th>Pedidos</th>
-      <th>Avaliação</th>
+      <th>Prod.</th>
+      <th>Ped.</th>
+      <th>Aval.</th>
+      <th># aval.</th>
+      <th>Flyer</th>
+      <th>PS</th>
       <th>Categorias</th>
-      <th>Pagseguro</th>
       <th>Responsável</th>
-      <th>Email</th>
+      <th>Data</th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <td>Totals:</th>
+      <td>{{numberOfProducts}}</th>
+      <td>{{numberOfOrders}}</th>
+      <td>{{evaluationAvgRating}}</th>
+      <td>{{numberOfEvaluations}}</th>
+      <td>{{numberOfApprovedFlyers}}</th>
+      <td>{{numberOfPagseguroEnabled}}</th>
+      <td></th>
+      <td></th>
+      <td>{{numberOfStores}}</th>
+    </tr>
+  </tfoot>
   <tbody>
     {{#each stores}}
     <tr class="store">
-      <td class="name"><a href="/{{slug}}">{{name}}</a></td>
-      <td class="email"><a href="mailto:{{email}}" />{{email}}</a></td>
-      <td class="phoneNumber">{{phoneNumber}}</td>
+      <input type="hidden" value="{{_id}}" />
+      <td class="name" data-title="Contatos" data-content="<a href='mailto:{{email}}'>{{email}}</a><br /><a href='tel:{{phoneNumber}}'>{{phoneNumber}}</a>"><a href="/{{slug}}">{{name}}</a></td>
       <td class="numberOfProducts">{{#if numberOfProducts}}{{numberOfProducts}}{{else}}0{{/if}}</td>
       <td class="numberOfOrders">{{#if numberOfOrders}}{{numberOfOrders}}{{else}}0{{/if}}</td>
-      <td class="evaluations"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{evaluationAvgRating}} ({{numberOfEvaluations}}){{/if}}</a></td>
-      <td class="categories">{{categories}}</td>
+      <td class="evaluationAvgRating"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{evaluationAvgRating}}{{/if}}</a></td>
+      <td class="numberOfEvaluations"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{numberOfEvaluations}}{{/if}}</a></td>
+      <td class="isFlyerAuthorized">{{#if isFlyerAuthorized}}S{{else}}N{{/if}}</td>
       <td class="pagseguro">{{#if pagseguro}}S{{else}}N{{/if}}</td>
-      <td class="ownerName">{{ownerName}}</td>
-      <td class="ownerEmail">{{ownerEmail}}</td>
+      <td class="categories" data-content='{{categories}}' style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{categories}}</td>
+      <td class="ownerName" data-content="<a href='mailto:{{ownerEmail}}'>{{ownerEmail}}</a>"><a href='mailto:{{ownerEmail}}'>{{ownerName}}</a></td>
+      <td data-dateformat="DD-MM-YYYY">{{formatDate dateCreated "%d/%m/%Y"}}</td>
     </tr>
     {{/each}}
   </tbody>
 </table>
+<button id="exportStoresReport" class="btn btn-primary">Exportar</button>

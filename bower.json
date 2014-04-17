@@ -32,7 +32,8 @@
     "facebook": "https://connect.facebook.net/pt_BR/all.js",
     "twitter": "https://platform.twitter.com/widgets.js",
     "select2": "~3.4.5",
-    "respond": "~1.4.2"
+    "respond": "~1.4.2",
+    "bootstrap-sortable": "~1.8.0"
   },
   "devDependencies": {}
 }

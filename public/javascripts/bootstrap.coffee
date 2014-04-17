@@ -23,7 +23,12 @@ requirejs.config
     jrating: 'lib/jrating/jquery/jRating.jquery'
     select2en: 'lib/select2/select2'
     select2: 'lib/select2/select2_locale_pt-BR'
+    'boostrap-sortable': 'lib/bootstrap-sortable/Scripts/bootstrap-sortable'
+    moment: 'lib/moment/moment'
   shim:
+    'boostrap-sortable':
+      deps: [ 'moment' ]
+      exports: '$.fn.TinySort'
     'handlebars':
       deps: ['jquery']
       exports: 'Handlebars'
