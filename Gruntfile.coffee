@@ -312,7 +312,7 @@ module.exports = (grunt) ->
         enabled: on
         duration: 1
         title: 'Atelies'
-
+  unless grunt.task.exists? then grunt.task.exists = (name) -> _.include(_.pluck(grunt.task._tasks, 'name'), name)
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -329,7 +329,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-coveralls'
   grunt.loadNpmTasks 'grunt-notify'
   isHeroku = -> process.env.HOME is "/app"
-  grunt.task.run 'notify_hooks' unless isHeroku()
+  grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
