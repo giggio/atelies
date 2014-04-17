@@ -43,7 +43,7 @@ define [
         container: '#storesReport'
         html: on
     _download: ->
-      csv = "_id,name,slug,email,description,urlFacebook,urlTwitter,phoneNumber,city,state,zip,otherUrl,numberOfEvaluations,evaluationAvgRating,isFlyerAuthorized,categories,pagseguro,ownerName,ownerEmail,hasEvaluations,dateCreated\n"
+      csv = "_id;name;slug;email;description;urlFacebook;urlTwitter;phoneNumber;city;state;zip;otherUrl;numberOfEvaluations;evaluationAvgRating;isFlyerAuthorized;categories;pagseguro;ownerName;ownerEmail;hasEvaluations;dateCreated\n"
       for store in @stores
         csv += "\"#{store['_id']}\";\"#{store['name']}\";\"#{store['slug']}\";\"#{store['email']}\";\"#{store['description']}\";\"#{store['urlFacebook']}\";\"#{store['urlTwitter']}\";\"#{store['phoneNumber']}\";\"#{store['city']}\";\"#{store['state']}\";\"#{store['zip']}\";\"#{store['otherUrl']}\";\"#{store['numberOfEvaluations']}\";\"#{store['evaluationAvgRating']}\";\"#{store['isFlyerAuthorized']}\";\"#{store['categories']}\";\"#{store['pagseguro']}\";\"#{store['ownerName']}\";\"#{store['ownerEmail']}\";\"#{store['hasEvaluations']}\";\"#{store['dateCreated']}\"\n"
       csv.substr 0, csv.length - 1
