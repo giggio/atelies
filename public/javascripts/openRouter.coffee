@@ -2,8 +2,9 @@ define [
   'backbone'
   'underscore'
   './logger'
+  './errorLogger'
   './seoLoadManager'
-], (Backbone, _, Logger, SEOLoadManager) ->
+], (Backbone, _, Logger, ErrorLogger, SEOLoadManager) ->
   class Router extends Backbone.Router
     constructor: ->
       @logger = new Logger()
@@ -40,12 +41,9 @@ define [
           event.preventDefault()
           url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}/#{@_rootUrl}/",""
           Backbone.history.navigate url, trigger: true
-    redirect: (to) ->
-      Backbone.history.navigate to, trigger: true
-    logXhrError: (xhr, otherInfo) ->
-      @logError xhr.responseText, otherInfo if xhr.status is 400
-    logError: (message, otherInfo) ->
-      ErrorLogger.logError @area, message, '', '', otherInfo
+    redirect: (to) -> Backbone.history.navigate to, trigger: true
+    logXhrError: (xhr, otherInfo) -> @logError xhr.responseText, otherInfo if xhr.status is 400
+    logError: (message, otherInfo) -> ErrorLogger.logError @area, message, '', '', otherInfo
     _bindLoadingStartedToEveryRoute: ->
       for url, fn of @routes
         do (fn) =>
