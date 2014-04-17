@@ -16,7 +16,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.DEBUG = true unless process.env.DEBUG?
   switch process.env.NODE_ENV
     when 'development'
-      process.env.MONGOLAB_URI = "mongodb://localhost/atelies"
+      process.env.MONGOLAB_URI = "mongodb://localhost/atelies" unless process.env.MONGOLAB_URI?
       process.env.PORT = 3000 unless process.env.PORT?
       process.env.AWS_ACCESS_KEY_ID = 'a' unless process.env.AWS_ACCESS_KEY_ID?
       process.env.AWS_SECRET_KEY = 'b' unless process.env.AWS_SECRET_KEY?

@@ -14,6 +14,8 @@ module.exports = class AdminRoutes
 
   handleError: @::_handleError.partial 'siteAdmin'
 
+  logError: @::_logError.partial 'siteAdmin'
+
   siteAdmin: (req, res) ->
     req.user.toSimpleUser (user) ->
       res.render 'siteAdmin/siteAdmin', user: user
@@ -38,6 +40,7 @@ module.exports = class AdminRoutes
         res.json 200
 
   stores: (req, res) ->
+    that = @
     Q.ninvoke Store, 'find'
     .then (stores) ->
       for store in stores
@@ -56,11 +59,13 @@ module.exports = class AdminRoutes
         for orderSummary in ordersSummariesPerStore
           store = _.find simpleStores, (s) -> s._id.equals orderSummary._id
           store.numberOfOrders = orderSummary.value
-        undefined
         Store.productsPerStore()
         .then (productsPerStore) ->
           for product in productsPerStore
             store = _.find simpleStores, (s) -> s.slug is product._id
-            store.numberOfProducts = product.value
+            if store?
+              store.numberOfProducts = product.value
+            else
+              that.logError req, "When aggregating products per store could not find store with slug '#{product._id}'."
       .then -> res.json simpleStores
     .catch (err) => @handleError req, res, err
