@@ -651,64 +651,67 @@ section#app-container {
   margin-bottom: 30px;
 
   .home {
-    #products {
-      .product {
-        border: 1px solid #ccc;
-        background-color: white;
-        padding: 9px;
-        margin: 7px;
-        float: left;
-        position:relative;
-        .picture {
-        }
-        .link {
-          width: 150px;
-          height: 150px;
-          display: block;
-          overflow: hidden;
-        }
-        .productInfoBox {
-          position: absolute;
-          top: +50-50+9+150px;
-          height: 0px;
-          width: 150px;
+    #productsPlaceHolder {
+      max-height: 204px;
+      #products {
+        .product {
+          border: 1px solid #ccc;
           background-color: white;
-          display: block;
-          opacity:0.5;
-          .storeName, .price {
-            color: black;
-            display: none;
+          padding: 9px;
+          margin: 7px;
+          float: left;
+          position:relative;
+          .picture {
           }
-          .storeName {
-            padding-left: 5px;
-            float:left;
-            text-decoration:none;
-            width: 140px;
-            height: 41px;
+          .link {
+            width: 150px;
+            height: 150px;
+            display: block;
             overflow: hidden;
-            position: absolute;
           }
-          .price {
-            right: 5px;
-            top: 20px;
-            text-decoration: none;
+          .productInfoBox {
             position: absolute;
-            z-index: 1000;
-            background: white;
-            padding-left: 13px;
-            padding-top: 5px;
+            top: +50-50+9+150px;
+            height: 0px;
+            width: 150px;
+            background-color: white;
+            display: block;
+            opacity:0.5;
+            .storeName, .price {
+              color: black;
+              display: none;
+            }
+            .storeName {
+              padding-left: 5px;
+              float:left;
+              text-decoration:none;
+              width: 140px;
+              height: 41px;
+              overflow: hidden;
+              position: absolute;
+            }
+            .price {
+              right: 5px;
+              top: 20px;
+              text-decoration: none;
+              position: absolute;
+              z-index: 1000;
+              background: white;
+              padding-left: 13px;
+              padding-top: 5px;
+            }
           }
         }
-      }
-      a.prev, a.next {
-        position: relative;
-        top: -100px;
-      }
-      a.prev {
-        float:left;
-      }
-      a.next {
-        float:right;
+        a.prev, a.next {
+          position: relative;
+          top: -100px;
+        }
+        a.prev {
+          float:left;
+        }
+        a.next {
+          float:right;
+        }
       }
     }
   }
