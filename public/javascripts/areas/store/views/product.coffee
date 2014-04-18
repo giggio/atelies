@@ -114,9 +114,9 @@ define [
       $("#createComment", @$el).attr 'disabled', 'disabled'
       jqxhr = $.post "/api/products/#{@product.get '_id'}/comments", body:body, =>
         @product.get('comments').push date: new Date(), userEmail: @user.email, userName: @user.name, body: body
+        @render()
         $("#createComment", @$el).removeAttr 'disabled'
         $("#newCommentBody", @$el).val ''
-        @render()
         @showDialog "<strong>Obrigado!</strong>
           O seu comentário foi criado com sucesso e já está disponível na página do produto. A loja também foi notificada que você comentou.<br /><br />
           Apreciamos muito o seu feedback. Fique a vontade para fazer comentários em outros produtos. O vendedor poderá lhe responder aqui mesmo na página do

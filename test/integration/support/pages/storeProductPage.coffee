@@ -37,10 +37,10 @@ module.exports = class StoreProductPage extends Page
           do (el) =>
             (getCommentCb) =>
               getCommentActions =
-                userName: (cb) => @getTextIn(el, ".userName").then (t) -> cb null, t
                 userPicture: (cb) => @getSrcIn(el, ".userPicture").then (t) -> cb null, t
                 body: (cb) => @getTextIn(el, ".body").then (t) -> cb null, t
                 date: (cb) => @getTextIn(el, ".date").then (t) -> cb null, t
+                userName: (cb) => @getTextIn(el, ".userName").then (t) -> cb null, t
               async.parallel getCommentActions, getCommentCb
       Q.nfcall async.parallel, getCommentsAction
   writeComment: (comm) ->
