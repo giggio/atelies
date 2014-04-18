@@ -12,7 +12,8 @@ define [
       'click #seeAllStores':'_seeAllStores'
     template: homeProductsTemplate
     initialize: (opt) ->
-      productGroups = @_group opt.products, "products"
+      products = _.uniq opt.products, (product) -> product._id
+      productGroups = @_group products, "products"
       productGroups[0].isFirst = "isFirst" if productGroups.length > 0
       storeGroups = @_group opt.stores, "stores"
       storeGroups[0].isFirst = "isFirst" if storeGroups.length > 0
