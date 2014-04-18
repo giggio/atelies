@@ -3,8 +3,21 @@
   <div id="orderDescription">
     <span id="_id" data-id="{{order._id}}"></span>
     Pedido realizado em <strong><span id="orderDate">{{order.orderDate}}</span></strong>
-    na loja  <strong><a id="storeLink" href="/{{order.storeSlug}}">{{order.storeName}}</a></strong>
+    na loja  <strong><a id="storeLink" href="/{{order.storeSlug}}" data-not-push-state="true">{{order.storeName}}</a></strong>
   </div>
+      <span>Status do pedido:</span>
+      <span id="orderState">{{orderState}}</span>
+      <div id="changeStateHolder" style="width: 200px; display:inline-block;">
+        <select id="changeState">
+          {{#select order.state}}
+          {{#each orderStatus}}
+          <option value="{{@key}}">{{this}}</option>
+          {{/each}}
+          {{/select}}
+        </select>
+      </div>
+      <a href="#" id="changeOrderStatus">(alterar)</a>
+      <button id="doChangeOrderStatus" class="btn btn-primary">Salvar</button>
   <div id="customer">
     <div><strong>{{order.customer.name}}</strong></div>
     <div>{{order.customer.email}}</div>

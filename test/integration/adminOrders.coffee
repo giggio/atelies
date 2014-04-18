@@ -47,9 +47,11 @@ describe 'Admin orders page', ->
         o1.numberOfItems.should.equal order1.items.length
         o1.totalSaleAmount.should.equal 'R$ 12,10'
         o1.orderLink.should.equal "http://localhost:8000/admin/orders/#{o1._id.toString()}"
+        o1.status.should.equal 'Pedido realizado'
         o2.orderDate.should.equal '05/01/2013'
         o2.storeName.should.equal store.name
         o2.storeLink.should.equal "http://localhost:8000/#{store.slug}"
         o2.numberOfItems.should.equal order2.items.length
         o2.totalSaleAmount.should.equal 'R$ 23,20'
         o2.orderLink.should.equal "http://localhost:8000/admin/orders/#{o2._id.toString()}"
+        o2.status.should.equal 'Pedido realizado'

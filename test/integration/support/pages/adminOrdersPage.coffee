@@ -18,5 +18,6 @@ module.exports = class AccountOrdersPage extends Page
           getData.push => @getTextIn(el, ".storeLink").then (t) -> order.storeName = t
           getData.push => @getAttributeIn(el, ".orderLink", 'href').then (t) -> order.orderLink = t
           getData.push => @getAttributeIn(el, ".storeLink", 'href').then (t) -> order.storeLink = t
+          getData.push => @getTextIn(el, ".state").then (t) -> order.status = t
       @parallel getData
     .then -> orders

@@ -92,6 +92,18 @@ module.exports = class Page
     .then (el) ->
       Q el.clear()
       .then -> el.sendKeys text
+  selectWithValue: (selector, val) ->
+    if val is ''
+      return Q.fcall ->
+    @findElement(selector)
+    .then (el) -> el.findElements(webdriver.By.tagName('option'))
+    .then (els) ->
+      elsWithText = []
+      flow = webdriver.promise.createFlow (f) ->
+        for el in els
+          do (el) -> f.execute -> el.getAttribute('value').then (val) -> elsWithText.push {val: val, el: el}
+        undefined
+      Q(flow).then -> _.findWhere(elsWithText, val:val).el.click()
   select: (selector, text) ->
     if text is ''
       return Q.fcall ->
@@ -146,7 +158,8 @@ module.exports = class Page
         undefined
     Q(flow).then -> texts
   getAttribute: (selector, attribute) -> @findElement(selector).then (el) -> el.getAttribute(attribute)
-  getValue: @::getAttribute.partial(undefined, 'value', undefined)
+  getValue: @::getAttribute.partial undefined, 'value'
+  getValueIn: @::getAttributeIn.partial undefined, undefined, 'value'
   getHrefIn: @::getAttributeIn.partial(undefined, undefined, 'href')
   getSrc: @::getAttribute.partial(undefined, 'src', undefined)
   getSrcIn: @::getAttributeIn.partial(undefined, undefined, 'src', undefined)

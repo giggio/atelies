@@ -3,9 +3,10 @@ define [
   'underscore'
   'backboneConfig'
   'handlebars'
+  '../models/orderStatus'
   'text!./templates/orders.html'
   '../../../converters'
-], ($, _, Backbone, Handlebars, ordersTemplate, converters) ->
+], ($, _, Backbone, Handlebars, OrderStatus, ordersTemplate, converters) ->
   class OrdersView extends Backbone.Open.View
     template: ordersTemplate
     initialize: (opt) ->
@@ -20,5 +21,6 @@ define [
         totalSaleAmount: converters.currency o.totalSaleAmount
         orderDate: converters.prettyDate new Date(o.orderDate)
         numberOfItems: o.numberOfItems
+        state: OrderStatus[o.state]
       @$el.html context orders: orders
       super

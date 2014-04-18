@@ -6,6 +6,7 @@
       <th>Loja</th>
       <th>Items</th>
       <th>Valor</th>
+      <th>Status</th>
       <th></th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
       <td><a class="storeLink" href="/{{storeSlug}}" data-not-push-state="true">{{storeName}}</a></td>
       <td><span class="numberOfItems">{{numberOfItems}}</span></td>
       <td><span class="totalSaleAmount">{{totalSaleAmount}}</span></td>
+      <td><span class="state">{{state}}</span></td>
       <td><a class="orderLink" href="orders/{{_id}}">Ver detalhes</a></td>
     </tr>
     {{/each}}

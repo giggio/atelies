@@ -26,6 +26,7 @@ orderSchema = new mongoose.Schema
     zip:                      type: String, required: true
   paymentType:                type: String, required: true
   evaluation:                 type: mongoose.Schema.Types.ObjectId, ref: 'storeevaluation'
+  state:                      type: String, required: true, default: 'ordered', enum: {values: ['ordered', 'delivered', 'paymentDone', 'inProduction', 'posted', 'returned'], message: 'Valor incorreto passado para o estado do pedido.'}
 
 orderSchema.methods.addEvaluation = (evaluation, cb) ->
   evaluation.order = @
@@ -147,6 +148,7 @@ Order.getSimpleByStores = (stores, cb) ->
       totalSaleAmount: o.totalSaleAmount
       orderDate: o.orderDate
       numberOfItems: o.items.length
+      state: o.state
     cb null, simpleOrders
 
 Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
@@ -166,6 +168,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
       orderDate: order.orderDate
       numberOfItems: order.items.length
       deliveryAddress: order.deliveryAddress
+      state: order.state
       customer:
         name: order.customer.name
         email: order.customer.email
