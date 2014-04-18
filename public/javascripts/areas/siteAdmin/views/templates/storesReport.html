@@ -44,15 +44,15 @@
     {{#each stores}}
     <tr class="store">
       <input type="hidden" value="{{_id}}" />
-      <td class="name" data-title="Contatos" data-content="<a href='mailto:{{email}}'>{{email}}</a><br /><a href='tel:{{phoneNumber}}'>{{phoneNumber}}</a>"><a href="/{{slug}}">{{name}}</a></td>
+      <td class="name" data-title="Contatos" data-content="<a href='mailto:{{email}}' data-not-push-state='true'>{{email}}</a><br /><a href='tel:{{phoneNumber}}' data-not-push-state='true'>{{phoneNumber}}</a>"><a href="/{{slug}}" data-not-push-state="true">{{name}}</a></td>
       <td class="numberOfProducts">{{#if numberOfProducts}}{{numberOfProducts}}{{else}}0{{/if}}</td>
       <td class="numberOfOrders">{{#if numberOfOrders}}{{numberOfOrders}}{{else}}0{{/if}}</td>
-      <td class="evaluationAvgRating"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{evaluationAvgRating}}{{/if}}</a></td>
-      <td class="numberOfEvaluations"><a href="/{{slug}}/evaluations">{{#if hasEvaluations}}{{numberOfEvaluations}}{{/if}}</a></td>
+      <td class="evaluationAvgRating"><a href="/{{slug}}/evaluations" data-not-push-state="true">{{#if hasEvaluations}}{{evaluationAvgRating}}{{/if}}</a></td>
+      <td class="numberOfEvaluations"><a href="/{{slug}}/evaluations" data-not-push-state="true">{{#if hasEvaluations}}{{numberOfEvaluations}}{{/if}}</a></td>
       <td class="isFlyerAuthorized">{{#if isFlyerAuthorized}}S{{else}}N{{/if}}</td>
       <td class="pagseguro">{{#if pagseguro}}S{{else}}N{{/if}}</td>
       <td class="categories" data-content='{{categories}}' style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{categories}}</td>
-      <td class="ownerName" data-content="<a href='mailto:{{ownerEmail}}'>{{ownerEmail}}</a>"><a href='mailto:{{ownerEmail}}'>{{ownerName}}</a></td>
+      <td class="ownerName" data-content="<a href='mailto:{{ownerEmail}}' data-not-push-state='true'>{{ownerEmail}}</a>"><a href='mailto:{{ownerEmail}}' data-not-push-state="true">{{ownerName}}</a></td>
       <td data-dateformat="DD-MM-YYYY">{{formatDate dateCreated "%d/%m/%Y"}}</td>
     </tr>
     {{/each}}
