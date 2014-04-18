@@ -75,6 +75,7 @@ exports.route = (app) ->
   #admin
   app.get     "/api/admin/orders",                                          admin.orders
   app.get     "/api/admin/orders/:_id",                                     admin.order
+  app.put     "/api/admin/orders/:_id/state/:newOrderState",                admin.updateOrderStatus
   #admin store
   app.post    "/api/admin/store",                                           admin.adminStoreCreate
   app.put     "/api/admin/store/:storeId",                                  admin.adminStoreUpdate

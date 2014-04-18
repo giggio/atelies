@@ -10,12 +10,13 @@ correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
 ProductUploader = require '../models/productUploader'
 StoreUploader   = require '../models/storeUploader'
+Q               = require 'q'
 
 module.exports = class AdminRoutes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order', 'updateOrderStatus'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'admin'
@@ -170,3 +171,13 @@ module.exports = class AdminRoutes
     Store.findById req.params.storeId, (err, store) =>
       return @handleError req, res, err if err?
       res.json store.categories
+
+  updateOrderStatus: (req, res) ->
+    Q.ninvoke Order, 'findById', req.params._id
+    .then (order) ->
+      throw new AccessDenied() unless req.user.hasStore order.store
+      order.state = req.params.newOrderState
+      Q.ninvoke order, 'save'
+      .then -> order.sendMailAfterStateChange()
+      .then -> res.send 204
+    .catch (err) => @handleError req, res, err

@@ -3,6 +3,7 @@ define [
   'underscore'
   'backboneConfig'
   '../../viewsManager'
+  '../shared/views/dialog'
   './views/admin'
   './views/manageStore'
   './views/store'
@@ -15,7 +16,7 @@ define [
   './models/store'
   './models/orders'
   './models/order'
-],($, _, Backbone, viewsManager, AdminView, ManageStoreView, StoreView, ManageProductView, OrdersView, OrderView, Products, Product, Stores, Store, Orders, Order) ->
+],($, _, Backbone, viewsManager, Dialog, AdminView, ManageStoreView, StoreView, ManageProductView, OrdersView, OrderView, Products, Product, Stores, Store, Orders, Order) ->
   class Router extends Backbone.Open.Router
     area: 'admin'
     logCategory: 'admin'

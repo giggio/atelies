@@ -3,6 +3,7 @@ _         = require 'underscore'
 Postman   = require './postman'
 postman   = new Postman()
 async     = require 'async'
+Q         = require 'q'
 
 orderSchema = new mongoose.Schema
   store:                      type: mongoose.Schema.Types.ObjectId, ref: 'store'
@@ -27,6 +28,14 @@ orderSchema = new mongoose.Schema
   paymentType:                type: String, required: true
   evaluation:                 type: mongoose.Schema.Types.ObjectId, ref: 'storeevaluation'
   state:                      type: String, required: true, default: 'ordered', enum: {values: ['ordered', 'delivered', 'paymentDone', 'inProduction', 'posted', 'returned'], message: 'Valor incorreto passado para o estado do pedido.'}
+
+OrderStatus =
+  ordered: 'Pedido realizado'
+  delivered: 'Entregue'
+  paymentDone: 'Pagamento realizado'
+  inProduction: 'Em produção'
+  posted: 'Despachado'
+  returned: 'Devolvido'
 
 orderSchema.methods.addEvaluation = (evaluation, cb) ->
   evaluation.order = @
@@ -57,6 +66,33 @@ orderSchema.methods.sendMailAfterEvaluation = (cb) ->
               </html>"
             (cb) => postman.sendFromContact user, "Ateliês: A loja #{@store.name} recebeu uma avaliação", body, cb
       async.parallel sendMailActions, cb
+orderSchema.methods.sendMailAfterStateChange = ->
+  Q.ninvoke @, 'populate', 'store customer'
+  .then (order) ->
+    data= new Date()
+    data= "#{data.getDate()}/#{data.getMonth()+1}/#{data.getFullYear()}"
+    body = "<html>
+      <h1>#{order.store.name}</h1>
+      <h2>Seu pedido foi alterado</h2>
+      <div>
+        O seu pedido foi marcado pelo vendedor como #{OrderStatus[order.state]}.<br />
+        #{if order.state is 'delivered' then "Não deixe de avaliar sua compra e o vendedor. Você pode fazer isso
+        clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>." else ""
+         }
+      </div>
+      <div>
+        Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.
+      </div>
+      <div>&nbsp;</div>
+      <div>
+        Obrigado!
+      </div>
+      <div>
+        #{order.store.name}
+      </div>
+      <div>#{data}</div>
+      </html>"
+    postman.send order.store, order.customer, "Ateliês: Seu pedido na loja #{order.store.name} foi alterado", body
 orderSchema.methods.toSimpleOrder = ->
   items = _.map @items, (i) ->
     _id: i.product.toString()

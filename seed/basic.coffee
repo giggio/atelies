@@ -34,6 +34,13 @@ db.users.insert
   name: 'Another Seller'
   isSeller: true
   stores: []
+  deliveryAddress:
+    street: 'Rua B'
+    street2: 'Aclimacao'
+    city: 'Sao Paulo'
+    state: 'SP'
+    zip: '01234-555'
+  phoneNumber: '+55 (11) 99999-4321'
   loginError: 0
   verified: true
 userSeller = db.users.findOne email:'c@a.com'

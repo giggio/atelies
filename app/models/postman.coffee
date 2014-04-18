@@ -1,4 +1,5 @@
-nodemailer = require 'nodemailer'
+nodemailer  = require 'nodemailer'
+Q           = require 'q'
 module.exports = class Postman
   @configure = (id, secret) ->
     unless @dryrun
@@ -17,7 +18,7 @@ module.exports = class Postman
       if val
         @sentMails = []
 
-  send: (from, to, subject, body, cb = (->)) ->
+  send: (from, to, subject, body, cb) ->
     mail =
       from: "#{from.name} <contato@atelies.com.br>"
       to: "#{to.name} <#{to.email}>"
@@ -30,9 +31,9 @@ module.exports = class Postman
     if Postman.dryrun
       console.log "NOT sending mail to #{mail.to} with subject #{mail.subject}, dry run"
       Postman.sentMails.push mail
-      cb()
+      callbackOrPromise cb, Q.fcall ->
     else
       #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
-      Postman.smtp.sendMail mail, cb
+      callbackOrPromise cb, Q.ninvoke Postman.smtp, 'sendMail', mail
 
   sendFromContact: @::send.partial {name:'Ateliês', email:'contato@atelies.com.br'}

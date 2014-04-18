@@ -34,7 +34,7 @@ describe 'Admin order page with status', ->
       page.loginFor userSeller._id
       .then -> page.visit order1._id
     it 'shows correct status', -> page.orderState().should.become 'Pedido realizado'
-  describe.skip 'changing order status from ordered to delivered', ->
+  describe 'changing order status from ordered to delivered', ->
     before ->
       Postman.sentMails.length = 0
       page.loginFor userSeller._id
