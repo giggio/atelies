@@ -65,6 +65,7 @@ userSchema.methods.toSimpleUser = (cb) ->
     phoneNumber: @phoneNumber
     verified: @verified
     isSeller: @isSeller
+    isAdmin: @isAdmin
   if @isSeller
     @populate 'stores', 'slug', =>
       user.stores = _.pluck @stores, 'slug'
