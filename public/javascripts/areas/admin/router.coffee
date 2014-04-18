@@ -31,8 +31,10 @@ define [
         'createProduct/:storeSlug': @createProduct
         'orders': @orders
         'orders/:orderId': @order
+        'search/:searchTerm': @search
       _.bindAll @, _.functions(@)...
       super
+    search: (searchTerm) -> window.location = "/search/#{searchTerm}"
     admin: ->
       homeView = new AdminView stores: adminStoresBootstrapModel.stores
       viewsManager.show homeView

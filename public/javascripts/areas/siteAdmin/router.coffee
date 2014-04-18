@@ -21,8 +21,10 @@ define [
         'authorizeStores': @authorizeStores
         'authorizeStores/authorized': @authorizeStoresAuthorized
         'authorizeStores/unauthorized': @authorizeStoresUnauthorized
+        'search/:searchTerm': @search
       _.bindAll @, _.functions(@)...
       super
+    search: (searchTerm) -> window.location = "/search/#{searchTerm}"
     siteAdmin: ->
       homeView = new SiteAdminView()
       viewsManager.show homeView

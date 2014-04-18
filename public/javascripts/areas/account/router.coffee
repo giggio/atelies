@@ -20,8 +20,10 @@ define [
         'orders': @orders
         'orders/:orderId': @order
         'userNotVerified': @userNotVerified
+        'search/:searchTerm': @search
       _.bindAll @, _.functions(@)...
       super
+    search: (searchTerm) -> window.location = "/search/#{searchTerm}"
     home: ->
       user = accountBootstrapModel.user
       accountView = new AccountView user: user
