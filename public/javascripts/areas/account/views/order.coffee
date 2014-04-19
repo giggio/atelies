@@ -3,10 +3,11 @@ define [
   'underscore'
   'backboneConfig'
   'handlebars'
+  '../../admin/models/orderStatus'
   '../models/evaluations'
   'text!./templates/order.html'
   '../../../converters'
-], ($, _, Backbone, Handlebars, Evaluations, orderTemplate, converters) ->
+], ($, _, Backbone, Handlebars, OrderStatus, Evaluations, orderTemplate, converters) ->
   class OrderView extends Backbone.Open.View
     events:
       'click #createEvaluation': '_createEvaluation'
@@ -31,7 +32,7 @@ define [
         price: converters.currency i.price
         quantity: i.quantity
         totalPrice: converters.currency i.totalPrice
-      @$el.html context user: @user, order: order
+      @$el.html context user: @user, order: order, orderState: OrderStatus[order.state]
       @_showStars()
       super
     _showStars: ->

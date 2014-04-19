@@ -14,6 +14,7 @@ define [
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
+      @orders = _.sortBy @orders, (o) -> -o.orderDate
       orders = _.map @orders, (o) ->
         _id: o._id
         storeName: o.storeName

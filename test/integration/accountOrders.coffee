@@ -37,8 +37,8 @@ describe 'Account orders page', ->
     it 'shows orders', ->
       page.orders().then (orders) ->
         orders.length.should.equal 2
-        o1 = orders[0]
-        o2 = orders[1]
+        o1 = orders[1]
+        o2 = orders[0]
         o1.orderDate.should.equal '01/01/2013'
         o1.storeName.should.equal store.name
         o1.storeLink.should.equal "http://localhost:8000/#{store.slug}"

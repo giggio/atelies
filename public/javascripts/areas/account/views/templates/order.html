@@ -26,6 +26,8 @@
     Pedido realizado em <strong><span id="orderDate">{{order.orderDate}}</span></strong>
     na loja  <strong><a id="storeLink" href="/{{order.storeSlug}}">{{order.storeName}}</a></strong>
   </div>
+  <span>Status do pedido:</span>
+  <span id="orderState">{{orderState}}</span>
   <address id="deliveryAddress">
     <strong>Endereço de entrega:</strong><br />
     <span id="street">{{order.deliveryAddress.street}}</span> - <span id="street2">{{order.deliveryAddress.street2}}</span><br />

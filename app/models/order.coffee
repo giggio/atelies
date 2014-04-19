@@ -178,6 +178,7 @@ Order.getSimpleByUser = (user, cb) ->
       totalSaleAmount: o.totalSaleAmount
       orderDate: o.orderDate
       numberOfItems: o.items.length
+      state: o.state
     cb null, simpleOrders
 Order.getSimpleByStores = (stores, cb) ->
   Order.find(store: $in: stores).populate('store', 'name slug').exec (err, orders) ->
