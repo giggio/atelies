@@ -113,6 +113,7 @@ module.exports = class StoreRoutes
       @paypal.confirmPayment order, store, req.query['PayerID']
       .then (paypalInfo) ->
         order.updatePaypalInfo paypalInfo
+        order.state = 'paymentDone'
         Q.ninvoke order, 'save'
       .then -> Q.ninvoke order, 'sendMailAfterPurchase'
       .then (mailResponse) -> res.redirect "/#{store.slug}/finishOrder/orderFinished"
@@ -126,6 +127,8 @@ module.exports = class StoreRoutes
         return @handleError req, res, err, false if err?
         Order.findById orderId, (err, order) =>
           return @handleError req, res, err, false if err?
+          order.state = 'paymentDone'
+          order.save()
           order.sendMailAfterPurchase (err, mailResponse) =>
             return @handleError req, res, err, false if err?
             req.session.recentOrder = order.toSimpleOrder()
