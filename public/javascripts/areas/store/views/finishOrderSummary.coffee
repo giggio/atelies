@@ -47,7 +47,7 @@ define [
       paymentType = @cart.paymentTypeSelected().type
       success = (model, response, opt) =>
         @cart.clear()
-        if @store.pagseguro and paymentType is 'pagseguro'
+        if (@store.paypal and paymentType is 'paypal') or (@store.pagseguro and paymentType is 'pagseguro')
           window.location = response.redirect
         else
           Backbone.history.navigate 'finishOrder/orderFinished', trigger: true

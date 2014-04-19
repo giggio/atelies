@@ -11,6 +11,7 @@ define [
   './views/finishOrderPayment'
   './views/finishOrderSummary'
   './views/finishOrderOrderFinished'
+  './views/finishOrderOrderNotCompleted'
   './views/evaluations'
   './models/products'
   './models/store'
@@ -18,7 +19,7 @@ define [
   './models/productsSearch'
   './models/storeEvaluations'
   '../shared/views/dialog'
-],($, _, Backbone, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, EvaluationsView, Products, Store, Cart, ProductsSearch, StoreEvaluations, Dialog) ->
+],($, _, Backbone, viewsManager, StoreView, ProductView, CartView, FinishOrderShippingView, FinishOrderUpdateProfileView, FinishOrderPaymentView, FinishOrderSummaryView, FinishOrderOrderFinishedView, FinishOrderOrderNotCompletedView, EvaluationsView, Products, Store, Cart, ProductsSearch, StoreEvaluations, Dialog) ->
   class Router extends Backbone.Open.Router
     area: 'store'
     logCategory: 'store'
@@ -35,6 +36,7 @@ define [
         'finishOrder/payment': @finishOrderPayment
         'finishOrder/summary': @finishOrderSummary
         'finishOrder/orderFinished': @finishOrderOrderFinished
+        'finishOrder/orderNotCompleted': @finishOrderOrderNotCompleted
         'searchProducts/:searchTerm': @searchProducts
       _.bindAll @, _.functions(@)...
       super
@@ -87,6 +89,9 @@ define [
     finishOrderOrderFinished: ->
       finishOrderOrderFinishedView = new FinishOrderOrderFinishedView()
       viewsManager.show finishOrderOrderFinishedView
+    finishOrderOrderNotCompleted: ->
+      finishOrderOrderNotCompletedView = new FinishOrderOrderNotCompletedView()
+      viewsManager.show finishOrderOrderNotCompletedView
     searchProducts: (searchTerm) =>
       @home() unless @storeView?
       $('#productSearchTerm').val searchTerm

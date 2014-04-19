@@ -95,6 +95,7 @@ exports.route = (app) ->
   #store order
   app.post    "/api/orders/:storeId",                                       store.orderCreate
   app.get     "/paymentGateway/pagseguro/:storeSlug/returnFromPayment",     store.pagseguroReturnFromPayment
+  app.get     "/paymentGateway/paypal/:storeSlug/returnFromPayment/:orderId/:result",store.paypalReturnFromPayment
   app.post    "/api/paymentGateway/pagseguro/:storeSlug/statusChanged",     store.pagseguroStatusChanged
   app.post    "/api/shipping/:storeSlug",                                   store.calculateShipping
   #store

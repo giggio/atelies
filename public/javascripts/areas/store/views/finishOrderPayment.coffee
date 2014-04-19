@@ -23,12 +23,14 @@ define [
       @user = opt.user
     render: =>
       context = Handlebars.compile @template
-      @$el.html context pagseguro:@store.pagseguro, hasShipping: @cart.hasShipping()
+      @$el.html context pagseguro:@store.pagseguro, hasShipping: @cart.hasShipping(), paypal: @store.paypal
       super
     _selectPaymentType: ->
       selected = $('#paymentTypesHolder input[type=radio]:checked', @$el)
       paymentType = switch selected.val()
         when "pagseguro" then type:'pagseguro', name:'PagSeguro'
+        when "paypal" then type:'paypal', name:'Paypal'
+        when "creditCard" then type:'creditCard', name:'Cartão de crédito'
         when "directSell" then type:'directSell', name:'Pagamento direto ao fornecedor'
       @cart.choosePaymentType paymentType
       Backbone.history.navigate 'finishOrder/summary', trigger: true

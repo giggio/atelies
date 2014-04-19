@@ -17,8 +17,10 @@ exports.start = (cb) ->
   redirectUnlessSecure= require './helpers/middleware/redirectUnlessSecure'
   healthCheck         = require './helpers/middleware/healthCheck'
   Q                   = require 'q'
+  Paypal              = require './infra/paypal'
 
   Q.longStackSupport = on
+  Paypal.init config.paypal
   sessionStore = new MongoStore url:config.connectionString, auto_reconnect:on
   if config.isProduction
     Postman.configure config.aws.accessKeyId, config.aws.secretKey

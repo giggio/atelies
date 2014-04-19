@@ -8,6 +8,7 @@ RouteFunctions  = require './routeFunctions'
 async           = require 'async'
 PostOffice      = require '../infra/postOffice'
 PagSeguro       = require '../infra/pagseguro'
+Paypal          = require '../infra/paypal'
 Q               = require 'q'
 
 module.exports = class StoreRoutes
@@ -16,6 +17,7 @@ module.exports = class StoreRoutes
     @_authVerified 'orderCreate'
     @postOffice = new PostOffice()
     @pagseguro = new PagSeguro()
+    @paypal = new Paypal()
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'store'
@@ -39,7 +41,6 @@ module.exports = class StoreRoutes
           order = req.session.recentOrder
           req.session.recentOrder = null
         res.render "store/store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0}, (err, html) =>
-          console.log err if err?
           return @handleError req, res, err, false if err?
           res.send html
 
@@ -74,14 +75,18 @@ module.exports = class StoreRoutes
               p = item.product
               p.inventory -= item.quantity if p.hasInventory
               p.save()
-            if store.pagseguro() and req.body.paymentType is 'pagseguro'
+            if req.body.paymentType is 'paypal' and store.paypal()
+              @paypal.sendToPaypal store, order, req.user
+              .then (resp) ->
+                order.updatePaypalInfo resp.paypalInfo
+                order.save()
+                res.json 201, order: order.toSimpleOrder(), redirect: resp.redirectUrl
+            else if req.body.paymentType is 'pagseguro' and store.pagseguro()
               Q.nfcall @pagseguro.sendToPagseguro, store, order, req.user
               .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
-              .done()
             else
               Q.ninvoke order, 'sendMailAfterPurchase'
               .then (mailResponse) -> res.json 201, order.toSimpleOrder()
-              .done()
     .catch (err) => @handleError req, res, err
 
   pagseguroStatusChanged: (req, res) ->
@@ -95,6 +100,24 @@ module.exports = class StoreRoutes
             return @handleError req, res, err if err?
             res.send 200
 
+  paypalReturnFromPayment: (req, res) ->
+    if req.params.result is 'fail'
+      return res.redirect "/#{req.params.storeSlug}/finishOrder/orderNotCompleted"
+    Q.all [
+      Q.ninvoke Store, 'findBySlug', req.params.storeSlug
+      Q.ninvoke Order, "findById", req.params.orderId
+    ]
+    .spread (store, order) =>
+      throw new Error "Store id #{store._id} doesn't match store id (#{order.store}) from order #{order._id}." unless order.store.equals store._id
+      req.session.recentOrder = order.toSimpleOrder()
+      @paypal.confirmPayment order, store, req.query['PayerID']
+      .then (paypalInfo) ->
+        order.updatePaypalInfo paypalInfo
+        Q.ninvoke order, 'save'
+      .then -> Q.ninvoke order, 'sendMailAfterPurchase'
+      .then (mailResponse) -> res.redirect "/#{store.slug}/finishOrder/orderFinished"
+    .catch (err) => @handleError req, res, err, false
+
   pagseguroReturnFromPayment: (req, res) ->
     Store.findBySlug req.params.storeSlug, (err, store) =>
       return @handleError req, res, err, false if err?
@@ -106,9 +129,7 @@ module.exports = class StoreRoutes
           order.sendMailAfterPurchase (err, mailResponse) =>
             return @handleError req, res, err, false if err?
             req.session.recentOrder = order.toSimpleOrder()
-            order.populate 'store', 'slug', (err) =>
-              return @handleError req, res, err, false if err?
-              res.redirect "/#{order.store.slug}#finishOrder/orderFinished"
+            res.redirect "/#{store.slug}/finishOrder/orderFinished"
 
   calculateShipping: (req, res) ->
     Q.nfcall Store.findBySlug, req.params.storeSlug

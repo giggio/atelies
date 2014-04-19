@@ -36,11 +36,11 @@ describe 'Store Finish Order: Payment', ->
       .then storeCartPage.clickFinishOrder
       .then storeFinishOrderShippingPage.clickSedexOption
       .then storeFinishOrderShippingPage.clickContinue
-    it 'should show options for payment type with PagSeguro already selected', ->
+    it 'should show options for payment type with Paypal already selected', ->
       page.paymentTypes().then (pts) ->
-        pts.length.should.equal 2
+        pts.length.should.equal 3
         selectedPaymentType = _.findWhere pts, selected:true
-        selectedPaymentType.value.should.equal 'pagseguro'
+        selectedPaymentType.value.should.equal 'paypal'
     it 'should be at payment page', -> page.currentUrl().should.become "http://localhost:8000/#{store.slug}/finishOrder/payment"
 
   describe 'payment info for store without pagseguro enabled', ->

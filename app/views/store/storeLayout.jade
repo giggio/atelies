@@ -73,6 +73,8 @@ append layout
                 div: a(href="mailto:#{store.email}")= store.email
               #waysToPay Meios de Pagamento
                 p Depósito
+                if store.paypal
+                  p Paypal
                 if store.pagseguro
                   p PagSeguro
             #socialReferal

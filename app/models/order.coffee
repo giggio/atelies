@@ -28,6 +28,10 @@ orderSchema = new mongoose.Schema
   paymentType:                type: String, required: true
   evaluation:                 type: mongoose.Schema.Types.ObjectId, ref: 'storeevaluation'
   state:                      type: String, required: true, default: 'ordered', enum: {values: ['ordered', 'delivered', 'paymentDone', 'inProduction', 'posted', 'returned'], message: 'Valor incorreto passado para o estado do pedido.'}
+  paymentGatewayInfo:
+    paypal:
+      id:                     type: String
+      state:                  type: String
 
 OrderStatus =
   ordered: 'Pedido realizado'
@@ -37,6 +41,7 @@ OrderStatus =
   posted: 'Despachado'
   returned: 'Devolvido'
 
+orderSchema.methods.updatePaypalInfo = (info) -> @paymentGatewayInfo.paypal = info
 orderSchema.methods.addEvaluation = (evaluation, cb) ->
   evaluation.order = @
   evaluation.store = @store

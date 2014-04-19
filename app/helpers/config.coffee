@@ -10,6 +10,8 @@ unless process.env.NODE_ENV is 'production'
   process.env.RECAPTCHA_PRIVATE_KEY = 'what' unless process.env.RECAPTCHA_PRIVATE_KEY?
   process.env.FB_APP_ID = '1415894348640840' unless process.env.FB_APP_ID?
   process.env.FB_APP_SECRET = '6318e0570043978efca19c7ee18b0c59' unless process.env.FB_APP_SECRET?
+  process.env.PAYPAL_HOST = 'api.sandbox.paypal.com' unless process.env.PAYPAL_HOST?
+  process.env.PAYPAL_PORT = '' unless process.env.PAYPAL_PORT?
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
   process.env.CLIENT_LIB_VERSION = "."
   process.env.UPLOAD_FILES = true unless process.env.UPLOAD_FILES?
@@ -24,6 +26,9 @@ unless process.env.NODE_ENV is 'production'
       process.env.MONGOLAB_URI = "mongodb://localhost/ateliesteste"
       process.env.PORT = 8000 unless process.env.PORT?
   process.env.BASE_DOMAIN = "localhost:#{process.env.PORT}" unless process.env.BASE_DOMAIN?
+if process.env.NODE_ENV is 'production' and process.env.SERVER_ENVIRONMENT is 'production'
+  process.env.PAYPAL_HOST = 'api.paypal.com' unless process.env.PAYPAL_HOST?
+  process.env.PAYPAL_PORT = '' unless process.env.PAYPAL_PORT?
 
 values =
   appCookieSecret: process.env.APP_COOKIE_SECRET
@@ -55,12 +60,16 @@ values =
   superAdminEmail: process.env.SUPER_ADMIN_EMAIL?.toLowerCase()
   clientLibVersion: process.env.CLIENT_LIB_VERSION
   clientLibPath: "#{process.env.STATIC_PATH}/javascripts/#{process.env.CLIENT_LIB_VERSION}"
+  paypal:
+    host: process.env.PAYPAL_HOST
+    port: process.env.PAYPAL_PORT
 values.secureUrl = if values.environment is 'production' then "https://www.#{values.baseDomain}" else "http://#{values.baseDomain}"
 values.allValuesPresent = ->
   @appCookieSecret? and @connectionString? and @port? and @environment? and
     @aws? and @aws?.accessKeyId? and @aws?.secretKey? and @aws?.region? and @aws?.imagesBucket? and
     @recaptcha? and @recaptcha?.publicKey? and @recaptcha?.privateKey and @baseDomain? and @serverEnvironment? and
-    @staticPath? and @clientLibVersion? and @superAdminEmail?
+    @staticPath? and @clientLibVersion? and @superAdminEmail? and
+    @paypal.host? and @paypal.port?
 valuesPresent =
   appCookieSecret: values.appCookieSecret?
   connectionString: values.connectionString?
@@ -83,6 +92,9 @@ valuesPresent =
   staticPath: values.staticPath?
   clientLibVersion: values.clientLibVersion?
   superAdminEmail: values.superAdminEmail?
+  paypal:
+    host: values.paypal?.host?
+    port: values.paypal?.port?
 unless values.environment is 'test'
   console.log "Config values present: #{JSON.stringify valuesPresent}"
   console.log "Config values: #{JSON.stringify values}"
