@@ -39,6 +39,8 @@ describe 'Admin create store page', ->
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.pmtGateways.pagseguro.email).to.be.equal exampleStore.pmtGateways.pagseguro.email
         expect(store.pmtGateways.pagseguro.token).to.be.equal exampleStore.pmtGateways.pagseguro.token
+        expect(store.pmtGateways.paypal.clientId).to.be.equal exampleStore.pmtGateways.paypal.clientId
+        expect(store.pmtGateways.paypal.secret).to.be.equal exampleStore.pmtGateways.paypal.secret
     it 'added the store to the user', -> Q.ninvoke(User, "findById", userSeller.id).then (user) -> user.stores.length.should.equal 1
 
   describe 'does not create a store (missing or wrong info)', ->
@@ -119,4 +121,6 @@ describe 'Admin create store page', ->
         expect(store.otherUrl).to.equal exampleStore.otherUrl
         expect(store.pmtGateways.pagseguro.email).to.be.equal exampleStore.pmtGateways.pagseguro.email
         expect(store.pmtGateways.pagseguro.token).to.be.equal exampleStore.pmtGateways.pagseguro.token
+        expect(store.pmtGateways.paypal.clientId).to.be.equal exampleStore.pmtGateways.paypal.clientId
+        expect(store.pmtGateways.paypal.secret).to.be.equal exampleStore.pmtGateways.paypal.secret
     it 'added the store to the user', -> Q.ninvoke(User, "findById", userSeller.id).then (user) -> user.stores.length.should.equal 1

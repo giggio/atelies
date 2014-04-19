@@ -30,6 +30,9 @@ define [
       pagseguro:true
       pagseguroEmail:undefined
       pagseguroToken:undefined
+      paypal:true
+      paypalClientId:undefined
+      paypalSecret:undefined
     validation:
       name:
         required: true
@@ -55,3 +58,9 @@ define [
       pagseguroToken:
         [{required: true, msg:'O token do PagSeguro é obrigatório.'}
          {length: 32, msg: 'O token do PagSeguro deve possuir 32 caracteres.'}]
+      paypalClientId:
+        required:true
+        msg:'O id do cliente do Paypal deve ser informado.'
+      paypalSecret:
+        required:true
+        msg: 'O segredo do Paypal é obrigatório.'

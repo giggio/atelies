@@ -1233,6 +1233,17 @@
         }
       }
     },
+    "paypal-rest-sdk": {
+      "version": "0.8.0",
+      "from": "paypal-rest-sdk@",
+      "resolved": "https://registry.npmjs.org/paypal-rest-sdk/-/paypal-rest-sdk-0.8.0.tgz",
+      "dependencies": {
+        "node-uuid": {
+          "version": "1.4.1",
+          "from": "node-uuid@~1.4.1"
+        }
+      }
+    },
     "prerender-node": {
       "version": "0.1.18",
       "from": "prerender-node@0.1.18",

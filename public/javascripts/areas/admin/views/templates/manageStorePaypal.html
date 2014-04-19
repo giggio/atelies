@@ -1,0 +1,67 @@
+{{#if paypal}}
+  <input id="unsetPaypal" type="button" class="btn btn-primary" value="Desativar Paypal" data-toggle="modal" data-target="#modalConfirmPaypal"/>
+  <div id="modalConfirmPaypal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelPaypal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="confirmModalLabelPaypal">Desligar Paypal</h3>
+        </div>
+        <div class="modal-body">
+          <p>Ao desativar o Paypal nenhuma venda futura poderá ser feita pelo Paypal, e todas deverão ser fechadas manualmente.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+          <button id="confirmUnsetPaypal" class="btn btn-primary">Desativar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <input id="setPaypal" type="button" class="btn btn-primary" value="Ativar Paypal" data-toggle="modal" data-target="#modalConfirmPaypal"/>
+  <div id="modalConfirmPaypal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelPaypal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="confirmModalLabelPaypal">Ativar Paypal</h3>
+        </div>
+        <div class="modal-body">
+          <p>Ao ativar o Paypal seu cliente poderá optar por fechar a venda manualmente (em contato com você) ou usar o Paypal.</p>
+          <div class="control-group">
+            <label class="control-label" for="paypalClientId">Id do cliente do Paypal:</label>
+            <div class="controls">
+              <input type="text" id="paypalClientId" name="paypalClientId" class="span4" data-error-style="tooltip" maxLength="90"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="paypalSecret">Segredo do Paypal (veja <a href="{{staticPath}}/images/integracaoPaypal.jpg" target="_blank">aqui</a> como obter seu id e segredo):</label>
+            <div class="controls">
+              <input type="text" id="paypalSecret" name="paypalSecret" class="span4" data-error-style="tooltip" maxLength="90"/>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+          <button id="confirmSetPaypal" class="btn btn-primary">Ativar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}
+<div id="modalCannotPaypal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cannotPaypalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="cannotPaypalModalLabel">Não foi alterar o status do Paypal</h3>
+      </div>
+      <div class="modal-body">
+        <p>O cálculo de postagem não foi alterado. Tente novamente mais tarde.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

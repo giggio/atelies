@@ -167,6 +167,9 @@ exports.generator =
         pagseguro:
           email: 'pagseguro@a.com'
           token: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+        paypal:
+          clientId: 'SomeClientId'
+          secret: 'SomeSecret'
       numberOfEvaluations: 0
       evaluationAvgRating: 0
       isFlyerAuthorized: true

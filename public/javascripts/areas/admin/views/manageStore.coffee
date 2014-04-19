@@ -7,12 +7,14 @@ define [
   'text!./templates/validationErrors.html'
   './store'
   './manageStorePagseguro'
+  './manageStorePaypal'
   'backboneValidation'
-], ($, _, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, Validation) ->
+], ($, _, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, ManageStorePaypalView, Validation) ->
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
       'change #pagseguro':'_pagseguroChanged'
+      'change #paypal':'_paypalChanged'
     template: manageStoreTemplate
     initialize: (opt) ->
       @model = opt.store
@@ -20,13 +22,15 @@ define [
       return if @_redirectIfUserNotSatisfied()
       context = Handlebars.compile @template
       isnew = @model.id? is false
-      @$el.html context new: isnew, pagseguro: @model.get('pagseguro'), staticPath: @staticPath
+      @$el.html context new: isnew, paypal: @model.get('paypal'), pagseguro: @model.get('pagseguro'), staticPath: @staticPath
       @bindings = @initializeBindings
+        '#paypal':'checked:paypal'
         '#pagseguro':'checked:pagseguro'
         "#showFlyer": "attr:{src:flyer}"
         "#showBanner": "attr:{src:banner}"
       if isnew
         @model.on 'change:pagseguro', => @_pagseguroChanged()
+        @model.on 'change:paypal', => @_paypalChanged()
       else
         delete @bindings['#pagseguro']
         delete @bindings['#pagseguroEmail']
@@ -35,10 +39,21 @@ define [
         delete @model.validation.pagseguroToken
         manageStorePagseguroView = new ManageStorePagseguroView pagseguro: @model.get('pagseguro'), storeId: @model.get('_id')
         $('#pagseguroOptions', @$el).html manageStorePagseguroView.el
-        manageStorePagseguroView.render()
         manageStorePagseguroView.on 'changed', (opt) =>
           @model.set 'pagseguro', opt.pagseguro
           @_storeCreated @model
+        manageStorePagseguroView.render()
+        delete @bindings['#paypal']
+        delete @bindings['#paypalClientId']
+        delete @bindings['#paypalSecret']
+        delete @model.validation.paypalClientId
+        delete @model.validation.paypalSecret
+        manageStorePaypalView = new ManageStorePaypalView paypal: @model.get('paypal'), storeId: @model.get('_id')
+        $('#paypalOptions', @$el).html manageStorePaypalView.el
+        manageStorePaypalView.on 'changed', (opt) =>
+          @model.set 'paypal', opt.paypal
+          @_storeCreated @model
+        manageStorePaypalView.render()
       Validation.bind @
       validationErrorsEl = $('#validationErrors', @$el)
       valContext = Handlebars.compile validationErrorsTemplate
@@ -94,5 +109,11 @@ define [
         v.reverse()
         requiredIndex = if pagseguro then 0 else 1
         v[requiredIndex].required = pagseguro
+      Validation.bind @
+      @model.validate()
+    _paypalChanged: ->
+      paypal = @model.get 'paypal'
+      val = @model.validation
+      v.required = paypal for v in [ val.paypalClientId, val.paypalSecret ]
       Validation.bind @
       @model.validate()

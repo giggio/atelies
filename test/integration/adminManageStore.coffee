@@ -66,6 +66,28 @@ describe 'Admin manage store page', ->
         store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
         store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
 
+  describe 'updates to use paypal', ->
+    before ->
+      cleanDB()
+      .then ->
+        exampleStore = generator.store.c()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickSetPaypalButton
+      .then -> page.setPaypalValuesAs clientId: 'someid', secret: 'somesecret'
+      .then page.clickConfirmSetPaypalButton
+      .then waitSeconds 5
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
+    it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
+    it 'updated the store and set paypal', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+        store.pmtGateways.paypal.clientId.should.equal 'someid'
+        store.pmtGateways.paypal.secret.should.equal 'somesecret'
+
   describe 'does not update a store to use pagseguro if information is missing', ->
     before ->
       cleanDB().then ->
@@ -91,6 +113,31 @@ describe 'Admin manage store page', ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
 
+  describe 'does not update a store to use paypal if information is missing', ->
+    before ->
+      cleanDB().then ->
+        exampleStore = generator.store.c()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickSetPaypalButton
+      .then -> page.setPaypalValuesAs clientId: '', secret: ''
+      .then page.clickConfirmSetPaypalButton
+    it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/manageStore/#{exampleStore._id}"
+    it 'does not show store updated message', -> page.hasMessage().should.eventually.be.false
+    it 'shows error messages', ->
+      Q.all [
+        page.paypalClientIdErrorMsg().should.become 'O id do cliente do Paypal deve ser informado.'
+        page.paypalSecretErrorMsg().should.become 'O segredo do Paypal é obrigatório.'
+      ]
+    it 'did not update the store and set paypal', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+        expect(store.pmtGateways.paypal.clientId).to.be.undefined
+        expect(store.pmtGateways.paypal.secret).to.be.undefined
+
   describe 'updates to do not use pagseguro', ->
     before ->
       cleanDB()
@@ -110,6 +157,26 @@ describe 'Admin manage store page', ->
       Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
+
+  describe 'updates to do not use paypal', ->
+    before ->
+      cleanDB()
+      .then ->
+        exampleStore = generator.store.a()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        userSeller.stores.push exampleStore
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+      .then page.clickUnsetPaypalButton
+      .then page.clickConfirmUnsetPaypalButton
+    it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
+    it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
+    it 'updated the store and unset paypal', ->
+      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+        expect(store.pmtGateways.paypal.clientId).to.be.undefined
+        expect(store.pmtGateways.paypal.secret).to.be.undefined
 
   describe 'does not update a store (missing or wrong info)', ->
     before ->

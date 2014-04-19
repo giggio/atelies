@@ -33,6 +33,9 @@ define [
         manageStoreView.$("#pagseguro").prop('checked', true).change()
         manageStoreView.$("#pagseguroEmail").val(exampleStore.pagseguroEmail).change()
         manageStoreView.$("#pagseguroToken").val(exampleStore.pagseguroToken).change()
+        manageStoreView.$("#paypal").prop('checked', true).change()
+        manageStoreView.$("#paypalClientId").val(exampleStore.paypalClientId).change()
+        manageStoreView.$("#paypalSecret").val(exampleStore.paypalSecret).change()
         $('#updateStore', el).trigger 'click'
       after ->
         ajaxSpy.restore()
@@ -51,6 +54,9 @@ define [
         expect(storePassedIn.pagseguro).to.be.true
         expect(storePassedIn.pagseguroEmail).to.equal exampleStore.pagseguroEmail
         expect(storePassedIn.pagseguroToken).to.equal exampleStore.pagseguroToken
+        expect(storePassedIn.paypal).to.be.true
+        expect(storePassedIn.paypalClientId).to.equal exampleStore.paypalClientId
+        expect(storePassedIn.paypalSecret).to.equal exampleStore.paypalSecret
       it 'adds store to stores in the bootstrapped model', ->
         expect(global.adminStoresBootstrapModel.stores[0]).to.be.like exampleStore
 
@@ -97,6 +103,9 @@ define [
         newStore.pagseguro = true
         newStore.pagseguroEmail = store.pagseguroEmail
         newStore.pagseguroToken = store.pagseguroToken
+        newStore.paypal = true
+        newStore.paypalClientId = store.paypalClientId
+        newStore.paypalSecret = store.paypalSecret
         newStore._id = store._id
         before ->
           global.adminStoresBootstrapModel = stores:[store]

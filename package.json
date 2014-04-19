@@ -42,7 +42,8 @@
     "grunt-wait": "~0.1.0",
     "prerender-node": "~0.1.18",
     "sitemap": "~0.7.1",
-    "q": "^1.0.1"
+    "q": "^1.0.1",
+    "paypal-rest-sdk": "^0.8.0"
   },
   "devDependencies": {
     "grunt-coffeelint": "git://github.com/vojtajina/grunt-coffeelint.git#v0.0.9",

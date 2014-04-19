@@ -26,6 +26,9 @@ storeSchema = new mongoose.Schema
     pagseguro:
       email:              String
       token:              String
+    paypal:
+      clientId:           String
+      secret:             String
   random:                 type: Number, required: true, default: -> Math.random()
   numberOfEvaluations:    type: Number, required: true, default: 0
   evaluationAvgRating:    type: Number, required: true, default: 0
@@ -80,6 +83,7 @@ storeSchema.methods.toSimple = ->
     isFlyerAuthorized: @isFlyerAuthorized
     categories: @categories
   store.pagseguro = @pagseguro()
+  store.paypal = @paypal()
   store
 storeSchema.methods.toSimpler = ->
   store =
@@ -88,8 +92,10 @@ storeSchema.methods.toSimpler = ->
     slug: @slug
     flyer: @flyer
   store.pagseguro = @pagseguro()
+  store.paypal = @paypal()
   store
 storeSchema.methods.pagseguro = -> @pmtGateways.pagseguro?.token? and @pmtGateways.pagseguro?.email?
+storeSchema.methods.paypal = -> @pmtGateways.paypal?.clientId? and @pmtGateways.paypal?.secret?
 storeSchema.path('name').set (val) ->
   @nameKeywords = if val is '' then [] else val.toLowerCase().split ' '
   @slug = slug val.toLowerCase(), "_"
@@ -99,6 +105,11 @@ storeSchema.methods.setPagseguro = (set) ->
     @pmtGateways.pagseguro = undefined
   else
     @pmtGateways.pagseguro = set
+storeSchema.methods.setPaypal = (set) ->
+  if typeof set is 'boolean' and set is false
+    @pmtGateways.paypal = undefined
+  else
+    @pmtGateways.paypal = set
 storeSchema.methods.updateFromSimple = (simple) ->
   for attr in [ 'email', 'description', 'urlFacebook', 'urlTwitter', 'phoneNumber', 'city', 'state', 'zip', 'otherUrl' ]
     if simple[attr]? and simple[attr] isnt ''

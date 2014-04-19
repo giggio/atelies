@@ -21,8 +21,8 @@ define [
       @bindings = @initializeBindings()
       Validation.bind @
       #@model.bind 'validated:invalid', (model, errors) -> console.log errors
-    _confirmSetPagSeguro: -> @_setPagseguro on
-    _confirmUnsetPagSeguro: -> @_setPagseguro off
+    _confirmSetPagSeguro: -> @_setPagseguro on; false
+    _confirmUnsetPagSeguro: -> @_setPagseguro off; false
     _setPagseguro: (set) ->
       opt =
         url: "/api/admin/store/#{@storeId}/setPagSeguro"

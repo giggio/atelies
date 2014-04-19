@@ -32,7 +32,24 @@
     <div class="form-group">
       <label class="control-label" for="pagseguroToken">Token do PagSeguro (veja <a href="{{staticPath}}/images/integracaoPagSeguro.jpg" target="_blank" data-not-push-state="true">aqui</a> como obter seu token):</label>
       <div class="controls width6">
-        <input type="text" id="pagseguroToken" name="pagseguroToken" data-error-style="tooltip" />
+        <input type="text" id="pagseguroToken" name="pagseguroToken" data-error-style="tooltip" maxLength="32" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="controls">
+        <input type="checkbox" id="paypal" name="paypal" value="true" checked>utilizar Paypal nas vendas</input>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="paypalClientId">Id do cliente do Paypal:</label>
+      <div class="controls width6">
+        <input type="text" id="paypalClientId" name="paypalClientId" data-error-style="tooltip" maxLength="90" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="paypalSecret">Segredo do Paypal (veja <a href="{{staticPath}}/images/integracaoPaypal.jpg" target="_blank" data-not-push-state="true">aqui</a> como obter seu id e segredo do Paypal):</label>
+      <div class="controls width6">
+        <input type="text" id="paypalSecret" name="paypalSecret" data-error-style="tooltip" maxLength="90" />
       </div>
     </div>
     {{/if}}
@@ -145,11 +162,12 @@
     <input id="updateStore" type="button" class="btn btn-primary" value="Criar Loja"/>
     {{else}}
     <input id="updateStore" type="button" class="btn btn-primary" value="Atualizar Loja"/>
+    {{#unless new}}
+      <div id="pagseguroOptions"></div>
+      <div id="paypalOptions"></div>
+    {{/unless}}
   </form>
   {{/if}}
-  {{#unless new}}
-    <div id="pagseguroOptions"></div>
-  {{/unless}}
   <div id="nameAlreadyExists" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="nameAlreadyExistsLabel">
     <div class="modal-dialog">
       <div class="modal-content">

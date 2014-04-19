@@ -16,7 +16,7 @@ module.exports = class AdminRoutes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'storeProduct', 'storeProducts', 'orders', 'order', 'updateOrderStatus'
+    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'adminStoreUpdateSetPaypalOff', 'adminStoreUpdateSetPaypalOn', 'storeProduct', 'storeProducts', 'orders', 'order', 'updateOrderStatus'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'admin'
@@ -32,13 +32,14 @@ module.exports = class AdminRoutes
   adminStoreCreate: (req, res) ->
     body = req.body
     name = body.name
-    @_convertBodyToBool req.body, 'pagseguro'
+    @_convertBodyToBool req.body, 'pagseguro', 'paypal'
     Store.nameExists name, (err, itExists) =>
       return res.json 409, error: user: "Loja já existe com esse nome." if itExists
       store = req.user.createStore()
       store.updateFromSimple body
       store.name = body.name
       if body.pagseguro is on then store.setPagseguro email: body.pagseguroEmail, token: body.pagseguroToken
+      if body.paypal is on then store.setPaypal clientId: body.paypalClientId, secret: body.paypalSecret
       uploader = new StoreUploader store
       imageFields = banner: null, flyer: Store.flyerDimension
       uploader.upload req.files, imageFields, (err, fileUrls) =>
@@ -88,6 +89,16 @@ module.exports = class AdminRoutes
       return @handleError req, res, err if err?
       throw new AccessDenied() unless req.user.hasStore store
       store.setPagseguro set
+      store.save (err) =>
+        return @handleError req, res, err if err?
+        res.send 204
+  adminStoreUpdateSetPaypalOff: (req, res) -> @_adminStoreUpdateSetPaypal req, res, off
+  adminStoreUpdateSetPaypalOn: (req, res) -> @_adminStoreUpdateSetPaypal req, res, clientId: req.body.clientId, secret: req.body.secret
+  _adminStoreUpdateSetPaypal: (req, res, set) ->
+    Store.findById req.params.storeId, (err, store) =>
+      return @handleError req, res, err if err?
+      throw new AccessDenied() unless req.user.hasStore store
+      store.setPaypal set
       store.save (err) =>
         return @handleError req, res, err if err?
         res.send 204

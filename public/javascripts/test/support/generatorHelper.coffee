@@ -86,6 +86,9 @@ define ->
         pagseguro: true
         pagseguroEmail: 'pagseguro@a.com'
         pagseguroToken: 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
+        paypal: true
+        paypalClientId: 'someClientId'
+        paypalSecret: 'someSecret'
       b: ->
         _id: '2'
         name: 'Store 2'
@@ -102,6 +105,7 @@ define ->
         banner: 'http://j.jpg'
         flyer: 'http://lorempixel.com/350/400/nightlife/'
         pagseguro: false
+        paypal: false
       c: ->
         _id: '3'
         name: 'Store 3'
