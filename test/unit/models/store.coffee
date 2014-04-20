@@ -1,6 +1,7 @@
 Store   = require '../../../app/models/store'
 Product = require '../../../app/models/product'
 Order   = require '../../../app/models/order'
+Q       = require 'q'
 
 describe 'Store', ->
   it 'requires name, city and state to be present', (done) ->
@@ -75,30 +76,32 @@ describe 'Store', ->
     store.otherUrl.should.equal simple.otherUrl
   describe 'evaluations', ->
     store = userEvaluating1 = rating1 = body1 = body2 = rating2 = evaluation1 = evaluation2 = order1 = order2 = null
-    before (done) ->
+    before ->
       store = new Store()
-      userEvaluating1 = generator.user.a()
+      userEvaluating1 = generator.user.d()
       body1 = "body1"
       body2 = "body2"
       rating1 = 2
       rating2 = 5
       store = generator.store.a()
-      p1 = new Product price: 10
+      p1 = new Product price: 10, name: 'item 1'
       item1 = product: p1, quantity: 1
-      p2 = new Product price: 20
+      p2 = new Product price: 20, name: 'item 2'
       item2 = product: p2, quantity: 1
-      Order.create userEvaluating1, store, [ item1 ], 1, 'directSell', (err, order) ->
+      Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
+      .then (order) ->
         order1 = order
         sinon.stub(Store, 'findById').yields null, store
-        order.addEvaluation {user: userEvaluating1, body: body1, rating: rating1}, (err, evaluation, store) ->
-          evaluation1 = evaluation
-          Order.create userEvaluating1, store, [ item2 ], 1, 'directSell', (err, order) ->
-            order2 = order
-            order.addEvaluation {user: userEvaluating1, body: body2, rating: rating2}, (err, evaluation, store) ->
-              evaluation2 = evaluation
-              done err
-    after ->
-      Store.findById.restore()
+        order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
+      .then (result) ->
+        evaluation1 = result.evaluation
+        Order.create userEvaluating1, result.store, [ item2 ], 1, 'directSell'
+      .then (order) ->
+        order2 = order
+        order.addEvaluation user: userEvaluating1, body: body2, rating: rating2
+      .then (result) ->
+        evaluation2 = result.evaluation
+    after -> Store.findById.restore()
     it 'has evaluations', ->
       evaluation1.user.should.equal userEvaluating1._id
       evaluation1.userName.should.equal userEvaluating1.name

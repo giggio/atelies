@@ -29,7 +29,7 @@ describe 'Order', ->
     item2 = product: p2, quantity: 2, name: p2.name
     items = [ item1, item2 ]
     shippingCost = 1
-    Q.nfcall Order.create, user, store, items, shippingCost, 'directSell'
+    Order.create user, store, items, shippingCost, 'directSell'
     .then (o) -> order = o
 
   describe 'creating', ->
@@ -69,6 +69,6 @@ describe 'Order', ->
         orderStub.customer = user
         cb null, orderStub
       Postman.sentMails.length = 0
-      Q.ninvoke order, 'sendMailAfterPurchase'
+      order.sendMailAfterPurchase()
     it 'shoud have sent the e-mails', ->
       Postman.sentMails.length.should.equal 2

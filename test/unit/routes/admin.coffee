@@ -8,7 +8,7 @@ describe 'AdminRoute', ->
     it 'allows access and renders all the stores if signed in and seller', ->
       stores = []
       simpleUser = {}
-      req = user: {isSeller:true, stores:stores, toSimpleUser: (cb) -> cb(simpleUser)}, loggedIn: true
+      req = user: {isSeller:true, stores:stores, toSimpleUser: (cb) -> cb(undefined, simpleUser)}, loggedIn: true
       req.user.populate = (path, cb) -> cb null, req.user
       res = render: sinon.spy()
       routes.admin req, res
@@ -30,7 +30,7 @@ describe 'AdminRoute', ->
       store = toSimple: -> @
       stores = [store]
       simpleUser = {}
-      user = isSeller:true, stores: [], toSimpleUser: (cb) -> cb simpleUser
+      user = isSeller:true, stores: [], toSimpleUser: (cb) -> cb undefined, simpleUser
       user.populate = (path, cb) ->
         user.stores = stores
         cb null, user

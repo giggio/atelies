@@ -33,10 +33,10 @@ module.exports = class StoreRoutes
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
       getUser = (cb) ->
         if req.user?
-          req.user.toSimpleUser (user) -> cb user
+          req.user.toSimpleUser cb
         else
-          cb undefined
-      getUser (user) =>
+          cb()
+      getUser (err, user) =>
         if req.session.recentOrder?
           order = req.session.recentOrder
           req.session.recentOrder = null
@@ -68,7 +68,7 @@ module.exports = class StoreRoutes
                 cb err, product: product, quantity: item.quantity
         Q.nfcall async.parallel, getItems
         .then (items) =>
-          Q.nfcall Order.create, req.user, store, items, shippingCost, req.body.paymentType
+          Order.create req.user, store, items, shippingCost, req.body.paymentType
           .then (order) -> Q.ninvoke order, 'save'
           .spread (order) =>
             for item in items
@@ -85,7 +85,7 @@ module.exports = class StoreRoutes
               Q.nfcall @pagseguro.sendToPagseguro, store, order, req.user
               .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
             else
-              Q.ninvoke order, 'sendMailAfterPurchase'
+              order.sendMailAfterPurchase()
               .then (mailResponse) -> res.json 201, order.toSimpleOrder()
     .catch (err) => @handleError req, res, err
 
@@ -115,7 +115,7 @@ module.exports = class StoreRoutes
         order.updatePaypalInfo paypalInfo
         order.state = 'paymentDone'
         Q.ninvoke order, 'save'
-      .then -> Q.ninvoke order, 'sendMailAfterPurchase'
+      .then -> order.sendMailAfterPurchase()
       .then (mailResponse) -> res.redirect "/#{store.slug}/finishOrder/orderFinished"
     .catch (err) => @handleError req, res, err, false
 
@@ -129,10 +129,11 @@ module.exports = class StoreRoutes
           return @handleError req, res, err, false if err?
           order.state = 'paymentDone'
           order.save()
-          order.sendMailAfterPurchase (err, mailResponse) =>
-            return @handleError req, res, err, false if err?
+          order.sendMailAfterPurchase()
+          .then (mailResponse) ->
             req.session.recentOrder = order.toSimpleOrder()
             res.redirect "/#{store.slug}/finishOrder/orderFinished"
+          .catch (err) => @handleError req, res, err, false
 
   calculateShipping: (req, res) ->
     Q.nfcall Store.findBySlug, req.params.storeSlug
@@ -148,12 +149,11 @@ module.exports = class StoreRoutes
       res.json viewModelProducts
 
   commentCreate: (req, res) ->
-    Product.findById req.params.productId, (err, product) =>
-      return @handleError req, res, err if err?
-      product.addComment {user: req.user, body: req.body.body}, (err, comment) =>
-        return @handleError req, res, err if err?
-        comment.save()
-        res.send 201
+    Q.ninvoke Product, 'findById', req.params.productId
+    .then (product) -> product.addComment user: req.user, body: req.body.body
+    .then (comment) -> Q.ninvoke comment, 'save'
+    .then -> res.send 201
+    .catch (err) => @handleError req, res, err
 
   evaluations: (req, res) ->
     StoreEvaluation.getSimpleFromStore req.params._id, (err, evals) =>

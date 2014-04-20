@@ -36,4 +36,4 @@ module.exports = class Postman
       #console.log "Sending mail from #{mail.from} to #{mail.to} with subject '#{mail.subject}'"
       callbackOrPromise cb, Q.ninvoke Postman.smtp, 'sendMail', mail
 
-  sendFromContact: @::send.partial {name:'Ateliês', email:'contato@atelies.com.br'}
+  sendFromContact: @::send.partial name:'Ateliês', email:'contato@atelies.com.br'

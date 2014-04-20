@@ -8,6 +8,7 @@ AccessDenied    = require '../errors/accessDenied'
 values          = require '../helpers/values'
 correios        = require 'correios'
 RouteFunctions  = require './routeFunctions'
+Q               = require 'q'
 
 module.exports = class AccountRoutes
   constructor: (@env) ->
@@ -19,11 +20,11 @@ module.exports = class AccountRoutes
   logError: @::_logError.partial 'admin'
 
   account: (req, res) ->
-    user = req.user
-    Order.getSimpleByUser user, (err, orders) =>
-      return @handleError req, res, err, false if err?
-      user.toSimpleUser (user) ->
-        res.render 'account/account', user: user, orders: orders
+    Q.all([
+      Order.getSimpleByUser req.user
+      req.user.toSimpleUser()
+    ]).spread (orders, simpleUser) -> res.render 'account/account', user: simpleUser, orders: orders
+    .catch (err) => @handleError req, res, err, false
 
   resendConfirmationEmail: (req, res) ->
     user = req.user
@@ -96,12 +97,11 @@ module.exports = class AccountRoutes
   
   notSeller: (req, res) -> res.render 'account/notseller'
 
-  
   order: (req, res) ->
     user = req.user
-    Order.getSimpleWithItemsByUserAndId user, req.params._id, (err, orders) =>
-      return @handleError req, res, err if err?
-      res.json orders
+    Order.getSimpleWithItemsByUserAndId user, req.params._id
+    .then (orders) -> res.json orders
+    .catch (err) => @handleError req, res, err
 
   verifyUser: (req, res) ->
     User.findById req.params._id, (err, user) =>
@@ -148,13 +148,12 @@ module.exports = class AccountRoutes
         return res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.'
 
   evaluationCreate: (req, res) ->
-    Order.findById req.params._id, (err, order) =>
-      return @handleError req, res, err if err?
-      order.addEvaluation {user: req.user, body: req.body.body, rating: req.body.rating}, (err, evaluation, store) =>
-        return @handleError req, res, err if err?
-        evaluation.save =>
-          order.save =>
-            store.save =>
-              order.sendMailAfterEvaluation (err) =>
-                return @handleError req, res, err if err?
-                res.send 201
+    Q.ninvoke Order, "findById", req.params._id
+    .then (order) -> order.addEvaluation user: req.user, body: req.body.body, rating: req.body.rating
+    .then (result) ->
+      Q.ninvoke result.evaluation, 'save'
+      .then -> Q.ninvoke result.store, 'save'
+      .then -> Q.ninvoke result.order, 'save'
+      .then -> result.order.sendMailAfterEvaluation()
+    .then -> res.send 201
+    .catch (err) => @handleError req, res, err

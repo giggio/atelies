@@ -28,7 +28,7 @@ describe 'Account order detail page', ->
         { product: product2, quantity: 2 }
       ]
       shippingCost = 1
-      Q.nfcall Order.create, user, store, items, shippingCost, 'directSell'
+      Order.create user, store, items, shippingCost, 'directSell'
     .then (order) ->
       order1 = order
       order.orderDate = new Date(2013,0,1)

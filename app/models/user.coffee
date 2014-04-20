@@ -2,7 +2,8 @@ mongoose  = require 'mongoose'
 _         = require 'underscore'
 config    = require '../helpers/config'
 Postman   = require './postman'
-postman = new Postman()
+postman   = new Postman()
+Q         = require 'q'
 
 userSchema = new mongoose.Schema
   name:             type: String, required: true
@@ -67,11 +68,13 @@ userSchema.methods.toSimpleUser = (cb) ->
     isSeller: @isSeller
     isAdmin: @isAdmin
   if @isSeller
-    @populate 'stores', 'slug', =>
+    p = Q.ninvoke @, 'populate', 'stores', 'slug'
+    .then =>
       user.stores = _.pluck @stores, 'slug'
-      cb user
+      user
+    callbackOrPromise cb, p
   else
-    setImmediate cb user
+    callbackOrPromise cb, Q.fcall -> user
 
 userSchema.methods.sendMailConfirmRegistration = (redirectTo, cb) ->
   redirectTo = if redirectTo? then "?redirectTo=#{redirectTo}" else ""
@@ -118,7 +121,7 @@ userSchema.methods.sendMailPasswordReset = (cb) ->
   
 module.exports = User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email.toLowerCase(), cb
-User.findAdminsFor = (store, cb) -> User.find stores: store, cb
+User.findAdminsFor = (store, cb) -> callbackOrPromise cb, Q.ninvoke User, 'find', stores: store
 User.findByFacebookId = (facebookId, cb) -> User.findOne facebookId: facebookId, cb
 
 Store     = require './store'

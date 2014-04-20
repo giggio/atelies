@@ -42,35 +42,34 @@ OrderStatus =
   returned: 'Devolvido'
 
 orderSchema.methods.updatePaypalInfo = (info) -> @paymentGatewayInfo.paypal = info
-orderSchema.methods.addEvaluation = (evaluation, cb) ->
+orderSchema.methods.addEvaluation = (evaluation) ->
   evaluation.order = @
   evaluation.store = @store
-  StoreEvaluation.create evaluation, (err, evaluation) =>
-    return cb err, evaluation if err?
-    @evaluation = evaluation
-    Store.findById @store, (err, store) ->
-      return cb err if err?
-      store.evaluationAdded evaluation
-      cb null, evaluation, store
-orderSchema.methods.sendMailAfterEvaluation = (cb) ->
-  @populate 'evaluation store', (err) =>
-    return cb err if err?
-    User.findAdminsFor @store._id, (err, users) =>
-      return cb err if err?
-      sendMailActions =
-        for user in users
-          do (user) =>
-            body = "<html>
-              <h1>Olá #{user.name},</h1>
-              <h2>Sua loja recebeu uma avaliação</h2>
-              <div>
-                O cliente <a href=\"mailto:#{@evaluation.userEmail}\">#{@evaluation.userName}</a> fez uma
-                avaliação de #{@evaluation.rating} estrelas, com o comentário '#{@evaluation.body}'.
-              </div>
-              <div>Você pode vê-lo <a href='#{CONFIG.secureUrl}/#{@store.slug}/evaluations'>aqui</a>.</div>
-              </html>"
-            (cb) => postman.sendFromContact user, "Ateliês: A loja #{@store.name} recebeu uma avaliação", body, cb
-      async.parallel sendMailActions, cb
+  Q.ninvoke StoreEvaluation, "create", evaluation
+  .then (ev) =>
+    @evaluation = ev
+    Q.ninvoke Store, "findById", @store
+    .then (store) =>
+      store.evaluationAdded ev
+      evaluation: ev, store: store, order: @
+orderSchema.methods.sendMailAfterEvaluation = ->
+  Q.ninvoke @, 'populate', 'evaluation store'
+  .then => User.findAdminsFor @store._id
+  .then (users) =>
+    sendMailActions =
+      for user in users
+        do (user) =>
+          body = "<html>
+            <h1>Olá #{user.name},</h1>
+            <h2>Sua loja recebeu uma avaliação</h2>
+            <div>
+              O cliente <a href=\"mailto:#{@evaluation.userEmail}\">#{@evaluation.userName}</a> fez uma
+              avaliação de #{@evaluation.rating} estrelas, com o comentário '#{@evaluation.body}'.
+            </div>
+            <div>Você pode vê-lo <a href='#{CONFIG.secureUrl}/#{@store.slug}/evaluations'>aqui</a>.</div>
+            </html>"
+          postman.sendFromContact user, "Ateliês: A loja #{@store.name} recebeu uma avaliação", body
+    Q.allSettled sendMailActions
 orderSchema.methods.sendMailAfterStateChange = ->
   Q.ninvoke @, 'populate', 'store customer'
   .then (order) ->
@@ -112,52 +111,50 @@ orderSchema.methods.toSimpleOrder = ->
   items: items
   paymentType: @paymentType
 
-orderSchema.methods.sendMailAfterPurchase = (cb) ->
-  @populate 'store customer', (err, order) ->
-    return cb err if err?
+orderSchema.methods.sendMailAfterPurchase = ->
+  Q.ninvoke @, 'populate', 'store customer'
+  .then (order) ->
     dataPedido = new Date()
     dataPedido = "#{dataPedido.getDate()}/#{dataPedido.getMonth()+1}/#{dataPedido.getFullYear()}"
-    clientMail = (cb) ->
-      body = "<html>
-        <h1>#{order.store.name}</h1>
-        <h2>Recebemos seu pedido</h2>
-        <div>Você será avisado assim que ele for liberado.</div>
-        <div>Total da venda: R$ #{order.totalSaleAmount}</div>
-        <div>
-          Não deixe de avaliar o vendedor e sua loja quando receber seu pedido. Você pode fazer isso
-          clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>.
-        </div>
-        <div>
-          Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.
-        </div>
-        <div>&nbsp;</div>
-        <div>
-          Obrigado!
-        </div>
-        <div>
-          #{order.store.name}
-        </div>
-        </html>"
-      postman.send order.store, order.customer, "Pedido realizado", body, cb
-    storeMail = (cb)->
-      body = "<html>
-        <h2>Sua loja #{order.store.name} recebeu um novo pedido.</h2>
-        <div></div>
-        <div>Veja detalhes dessa venda no Ateliês <a href='#{CONFIG.secureUrl}/admin/orders/#{order._id.toString()}'>clicando aqui</a>.</div>
-        <div>&nbsp;</div>
-        <div>Cliente: <a href='mailto:#{order.customer.email}'>#{order.customer.name}</a></div>
-        <div>Data: #{dataPedido}</div>
-        <div>Total da venda: R$ #{order.totalSaleAmount}</div>
-        <div>&nbsp;</div>
-        <div>Obrigado!</div>
-        <div>Equipe Ateliês</div>
-        </html>"
-      postman.sendFromContact order.store, "Novo Pedido", body, cb
-    async.parallel [clientMail, storeMail], cb
+    body = "<html>
+      <h1>#{order.store.name}</h1>
+      <h2>Recebemos seu pedido</h2>
+      <div>Você será avisado assim que ele for liberado.</div>
+      <div>Total da venda: R$ #{order.totalSaleAmount}</div>
+      <div>
+        Não deixe de avaliar o vendedor e sua loja quando receber seu pedido. Você pode fazer isso
+        clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>.
+      </div>
+      <div>
+        Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.
+      </div>
+      <div>&nbsp;</div>
+      <div>
+        Obrigado!
+      </div>
+      <div>
+        #{order.store.name}
+      </div>
+      </html>"
+    clientMail = postman.send order.store, order.customer, "Pedido realizado", body
+    body = "<html>
+      <h2>Sua loja #{order.store.name} recebeu um novo pedido.</h2>
+      <div></div>
+      <div>Veja detalhes dessa venda no Ateliês <a href='#{CONFIG.secureUrl}/admin/orders/#{order._id.toString()}'>clicando aqui</a>.</div>
+      <div>&nbsp;</div>
+      <div>Cliente: <a href='mailto:#{order.customer.email}'>#{order.customer.name}</a></div>
+      <div>Data: #{dataPedido}</div>
+      <div>Total da venda: R$ #{order.totalSaleAmount}</div>
+      <div>&nbsp;</div>
+      <div>Obrigado!</div>
+      <div>Equipe Ateliês</div>
+      </html>"
+    storeMail = postman.sendFromContact order.store, "Novo Pedido", body
+    Q.allSettled [clientMail, storeMail]
 
 module.exports = Order = mongoose.model 'order', orderSchema
 
-Order.create = (user, store, items, shippingCost, paymentType, cb) ->
+Order.create = (user, store, items, shippingCost, paymentType) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items
     item = product: i.product, price: i.product.price, quantity: i.quantity, totalPrice: i.product.price * i.quantity, name: i.product.name
@@ -166,11 +163,11 @@ Order.create = (user, store, items, shippingCost, paymentType, cb) ->
   order.totalSaleAmount = order.totalProductsPrice + order.shippingCost
   order.deliveryAddress = user.deliveryAddress
   order.paymentType = paymentType
-  order.validate (err) ->
-    cb err, order
-Order.getSimpleByUser = (user, cb) ->
-  Order.find(customer: user).populate('store', 'name slug').exec (err, orders) ->
-    cb err, null if err?
+  Q.ninvoke order, 'validate'
+  .then -> order
+Order.getSimpleByUser = (user) ->
+  Q.ninvoke Order.find(customer: user).populate('store', 'name slug'), "exec"
+  .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
       storeName: o.store.name
@@ -179,10 +176,10 @@ Order.getSimpleByUser = (user, cb) ->
       orderDate: o.orderDate
       numberOfItems: o.items.length
       state: o.state
-    cb null, simpleOrders
-Order.getSimpleByStores = (stores, cb) ->
-  Order.find(store: $in: stores).populate('store', 'name slug').exec (err, orders) ->
-    cb err, null if err?
+    simpleOrders
+Order.getSimpleByStores = (stores) ->
+  Q.ninvoke Order.find(store: $in: stores).populate('store', 'name slug'), "exec"
+  .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
       storeName: o.store.name
@@ -191,15 +188,15 @@ Order.getSimpleByStores = (stores, cb) ->
       orderDate: o.orderDate
       numberOfItems: o.items.length
       state: o.state
-    cb null, simpleOrders
+    simpleOrders
 
-Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
-  Order.findById(_id)
+Order.findSimpleWithItemsBySellerAndId = (user, _id) ->
+  find = Order.findById(_id)
   .populate('items.product', '_id name slug picture')
   .populate('customer', 'name email phoneNumber')
-  .populate('store', 'name slug').exec (err, order) ->
-    cb err, null if err?
-    return cb null, null unless user.hasStore order.store
+  .populate('store', 'name slug')
+  Q.ninvoke(find, 'exec').then (order) ->
+    return null unless user.hasStore order.store
     simpleOrder =
       _id: order._id.toString()
       storeName: order.store.name
@@ -223,11 +220,11 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id, cb) ->
       price: i.price
       quantity: i.quantity
       totalPrice: i.totalPrice
-    cb null, simpleOrder
-Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
-  Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation').exec (err, order) ->
-    cb err, null if err?
-    return cb null, null if order.customer.toString() isnt user._id.toString()
+    simpleOrder
+Order.getSimpleWithItemsByUserAndId = (user, _id) ->
+  Q.ninvoke Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation'), 'exec'
+  .then (order) ->
+    return null if order.customer.toString() isnt user._id.toString()
     simpleOrder =
       _id: order._id.toString()
       totalSaleAmount: order.totalSaleAmount
@@ -248,7 +245,7 @@ Order.getSimpleWithItemsByUserAndId = (user, _id, cb) ->
       simpleOrder.evaluation =
         rating: order.evaluation.rating
         body: order.evaluation.body
-    cb null, simpleOrder
+    simpleOrder
 
 StoreEvaluation = require './storeEvaluation'
 Store = require './store'

@@ -32,23 +32,23 @@ describe 'Store evaluations page', ->
         product1 = generator.product.a()
         product1.save()
         item1 = product: product1, quantity: 1
-        Q.nfcall Order.create, userEvaluating1, store, [ item1 ], 1, 'directSell'
+        Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
         .then (order) ->
           order.save()
-          Q.ninvoke order, "addEvaluation", user: userEvaluating1, body: body1, rating: rating1
-          .spread (evaluation, updatedStore) ->
-            store = updatedStore
+          order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
+          .then (result) ->
+            store = result.store
             order.save()
-            evaluation.save()
-            store.save()
-            Q.nfcall Order.create, userEvaluating2, store, [ item1 ], 2, 'directSell'
+            result.evaluation.save()
+            result.store.save()
+            Order.create userEvaluating2, store, [ item1 ], 2, 'directSell'
             .then ->
               order.save()
-              Q.ninvoke order, "addEvaluation", user: userEvaluating2, body: body2, rating: rating2
-              .spread (evaluation, updatedStore) ->
-                store = updatedStore
+              order.addEvaluation user: userEvaluating2, body: body2, rating: rating2
+              .then (result) ->
+                store = result.store
                 order.save()
-                evaluation.save()
+                result.evaluation.save()
                 store.save()
                 page.visit "store_1"
     it 'shows evaluations', ->

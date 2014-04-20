@@ -64,24 +64,26 @@ describe 'Store product page', ->
 
   describe 'comments', ->
     describe 'showing', ->
-      userCommenting1 = userCommenting2 = body1 = body2 = null
+      product1 = userCommenting1 = userCommenting2 = body1 = body2 = null
       before ->
-        cleanDB().then ->
+        cleanDB()
+        .then ->
           store = generator.store.a()
-          store.save()
           product1 = generator.product.a()
-          product1.save()
+          Q.all [
+            Q.ninvoke store, 'save'
+            Q.ninvoke product1, 'save'
+          ]
+        .then ->
           userCommenting1 = generator.user.a()
           userCommenting2 = generator.user.b()
           body1 = "body1"
           body2 = "body2"
-          Q.ninvoke product1, "addComment", user: userCommenting1, body: body1
-          .then (comment) ->
-            comment.save()
-            Q.ninvoke product1, "addComment", user: userCommenting2, body: body2
-          .then (comment) ->
-            comment.save()
-            page.visit "store_1", "name_1"
+          product1.addComment user: userCommenting1, body: body1
+        .then (comment) -> Q.ninvoke comment, 'save'
+        .then -> product1.addComment user: userCommenting2, body: body2
+        .then (comment) -> Q.ninvoke comment, 'save'
+        .then -> page.visit "store_1", "name_1"
       it 'shows comments', ->
         page.comments().then (comments) ->
           comments.length.should.equal 2

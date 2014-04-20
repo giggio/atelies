@@ -120,20 +120,18 @@ describe 'Product', ->
     product.hasShippingInfo().should.be.false
   describe 'has comments', ->
     user = product = store = userCommenting = body = comment = null
-    before (done) ->
+    before ->
       Postman.sentMails.length = 0
       product = generator.product.a()
       userCommenting = generator.user.a()
       title = "some title"
       body = "some comment"
       store = generator.store.a()
-      user = generator.store.b()
-      sinon.stub(Store, "findBySlug").yields null, store
-      sinon.stub(User, "findAdminsFor").yields null, [user]
-      product.addComment {user: userCommenting, body: body}, (err, commentCreated) ->
-        return done err if err?
-        comment = commentCreated
-        done()
+      user = generator.user.a()
+      sinon.stub(Store, "findBySlug").returns then: (cb) -> cb store
+      sinon.stub(User, "findAdminsFor").returns then: (cb) -> cb [user]
+      product.addComment user: userCommenting, body: body
+      .then (commentCreated) -> comment = commentCreated
     after ->
       Store.findBySlug.restore()
       User.findAdminsFor.restore()

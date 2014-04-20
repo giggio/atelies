@@ -26,7 +26,7 @@ module.exports = class AdminRoutes
     req.user.populate 'stores', (err, user) =>
       return @handleError req, res, err, false if err?
       stores = _.map user.stores, (s) -> s.toSimple()
-      req.user.toSimpleUser (user) ->
+      req.user.toSimpleUser (err, user) ->
         res.render 'admin/admin', stores: stores, user: user
 
   adminStoreCreate: (req, res) ->
@@ -169,14 +169,14 @@ module.exports = class AdminRoutes
 
   orders: (req, res) ->
     user = req.user
-    Order.getSimpleByStores user.stores, (err, orders) =>
-      return @handleError req, res, err if err?
-      res.json orders
+    Order.getSimpleByStores user.stores
+    .then (orders) -> res.json orders
+    .catch (err) => @handleError req, res, err
 
   order: (req, res) ->
-    Order.findSimpleWithItemsBySellerAndId req.user, req.params._id, (err, order) =>
-      return @handleError req, res, err if err?
-      res.json order
+    Order.findSimpleWithItemsBySellerAndId req.user, req.params._id
+    .then (order) -> res.json order
+    .catch (err) => @handleError req, res, err
 
   storeCategories: (req, res) ->
     Store.findById req.params.storeId, (err, store) =>

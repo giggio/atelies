@@ -49,14 +49,13 @@ productSchema.methods.updateFromSimpleProduct = (simple) ->
   @shipping.charge = !!simple.shippingCharge
   @categories = simple.categories?.match(/(?=\S)[^,]+?(?=\s*(,|$))/g) || []
 productSchema.methods.url = -> "#{@storeSlug}/#{@slug}"
-productSchema.methods.addComment = (comment, cb) ->
+productSchema.methods.addComment = (comment) ->
   comment.product = @
-  ProductComment.create comment, cb
+  ProductComment.create comment
 
-productSchema.methods.findAdmins = (cb) ->
-  Store.findBySlug @storeSlug, (err, store) ->
-    return cb if err?
-    User.findAdminsFor store, cb
+productSchema.methods.findAdmins = ->
+  Store.findBySlug @storeSlug
+  .then (store) -> User.findAdminsFor store
 productSchema.methods.manageUrl = -> "#{@storeSlug}/#{@_id}"
 productSchema.methods.pictureThumb = ->
   return undefined unless @picture?

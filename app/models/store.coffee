@@ -164,7 +164,7 @@ module.exports = Store = mongoose.model 'store', storeSchema
 Store.nameExists = (name, cb) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug aSlug, (err, store) -> cb err, store?
-Store.findBySlug = (slug, cb) -> Store.findOne slug: slug, cb
+Store.findBySlug = (slug, cb) -> callbackOrPromise cb, Q.ninvoke Store, 'findOne', slug: slug
 Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized, cb) ->
   Store.find isFlyerAuthorized: isFlyerAuthorized, flyer: /./, (err, stores) ->
     return cb err if err?

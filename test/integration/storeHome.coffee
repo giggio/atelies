@@ -71,24 +71,21 @@ describe 'store home page', ->
         product1 = generator.product.a()
         product1.save()
         item1 = product: product1, quantity: 1
-        Q.ninvoke Order, "create", userEvaluating1, store, [ item1 ], 1, 'directSell'
-        .then (order) ->
-          Q.ninvoke order, "save"
-          .then ->
-            Q.ninvoke order, "addEvaluation", user: userEvaluating1, body: body1, rating: rating1
-            .spread (evaluation, updatedStore) ->
-              order.save()
-              evaluation.save()
-              updatedStore.save()
-              Q.ninvoke Order, "create", userEvaluating2, store, [ item1 ], 2, 'directSell'
-            .then (order) ->
-              order.save()
-              Q.ninvoke order, "addEvaluation", user: userEvaluating2, body: body2, rating: rating2
-            .spread (evaluation, updatedStore) ->
-              order.save()
-              evaluation.save()
-              updatedStore.save()
-              page.visit store.slug
+        Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
+        .then (order) -> Q.ninvoke order, "save"
+        .spread (order) -> order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
+        .then (result) ->
+          Q.ninvoke result.order, "save"
+          .then -> Q.ninvoke result.evaluation, "save"
+          .then -> Q.ninvoke result.store, "save"
+        .then -> Order.create userEvaluating2, store, [ item1 ], 2, 'directSell'
+        .then (order) -> Q.ninvoke order, "save"
+        .spread (order) -> order.addEvaluation user: userEvaluating2, body: body2, rating: rating2
+        .then (result) ->
+          Q.ninvoke result.order, "save"
+          .then -> Q.ninvoke result.evaluation, "save"
+          .then -> Q.ninvoke result.store, "save"
+          .then -> page.visit store.slug
     it 'should show the store average evaluation' , ->
       page.evaluation().then (ev) ->
         ev.ratingStars.should.equal 3.5

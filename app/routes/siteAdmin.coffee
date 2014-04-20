@@ -17,7 +17,7 @@ module.exports = class AdminRoutes
   logError: @::_logError.partial 'siteAdmin'
 
   siteAdmin: (req, res) ->
-    req.user.toSimpleUser (user) ->
+    req.user.toSimpleUser (err, user) ->
       res.render 'siteAdmin/siteAdmin', user: user
 
   storesForAuthorization: (req, res) ->
