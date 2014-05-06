@@ -313,6 +313,30 @@ module.exports = (grunt) ->
         enabled: on
         duration: 1
         title: 'Atelies'
+
+    clean:
+      options: "no-write": off
+      client:
+        expand: true
+        cwd: 'public'
+        src: [ '**/*.js', '!javascripts/lib/**/*' ]
+        dest: 'public'
+        ext: '.js'
+      server:
+        expand: true
+        cwd: 'app'
+        src: [ '**/*.js' ]
+        dest: 'app'
+        ext: '.js'
+      test:
+        expand: true
+        cwd: 'test'
+        src: [ '**/*.js' ]
+        dest: 'test'
+        ext: '.js'
+      base: src: [ 'server.js' ]
+
+
   unless grunt.task.exists? then grunt.task.exists = (name) -> _.include(_.pluck(grunt.task._tasks, 'name'), name)
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -327,9 +351,10 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-coveralls'
-  #grunt.loadNpmTasks 'grunt-notify'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
+  grunt.loadNpmTasks 'grunt-notify'
   isHeroku = -> process.env.HOME is "/app"
-  #grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
+  grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]

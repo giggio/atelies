@@ -1,4 +1,3 @@
-#console.log 6666666666, 'patch loaded'
 fs = require 'fs'
 path = require 'path'
 coffee = require 'coffee-script'
