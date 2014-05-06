@@ -1,5 +1,4 @@
 require '../../../../test/support/_specHelper'
-global.requirejs = require "requirejs"
 global.DEBUG = true
 os = require 'os'
 path = require 'path'
@@ -33,6 +32,8 @@ configureRequireJS = ->
   global.jQuery = window.jQuery = window.$ = global.$ = requirejs 'jquery'
   global.Handlebars = require('handlebars')
 
+require './patchFileSystemForCoffee'
+global.requirejs = require "requirejs"
 initDOM()
 configureRequireJS()
 

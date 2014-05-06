@@ -8,7 +8,7 @@ before_script:
 - node_modules/bower/bin/bower install
 - ls -la
 script:
-- node_modules/grunt-cli/bin/grunt travis:compileAndTest --no-color --verbose
+- node_modules/grunt-cli/bin/grunt travis:compileLintAndTest --no-color --verbose
 - node_modules/grunt-cli/bin/grunt travis:reportCoverage --no-color --verbose
 - ls -la
 - gem install --version 0.8.9 faraday #necessary for travis-artifacts to work

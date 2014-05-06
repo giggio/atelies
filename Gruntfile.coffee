@@ -45,15 +45,15 @@ module.exports = (grunt) ->
       options: livereload: true
       coffeeClient:
         files: [ 'public/**/*.coffee' ]
-        tasks: [ 'compileLintAndTest:client' ]
+        tasks: [ 'coffeelint:client', 'test:client' ]
         options: livereload: false
       coffeeServer:
         files: [ 'app/**/*.coffee' ]
-        tasks: [ 'compileAndLint:server' ]
+        tasks: [ 'coffeelint:server' ]
         options: livereload: false
       coffeeTest:
         files: [ 'test/**/*.coffee' ]
-        tasks: [ 'compileAndLint:test' ]
+        tasks: [ 'coffeelint:test' ]
         options: livereload: false
       coffeeServerOrTest:
         files: [ 'app/**/*.coffee', 'test/**/*.coffee' ]
@@ -77,12 +77,13 @@ module.exports = (grunt) ->
 
     nodemon:
       dev:
-        script: 'server.js'
+        script: 'server.coffee'
         options:
-          ext: 'js'
+          ext: 'coffee'
           ignore: ['node_modules/**', 'public/**']
           watch: ['app']
-          nodeArgs: ['--debug']
+          nodeArgs: [ '--debug', './node_modules/.bin/coffee' ]
+          exec: 'node'
           delay: 2000
           env:
             NODE_ENV: 'development'
@@ -102,34 +103,34 @@ module.exports = (grunt) ->
 
     mochaTest:
       server_unit:
-        src: 'test/unit/**/*.js'
+        src: 'test/unit/**/*.coffee'
         options:
-          require: 'test/support/_specHelper.js'
+          require: [ 'coffee-script/register', 'test/support/_specHelper.coffee' ]
           reporter: 'nyan'
           ui: 'bdd'
       server_unit_spec:
-        src: 'test/unit/**/*.js'
+        src: 'test/unit/**/*.coffee'
         options:
-          require: 'test/support/_specHelper.js'
+          require: [ 'coffee-script/register', 'test/support/_specHelper.coffee' ]
           reporter: 'spec'
           ui: 'bdd'
       server_integration:
-        src: 'test/integration/**/*.js'
+        src: 'test/integration/**/*.coffee'
         options:
-          require: 'test/support/_specHelper.js'
+          require: [ 'coffee-script/register', 'test/support/_specHelper.coffee' ]
           reporter: 'spec'
           ui: 'bdd'
           timeout: 20000
       client:
-        src: [ 'public/javascripts/test/**/*.js', '!public/javascripts/test/support/_instrumentForCoverage.js' ]
+        src: [ 'public/javascripts/test/**/*.coffee', '!public/javascripts/test/support/_instrumentForCoverage.coffee' ]
         options:
-          require: 'public/javascripts/test/support/runnerSetup.js'
+          require: [ 'coffee-script/register', 'public/javascripts/test/support/runnerSetup.coffee' ]
           reporter: 'nyan'
           ui: 'bdd'
       client_spec:
-        src: [ 'public/javascripts/test/**/*.js', '!public/javascripts/test/support/_instrumentForCoverage.js' ]
+        src: [ 'public/javascripts/test/**/*.coffee', '!public/javascripts/test/support/_instrumentForCoverage.coffee' ]
         options:
-          require: 'public/javascripts/test/support/runnerSetup.js'
+          require: [ 'coffee-script/register', 'public/javascripts/test/support/runnerSetup.coffee' ]
           reporter: 'spec'
           ui: 'bdd'
       server_unit_coverage:
@@ -318,7 +319,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-bower-task'
-  grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-shell'
@@ -327,15 +327,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-mocha-test'
   grunt.loadNpmTasks 'grunt-coveralls'
-  grunt.loadNpmTasks 'grunt-notify'
+  #grunt.loadNpmTasks 'grunt-notify'
   isHeroku = -> process.env.HOME is "/app"
-  grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
+  #grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
 
   #TASKS:
   grunt.registerTask 'server', [ 'express:prod' ]
   grunt.registerTask 'test', [ 'test:server', 'test:client', 'test:integration' ]
-  grunt.registerTask 'test:smoke', [ 'test:server', 'test:client' ]
-  grunt.registerTask 'test:smoke:spec', [ 'mochaTest:server_unit_spec', 'mochaTest:client_spec' ]
+  grunt.registerTask 'test:smoke', [ 'mochaTest:server_unit_spec', 'mochaTest:client_spec' ]
   grunt.registerTask 'test:server', ['mochaTest:server_unit']
   grunt.registerTask 'test:integration', ['mochaTest:server_integration']
   grunt.registerTask 'test:unit', ['test:client', 'test:server']
@@ -347,12 +346,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile:server', [ 'coffee:base', 'coffee:server' ]
   grunt.registerTask 'compile:test', [ 'coffee:test' ]
   grunt.registerTask 'compile:client', [ 'coffee:client' ]
-  grunt.registerTask 'compileAndLint', [ 'compileAndLint:server', 'compileAndLint:test', 'compileAndLint:client' ]
-  grunt.registerTask 'compileAndLint:client', [ 'compile:client', 'coffeelint:client' ]
-  grunt.registerTask 'compileAndLint:test', [ 'compile:test', 'coffeelint:test' ]
-  grunt.registerTask 'compileAndLint:server', [ 'compile:server', 'coffeelint:server' ]
-  grunt.registerTask 'compileLintAndTest:client', [ 'compileAndLint:client', 'test:client' ]
-  grunt.registerTask 'travis:compileAndTest', [ 'compile', 'test:smoke:spec' ]
+  grunt.registerTask 'travis:compileLintAndTest', [ 'compile', 'coffeelint', 'test:smoke' ]
   grunt.registerTask 'travis:reportCoverage', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage' ]
   grunt.registerTask 'heroku', ->
     if isHeroku() #trying to identify heroku
@@ -360,8 +354,10 @@ module.exports = (grunt) ->
       grunt.task.run [ 'compile:server' ]
     else
       grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{process.env.HOME.blue}."
-  grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejs:multipackage', 'less:production' ]
-  grunt.registerTask 'lintAndTest', [ 'coffeelint', 'test:unit' ]
-  grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'compileAndLint:client', 'compileAndLint:test', 'test:unit' ]
-  grunt.registerTask 'default', [ 'compile:server', 'concurrent:completeDefaultStart' ]
+  grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejsBuild', 'less:production' ]
+  grunt.registerTask 'requirejsBuild', ->
+    grunt.loadNpmTasks 'grunt-contrib-requirejs'
+    grunt.task.run [ 'requirejs:multipackage' ]
+  grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'coffeelint:client', 'coffeelint:test', 'test:unit' ]
+  grunt.registerTask 'default', [ 'concurrent:completeDefaultStart' ]
   grunt.registerTask 'quickstart', [ 'concurrent:watchAndDevServer']

@@ -64,6 +64,9 @@ exports.start = (cb) ->
   app.use express.cookieParser config.appCookieSecret
   app.use express.session secret: config.appCookieSecret, store:sessionStore
   if app.get("env") isnt 'production'
+    coffeeMiddleware = require 'coffee-middleware'
+    app.use config.staticPath + '/javascripts/lib', express.static publicDir + '/javascripts/lib'
+    app.use config.staticPath + '/javascripts', coffeeMiddleware src: publicDir + '/javascripts'
     app.use config.staticPath, express.static publicDir
 
   everyauthConfig.configure app
