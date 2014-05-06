@@ -1,3 +1,4 @@
---require test/support/runnerSetup.js
+--compilers coffee:coffee-script/register
+--require test/support/runnerSetup.coffee
 --reporter nyan
 --recursive
