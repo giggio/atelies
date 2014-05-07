@@ -11,11 +11,13 @@ before ->
     chromedriver = require 'chromedriver'
     chrome = require "selenium-webdriver/chrome"
     chromeServiceBuilder = new chrome.ServiceBuilder chromedriver.path
+    chromeServiceBuilder.args_.push "--whitelisted-ips"
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
       'prefs': {"profile.default_content_settings": {'images': 2}}
       'args': ["--host-rules=MAP * 127.0.0.1"]
-    Page.driver = chrome.createDriver capabilities, chromeServiceBuilder.build()
+    service = chromeServiceBuilder.build()
+    Page.driver = chrome.createDriver capabilities, service
   else
     phantomjs = require 'phantomjs'
     capabilities = webdriver.Capabilities.phantomjs()
