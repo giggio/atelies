@@ -119,7 +119,7 @@ module.exports = (grunt) ->
         options:
           require: [ 'coffee-script/register', 'test/support/_specHelper.coffee' ]
           reporter: 'spec'
-          ui: 'bdd'
+          ui: 'mocha-retry'
           timeout: 20000
       client:
         src: [ 'public/javascripts/test/**/*.coffee', '!public/javascripts/test/support/_instrumentForCoverage.coffee' ]
