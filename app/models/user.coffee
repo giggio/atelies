@@ -76,7 +76,7 @@ userSchema.methods.toSimpleUser = (cb) ->
   else
     callbackOrPromise cb, Q.fcall -> user
 
-userSchema.methods.sendMailConfirmRegistration = (redirectTo, cb) ->
+userSchema.methods.sendMailConfirmRegistration = (redirectTo) ->
   redirectTo = if redirectTo? then "?redirectTo=#{redirectTo}" else ""
   registrationLink = "#{config.secureUrl}/account/verifyUser/#{@_id}#{redirectTo}"
   body = "<html>
@@ -99,8 +99,8 @@ userSchema.methods.sendMailConfirmRegistration = (redirectTo, cb) ->
       Equipe Ateliês
     </div>
     </html>"
-  postman.sendFromContact @, "Bem vindo ao Ateliês", body, cb
-userSchema.methods.sendMailPasswordReset = (cb) ->
+  postman.sendFromContact @, "Bem vindo ao Ateliês", body
+userSchema.methods.sendMailPasswordReset = ->
   resetLink = "#{config.secureUrl}/account/resetPassword?_id=#{@_id}&resetKey=#{@createResetKey()}"
   body = "<html>
     <h1>Olá #{@name}!</h1>
@@ -117,7 +117,7 @@ userSchema.methods.sendMailPasswordReset = (cb) ->
       Equipe Ateliês
     </div>
     </html>"
-  postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body, cb
+  postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body
   
 module.exports = User = mongoose.model 'user', userSchema
 User.findByEmail = (email, cb) -> User.findOne email: email.toLowerCase(), cb

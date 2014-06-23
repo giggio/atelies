@@ -28,9 +28,9 @@ module.exports = class AccountRoutes
 
   resendConfirmationEmail: (req, res) ->
     user = req.user
-    user.sendMailConfirmRegistration null, (err, mailResponse) =>
-      return @handleError req, res, err if err?
-      res.send 200
+    user.sendMailConfirmRegistration null
+    .then -> res.send 200
+    .catch (err) => @handleError req, res, err
 
   updateProfileShow: (req, res) ->
     user = req.user
@@ -121,14 +121,17 @@ module.exports = class AccountRoutes
 
   forgotPassword: (req, res) ->
     return res.render 'account/forgotPassword' unless req.body.email?
-    User.findByEmail req.body.email, (err, user) =>
-      return @handleError req, res, err, false if err?
-      return res.render 'account/forgotPassword', error: 'Usuário não encontrado.' if !user?
-      user.sendMailPasswordReset (err, mailResponse) =>
-        @logError req, err if err?
-        return res.render 'account/forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.' if err?
+    Q.ninvoke User, 'findByEmail', req.body.email
+    .catch (err) => @handleError req, res, err, false
+    .then (user) ->
+      return res.render 'account/forgotPassword', error: 'Usuário não encontrado.' unless user?
+      user.sendMailPasswordReset()
+      .then ->
         user.save()
         res.redirect '/account/passwordResetSent'
+      .catch (err) =>
+        @logError req, err
+        res.render 'account/forgotPassword', error: 'Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.'
 
   passwordResetSent: (req, res) -> res.render 'account/passwordResetSent'
 

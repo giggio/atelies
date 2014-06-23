@@ -127,7 +127,7 @@ storeSchema.methods.updateName = (name, cb) ->
       p.storeName = name
       p.save()
     cb()
-storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
+storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing) ->
   if @isFlyerAuthorized
     status = "aprovado"
     unauthorizedMsg = ""
@@ -139,8 +139,8 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
       contenha o nome do seu ateliê de maneira legível, este arquivo será aprovado em até 48 horas por um
       administrador do portal.</div>
       <div>Você também pode falar com o administrador que reprovou o flyer diretamente.</div>"
-  User.findAdminsFor @_id, (err, users) =>
-    return cb err if err?
+  User.findAdminsFor @_id
+  .then (users) =>
     sendMailActions =
       for user in users
         do (user) =>
@@ -156,8 +156,8 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing, cb) ->
             <div></div>
             <div>Equipe Ateliês</div>
             </html>"
-          (cb) => postman.sendFromContact user, "Ateliês: A loja #{@name} teve seu flyer #{status}", body, cb
-    async.parallel sendMailActions, cb
+          postman.sendFromContact user, "Ateliês: A loja #{@name} teve seu flyer #{status}", body
+    Q.allSettled sendMailActions
 
 module.exports = Store = mongoose.model 'store', storeSchema
 

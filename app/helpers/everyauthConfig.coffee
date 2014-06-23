@@ -192,8 +192,8 @@ exports.configure = (app) ->
       deliveryZIP: req.body.deliveryZIP
       phoneNumber: req.body.phoneNumber
     respondToRegistrationSucceed: (req, res, user) ->
-      user.sendMailConfirmRegistration req.query?.redirectTo, (error, mailResponse) =>
-        @redirect res, @registerSuccessRedirect() + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
+      user.sendMailConfirmRegistration req.query?.redirectTo
+      .then => @redirect res, @registerSuccessRedirect() + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
   
   everyauth.everymodule.findUserById (req, userId, cb) ->
     User.findById userId, (error, user) ->

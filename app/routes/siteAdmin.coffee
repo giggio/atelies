@@ -30,14 +30,14 @@ module.exports = class AdminRoutes
       res.json stores
 
   updateStoreFlyerAuthorization: (req, res) ->
-    Store.findById req.params._id, (err, store) ->
-      return @handleError req, res, err if err?
+    Q.ninvoke Store, 'findById', req.params._id
+    .then (store) ->
       isFlyerAuthorized = req.params.isFlyerAuthorized is 'true'
       store.isFlyerAuthorized = isFlyerAuthorized
       store.save()
-      store.sendMailAfterFlyerAuthorization req.user, (err) ->
-        return @handleError req, res, err if err?
-        res.json 200
+      store.sendMailAfterFlyerAuthorization req.user
+    .then -> res.json 200
+    .catch (err) => @handleError req, res, err
 
   stores: (req, res) ->
     that = @
