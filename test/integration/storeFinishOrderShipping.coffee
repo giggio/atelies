@@ -50,8 +50,8 @@ describe 'Store Finish Order: Shipping', ->
     it 'should show calculated shipping', ->
       page.shippingInfo().then (s) ->
         s.length.should.equal 2
-        s[0].should.be.like value: 'pac', text: '3 dia(s) - PAC - R$ 16,10'
-        s[1].should.be.like value: 'sedex', text: '1 dia(s) - Sedex - R$ 20,10'
+        s[0].should.be.like value: 'pac', text: '3 dia(s) - PAC - R$ 17,90'
+        s[1].should.be.like value: 'sedex', text: '1 dia(s) - Sedex - R$ 21,20'
 
     it 'does not have next button enabled', -> page.finishOrderButtonIsEnabled().should.eventually.be.false
     it 'does not show message about shipping manual calculation', -> page.manualShippingCalculationMessage().then (m) -> expect(m).to.be.null
