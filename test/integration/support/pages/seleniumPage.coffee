@@ -15,7 +15,7 @@ before ->
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
       'prefs': {"profile.default_content_settings": {'images': 2}}
-      'args': ["--host-rules=MAP * 127.0.0.1"]
+      'args': ["--host-rules=MAP * 127.0.0.1", '--test-type']
     service = chromeServiceBuilder.build()
     Page.driver = chrome.createDriver capabilities, service
   else
