@@ -26,9 +26,9 @@ module.exports = class AdminRoutes
       when undefined then undefined
       when 'true' then true
       else false
-    Store.findSimpleByFlyerAuthorization isFlyerAuthorized, (err, stores) =>
-      return @handleError req, res, err if err?
-      res.json stores
+    Store.findSimpleByFlyerAuthorization isFlyerAuthorized
+    .then (stores) -> res.json stores
+    .catch (err) => @handleError req, res, err
 
   updateStoreFlyerAuthorization: (req, res) ->
     Q.ninvoke Store, 'findById', req.params._id

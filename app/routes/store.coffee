@@ -81,23 +81,22 @@ module.exports = class StoreRoutes
                 order.save()
                 res.json 201, order: order.toSimpleOrder(), redirect: resp.redirectUrl
             else if req.body.paymentType is 'pagseguro' and store.pagseguro()
-              Q.nfcall @pagseguro.sendToPagseguro, store, order, req.user
+              @pagseguro.sendToPagseguro store, order, req.user
               .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
             else
               order.sendMailAfterPurchase()
-              .then (mailResponse) -> res.json 201, order.toSimpleOrder()
+              .spread (order) -> res.json 201, order.toSimpleOrder()
     .catch (err) => @handleError req, res, err
 
   pagseguroStatusChanged: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) =>
-      return @handleError req, res, err if err?
+    Store.findBySlug req.params.storeSlug
+    .then (store) =>
       notificationId = req.body.notificationCode
-      @pagseguro.getSalestatusFromPagseguroNotificationId notificationId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId, saleStatus) ->
-        Order.findById orderId, (err, order) =>
-          return @handleError req, res, err if err?
-          order.updateStatus saleStatus, (err) =>
-            return @handleError req, res, err if err?
-            res.send 200
+      @pagseguro.getSalestatusFromPagseguroNotificationId notificationId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token
+    .spread (orderId, saleStatus) -> Q.ninvoke Order, 'findById', orderId
+    .then (order) -> order.updateStatus saleStatus
+    .then -> res.send 200
+    .catch (err) => @handleError req, res, err
 
   paypalReturnFromPayment: (req, res) ->
     if req.params.result is 'fail'
@@ -115,24 +114,23 @@ module.exports = class StoreRoutes
         order.state = 'paymentDone'
         Q.ninvoke order, 'save'
       .then -> order.sendMailAfterPurchase()
-      .then (mailResponse) -> res.redirect "/#{store.slug}/finishOrder/orderFinished"
+      .then -> res.redirect "/#{store.slug}/finishOrder/orderFinished"
     .catch (err) => @handleError req, res, err, false
 
   pagseguroReturnFromPayment: (req, res) ->
-    Store.findBySlug req.params.storeSlug, (err, store) =>
-      return @handleError req, res, err, false if err?
+    Store.findBySlug req.params.storeSlug
+    .then (store) =>
       psTransactionId = req.query.transactionId
-      @pagseguro.getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token, (err, orderId) =>
-        return @handleError req, res, err, false if err?
-        Order.findById orderId, (err, order) =>
-          return @handleError req, res, err, false if err?
-          order.state = 'paymentDone'
-          order.save()
-          order.sendMailAfterPurchase()
-          .then (mailResponse) ->
-            req.session.recentOrder = order.toSimpleOrder()
-            res.redirect "/#{store.slug}/finishOrder/orderFinished"
-          .catch (err) => @handleError req, res, err, false
+      [store, @pagseguro.getOrderIdFromPagseguroTransactionId psTransactionId, store.pmtGateways.pagseguro.email, store.pmtGateways.pagseguro.token]
+    .spread (store, orderId) -> [store, Q.ninvoke Order, 'findById', orderId]
+    .spread (store, order) ->
+      order.state = 'paymentDone'
+      order.save()
+      order.sendMailAfterPurchase()
+      .then ->
+        req.session.recentOrder = order.toSimpleOrder()
+        res.redirect "/#{store.slug}/finishOrder/orderFinished"
+    .catch (err) => @handleError req, res, err, false
 
   calculateShipping: (req, res) ->
     Q.nfcall Store.findBySlug, req.params.storeSlug
@@ -155,6 +153,6 @@ module.exports = class StoreRoutes
     .catch (err) => @handleError req, res, err
 
   evaluations: (req, res) ->
-    StoreEvaluation.getSimpleFromStore req.params._id, (err, evals) =>
-      return @handleError req, res, err if err?
-      res.json evals
+    StoreEvaluation.getSimpleFromStore req.params._id
+    .then (evals) -> res.json evals
+    .catch (err) => @handleError req, res, err

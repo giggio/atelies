@@ -162,10 +162,9 @@ Store.nameExists = (name) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug(aSlug).then (store) -> store?
 Store.findBySlug = (slug, cb) -> callbackOrPromise cb, Q.ninvoke Store, 'findOne', slug: slug
-Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized, cb) ->
-  Store.find isFlyerAuthorized: isFlyerAuthorized, flyer: /./, (err, stores) ->
-    return cb err if err?
-    cb null, _.map stores, (s) -> s.toSimple()
+Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized) ->
+  Q.ninvoke Store, 'find', isFlyerAuthorized: isFlyerAuthorized, flyer: /./
+  .then (stores) -> _.map stores, (s) -> s.toSimple()
 Store.findWithProductsBySlug = (slug) ->
   Store.findBySlug slug
   .then (store) ->

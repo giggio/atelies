@@ -1,5 +1,6 @@
 mongoose    = require 'mongoose'
 _           = require 'underscore'
+Q           = require 'q'
 
 evaluationSchema = new mongoose.Schema
   body:         type: String, required: true
@@ -13,16 +14,14 @@ evaluationSchema = new mongoose.Schema
 
 module.exports = Evaluation = mongoose.model 'storeevaluation', evaluationSchema
 
-Evaluation.create = (evaluationAttrs, cb) ->
+Evaluation.create = (evaluationAttrs) ->
   evaluation = new Evaluation evaluationAttrs
   evaluation.userName = evaluationAttrs.user.name
   evaluation.userEmail = evaluationAttrs.user.email
-  evaluation.validate (err) ->
-    return cb err, evaluation if err?
-    cb null, evaluation
+  Q.ninvoke(evaluation, 'validate').then -> evaluation
 
-Evaluation.getSimpleFromStore = (storeId, cb) ->
-  Evaluation.find { store: storeId }, (err, evals) ->
-    return cb err if err?
+Evaluation.getSimpleFromStore = (storeId) ->
+  Q.ninvoke Evaluation, 'find', { store: storeId }
+  .then (evals) ->
     simpleEvals = _.map evals, (e) -> body: e.body, rating: e.rating, date: e.date, userName: e.userName, userEmail: e.userEmail
-    cb null, simpleEvals
+    simpleEvals

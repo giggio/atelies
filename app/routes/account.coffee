@@ -67,49 +67,47 @@ module.exports = class AccountRoutes
     user.deliveryAddress.zip = body.deliveryZIP
     user.phoneNumber = body.phoneNumber
     user.isSeller = true if body.isSeller
-    user.save (err, user) ->
-      return res.render 'account/updateProfile', errors: error.errors, user: body, states: values.states if err?
+    Q.ninvoke user, 'save'
+    .then (user) ->
       redirectTo = if req.query.redirectTo? then "?redirectTo=#{encodeURIComponent req.query.redirectTo}" else ""
       res.redirect "account/profileUpdated#{redirectTo}"
+    .catch (err) -> res.render 'account/updateProfile', errors: error.errors, user: body, states: values.states
 
-  profileUpdated: (req, res) ->
-    res.render 'account/profileUpdated', redirectTo: req.query.redirectTo
+  profileUpdated: (req, res) -> res.render 'account/profileUpdated', redirectTo: req.query.redirectTo
   
-  changePasswordShow: (req, res) ->
-    res.render 'account/changePassword'
+  changePasswordShow: (req, res) -> res.render 'account/changePassword'
   
   changePassword: (req, res) ->
     user = req.user
     email = user.email.toLowerCase()
-    user.verifyPassword req.body.password, (err, succeeded) ->
-      return res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ] if err?
+    user.verifyPassword req.body.password
+    .catch (err) -> res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao verificar a senha.' ]
+    .then (succeeded) ->
       if succeeded
         return res.render 'account/changePassword', errors: [ 'Senha não é forte.' ] unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
-        user.save (err, user) ->
-          return res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ] if err?
-          res.redirect 'account/passwordChanged'
+        Q.ninvoke user, 'save'
+        .catch (err) -> res.render 'account/changePassword', errors: [ 'Não foi possível trocar a senha. Erro ao salvar o usuário.' ]
+        .then -> res.redirect 'account/passwordChanged'
       else
         res.render 'account/changePassword', errors: [ 'Senha inválida.' ]
   
-  passwordChanged: (req, res) ->
-    res.render 'account/passwordChanged'
+  passwordChanged: (req, res) -> res.render 'account/passwordChanged'
   
   notSeller: (req, res) -> res.render 'account/notseller'
 
   order: (req, res) ->
-    user = req.user
-    Order.getSimpleWithItemsByUserAndId user, req.params._id
+    Order.getSimpleWithItemsByUserAndId req.user, req.params._id
     .then (orders) -> res.json orders
     .catch (err) => @handleError req, res, err
 
   verifyUser: (req, res) ->
-    User.findById req.params._id, (err, user) =>
-      return @handleError req, res, err if err?
+    Q.ninvoke User, 'findById', req.params._id
+    .then (user) ->
       user.verified = true
-      user.save (err, user) =>
-        return @handleError req, res, err if err?
-        res.redirect 'account/verified' + if req.query?.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
+      Q.ninvoke user, 'save'
+    .then -> res.redirect 'account/verified' + if req.query?.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
+    .catch (err) => @handleError req, res, err
 
   verified: (req, res) -> res.render 'account/accountVerified', redirectTo: if req.query?.redirectTo? then req.query.redirectTo else undefined
 
@@ -121,7 +119,7 @@ module.exports = class AccountRoutes
 
   forgotPassword: (req, res) ->
     return res.render 'account/forgotPassword' unless req.body.email?
-    Q.ninvoke User, 'findByEmail', req.body.email
+    User.findByEmail req.body.email
     .catch (err) => @handleError req, res, err, false
     .then (user) ->
       return res.render 'account/forgotPassword', error: 'Usuário não encontrado.' unless user?
@@ -138,17 +136,17 @@ module.exports = class AccountRoutes
   resetPasswordShow: (req, res) -> res.render 'account/resetPassword'
 
   resetPassword: (req, res) ->
-    User.findById req.query._id, (err, user) =>
-      return @handleError req, res, err, false if err?
+    Q.ninvoke User, 'findById', req.query._id
+    .then (user) ->
       return res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.' unless user?.resetKey?
       if user.resetKey.toString() is req.query.resetKey
         return res.render 'account/resetPassword', error:'Senha não é forte.' unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test req.body.newPassword
         user.setPassword req.body.newPassword
-        user.save (err, user) =>
-          return @handleError req, res, err, false if err?
-          res.redirect 'account/passwordChanged'
+        Q.ninvoke user, 'save'
+        .then (user) -> res.redirect 'account/passwordChanged'
       else
-        return res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.'
+        res.render 'account/resetPassword', error: 'Não foi possível trocar a senha.'
+    .catch (err) => @handleError req, res, err, false
 
   evaluationCreate: (req, res) ->
     Q.ninvoke Order, "findById", req.params._id

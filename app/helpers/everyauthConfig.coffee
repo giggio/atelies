@@ -4,6 +4,7 @@ User          = require '../models/user'
 values        = require './values'
 Recaptcha     = require('recaptcha').Recaptcha
 config        = require './config'
+Q             = require 'q'
 
 exports.configure = (app) ->
   everyauth.facebook.configure
@@ -16,11 +17,13 @@ exports.configure = (app) ->
     findOrCreateUser: (session, accessToken, accessTokExtra, fbUserMetadata) ->
       cb = @Promise()
       #fbUserMetadata is { id: 'string of numbers', name: 'string', email: 'string of email' }
-      User.findByFacebookId fbUserMetadata.id, (err, user) ->
+      User.findByFacebookId fbUserMetadata.id
+      .then (user) ->
         if user?
           session.existingUserLogin = true
           return cb.fulfill user
-        User.findByEmail fbUserMetadata.email.toLowerCase(), (err, user) ->
+        User.findByEmail fbUserMetadata.email.toLowerCase()
+        .then (user) ->
           if user?
             session.existingUserLogin = true
             user.facebookId = fbUserMetadata.id
@@ -32,8 +35,9 @@ exports.configure = (app) ->
             email: fbUserMetadata.email.toLowerCase()
             facebookId: fbUserMetadata.id
             verified: true
-          user.save (error, user) ->
-            cb.fulfill user
+          Q.ninvoke user, 'save'
+          .then (user) -> cb.fulfill user
+      .catch (err) -> cb.fulfill [err.message]
       cb
     redirectPath: (req, res) ->
       '/account/afterFacebookLogin' + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
@@ -59,15 +63,15 @@ exports.configure = (app) ->
         locals.recaptchaForm = recaptcha.toHTML()
       if req.session.carefulLogin
         addRecaptcha()
-        setImmediate -> cb null, locals
-        return
+        return setImmediate -> cb null, locals
       else if req.body.email?
-        User.findByEmail req.body.email, (error, user) ->
-          return cb error if error?
+        User.findByEmail req.body.email
+        .then (user) ->
           if user?.carefulLogin()
             req.session.carefulLogin = true
             addRecaptcha()
           cb null, locals
+        .catch (err) -> cb err
       else
         setImmediate -> cb null, locals
     extractLoginPassword: (req, res) ->
@@ -81,40 +85,42 @@ exports.configure = (app) ->
       else
         [req.body.email, req.body.password]
     authenticate: (email, password) ->
-      validatePassword = (user, p, cb) ->
-        p = p.password unless typeof p is 'string'
-        user.verifyPassword p, (error, success) ->
-          return cb false if error?
-          cb success
-      validateCaptcha = (data, cb) ->
-        return cb "O valor da imagem não foi informado." unless typeof data.remoteip?
-        recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, {remoteip: data.remoteip, challenge: data.captchaChallenge, response: data.captchaResponse}, true
-        recaptcha.verify (success, errorCode) ->
-          error = null
-          error = "O valor informado para a imagem está errado." unless success
-          cb error, success
-      doValidatePassword = (user, password) ->
-        validatePassword user, password, (success) ->
-          if success
-            cb.fulfill user
-          else
-            cb.fulfill ["Login falhou"]
       cb = @Promise()
       errors = []
-      errors.push "Informe o e-mail" unless email?
-      errors.push "Informe a senha" unless password?
+      errors.push "Informe o e-mail" unless email? and email isnt ''
+      errors.push "Informe a senha" unless password? and password isnt ''
       return cb.fulfill errors if errors.length isnt 0
-      User.findByEmail email.toLowerCase(), (error, user) ->
+      User.findByEmail email.toLowerCase()
+      .then (user) ->
         return cb.fulfill [error] if error?
         return cb.fulfill ['Login falhou'] unless user?
-        if user.carefulLogin() and !DEBUG
-          validateCaptcha password, (error, success) ->
+        validatePassword = ->
+          p = if typeof password is 'string' then password else password.password
+          user.verifyPassword p
+          .then (success) ->
             if success
-              doValidatePassword user, password
+              cb.fulfill user
             else
-              cb.fulfill [error]
+              cb.fulfill ["Login falhou"]
+        if DEBUG or !user.carefulLogin()
+          validatePassword()
         else
-          doValidatePassword user, password
+          Q.fcall ->
+            if typeof password.remoteip?
+              recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, {remoteip: password.remoteip, challenge: password.captchaChallenge, response: password.captchaResponse}, true
+              d = Q.defer()
+              recaptcha.verify (success, errorCode) ->
+                error = if success then null else "O valor informado para a imagem está errado."
+                d.resolve [error, success]
+              d.promise
+            else
+              ["O valor da imagem não foi informado.", false]
+          .spread (error, success) ->
+            if !success
+              cb.fulfill [error]
+            else
+              validatePassword()
+      .catch (err) -> cb.fulfill [err.message]
       cb
     respondToLoginSucceed: (res, user, data) ->
       return unless user?
@@ -141,10 +147,8 @@ exports.configure = (app) ->
         errors.push "E-mail já cadastrado."
         cb.fulfill errors
         return cb
-      User.findByEmail email, (error, user) ->
-        if error?
-          errors.push error
-          return cb.fulfill errors
+      User.findByEmail email
+      .then (user) ->
         errors.push "E-mail já cadastrado." if user?
         if DEBUG
           cb.fulfill errors
@@ -157,6 +161,9 @@ exports.configure = (app) ->
           recaptcha.verify (success, errorCode) ->
             errors.push "Código incorreto." unless success
             cb.fulfill errors
+      .catch (err) ->
+        errors.push err
+        cb.fulfill errors
       cb
     registerUser: (newUserAttrs) ->
       cb = @Promise()

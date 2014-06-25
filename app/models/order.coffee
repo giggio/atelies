@@ -45,13 +45,13 @@ orderSchema.methods.updatePaypalInfo = (info) -> @paymentGatewayInfo.paypal = in
 orderSchema.methods.addEvaluation = (evaluation) ->
   evaluation.order = @
   evaluation.store = @store
-  Q.ninvoke StoreEvaluation, "create", evaluation
+  StoreEvaluation.create evaluation
   .then (ev) =>
     @evaluation = ev
-    Q.ninvoke Store, "findById", @store
-    .then (store) =>
-      store.evaluationAdded ev
-      evaluation: ev, store: store, order: @
+    [ev, Q.ninvoke Store, "findById", @store]
+  .spread (ev, store) =>
+    store.evaluationAdded ev
+    evaluation: ev, store: store, order: @
 orderSchema.methods.sendMailAfterEvaluation = ->
   Q.ninvoke @, 'populate', 'evaluation store'
   .then => User.findAdminsFor @store._id
@@ -113,7 +113,7 @@ orderSchema.methods.toSimpleOrder = ->
 
 orderSchema.methods.sendMailAfterPurchase = ->
   Q.ninvoke @, 'populate', 'store customer'
-  .then (order) ->
+  .then (order) =>
     dataPedido = new Date()
     dataPedido = "#{dataPedido.getDate()}/#{dataPedido.getMonth()+1}/#{dataPedido.getFullYear()}"
     body = "<html>
@@ -151,6 +151,7 @@ orderSchema.methods.sendMailAfterPurchase = ->
       </html>"
     storeMail = postman.sendFromContact order.store, "Novo Pedido", body
     Q.allSettled [clientMail, storeMail]
+    .then (mailResponses) => [@, mailResponses]
 
 module.exports = Order = mongoose.model 'order', orderSchema
 

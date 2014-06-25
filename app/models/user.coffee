@@ -40,18 +40,16 @@ userSchema.methods.hasStore = (store) ->
   storeFound = _.find @stores, (_id) -> id is _id.toString()
   storeFound?
 userSchema.methods.carefulLogin = -> @loginError >= 3
-userSchema.methods.verifyPassword = (passwordToVerify, cb) ->
+userSchema.methods.verifyPassword = (passwordToVerify) ->
   bcrypt = require 'bcrypt'
-  bcrypt.compare passwordToVerify, @passwordHash, (error, succeeded) =>
+  Q.ninvoke bcrypt, 'compare', passwordToVerify, @passwordHash
+  .then (succeeded) =>
     if succeeded
-      if @loginError isnt 0
-        @loginError = 0
-      else
-        return cb null, true
+      if @loginError is 0 then return true
+      @loginError = 0
     else
       @loginError++
-    @save (err, u) ->
-      cb error, succeeded
+    Q.ninvoke(@, 'save').then -> succeeded
 userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10
@@ -119,8 +117,8 @@ userSchema.methods.sendMailPasswordReset = ->
   postman.sendFromContact @, "Ateliês: Solicitação de troca de senha", body
   
 module.exports = User = mongoose.model 'user', userSchema
-User.findByEmail = (email, cb) -> User.findOne email: email.toLowerCase(), cb
+User.findByEmail = (email, cb) -> callbackOrPromise cb, Q.ninvoke User, 'findOne', email: email.toLowerCase()
 User.findAdminsFor = (store, cb) -> callbackOrPromise cb, Q.ninvoke User, 'find', stores: store
-User.findByFacebookId = (facebookId, cb) -> User.findOne facebookId: facebookId, cb
+User.findByFacebookId = (facebookId) -> Q.ninvoke User, 'findOne', facebookId: facebookId
 
 Store     = require './store'
