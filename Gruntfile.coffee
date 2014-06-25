@@ -45,7 +45,11 @@ module.exports = (grunt) ->
       options: livereload: true
       coffeeClient:
         files: [ 'public/**/*.coffee' ]
-        tasks: [ 'coffeelint:client', 'test:client' ]
+        tasks: [ 'test:client', 'coffeelint:client' ]
+        options: livereload: false
+      coffeeServerOrTest:
+        files: [ 'app/**/*.coffee', 'test/**/*.coffee' ]
+        tasks: [ 'test:server' ]
         options: livereload: false
       coffeeServer:
         files: [ 'app/**/*.coffee' ]
@@ -54,10 +58,6 @@ module.exports = (grunt) ->
       coffeeTest:
         files: [ 'test/**/*.coffee' ]
         tasks: [ 'coffeelint:test' ]
-        options: livereload: false
-      coffeeServerOrTest:
-        files: [ 'app/**/*.coffee', 'test/**/*.coffee' ]
-        tasks: [ 'test:server' ]
         options: livereload: false
       less:
         files: [ 'public/**/*.less' ]

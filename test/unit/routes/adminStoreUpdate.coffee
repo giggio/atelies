@@ -1,6 +1,7 @@
 Routes          = require '../../../app/routes/admin'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
+Q               = require 'q'
 
 describe 'AdminStoreUpdateRoute', ->
   routes = null
@@ -31,8 +32,7 @@ describe 'AdminStoreUpdateRoute', ->
       req = loggedIn: true, user: user, params: params, body: exampleStore
       res = send: sinon.spy()
       routes.adminStoreUpdate req, res
-    after ->
-      Store.findById.restore()
+    after -> Store.findById.restore()
     it 'looked for correct store', ->
       Store.findById.should.have.been.calledWith store._id
     it 'access allowed and return code is correct', ->
@@ -43,9 +43,8 @@ describe 'AdminStoreUpdateRoute', ->
       store.save.should.have.been.called
 
   describe 'Access is denied', ->
-    describe "a seller but does not own this store", ->
-      store = req = res = body = user = null
-      before ->
+    describe 'a seller', ->
+      it "a seller but does not own this store denies access and throws", ->
         store =
           _id: '9876'
           save: sinon.spy()
@@ -58,11 +57,13 @@ describe 'AdminStoreUpdateRoute', ->
         req = loggedIn: true, user: user, params: params, body:
           name: 'Some Store'
         body = req.body
-        res = send: sinon.spy()
-      after ->
-        Store.findById.restore()
-      it 'denies access and throws', ->
-        expect( -> routes.adminStoreUpdate req, res).to.throw AccessDenied
+        res = json: sinon.spy()
+        sinon.stub routes, '_logError'
+        routes.adminStoreUpdate req, res
+        .then ->
+          res.json.should.have.been.calledWith 400
+          Store.findById.restore()
+
     describe 'not a seller', ->
       it 'denies access if the user isnt a seller and throws', ->
         req = user: {isSeller:false}, loggedIn: true
@@ -89,7 +90,7 @@ describe 'AdminStoreUpdateRoute', ->
         save: sinon.stub().yields()
         updateFromSimple: sinon.spy()
       sinon.stub(Store, 'findById').yields null, store
-      sinon.stub(Store, 'nameExists').yields null, true
+      sinon.stub(Store, 'nameExists').returns Q.fcall -> true
       user =
         isSeller: true
         stores: ['9876']

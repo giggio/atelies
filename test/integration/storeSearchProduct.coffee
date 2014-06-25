@@ -17,6 +17,7 @@ describe 'Store Search Product', ->
       store1.save()
     .then -> whenServerLoaded
     .then -> page.visit store1.slug
+    .then -> page.waitForViewToLoad()
     .then -> page.searchProductsText 'name'
     .then page.clickDoSearchProducts
   it 'shows product only from the store', -> page.searchProductsLength().should.become 1

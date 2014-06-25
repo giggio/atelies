@@ -2,6 +2,7 @@ AWS         = require 'aws-sdk'
 fs          = require 'fs'
 path        = require 'path'
 os          = require 'os'
+Q           = require 'q'
 ImageManipulation = require './imageManipulation'
 
 module.exports = class AmazonFileUploader
@@ -23,27 +24,28 @@ module.exports = class AmazonFileUploader
 
   constructor: ->
     @s3 = new AWS.S3()
-  upload: (fileName, file, dimensions, cb) ->
+  upload: (fileName, file, dimensions) ->
     if AmazonFileUploader.dryrun
-      console.log "NOT uploading file, dry run"
+      if !TEST then console.log "NOT uploading file, dry run"
       url = "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/#{fileName}"
       AmazonFileUploader.filesUploaded.push url
-      return cb null, url
-    AmazonFileUploader.im.isSizeSmallerThan file.path, dimensions, (err, itIs) =>
-      return cb err if err?
-      return cb smallerThan: "O tamanho da imagem é menor do que o esperado, ela deve ter no mínimo #{dimensions}." if itIs
-      AmazonFileUploader.im.resizeAndCrop file.path, dimensions, (err, newFileName) =>
-        return cb err if err?
-        fileParams = Bucket: AmazonFileUploader.bucket, Key: fileName, Body: fs.createReadStream(newFileName), ContentType: file.headers['content-type']
-        @s3.putObject fileParams, (err, data) ->
-          return cb err if err?
-          url = "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/#{fileName}"
-          cb null, url
-          fs.unlink newFileName
-  delete: (fileName, cb) ->
+      return Q.fcall -> url
+    AmazonFileUploader.im.isSizeSmallerThan file.path, dimensions
+    .then (itIs) ->
+      if itIs then throw smallerThan: "O tamanho da imagem é menor do que o esperado, ela deve ter no mínimo #{dimensions}."
+      AmazonFileUploader.im.resizeAndCrop file.path, dimensions
+    .then (newFileName) =>
+      fileParams = Bucket: AmazonFileUploader.bucket, Key: fileName, Body: fs.createReadStream(newFileName), ContentType: file.headers['content-type']
+      Q.ninvoke @s3, 'putObject', fileParams
+      .then -> newFileName
+    .then (newFileName) ->
+      url = "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/#{fileName}"
+      fs.unlink newFileName
+      url
+  delete: (fileName) ->
     key = fileName.replace "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/", ""
     fileParams = Bucket: AmazonFileUploader.bucket, Key: key
-    @s3.deleteObject fileParams, (err, data) -> cb err
+    Q.ninvoke @s3, 'deleteObject', fileParams
   getFileNameFromFullName: (fileName) ->
     key = fileName.replace "https://s3.amazonaws.com/#{AmazonFileUploader.bucket}/", ""
     key

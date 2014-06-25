@@ -1,19 +1,17 @@
 Product         = require '../models/product'
 FileUploader    = require '../helpers/amazonFileUploader'
+Q               = require 'q'
 
 module.exports = class ProductUploader
-  upload: (product, file, cb) ->
-    if file?
-      uploader = new FileUploader()
-      if product.picture?
-        onlineName = uploader.getFileNameFromFullName product.picture
-      else
-        onlineName = uploader.randomName "#{product.storeSlug}/products", file.name
-      uploader.upload onlineName, file, Product.pictureDimension, (err, fileUrl) ->
-        return cb err if err?
-        thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
-        uploader.upload thumbOnlineName, file, Product.pictureThumbDimension, (err, thumbUrl) ->
-          return cb err if err?
-          cb null, fileUrl
+  upload: (product, file) ->
+    unless file? then return Q.fcall ->
+    uploader = new FileUploader()
+    onlineName = if product.picture?
+      uploader.getFileNameFromFullName product.picture
     else
-      setImmediate cb
+      uploader.randomName "#{product.storeSlug}/products", file.name
+    uploader.upload onlineName, file, Product.pictureDimension
+    .then (fileUrl) ->
+      thumbOnlineName = uploader.thumbName onlineName, Product.pictureThumbDimension
+      uploader.upload thumbOnlineName, file, Product.pictureThumbDimension
+      .then (thumbUrl) -> fileUrl

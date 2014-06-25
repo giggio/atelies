@@ -1,6 +1,7 @@
 SandboxedModule = require 'sandboxed-module'
 Store           = require '../../../app/models/store'
 AccessDenied    = require '../../../app/errors/accessDenied'
+Q               = require 'q'
 
 describe 'AdminStoreCreateRoute', ->
   routes = null
@@ -8,9 +9,9 @@ describe 'AdminStoreCreateRoute', ->
     store = res = body = user = req = null
     before ->
       class StoreStub
-        @nameExists: (name, cb) ->
+        @nameExists: (name) ->
           @nameLookedAfter = name
-          setImmediate -> cb null, false
+          Q.fcall -> false
       Routes = SandboxedModule.require '../../../app/routes/admin',
         requires:
           '../models/store': StoreStub
@@ -66,9 +67,9 @@ describe 'AdminStoreCreateRoute', ->
     StoreStub = store = res = body = user = req = null
     before ->
       class StoreStub
-        @nameExists: (name, cb) ->
+        @nameExists: (name) ->
           @nameLookedAfter = name
-          setImmediate -> cb null, true
+          Q.fcall -> true
       Routes = SandboxedModule.require '../../../app/routes/admin',
         requires:
           '../models/store': StoreStub

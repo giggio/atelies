@@ -9,4 +9,5 @@ define [
       @$el.html view.el
       view.render ->
         new SEOLoadManager().done()
+        window.renderDone = on
         Social.renderAll()

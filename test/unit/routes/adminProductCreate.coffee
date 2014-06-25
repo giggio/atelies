@@ -2,6 +2,7 @@ SandboxedModule = require 'sandboxed-module'
 Store           = require '../../../app/models/store'
 Product         = require '../../../app/models/product'
 AccessDenied    = require '../../../app/errors/accessDenied'
+Q               = require 'q'
 
 describe 'AdminProductCreateRoute', ->
   describe 'If user owns the store and product', sinon.test ->
@@ -19,7 +20,7 @@ describe 'AdminProductCreateRoute', ->
         storeSlug: 'some_store'
         toSimpleProduct: toSimpleProductStub
         isNew: true
-      createProductSpy = sinon.stub().yields(null, new ProductStub())
+      createProductSpy = sinon.stub().returns new ProductStub()
       store =
         _id: 9876
         slug: 'some_store'
@@ -27,7 +28,7 @@ describe 'AdminProductCreateRoute', ->
         createProduct: createProductSpy
         addCategories: (categories, cb) -> cb()
         save: sinon.stub().yields()
-      sinon.stub(Store, 'findBySlug').yields null, store
+      sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
       user =
         isSeller: true
         stores: [9876]
@@ -64,12 +65,15 @@ describe 'AdminProductCreateRoute', ->
       Routes = require '../../../app/routes/admin'
       routes = new Routes()
     it "a seller but does not own this product's store denies access and throws", sinon.test ->
-      @stub(Store, 'findBySlug').yields()
+      @stub(Store, 'findBySlug').returns Q.fcall ->
       user =
         isSeller: true
         hasStore: -> false
       req = loggedIn: true, user: user, body: {}, params: {}
-      expect( -> routes.adminProductCreate req, null).to.throw AccessDenied
+      res = json: sinon.spy()
+      sinon.stub routes, '_logError'
+      routes.adminProductCreate req, res
+      .then -> res.json.should.have.been.calledWith 400
     it 'denies access if the user isnt a seller and throws', ->
       req = user: {isSeller:false}, loggedIn: true
       expect( -> routes.adminProductCreate req, null).to.throw AccessDenied

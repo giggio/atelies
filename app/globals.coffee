@@ -6,6 +6,7 @@ global.dealWith = (err) ->
     throw err
 global.CONFIG = config
 global.DEBUG = !config.isProduction
+global.TEST = config.environment is 'test'
 global.STATIC_PATH = config.staticPath
 global.CLIENT_LIB_PATH = config.clientLibPath
 global.callbackOrPromise = (cb, promise) ->

@@ -41,6 +41,7 @@ module.exports = class Page
     Q(@driver.get('data:,')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
     .then => @driver.get(url)
     .then => @refresh() if refresh
+  waitForViewToLoad: -> @wait (=> @eval "return window.renderDone === true;"), 5000
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
   errorMessageForSelector: (selector) ->
     @findElements "#{selector} ~ .tooltip .tooltip-inner"

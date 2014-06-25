@@ -17,8 +17,9 @@ module.exports = class AdminRoutes
   logError: @::_logError.partial 'siteAdmin'
 
   siteAdmin: (req, res) ->
-    req.user.toSimpleUser (err, user) ->
-      res.render 'siteAdmin/siteAdmin', user: user
+    req.user.toSimpleUser()
+    .then (user) -> res.render 'siteAdmin/siteAdmin', user: user
+    .catch (err) => @handleError req, res, err, false
 
   storesForAuthorization: (req, res) ->
     isFlyerAuthorized = switch req.params.isFlyerAuthorized

@@ -7,12 +7,13 @@ describe 'AdminRoute', ->
   describe 'Access is granted correctly', ->
     it 'allows access and renders all the stores if signed in and seller', ->
       stores = []
-      simpleUser = {}
-      req = user: {isSeller:true, stores:stores, toSimpleUser: (cb) -> cb(undefined, simpleUser)}, loggedIn: true
+      stores.map = -> [ 1 ]
+      simpleUser = name:'giovanni'
+      req = user: {isSeller:true, stores:stores, toSimpleUser: -> simpleUser}, loggedIn: true
       req.user.populate = (path, cb) -> cb null, req.user
       res = render: sinon.spy()
       routes.admin req, res
-      res.render.should.have.been.calledWith 'admin/admin', stores:stores, user:simpleUser
+      .then -> res.render.should.have.been.calledWith 'admin/admin', stores:[1], user:simpleUser
     it 'denies access if the user isnt a seller and shows a message page', ->
       stores = []
       res = redirect:sinon.spy()
@@ -30,7 +31,7 @@ describe 'AdminRoute', ->
       store = toSimple: -> @
       stores = [store]
       simpleUser = {}
-      user = isSeller:true, stores: [], toSimpleUser: (cb) -> cb undefined, simpleUser
+      user = isSeller:true, stores: [], toSimpleUser: -> simpleUser
       user.populate = (path, cb) ->
         user.stores = stores
         cb null, user
@@ -38,5 +39,6 @@ describe 'AdminRoute', ->
       req = user: user, loggedIn: true
       res = render: sinon.spy()
       routes.admin req, res
-      user.populate.should.have.been.calledWith 'stores'
-      res.render.should.have.been.calledWith 'admin/admin', stores:stores, user: simpleUser
+      .then ->
+        user.populate.should.have.been.calledWith 'stores'
+        res.render.should.have.been.calledWith 'admin/admin', stores:stores, user: simpleUser

@@ -57,7 +57,7 @@ userSchema.methods.setPassword = (password) ->
   salt = bcrypt.genSaltSync 10
   @passwordHash = bcrypt.hashSync password, salt
   @resetKey = undefined
-userSchema.methods.toSimpleUser = (cb) ->
+userSchema.methods.toSimpleUser = ->
   user =
     _id: @_id
     name: @name
@@ -68,13 +68,12 @@ userSchema.methods.toSimpleUser = (cb) ->
     isSeller: @isSeller
     isAdmin: @isAdmin
   if @isSeller
-    p = Q.ninvoke @, 'populate', 'stores', 'slug'
-    .then =>
+    Q.ninvoke @, 'populate', 'stores', 'slug'
+    .then ->
       user.stores = _.pluck @stores, 'slug'
       user
-    callbackOrPromise cb, p
   else
-    callbackOrPromise cb, Q.fcall -> user
+    Q.fcall -> user
 
 userSchema.methods.sendMailConfirmRegistration = (redirectTo) ->
   redirectTo = if redirectTo? then "?redirectTo=#{redirectTo}" else ""

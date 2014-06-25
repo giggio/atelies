@@ -78,10 +78,10 @@ productSchema.methods.toSimpleProduct = ->
   categories: @categories.join ','
 productSchema.methods.toSimpleProductWithComments = (cb) ->
   simple = @toSimpleProduct()
-  ProductComment.findByProduct @, (err, comments) ->
-    return cb err if err?
+  Q.ninvoke ProductComment, 'findByProduct', @
+  .then (comments) ->
     simple.comments = _.map comments, (c) -> c.toSimple()
-    cb null, simple
+    simple
 productSchema.methods.toSimplerProduct = ->
   _id: @_id, name: @name, picture: @picture, pictureThumb: @pictureThumb(), price: @price,
   storeName: @storeName, storeSlug: @storeSlug,
@@ -112,8 +112,8 @@ Product.findRandom = (howMany, cb) ->
     else
       cb null, products
 
-Product.findByStoreSlug = (storeSlug, cb) -> Product.find storeSlug: storeSlug, cb
-Product.findByStoreSlugAndSlug = (storeSlug, productSlug, cb) -> Product.findOne {storeSlug: storeSlug, slug: productSlug}, cb
+Product.findByStoreSlug = (storeSlug, cb) -> callbackOrPromise cb, Q.ninvoke Product, "find", storeSlug: storeSlug
+Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug
 Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Product.searchByTag = (searchTerm) -> Q Product.find(tags: ///^#{searchTerm}///i).exec()
 Product.searchByCategory = (searchTerm) -> Q Product.find(categories: ///^#{searchTerm}///i).exec()

@@ -35,26 +35,23 @@ storeSchema = new mongoose.Schema
   isFlyerAuthorized:      Boolean
   categories:             [ String ]
 
-storeSchema.methods._isTheOnlyProduct = (product, simple, cb) ->
-  return setImmediate cb if product.name is simple.name
-  Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_"), (err, existingProduct) ->
-    return cb err if err?
-    if existingProduct?
-      return cb nameExists: "Name '#{simple.name}' already exists."
-    cb()
+storeSchema.methods._isTheOnlyProduct = (product, simple) ->
+  if product.name is simple.name then return Q.fcall ->
+  Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_")
+  .then (existingProduct) -> if existingProduct? then throw nameExists: "Name '#{simple.name}' already exists."
 
-storeSchema.methods.createProduct = (simple, cb) ->
+storeSchema.methods.createProduct = (simple) ->
   product = new Product()
   product.storeName = @name
   product.storeSlug = @slug
-  @updateProduct product, simple, cb
+  @updateProduct product, simple
 
-storeSchema.methods.updateProduct = (product, simple, cb) ->
-  @_isTheOnlyProduct product, simple, (err) =>
-    return cb err if err?
+storeSchema.methods.updateProduct = (product, simple) ->
+  @_isTheOnlyProduct product, simple
+  .then =>
     product.updateFromSimpleProduct simple
     @addCategories product.categories
-    cb null, product
+    product
 
 storeSchema.methods.addCategories = (categoryNames) ->
   newCategoryNames = _.reject categoryNames, (categoryName) => categoryName in @categories
@@ -116,17 +113,17 @@ storeSchema.methods.updateFromSimple = (simple) ->
       @[attr] = simple[attr]
     else
       @[attr] = undefined
-storeSchema.methods.updateName = (name, cb) ->
+storeSchema.methods.updateName = (name) ->
   currentSlug = @slug
   @name = name
-  @save()
-  Product.findByStoreSlug currentSlug, (err, products) =>
-    return cb err if err?
-    for p in products
+  Q.ninvoke @, 'save'
+  .then -> Product.findByStoreSlug currentSlug
+  .then (products) =>
+    saves = for p in products
       p.storeSlug = @slug
       p.storeName = name
-      p.save()
-    cb()
+      Q.ninvoke p, 'save'
+    Q.all(saves).then => @
 storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing) ->
   if @isFlyerAuthorized
     status = "aprovado"
@@ -161,21 +158,20 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing) ->
 
 module.exports = Store = mongoose.model 'store', storeSchema
 
-Store.nameExists = (name, cb) ->
+Store.nameExists = (name) ->
   aSlug = slug name.toLowerCase(), "_"
-  Store.findBySlug aSlug, (err, store) -> cb err, store?
+  Store.findBySlug(aSlug).then (store) -> store?
 Store.findBySlug = (slug, cb) -> callbackOrPromise cb, Q.ninvoke Store, 'findOne', slug: slug
 Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized, cb) ->
   Store.find isFlyerAuthorized: isFlyerAuthorized, flyer: /./, (err, stores) ->
     return cb err if err?
     cb null, _.map stores, (s) -> s.toSimple()
-Store.findWithProductsBySlug = (slug, cb) ->
-  Store.findBySlug slug, (err, store) ->
-    return cb err if err?
-    return cb(null, null) if store is null
-    Product.findByStoreSlug slug, (err, products) ->
-      return cb err if err?
-      cb null, store, products
+Store.findWithProductsBySlug = (slug) ->
+  Store.findBySlug slug
+  .then (store) ->
+    return [null, null] unless store?
+    Product.findByStoreSlug slug
+    .then (products) -> [store, products]
 Store.findWithProductsById = (_id, cb) ->
   Store.findById _id, (err, store) ->
     return cb err if err?

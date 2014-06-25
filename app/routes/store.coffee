@@ -27,30 +27,29 @@ module.exports = class StoreRoutes
   store: (req, res) ->
     subdomain = @_getSubdomain @domain, req.headers.host.toLowerCase()
     return res.redirect "#{req.protocol}://#{req.headers.host}/" if subdomain? and req.params.storeSlug isnt subdomain
-    Store.findWithProductsBySlug req.params.storeSlug, (err, store, products) =>
-      return @handleError req, res, err, false if err?
-      return res.renderWithCode 404, 'store/storeNotFound', store: null, products: [] if store is null
+    Store.findWithProductsBySlug req.params.storeSlug
+    .spread (store, products) ->
+      throw new Error "store not found" unless store?
+      Q.fcall -> if req.user? then req.user.toSimpleUser() else undefined
+      .then (user) -> [user, store, products]
+    .spread (user, store, products) ->
       viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-      getUser = (cb) ->
-        if req.user?
-          req.user.toSimpleUser cb
-        else
-          cb()
-      getUser (err, user) =>
-        if req.session.recentOrder?
-          order = req.session.recentOrder
-          req.session.recentOrder = null
-        res.render "store/store", {store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0}, (err, html) =>
-          return @handleError req, res, err, false if err?
-          res.send html
+      if req.session.recentOrder?
+        order = req.session.recentOrder
+        req.session.recentOrder = null
+      res.render "store/store", store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0
+    .catch (err) =>
+      console.log err
+      return res.renderWithCode 404, 'store/storeNotFound', store: null, products: [] if err.message is "store not found"
+      @handleError req, res, err, false
 
   product: (req, res) ->
-    Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug, (err, product) =>
-      return @handleError req, res, err if err?
-      return res.send 404 if product is null
-      product.toSimpleProductWithComments (err, simpleProduct) =>
-        return @handleError req, res, err if err?
-        res.json simpleProduct
+    Product.findByStoreSlugAndSlug req.params.storeSlug, req.params.productSlug
+    .then (product) ->
+      return null unless product?
+      product.toSimpleProductWithComments()
+    .then (simpleProduct) -> if simpleProduct? then res.json simpleProduct else res.send 404
+    .catch (err) => @handleError req, res, err
   
   orderCreate: (req, res) ->
     Q(Store.findById(req.params.storeId).exec()).then (store) =>

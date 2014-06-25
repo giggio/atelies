@@ -1,30 +1,34 @@
 im          = require('gm').subClass imageMagick:on
 os          = require 'os'
 path        = require 'path'
+Q           = require 'q'
+
 module.exports = class ImageManipulation
   constructor: ->
     @tmpdir = os.tmpdir()
-  resize: (filePath, dimensions, cb) ->
-    return setImmediate(-> cb null, filePath) unless dimensions?
+  resize: (filePath, dimensions) ->
+    unless dimensions? then return Q.fcall -> filePath
     tempName = @_tempRandomName filePath
     d = @_getDimensions dimensions
-    im(filePath).resize(d.width, d.height, "^").quality(90).write tempName, (err) -> cb err, tempName
+    Q.ninvoke im(filePath).resize(d.width, d.height, "^").quality(90), "write", tempName
+    .then -> tempName
   _tempRandomName: (file) ->
     rand = -> Math.random() * Math.pow(10, 18)
     ext = path.extname file
     path.join @tmpdir, "#{rand()}#{rand()}#{ext}"
-  resizeAndCrop: (filePath, dimensions, cb) ->
-    return setImmediate(-> cb null, filePath) unless dimensions?
+  resizeAndCrop: (filePath, dimensions) ->
+    if !dimensions? then return Q.fcall -> filePath
     tempName = @_tempRandomName filePath
     d = @_getDimensions dimensions
-    im(filePath).resize(d.width, d.height, "^").crop(d.width, d.height, 0, 0).quality(90).write tempName, (err) -> cb err, tempName
+    Q.ninvoke im(filePath).resize(d.width, d.height, "^").crop(d.width, d.height, 0, 0).quality(90), 'write', tempName
+    .then -> tempName
   _getDimensions: (dimensions) ->
     width: parseInt dimensions.substr 0, dimensions.indexOf 'x'
     height: parseInt dimensions.substr dimensions.indexOf('x') + 1
-  getSize: (filePath, cb) -> im(filePath).size cb
-  isSizeSmallerThan: (filePath, dimensions, cb) ->
-    return setImmediate(-> cb null, false) unless dimensions?
-    @getSize filePath, (err, size) =>
-      return cb err if err?
+  getSize: (filePath) -> Q.ninvoke im(filePath), 'size'
+  isSizeSmallerThan: (filePath, dimensions) ->
+    unless dimensions? then return Q.fcall -> false
+    @getSize filePath
+    .then (size) =>
       expectedDimensions = @_getDimensions dimensions
-      cb null, size.width < expectedDimensions.width or size.height < expectedDimensions.height
+      size.width < expectedDimensions.width or size.height < expectedDimensions.height

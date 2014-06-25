@@ -2,6 +2,7 @@ Routes          = require '../../../app/routes/admin'
 Store           = require '../../../app/models/store'
 Product         = require '../../../app/models/product'
 AccessDenied    = require '../../../app/errors/accessDenied'
+Q               = require 'q'
 
 describe 'AdminProductUpdateRoute', ->
   routes = null
@@ -16,10 +17,10 @@ describe 'AdminProductUpdateRoute', ->
       store =
         _id: 9876
         slug: product.storeSlug
-        updateProduct: sinon.stub().yields()
+        updateProduct: sinon.stub().returns product
         save: sinon.stub().yields()
       sinon.stub(Product, 'findById').yields null, product
-      sinon.stub(Store, 'findBySlug').yields null, store
+      sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
       user =
         isSeller: true
         stores: [9876]
@@ -51,29 +52,25 @@ describe 'AdminProductUpdateRoute', ->
       store.save.should.have.been.called
 
   describe 'Access is denied', ->
-    describe "a seller but does not own this product's store", ->
-      product = store = req = res = body = user = null
-      before ->
-        product =
-          save: sinon.stub().yields null, product
-          storeSlug: 'some_store'
-        store = _id: 9876
-        sinon.stub(Product, 'findById').yields null, product
-        sinon.stub(Store, 'findBySlug').yields null, store
-        user =
-          isSeller: true
-          stores: [6543]
-          hasStore: -> false
-        params = productId: '1234'
-        req = loggedIn: true, user: user, params: params, body:
-          name: 'Some Product'
-        body = req.body
-        res = send: sinon.spy()
-      after ->
-        Product.findById.restore()
-        Store.findBySlug.restore()
-      it 'denies access and throws', ->
-        expect( -> routes.adminProductUpdate req, res).to.throw AccessDenied
+    it "a seller but does not own this product's store denies access and throws", sinon.test ->
+      product =
+        save: sinon.stub().yields null, product
+        storeSlug: 'some_store'
+      store = _id: 9876
+      sinon.stub(Product, 'findById').yields null, product
+      sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
+      user =
+        isSeller: true
+        stores: [6543]
+        hasStore: -> false
+      params = productId: '1234'
+      req = loggedIn: true, user: user, params: params, body:
+        name: 'Some Product'
+      body = req.body
+      res = json: sinon.spy()
+      sinon.stub routes, '_logError'
+      routes.adminProductUpdate req, res
+      .then -> res.json.should.have.been.calledWith 400
     describe 'not a seller', ->
       it 'denies access if the user isnt a seller and throws', ->
         req = user: {isSeller:false}, loggedIn: true

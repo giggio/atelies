@@ -48,8 +48,8 @@ module.exports = class RouteFunctions
     if typeof errToReturn is 'boolean'
       [errToReturn, json]=[json, errToReturn]
     json = true if errToReturn?
+    console.trace err if DEBUG and !TEST
     @_logError area, req, err
-    console.trace err if DEBUG
     if json
       errToReturn = err unless errToReturn?
       res.json 400, errToReturn
