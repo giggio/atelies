@@ -178,17 +178,17 @@ Store.findWithProductsById = (_id, cb) ->
     Product.findByStoreSlug store.slug, (err, products) ->
       return cb err if err?
       cb null, store, products
-Store.findRandomForHome = (howMany, cb) ->
+Store.findRandomForHome = (howMany) ->
   random = Math.random()
-  Store.find({flyer: /./, isFlyerAuthorized: true, random:$gte:random}).sort('random').limit(howMany).exec (err, stores) ->
-    return cb err if err?
-    if stores.length < howMany
-      difference = stores.length - howMany
-      Store.find({flyer: /./, isFlyerAuthorized: true}).sort('random').limit(difference).exec (err, newStores) ->
-        return cb err if err?
-        cb null, stores.concat newStores
+  Q Store.find({flyer: /./, isFlyerAuthorized: true, random:$gte:random}).sort('random').limit(howMany).exec()
+  .then (stores) ->
+    if stores.length >= howMany
+      stores
     else
-      cb null, stores
+      difference = stores.length - howMany
+      Q Store.find({flyer: /./, isFlyerAuthorized: true}).sort('random').limit(difference).exec()
+      .then (newStores) ->
+        stores.concat newStores
 
 Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Store.flyerDimension = '350x350'

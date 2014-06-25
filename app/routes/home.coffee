@@ -25,13 +25,13 @@ module.exports = class HomeRoutes
       if subdomain?
         req.params.storeSlug = subdomain
         return @storeWithDomain req, res
-      Product.findRandom 12, (err, products) =>
-        return @handleError req, res, err, false if err?
+      Product.findRandom 12
+      .then (products) -> [products, Store.findRandomForHome 12]
+      .spread (products, stores) ->
         viewModelProducts = _.map products, (p) -> p.toSimplerProduct()
-        Store.findRandomForHome 12, (err, stores) =>
-          return @handleError req, res, err, false if err?
-          viewModelStores = _.map stores, (s) -> s.toSimpler()
-          res.render "home/index", products: viewModelProducts, stores: viewModelStores
+        viewModelStores = _.map stores, (s) -> s.toSimpler()
+        res.render "home/index", products: viewModelProducts, stores: viewModelStores
+      .catch (err) => @handleError req, res, err, false
     route
 
   blank: (req, res) -> res.render 'home/blank'

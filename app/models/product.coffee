@@ -100,17 +100,16 @@ productSchema.methods.hasShippingInfo = ->
 
 module.exports = Product = mongoose.model 'product', productSchema
 
-Product.findRandom = (howMany, cb) ->
+Product.findRandom = (howMany) ->
   random = Math.random()
-  Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany).exec (err, products) ->
-    return cb err if err?
-    if products.length < howMany
-      difference = products.length - howMany
-      Product.find(picture: /./).sort('random').limit(difference).exec (err, newProducts) ->
-        return cb err if err?
-        cb null, products.concat newProducts
+  Q Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany).exec()
+  .then (products) ->
+    if products.length >= howMany
+      products
     else
-      cb null, products
+      difference = products.length - howMany
+      Q Product.find(picture: /./).sort('random').limit(difference).exec()
+      .then (newProducts) -> products.concat newProducts
 
 Product.findByStoreSlug = (storeSlug, cb) -> callbackOrPromise cb, Q.ninvoke Product, "find", storeSlug: storeSlug
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug

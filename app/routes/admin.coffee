@@ -89,23 +89,23 @@ module.exports = class AdminRoutes
   adminStoreUpdateSetPagseguroOff: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, off
   adminStoreUpdateSetPagseguroOn: (req, res) -> @_adminStoreUpdateSetPagseguro req, res, email: req.body.email, token: req.body.token
   _adminStoreUpdateSetPagseguro: (req, res, set) ->
-    Store.findById req.params.storeId, (err, store) =>
-      return @handleError req, res, err if err?
+    Q.ninvoke Store, 'findById', req.params.storeId
+    .then (store) ->
       throw new AccessDenied() unless req.user.hasStore store
       store.setPagseguro set
-      store.save (err) =>
-        return @handleError req, res, err if err?
-        res.send 204
+      Q.ninvoke store, 'save'
+    .then -> res.send 204
+    .catch (err) => @handleError req, res, err
   adminStoreUpdateSetPaypalOff: (req, res) -> @_adminStoreUpdateSetPaypal req, res, off
   adminStoreUpdateSetPaypalOn: (req, res) -> @_adminStoreUpdateSetPaypal req, res, clientId: req.body.clientId, secret: req.body.secret
   _adminStoreUpdateSetPaypal: (req, res, set) ->
-    Store.findById req.params.storeId, (err, store) =>
-      return @handleError req, res, err if err?
+    Q.ninvoke Store, 'findById', req.params.storeId
+    .then (store) ->
       throw new AccessDenied() unless req.user.hasStore store
       store.setPaypal set
-      store.save (err) =>
-        return @handleError req, res, err if err?
-        res.send 204
+      Q.ninvoke store, 'save'
+    .then -> res.send 204
+    .catch (err) => @handleError req, res, err
 
   adminProductUpdate: (req, res) ->
     Store.findBySlug req.params.storeSlug
@@ -147,27 +147,29 @@ module.exports = class AdminRoutes
       @handleError req, res, err
   
   adminProductDelete: (req, res) ->
-    Product.findById req.params.productId, (err, product) =>
-      return @handleError req, res, err if err?
-      Store.findBySlug product.storeSlug, (err, store) =>
-        return @handleError req, res, err if err?
-        throw new AccessDenied() unless req.user.hasStore store
-        product.remove (err) ->
-          res.send 204
+    Q.ninvoke Product, 'findById', req.params.productId
+    .then (product) -> [product, Store.findBySlug product.storeSlug]
+    .spread (product, store) ->
+      throw new AccessDenied() unless req.user.hasStore store
+      Q.ninvoke product, 'remove'
+    .then -> res.send 204
+    .catch (err) => return @handleError req, res, err
 
   storeProducts: (req, res) ->
-    Product.findByStoreSlug req.params.storeSlug, (err, products) =>
-      return @handleError req, res, err if err?
+    Product.findByStoreSlug req.params.storeSlug
+    .then (products) ->
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
+    .catch (err) => return @handleError req, res, err
   
   storeProduct: (req, res) ->
-    Product.findById req.params.productId, (err, product) =>
-      return @handleError req, res, err if err?
+    Q.ninvoke Product, 'findById', req.params.productId
+    .then (product) ->
       if product?
         res.json product.toSimpleProduct()
       else
         res.send 404
+    .catch (err) => return @handleError req, res, err
 
   orders: (req, res) ->
     user = req.user
@@ -181,9 +183,9 @@ module.exports = class AdminRoutes
     .catch (err) => @handleError req, res, err
 
   storeCategories: (req, res) ->
-    Store.findById req.params.storeId, (err, store) =>
-      return @handleError req, res, err if err?
-      res.json store.categories
+    Q.ninvoke Store, 'findById', req.params.storeId
+    .then (store) -> res.json store.categories
+    .catch (err) => @handleError req, res, err
 
   updateOrderStatus: (req, res) ->
     Q.ninvoke Order, 'findById', req.params._id
@@ -191,6 +193,6 @@ module.exports = class AdminRoutes
       throw new AccessDenied() unless req.user.hasStore order.store
       order.state = req.params.newOrderState
       Q.ninvoke order, 'save'
-      .then -> order.sendMailAfterStateChange()
-      .then -> res.send 204
+    .spread (order) -> order.sendMailAfterStateChange()
+    .then -> res.send 204
     .catch (err) => @handleError req, res, err

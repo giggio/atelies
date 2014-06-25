@@ -39,7 +39,6 @@ module.exports = class StoreRoutes
         req.session.recentOrder = null
       res.render "store/store", store: store.toSimple(), products: viewModelProducts, user: user, order: order, evaluationAvgRating: store.evaluationAvgRating, numberOfEvaluations: store.numberOfEvaluations, hasEvaluations: store.numberOfEvaluations > 0
     .catch (err) =>
-      console.log err
       return res.renderWithCode 404, 'store/storeNotFound', store: null, products: [] if err.message is "store not found"
       @handleError req, res, err, false
 
@@ -52,40 +51,42 @@ module.exports = class StoreRoutes
     .catch (err) => @handleError req, res, err
   
   orderCreate: (req, res) ->
-    Q(Store.findById(req.params.storeId).exec()).then (store) =>
+    Q.ninvoke Store, 'findById', req.params.storeId
+    .then (store) =>
       Q.fcall =>
         return 0 unless req.body.shippingType?
         @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
         .then (shippingOptions) ->
           shippingOption = _.findWhere shippingOptions, type: req.body.shippingType
           shippingOption.cost
-      .then (shippingCost) =>
-        getItems = for item in req.body.items
-          do (item) ->
-            (cb) ->
-              Product.findById item._id, (err, product) ->
-                cb err, product: product, quantity: item.quantity
-        Q.nfcall async.parallel, getItems
-        .then (items) =>
-          Order.create req.user, store, items, shippingCost, req.body.paymentType
-          .then (order) -> Q.ninvoke order, 'save'
-          .spread (order) =>
-            for item in items
-              p = item.product
-              p.inventory -= item.quantity if p.hasInventory
-              p.save()
-            if req.body.paymentType is 'paypal' and store.paypal()
-              @paypal.sendToPaypal store, order, req.user
-              .then (resp) ->
-                order.updatePaypalInfo resp.paypalInfo
-                order.save()
-                res.json 201, order: order.toSimpleOrder(), redirect: resp.redirectUrl
-            else if req.body.paymentType is 'pagseguro' and store.pagseguro()
-              @pagseguro.sendToPagseguro store, order, req.user
-              .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
-            else
-              order.sendMailAfterPurchase()
-              .spread (order) -> res.json 201, order.toSimpleOrder()
+      .then (shippingCost) -> [store, shippingCost]
+    .spread (store, shippingCost) =>
+      getItems = for item in req.body.items
+        do (item) ->
+          Q.ninvoke Product, 'findById', item._id
+          .then (product) -> product: product, quantity: item.quantity
+      [store, shippingCost, Q.all getItems]
+    .spread (store, shippingCost, items) =>
+      Order.create req.user, store, items, shippingCost, req.body.paymentType
+      .then (order) -> Q.ninvoke order, 'save'
+      .spread (order) => [store, shippingCost, items, order]
+    .spread (store, shippingCost, items, order) =>
+      for item in items
+        p = item.product
+        p.inventory -= item.quantity if p.hasInventory
+        p.save()
+      if req.body.paymentType is 'paypal' and store.paypal()
+        @paypal.sendToPaypal store, order, req.user
+        .then (resp) ->
+          order.updatePaypalInfo resp.paypalInfo
+          order.save()
+          res.json 201, order: order.toSimpleOrder(), redirect: resp.redirectUrl
+      else if req.body.paymentType is 'pagseguro' and store.pagseguro()
+        @pagseguro.sendToPagseguro store, order, req.user
+        .then (pagseguroCode) => res.json 201, order: order.toSimpleOrder(), redirect: @pagseguro.redirectUrl pagseguroCode
+      else
+        order.sendMailAfterPurchase()
+        .spread (order) -> res.json 201, order.toSimpleOrder()
     .catch (err) => @handleError req, res, err
 
   pagseguroStatusChanged: (req, res) ->
@@ -136,7 +137,7 @@ module.exports = class StoreRoutes
     Q.nfcall Store.findBySlug, req.params.storeSlug
     .then (store) => @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
     .then (shippingOptions) -> res.json shippingOptions
-    .catch (err) => return @handleError req, res, err
+    .catch (err) => @handleError req, res, err
 
   productsSearch: (req, res) ->
     Product.searchByStoreSlugAndByName req.params.storeSlug, req.params.searchTerm
