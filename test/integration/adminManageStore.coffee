@@ -62,7 +62,7 @@ describe 'Admin manage store page', ->
     it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
     it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
     it 'updated the store and set pagseguro', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         store.pmtGateways.pagseguro.email.should.equal 'pagseguro@a.com'
         store.pmtGateways.pagseguro.token.should.equal 'FFFFFDAFADSFIUADSKFLDSJALA9D0CAA'
 
@@ -84,7 +84,7 @@ describe 'Admin manage store page', ->
     it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
     it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
     it 'updated the store and set paypal', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         store.pmtGateways.paypal.clientId.should.equal 'someid'
         store.pmtGateways.paypal.secret.should.equal 'somesecret'
 
@@ -109,7 +109,7 @@ describe 'Admin manage store page', ->
         page.pagseguroTokenErrorMsg().should.become 'O token do PagSeguro é obrigatório e deve possuir 32 caracteres.'
       ]
     it 'did not update the store and set pagseguro', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
 
@@ -134,7 +134,7 @@ describe 'Admin manage store page', ->
         page.paypalSecretErrorMsg().should.become 'O segredo do Paypal é obrigatório.'
       ]
     it 'did not update the store and set paypal', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         expect(store.pmtGateways.paypal.clientId).to.be.undefined
         expect(store.pmtGateways.paypal.secret).to.be.undefined
 
@@ -154,7 +154,7 @@ describe 'Admin manage store page', ->
     it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
     it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
     it 'updated the store and unset pagseguro', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         expect(store.pmtGateways.pagseguro.email).to.be.undefined
         expect(store.pmtGateways.pagseguro.token).to.be.undefined
 
@@ -174,7 +174,7 @@ describe 'Admin manage store page', ->
     it 'is at the admin store page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{exampleStore.slug}"
     it 'shows store updated message', -> page.message().then (msg) -> msg.endsWith("Loja atualizada com sucesso").should.be.true
     it 'updated the store and unset paypal', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         expect(store.pmtGateways.paypal.clientId).to.be.undefined
         expect(store.pmtGateways.paypal.secret).to.be.undefined
 
@@ -204,7 +204,7 @@ describe 'Admin manage store page', ->
         msgs.zip.should.equal "Informe o CEP no formato 99999-999."
         msgs.otherUrl.should.equal "Informe um link válido para o outro site, começando com http ou https."
     it 'did not update the store with wrong info', ->
-      Q.ninvoke(Store, "findBySlug", exampleStore.slug).then (store) ->
+      Store.findBySlug(exampleStore.slug).then (store) ->
         expect(store).not.to.be.null
         expect(store.slug).to.equal exampleStore.slug
         expect(store.name).to.equal exampleStore.name

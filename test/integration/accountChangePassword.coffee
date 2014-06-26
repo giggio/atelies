@@ -22,7 +22,7 @@ describe 'Change Password', ->
     it 'does not show the change password failed message', -> page.hasErrors().should.eventually.be.false
     it 'is at the password changed page', -> page.currentUrl().should.eventually.equal "http://localhost:8000/account/passwordChanged"
     it 'changed the user password', ->
-      Q.nfcall User.findByEmail, user.email
+      User.findByEmail user.email
       .then (foundUser) -> bcrypt.compareSync('newPassword1@', foundUser.passwordHash).should.be.true
 
   describe 'Can\'t change invalid password', ->
@@ -37,7 +37,7 @@ describe 'Change Password', ->
     it 'shows the invalid password message', -> page.errors().should.become 'Senha inválida.'
     it 'is at the change password page', -> page.currentUrl().should.become "http://localhost:8000/account/changePassword"
     it 'did not changed the user password', ->
-      Q.nfcall User.findByEmail, user.email
+      User.findByEmail user.email
       .then -> (foundUser) ->
         bcrypt.compareSync('newPassword', foundUser.passwordHash).should.be.false
         bcrypt.compareSync(user.password, foundUser.passwordHash).should.be.true
@@ -54,7 +54,7 @@ describe 'Change Password', ->
     it 'does not show the login failed message', -> page.passwordVerifyMessage().should.become 'A senha não confere.'
     it 'is at the change password page', -> page.currentUrl().should.become "http://localhost:8000/account/changePassword"
     it 'did not changed the user password', ->
-      Q.nfcall User.findByEmail, user.email
+      User.findByEmail user.email
       .then -> (foundUser) ->
         bcrypt.compareSync('newPassword', foundUser.passwordHash).should.be.false
         bcrypt.compareSync(user.password, foundUser.passwordHash).should.be.true

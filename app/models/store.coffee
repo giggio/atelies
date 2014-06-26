@@ -161,7 +161,7 @@ module.exports = Store = mongoose.model 'store', storeSchema
 Store.nameExists = (name) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug(aSlug).then (store) -> store?
-Store.findBySlug = (slug, cb) -> callbackOrPromise cb, Q.ninvoke Store, 'findOne', slug: slug
+Store.findBySlug = (slug) -> Q.ninvoke Store, 'findOne', slug: slug
 Store.findSimpleByFlyerAuthorization = (isFlyerAuthorized) ->
   Q.ninvoke Store, 'find', isFlyerAuthorized: isFlyerAuthorized, flyer: /./
   .then (stores) -> _.map stores, (s) -> s.toSimple()
@@ -171,13 +171,6 @@ Store.findWithProductsBySlug = (slug) ->
     return [null, null] unless store?
     Product.findByStoreSlug slug
     .then (products) -> [store, products]
-Store.findWithProductsById = (_id, cb) ->
-  Store.findById _id, (err, store) ->
-    return cb err if err?
-    return cb(null, null) if store is null
-    Product.findByStoreSlug store.slug, (err, products) ->
-      return cb err if err?
-      cb null, store, products
 Store.findRandomForHome = (howMany) ->
   random = Math.random()
   Q Store.find({flyer: /./, isFlyerAuthorized: true, random:$gte:random}).sort('random').limit(howMany).exec()

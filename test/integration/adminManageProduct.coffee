@@ -163,7 +163,7 @@ describe 'Admin Manage Product page', ->
         productOnDb.categories.should.contain "Cat1"
         productOnDb.categories.should.contain "Cat2"
     it 'added category to the store', ->
-      Q.ninvoke(Store, "findBySlug", product.storeSlug).then (storeOnDb) ->
+      Store.findBySlug(product.storeSlug).then (storeOnDb) ->
         storeOnDb.categories.length.should.equal 2
         storeOnDb.categories.should.contain "Cat1"
         storeOnDb.categories.should.contain "Cat2"

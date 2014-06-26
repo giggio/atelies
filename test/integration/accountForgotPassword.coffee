@@ -22,6 +22,6 @@ describe 'Account Forgot password', ->
       page.currentUrl (url) ->
         url.should.equal "http://localhost:8000/account/passwordResetSent"
     it 'set reset key', ->
-      Q.nfcall User.findByEmail, user.email
+      User.findByEmail user.email
       .then (foundUser) ->
         foundUser.resetKey.should.not.be.undefined

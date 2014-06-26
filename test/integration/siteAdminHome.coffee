@@ -4,7 +4,7 @@ SiteAdminHomePage                = require './support/pages/siteAdminHomePage'
 describe 'Site Admin home page', ->
   page = regularUser = adminUser = superAdmin = null
   before ->
-    cleanDB (error) ->
+    cleanDB().then ->
       page = new SiteAdminHomePage()
       regularUser = generator.user.a()
       regularUser.save()

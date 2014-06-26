@@ -12,5 +12,5 @@ module.exports = class AdminHomePage extends Page
       actions = []
       for row in rows
         do (row) =>
-          actions.push (cb) => @getAttributeIn(row, 'a', 'href').then (href) -> cb null, url:href
-      Q.nfcall async.parallel, actions
+          actions.push @getAttributeIn(row, 'a', 'href').then (href) -> url:href
+      Q.all actions

@@ -1,9 +1,5 @@
 config              = require './helpers/config'
 
-global.dealWith = (err) ->
-  if err
-    console.error err.stack
-    throw err
 global.CONFIG = config
 global.DEBUG = !config.isProduction
 global.TEST = config.environment is 'test'

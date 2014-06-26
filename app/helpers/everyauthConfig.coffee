@@ -15,13 +15,13 @@ exports.configure = (app) ->
     handleAuthCallbackError: (req, res) ->
       res.render 'facebookAuthCallbackError'
     findOrCreateUser: (session, accessToken, accessTokExtra, fbUserMetadata) ->
-      cb = @Promise()
+      promise = @Promise()
       #fbUserMetadata is { id: 'string of numbers', name: 'string', email: 'string of email' }
       User.findByFacebookId fbUserMetadata.id
       .then (user) ->
         if user?
           session.existingUserLogin = true
-          return cb.fulfill user
+          return promise.fulfill user
         User.findByEmail fbUserMetadata.email.toLowerCase()
         .then (user) ->
           if user?
@@ -29,16 +29,16 @@ exports.configure = (app) ->
             user.facebookId = fbUserMetadata.id
             user.verified = true
             user.save()
-            return cb.fulfill user
+            return promise.fulfill user
           user = new User
             name: fbUserMetadata.name
             email: fbUserMetadata.email.toLowerCase()
             facebookId: fbUserMetadata.id
             verified: true
           Q.ninvoke user, 'save'
-          .then (user) -> cb.fulfill user
-      .catch (err) -> cb.fulfill [err.message]
-      cb
+          .then (user) -> promise.fulfill user
+      .catch (err) -> promise.fulfill [err.message]
+      promise
     redirectPath: (req, res) ->
       '/account/afterFacebookLogin' + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
   everyauth.password.configure
@@ -85,23 +85,23 @@ exports.configure = (app) ->
       else
         [req.body.email, req.body.password]
     authenticate: (email, password) ->
-      cb = @Promise()
+      promise = @Promise()
       errors = []
       errors.push "Informe o e-mail" unless email? and email isnt ''
       errors.push "Informe a senha" unless password? and password isnt ''
-      return cb.fulfill errors if errors.length isnt 0
+      return promise.fulfill errors if errors.length isnt 0
       User.findByEmail email.toLowerCase()
       .then (user) ->
-        return cb.fulfill [error] if error?
-        return cb.fulfill ['Login falhou'] unless user?
+        return promise.fulfill [error] if error?
+        return promise.fulfill ['Login falhou'] unless user?
         validatePassword = ->
           p = if typeof password is 'string' then password else password.password
           user.verifyPassword p
           .then (success) ->
             if success
-              cb.fulfill user
+              promise.fulfill user
             else
-              cb.fulfill ["Login falhou"]
+              promise.fulfill ["Login falhou"]
         if DEBUG or !user.carefulLogin()
           validatePassword()
         else
@@ -117,11 +117,11 @@ exports.configure = (app) ->
               ["O valor da imagem não foi informado.", false]
           .spread (error, success) ->
             if !success
-              cb.fulfill [error]
+              promise.fulfill [error]
             else
               validatePassword()
-      .catch (err) -> cb.fulfill [err.message]
-      cb
+      .catch (err) -> promise.fulfill [err.message]
+      promise
     respondToLoginSucceed: (res, user, data) ->
       return unless user?
       if data.req.query.redirectTo?
@@ -138,20 +138,20 @@ exports.configure = (app) ->
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
       password = newUserAttrs.password
-      cb = @Promise()
+      promise = @Promise()
       unless /^(?=(?:.*[A-z]){1})(?=(?:.*\d){1}).{8,}$/.test password
         errors.push "A senha não é forte."
-        cb.fulfill errors
-        return cb
+        promise.fulfill errors
+        return promise
       if email is config.superAdminEmail
         errors.push "E-mail já cadastrado."
-        cb.fulfill errors
-        return cb
+        promise.fulfill errors
+        return promise
       User.findByEmail email
       .then (user) ->
         errors.push "E-mail já cadastrado." if user?
         if DEBUG
-          cb.fulfill errors
+          promise.fulfill errors
         else
           data =
             remoteip:  newUserAttrs.remoteip
@@ -160,13 +160,13 @@ exports.configure = (app) ->
           recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, data, true
           recaptcha.verify (success, errorCode) ->
             errors.push "Código incorreto." unless success
-            cb.fulfill errors
+            promise.fulfill errors
       .catch (err) ->
         errors.push err
-        cb.fulfill errors
-      cb
+        promise.fulfill errors
+      promise
     registerUser: (newUserAttrs) ->
-      cb = @Promise()
+      promise = @Promise()
       password = newUserAttrs.password
       attrs =
         name: newUserAttrs.name
@@ -182,8 +182,8 @@ exports.configure = (app) ->
       user = new User attrs
       user.setPassword password
       user.save (error, user) ->
-        cb.fulfill(if error? then [error] else user)
-      cb
+        promise.fulfill(if error? then [error] else user)
+      promise
 
     extractExtraRegistrationParams: (req) ->
       remoteip: req.connection.remoteAddress
@@ -202,8 +202,10 @@ exports.configure = (app) ->
       user.sendMailConfirmRegistration req.query?.redirectTo
       .then => @redirect res, @registerSuccessRedirect() + if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ""
   
+  #used by everyauth:
   everyauth.everymodule.findUserById (req, userId, cb) ->
     User.findById userId, (error, user) ->
       #console.log "found user: #{user}"
       cb error, user
+  #used by everyauth:
   everyauth.everymodule.userPkey '_id'

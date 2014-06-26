@@ -9,7 +9,7 @@ describe 'Store shopping cart page (manage)', ->
   before ->
     page = new StoreCartPage()
     storeProductPage = new StoreProductPage page
-    cleanDB (error) ->
+    cleanDB().then ->
       store = generator.store.a()
       store.save()
       product1 = generator.product.a()

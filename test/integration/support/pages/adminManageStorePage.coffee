@@ -7,29 +7,26 @@ module.exports = class AdminManageStorePage extends Page
     if typeof storeId is 'string'
       super "admin/manageStore/#{storeId}"
     else
-      cb = storeId
       super "admin/createStore"
   setFieldsAs: (store) ->
-    Q.nfcall async.parallel, [
-      (pcb) => @select("#manageStoreBlock #state", store.state).then pcb
-      (pcb) => @hasElement("#manageStoreBlock #pagseguro").then (itHas) =>
-        return pcb() unless itHas
+    Q.all [
+      @select("#manageStoreBlock #state", store.state)
+      @hasElement("#manageStoreBlock #pagseguro").then (itHas) =>
+        return unless itHas
         if store.pmtGateways.pagseguro?
-          @check("#manageStoreBlock #pagseguro")
+          @check "#manageStoreBlock #pagseguro"
           .then => @type "#manageStoreBlock #pagseguroEmail", store.pmtGateways.pagseguro.email
           .then => @type "#manageStoreBlock #pagseguroToken", store.pmtGateways.pagseguro.token
-          .then pcb
         else
-          @uncheck("#manageStoreBlock #pagseguro").then pcb
-      (pcb) => @hasElement("#manageStoreBlock #paypal").then (itHas) =>
-        return pcb() unless itHas
+          @uncheck("#manageStoreBlock #pagseguro")
+      @hasElement("#manageStoreBlock #paypal").then (itHas) =>
+        return unless itHas
         if store.pmtGateways.paypal?
           @check("#manageStoreBlock #paypal")
           .then => @type "#manageStoreBlock #paypalClientId", store.pmtGateways.paypal.clientId
           .then => @type "#manageStoreBlock #paypalSecret", store.pmtGateways.paypal.secret
-          .then pcb
         else
-          @uncheck("#manageStoreBlock #paypal").then pcb
+          @uncheck "#manageStoreBlock #paypal"
     ]
     .then => @type "#manageStoreBlock #name", store.name
     .then => @type "#manageStoreBlock #email", store.email

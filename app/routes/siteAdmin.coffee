@@ -47,7 +47,7 @@ module.exports = class AdminRoutes
       for store in stores
         do (store) ->
           simple = store.toSimple()
-          Q.ninvoke User, "findAdminsFor", store
+          User.findAdminsFor store
           .then (users) ->
             user = users[0]
             simple.ownerName = user?.name

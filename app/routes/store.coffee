@@ -134,7 +134,7 @@ module.exports = class StoreRoutes
     .catch (err) => @handleError req, res, err, false
 
   calculateShipping: (req, res) ->
-    Q.nfcall Store.findBySlug, req.params.storeSlug
+    Store.findBySlug req.params.storeSlug
     .then (store) => @postOffice.calculateShipping store.zip, req.body.items, req.user.deliveryAddress.zip
     .then (shippingOptions) -> res.json shippingOptions
     .catch (err) => @handleError req, res, err

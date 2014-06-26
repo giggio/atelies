@@ -76,9 +76,9 @@ productSchema.methods.toSimpleProduct = ->
   shippingWeight: @shipping?.weight
   hasInventory: @hasInventory, inventory: @inventory
   categories: @categories.join ','
-productSchema.methods.toSimpleProductWithComments = (cb) ->
+productSchema.methods.toSimpleProductWithComments = ->
   simple = @toSimpleProduct()
-  Q.ninvoke ProductComment, 'findByProduct', @
+  ProductComment.findByProduct @
   .then (comments) ->
     simple.comments = _.map comments, (c) -> c.toSimple()
     simple
@@ -111,16 +111,13 @@ Product.findRandom = (howMany) ->
       Q Product.find(picture: /./).sort('random').limit(difference).exec()
       .then (newProducts) -> products.concat newProducts
 
-Product.findByStoreSlug = (storeSlug, cb) -> callbackOrPromise cb, Q.ninvoke Product, "find", storeSlug: storeSlug
+Product.findByStoreSlug = (storeSlug) -> Q.ninvoke Product, "find", storeSlug: storeSlug
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug
 Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Product.searchByTag = (searchTerm) -> Q Product.find(tags: ///^#{searchTerm}///i).exec()
 Product.searchByCategory = (searchTerm) -> Q Product.find(categories: ///^#{searchTerm}///i).exec()
 Product.searchByStoreSlugAndByName = (storeSlug, searchTerm) -> Q Product.find(storeSlug: storeSlug, nameKeywords: ///^#{searchTerm}///i).exec()
-Product.getShippingWeightAndDimensions = (ids, cb) ->
-  Product.find '_id': '$in': ids, '_id shipping', (err, products) ->
-    cb err if err?
-    cb null, products
+Product.getShippingWeightAndDimensions = (ids) -> Q.ninvoke Product, 'find', '_id': '$in': ids, '_id shipping'
 Product.pictureDimension = '600x600'
 Product.pictureThumbDimension = '150x150'
 

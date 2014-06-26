@@ -9,7 +9,7 @@ describe 'Register', ->
   userA = page = null
   before ->
     page = new Page()
-    cleanDB (error) ->
+    cleanDB().then ->
       userA = generator.user.a()
       userA.save()
       whenServerLoaded
@@ -99,5 +99,5 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "P@ssw0rd12", isSeller: true, passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton
-    it 'is a seller', -> Q.ninvoke(User, "findByEmail", "someother@email.com").then (user) -> user.isSeller.should.be.true
+    it 'is a seller', -> User.findByEmail("someother@email.com").then (user) -> user.isSeller.should.be.true
     it 'shows the admin link', -> page.adminLinkExists().should.eventually.be.true

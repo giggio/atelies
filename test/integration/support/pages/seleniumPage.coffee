@@ -1,7 +1,6 @@
 webdriver       = require 'selenium-webdriver'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
-async           = require 'async'
 Q               = require 'q'
 
 useChrome = on
@@ -67,13 +66,12 @@ module.exports = class Page
     .then (els) ->
       actions =
         for el in els
-          do (el) -> (cb) ->
-            success = (text) ->
-              el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id').then (id) ->
-                errorMsgs[id] = text
-                cb()
-            el.getText().then success, -> cb("error") #needs to have a fail callback to be able to deal with stale elements
-      Q.nfcall async.parallel, actions
+          do (el) ->
+            el.getText()
+            .then (text) -> #, -> cb("error") #needs to have a fail callback to be able to deal with stale elements
+              el.findElement(webdriver.By.xpath('../preceding-sibling::input[1]')).getAttribute('id')
+              .then (id) -> errorMsgs[id] = text
+      Q.all actions
     .then -> errorMsgs
   findElement: (selector) ->
     return selector unless typeof selector is 'string'
@@ -140,9 +138,8 @@ module.exports = class Page
     .then (els) =>
       getActions =
         for el in els
-          do (el) =>
-            (cb) => @getAttribute(el, attr).then (t) -> cb null, t
-      Q.nfcall async.parallel, getActions
+          do (el) => @getAttribute el, attr
+      Q.all getActions
   getAttributeIn: (selector, childSelector, attr) ->
     @findElementIn selector, childSelector
     .then (el) => @getAttribute el, attr
@@ -256,18 +253,12 @@ module.exports = class Page
   waitForReady: -> @wait (=> @eval "return document.readyState === 'complete';"), 5000
   captureAttribute: captureAttribute
   resolveObj: (obj) ->
-    cbObj = {}
-    for key, promise of obj
-      if Q.isPromiseAlike promise
-        do (key, promise) ->
-          cbObj[key] = (cb) ->
-            Q(promise)
-            .then (result) -> cb null, result
-            .catch (err) -> cb err
-    d = Q.defer()
-    async.parallel cbObj, (err, resultObj) ->
-      d.reject err if err?
-      for key, value of resultObj
-        obj[key] = value
-      d.resolve obj
-    d.promise
+    promises = for key, promise of obj
+      obj[key] = Q promise
+    Q.all promises
+    .then (results) ->
+      retObj = {}
+      for key, promise of obj
+        debugger
+        retObj[key] = promise.valueOf()
+      retObj

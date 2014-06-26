@@ -4,16 +4,10 @@ Q           = require 'q'
 
 exports.localMongoDB = "mongodb://localhost/ateliesteste"
 
-exports.startServer = (cb) ->
+exports.startServer = ->
   app.start()
   .then (server) ->
     exports.expressServer = server
-    cb null, server if cb?
-  .catch (err) ->
-    if cb?
-      cb err, null if cb?
-    else
-      throw err
 
 exports.whenServerLoaded = -> whenDone (-> exports.expressServer isnt null)
 
@@ -26,7 +20,7 @@ exports.openNewConnection = ->
   conn.once 'open', -> d.resolve conn
   d.promise
 
-exports.cleanDB = (cb) ->
+exports.cleanDB = ->
   exports.openNewConnection()
   .then (conn) ->
     Q.ninvoke conn.db, "collections"
@@ -36,14 +30,10 @@ exports.cleanDB = (cb) ->
           #console.info "dropping #{col.collectionName}" if process.env.DEBUG
           col.drop()
       conn.close()
-      cb() if cb?
 
-before (done) ->
-  exports.cleanDB (err) ->
-    return done err if err?
-    exports.startServer (err, server) ->
-      done err if err?
-      done()
+before ->
+  exports.cleanDB()
+  .then -> exports.startServer()
 
 after ->
   if exports.expressServer

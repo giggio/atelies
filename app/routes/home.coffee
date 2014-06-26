@@ -78,7 +78,7 @@ module.exports = class HomeRoutes
       filePath = path.join publicDir, file
       res.sendfile filePath
 
-  sitemap: ->
+  sitemap: (req, res) ->
     sm = require 'sitemap'
     map =
       hostname: 'https://www.atelies.com.br/',
@@ -95,14 +95,15 @@ module.exports = class HomeRoutes
          { url: "contribute", changefreq: 'monthly', priority: 0.1 }
          { url: "donating", changefreq: 'monthly', priority: 0.1 }
       ]
-    Store.find().select('slug').exec (err, stores) ->
-      unless err?
-        map.urls.push { url: store.slug, changefreq: 'weekly', priority: 0.7 } for store in stores
-    Product.find().select('slug storeSlug').exec (err, products) ->
-      unless err?
-        map.urls.push { url: product.url(), changefreq: 'weekly', priority: 0.7 } for product in products
-    sitemap = sm.createSitemap map
-    (req, res) ->
-      sitemap.toXML (xml) ->
-        res.header 'Content-Type', 'application/xml'
-        res.send xml
+    findStores = Q Store.find().select('slug').exec()
+    .then (stores) ->
+      map.urls.push { url: store.slug, changefreq: 'weekly', priority: 0.7 } for store in stores
+    findProducts = Q Product.find().select('slug storeSlug').exec()
+    .then (products) ->
+      map.urls.push { url: product.url(), changefreq: 'weekly', priority: 0.7 } for product in products
+    Q.all [findStores, findProducts]
+    .then ->
+      sitemap = sm.createSitemap map
+      res.header 'Content-Type', 'application/xml'
+      res.send sitemap.toString()
+    .catch (err) => @handleError req, res, err

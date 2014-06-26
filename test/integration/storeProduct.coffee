@@ -112,7 +112,7 @@ describe 'Store product page', ->
           .then -> page.visit "store_1", "name_1"
           .then -> page.writeComment body
       it 'created the comment on the database', ->
-        Q.ninvoke ProductComment, "findByProduct", product1._id
+        ProductComment.findByProduct product1._id
         .then (comments) ->
           comments.length.should.equal 1
           comm = comments[0]

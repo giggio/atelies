@@ -113,7 +113,7 @@ describe 'Store Finish Order: Summary', ->
 
   describe 'completing the payment with product without shipping', ->
     before ->
-      cleanDB (error) ->
+      cleanDB().then ->
         store = generator.store.a()
         store.save()
         product1 = generator.product.a()

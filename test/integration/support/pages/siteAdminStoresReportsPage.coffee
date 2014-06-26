@@ -21,9 +21,5 @@ module.exports = class SiteAdminAuthorizeStoresPage extends Page
         numberOfOrders: @getTextIn(storeEl, '.numberOfOrders').then parseInt
         numberOfProducts: @getTextIn(storeEl, '.numberOfProducts').then parseInt
         categories: @getTextIn storeEl, '.categories'
-    .then (storePromiseObjs) =>
-      storesPromises = (@resolveObj storePromiseObj for storePromiseObj in storePromiseObjs)
-      Q.all storesPromises
-      .then (stores) ->
-        stores
-  storeIn: (pos) -> @stores().then (s) -> s[0]
+    .then (storePromiseObjs) => Q.all (@resolveObj storePromiseObj for storePromiseObj in storePromiseObjs)
+  storeIn: (pos) -> @stores().then (s) -> s[pos]

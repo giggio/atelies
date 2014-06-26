@@ -2,7 +2,7 @@ Page          = require './seleniumPage'
 
 module.exports = class AccountOrdersPage extends Page
   url: 'admin/orders'
-  orders: (cb) ->
+  orders: ->
     orders = []
     getData = []
     @findElementsIn '#orders tbody', 'tr'

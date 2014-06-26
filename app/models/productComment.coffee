@@ -16,9 +16,9 @@ productCommentSchema.methods.toSimple = -> title: @title, body: @body, date: @da
 
 module.exports = ProductComment = mongoose.model 'productcomment', productCommentSchema
 
-ProductComment.findByProduct = (product, cb) ->
+ProductComment.findByProduct = (product) ->
   productId = if product._id? then product._id else product
-  ProductComment.find { product: productId }, cb
+  Q.ninvoke ProductComment, 'find', product: productId
 ProductComment.create = (commentAttr) ->
   comment = new ProductComment commentAttr
   user = commentAttr.user

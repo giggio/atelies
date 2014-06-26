@@ -1,5 +1,5 @@
 mongoose            = require 'mongoose'
-exports.start = (cb) ->
+exports.start = ->
   require './globals'
   require './helpers/expressExtensions'
   require './helpers/languageExtensions'
@@ -75,7 +75,10 @@ exports.start = (cb) ->
     server: socketOptions: keepAlive: 1
     replset: socketOptions: keepAlive: 1
   mongoose.connect config.connectionString, connOptions
-  mongoose.connection.on 'error', dealWith
+  mongoose.connection.on 'error', (err) ->
+    if err
+      console.error err.stack
+      throw err
 
   router.route app
   
@@ -90,14 +93,8 @@ exports.start = (cb) ->
   server.listen app.get("port"), ->
     console.log "Express server listening on port #{app.get("port")} on environment #{app.get('env')}"
     console.log "Mongo database connection string: #{config.connectionString}" if app.get("env") isnt 'production'
-    if cb?
-      cb exports.server
-    else
-      d.resolve exports.server
-  if cb?
-    return
-  else
-    return d.promise
+    d.resolve exports.server
+  d.promise
 
 exports.stop = ->
   exports.server.close()

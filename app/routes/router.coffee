@@ -38,7 +38,7 @@ exports.route = (app) ->
   else
     app.get   "/robots.txt",                                              home.staticFile 'robots-dev.txt'
   app.get     "/facebookChannel.html",                                      home.staticFile 'javascripts/areas/shared/views/templates/facebookChannel.html'
-  app.get     "/sitemap.xml",                                               home.sitemap()
+  app.get     "/sitemap.xml",                                               home.sitemap
   #home client routes
   app.get     "/search/:searchTerm?",                                       home.index domain
   #home search
