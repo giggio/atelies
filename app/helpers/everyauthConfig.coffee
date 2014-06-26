@@ -2,7 +2,7 @@ path          = require "path"
 everyauth     = require 'everyauth'
 User          = require '../models/user'
 values        = require './values'
-Recaptcha     = require('recaptcha').Recaptcha
+Recaptcha     = require 'librecaptcha'
 config        = require './config'
 Q             = require 'q'
 
@@ -59,8 +59,8 @@ exports.configure = (app) ->
         else
           redirectTo: ''
       addRecaptcha = ->
-        recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, true
-        locals.recaptchaForm = recaptcha.toHTML()
+        recaptcha = new Recaptcha public_key: config.recaptcha.publicKey, private_key: config.recaptcha.privateKey
+        locals.recaptchaForm = recaptcha.generate()
       if req.session.carefulLogin
         addRecaptcha()
         return setImmediate -> cb null, locals
@@ -107,33 +107,34 @@ exports.configure = (app) ->
         else
           Q.fcall ->
             if typeof password.remoteip?
-              recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, {remoteip: password.remoteip, challenge: password.captchaChallenge, response: password.captchaResponse}, true
+              recaptcha = new Recaptcha public_key: config.recaptcha.publicKey, private_key: config.recaptcha.privateKey
               d = Q.defer()
-              recaptcha.verify (success, errorCode) ->
-                error = if success then null else "O valor informado para a imagem está errado."
-                d.resolve [error, success]
+              recaptcha.verify {remoteip: password.remoteip, challenge: password.captchaChallenge, response: password.captchaResponse}, (err) ->
+                error = if err? then "O valor informado para a imagem está errado." else null
+                d.resolve error
               d.promise
             else
-              ["O valor da imagem não foi informado.", false]
-          .spread (error, success) ->
-            if !success
-              promise.fulfill [error]
+              "O valor da imagem não foi informado."
+          .then (recaptchaError) ->
+            if recaptchaError?
+              promise.fulfill [recaptchaError]
             else
               validatePassword()
       .catch (err) -> promise.fulfill [err.message]
       promise
     respondToLoginSucceed: (res, user, data) ->
       return unless user?
+      data.req.session.carefulLogin = false
       if data.req.query.redirectTo?
         @redirect res, data.req.query.redirectTo
       else
         @redirect res, '/'
     #performRedirect: (res, location) -> res.redirect location, 302
     registerLocals: (req, res) ->
-      recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, true
+      recaptcha = new Recaptcha public_key: config.recaptcha.publicKey, private_key: config.recaptcha.privateKey
       states: values.states
       userParams: req.body
-      recaptchaForm: recaptcha.toHTML()
+      recaptchaForm: recaptcha.generate()
       redirectTo: if req.query.redirectTo? then "?redirectTo=#{req.query.redirectTo}" else ''
     validateRegistration: (newUserAttrs, errors) ->
       email = newUserAttrs.email.toLowerCase()
@@ -157,9 +158,9 @@ exports.configure = (app) ->
             remoteip:  newUserAttrs.remoteip
             challenge: newUserAttrs.captchaChallenge
             response:  newUserAttrs.captchaResponse
-          recaptcha = new Recaptcha config.recaptcha.publicKey, config.recaptcha.privateKey, data, true
-          recaptcha.verify (success, errorCode) ->
-            errors.push "Código incorreto." unless success
+          recaptcha = new Recaptcha public_key: config.recaptcha.publicKey, private_key: config.recaptcha.privateKey
+          recaptcha.verify data, (err) ->
+            errors.push "Código incorreto." if err?
             promise.fulfill errors
       .catch (err) ->
         errors.push err

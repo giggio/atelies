@@ -1183,6 +1183,11 @@
         }
       }
     },
+    "librecaptcha": {
+      "version": "0.0.5",
+      "from": "librecaptcha@",
+      "resolved": "https://registry.npmjs.org/librecaptcha/-/librecaptcha-0.0.5.tgz"
+    },
     "marked": {
       "version": "0.3.2",
       "from": "marked@0.3.2",
@@ -1427,9 +1432,9 @@
       }
     },
     "pagseguro": {
-      "version": "0.0.4",
-      "from": "pagseguro@0.0.4",
-      "resolved": "https://registry.npmjs.org/pagseguro/-/pagseguro-0.0.4.tgz",
+      "version": "0.0.5",
+      "from": "pagseguro@latest",
+      "resolved": "https://registry.npmjs.org/pagseguro/-/pagseguro-0.0.5.tgz",
       "dependencies": {
         "request": {
           "version": "2.9.203",
@@ -1577,11 +1582,6 @@
     "q": {
       "version": "1.0.1",
       "from": "q@latest"
-    },
-    "recaptcha": {
-      "version": "1.2.0",
-      "from": "https://registry.npmjs.org/recaptcha/-/recaptcha-1.2.0.tgz",
-      "resolved": "https://registry.npmjs.org/recaptcha/-/recaptcha-1.2.0.tgz"
     },
     "request": {
       "version": "2.36.0",
