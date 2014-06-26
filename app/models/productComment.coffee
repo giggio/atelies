@@ -1,5 +1,4 @@
 mongoose  = require 'mongoose'
-async     = require 'async'
 Postman   = require './postman'
 postman   = new Postman()
 Q         = require 'q'

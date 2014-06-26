@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 Q             = require 'q'
 _             = require 'underscore'
 

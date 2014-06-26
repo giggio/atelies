@@ -2,7 +2,6 @@ mongoose  = require 'mongoose'
 slug      = require '../helpers/slug'
 _         = require 'underscore'
 path      = require 'path'
-async     = require 'async'
 Q         = require 'q'
 
 productSchema = new mongoose.Schema

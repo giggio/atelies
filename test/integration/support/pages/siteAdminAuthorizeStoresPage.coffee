@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 
 module.exports = class SiteAdminAuthorizeStoresPage extends Page
   url: 'siteAdmin/authorizeStores'

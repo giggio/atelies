@@ -1,5 +1,4 @@
 mongoose = require 'mongoose'
-async    = require 'async'
 slug     = require '../helpers/slug'
 _        = require 'underscore'
 Evaluation = require './storeEvaluation'

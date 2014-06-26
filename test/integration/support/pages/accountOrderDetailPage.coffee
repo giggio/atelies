@@ -1,6 +1,5 @@
 Page          = require './seleniumPage'
 webdriver     = require 'selenium-webdriver'
-async         = require 'async'
 Q             = require 'q'
 
 module.exports = class AccountOrdersPage extends Page

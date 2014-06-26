@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 Q             = require 'q'
 
 module.exports = class AdminManageStorePage extends Page

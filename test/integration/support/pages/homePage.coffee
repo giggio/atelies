@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 webdriver       = require 'selenium-webdriver'
 Q               = require 'q'
 
@@ -20,11 +19,11 @@ module.exports = class HomePage extends Page
   productsLength: -> @findElements('#products .product').then (els) -> els.length
   product: (_id) ->
     product = {}
-    Q.nfcall async.parallel, [
-      (cb) => @getAttribute("#product#{_id}", "data-id").then (t) -> product._id = t;cb()
-      (cb) => @getInnerHtml("#product#{_id} .storeName").then (t) -> product.storeName = t;cb()
-      (cb) => @getAttribute("#product#{_id}_picture img", "src").then (t) -> product.picture = t;cb()
-      (cb) => @getAttribute("#product#{_id}_picture", "href").then (t) -> product.slug = t;cb()
+    Q.all [
+      @getAttribute("#product#{_id}", "data-id").then (t) -> product._id = t
+      @getInnerHtml("#product#{_id} .storeName").then (t) -> product.storeName = t
+      @getAttribute("#product#{_id}_picture img", "src").then (t) -> product.picture = t
+      @getAttribute("#product#{_id}_picture", "href").then (t) -> product.slug = t
     ]
     .then -> product
   storesIds: @::getAttributeInElements.partial '#stores .store', "data-id"

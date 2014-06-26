@@ -2,7 +2,6 @@ mongoose  = require 'mongoose'
 _         = require 'underscore'
 Postman   = require './postman'
 postman   = new Postman()
-async     = require 'async'
 Q         = require 'q'
 
 orderSchema = new mongoose.Schema

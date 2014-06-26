@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 Q             = require 'q'
 
 module.exports = class StoreHomePage extends Page
@@ -11,6 +10,8 @@ module.exports = class StoreHomePage extends Page
   searchProductsLength: -> @findElements('#productsSearchResults .product').then captureAttribute "length"
   productLink: (_id) -> @getAttribute "#product#{_id} .link", 'href'
   evaluation: ->
-    @findElement('#evaluation').then (el) => Q.nfcall async.parallel,
-      ratingStars: (cb) => @getAttributeIn(el, "#ratingStars", "data-average").then (t) -> cb null, parseFloat t
-      ratingDescription: (cb) => @getTextIn(el, "#ratingDescription").then (t) -> cb null, t
+    @findElement('#evaluation')
+    .then (el) =>
+      @resolveObj
+        ratingStars: @getAttributeIn(el, "#ratingStars", "data-average").then (t) -> parseFloat t
+        ratingDescription: @getTextIn el, "#ratingDescription"

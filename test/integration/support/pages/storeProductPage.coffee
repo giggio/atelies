@@ -1,5 +1,4 @@
 Page          = require './seleniumPage'
-async         = require 'async'
 Q             = require 'q'
 
 module.exports = class StoreProductPage extends Page
@@ -35,14 +34,12 @@ module.exports = class StoreProductPage extends Page
       getCommentsAction =
         for el in els
           do (el) =>
-            (getCommentCb) =>
-              getCommentActions =
-                userPicture: (cb) => @getSrcIn(el, ".userPicture").then (t) -> cb null, t
-                body: (cb) => @getTextIn(el, ".body").then (t) -> cb null, t
-                date: (cb) => @getTextIn(el, ".date").then (t) -> cb null, t
-                userName: (cb) => @getTextIn(el, ".userName").then (t) -> cb null, t
-              async.parallel getCommentActions, getCommentCb
-      Q.nfcall async.parallel, getCommentsAction
+            @resolveObj
+              userPicture: @getSrcIn el, ".userPicture"
+              body: @getTextIn el, ".body"
+              date: @getTextIn el, ".date"
+              userName: @getTextIn el, ".userName"
+      Q.all getCommentsAction
   writeComment: (comm) ->
     @type "#newCommentBody", comm
     .then => @pressButtonAndWait "#createComment"
