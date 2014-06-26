@@ -60,16 +60,16 @@ module.exports = class StoreRoutes
           shippingOption = _.findWhere shippingOptions, type: req.body.shippingType
           shippingOption.cost
       .then (shippingCost) -> [store, shippingCost]
-    .spread (store, shippingCost) =>
+    .spread (store, shippingCost) ->
       getItems = for item in req.body.items
         do (item) ->
           Q.ninvoke Product, 'findById', item._id
           .then (product) -> product: product, quantity: item.quantity
       [store, shippingCost, Q.all getItems]
-    .spread (store, shippingCost, items) =>
+    .spread (store, shippingCost, items) ->
       Order.create req.user, store, items, shippingCost, req.body.paymentType
       .then (order) -> Q.ninvoke order, 'save'
-      .spread (order) => [store, shippingCost, items, order]
+      .spread (order) -> [store, shippingCost, items, order]
     .spread (store, shippingCost, items, order) =>
       for item in items
         p = item.product

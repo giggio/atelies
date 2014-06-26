@@ -153,14 +153,14 @@ module.exports = class AdminRoutes
       throw new AccessDenied() unless req.user.hasStore store
       Q.ninvoke product, 'remove'
     .then -> res.send 204
-    .catch (err) => return @handleError req, res, err
+    .catch (err) => @handleError req, res, err
 
   storeProducts: (req, res) ->
     Product.findByStoreSlug req.params.storeSlug
     .then (products) ->
       viewModelProducts = _.map products, (p) -> p.toSimpleProduct()
       res.json viewModelProducts
-    .catch (err) => return @handleError req, res, err
+    .catch (err) => @handleError req, res, err
   
   storeProduct: (req, res) ->
     Q.ninvoke Product, 'findById', req.params.productId
@@ -169,7 +169,7 @@ module.exports = class AdminRoutes
         res.json product.toSimpleProduct()
       else
         res.send 404
-    .catch (err) => return @handleError req, res, err
+    .catch (err) => @handleError req, res, err
 
   orders: (req, res) ->
     user = req.user

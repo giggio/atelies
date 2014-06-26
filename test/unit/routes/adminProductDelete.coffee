@@ -2,19 +2,21 @@ Routes          = require '../../../app/routes/admin'
 Store           = require '../../../app/models/store'
 Product         = require '../../../app/models/product'
 AccessDenied    = require '../../../app/errors/accessDenied'
+Q               = require 'q'
+Err             = require '../../../app/models/error'
 
 describe 'AdminProductDeleteRoute', ->
   routes = null
-  before -> routes = new Routes()
   describe 'If user owns the store and product', ->
     product = store = req = res = body = user = null
     before ->
+      routes = new Routes()
       product =
         remove: sinon.stub().yields null, product
         storeSlug: 'some_store'
       store = _id: 9876
       sinon.stub(Product, 'findById').yields null, product
-      sinon.stub(Store, 'findBySlug').yields null, store
+      sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
       user =
         isSeller: true
         stores: [9876]
@@ -38,14 +40,14 @@ describe 'AdminProductDeleteRoute', ->
 
   describe 'Access is denied', ->
     describe "a seller but does not own this product's store", ->
-      product = store = req = res = body = user = null
-      before ->
+      it 'denies access and throws', sinon.test ->
+        routes = new Routes()
         product =
-          save: sinon.stub().yields null, product
+          save: @stub().yields null, product
           storeSlug: 'some_store'
         store = _id: 9876
-        sinon.stub(Product, 'findById').yields null, product
-        sinon.stub(Store, 'findBySlug').yields null, store
+        @stub(Product, 'findById').yields null, product
+        @stub(Store, 'findBySlug').returns Q.fcall -> store
         user =
           isSeller: true
           stores: [6543]
@@ -54,13 +56,12 @@ describe 'AdminProductDeleteRoute', ->
         req = loggedIn: true, user: user, params: params, body:
           name: 'Some Product'
         body = req.body
-        res = send: sinon.spy()
-      after ->
-        Product.findById.restore()
-        Store.findBySlug.restore()
-      it 'denies access and throws', ->
-        expect( -> routes.adminProductDelete req, res).to.throw AccessDenied
+        sinon.stub routes, '_logError'
+        res = json: sinon.spy()
+        routes.adminProductDelete req, res
+        .then -> res.json.should.have.been.calledWith 400
     describe 'not a seller', ->
+      beforeEach -> routes = new Routes()
       it 'denies access if the user isnt a seller and throws', ->
         req = user: {isSeller:false}, loggedIn: true
         expect( -> routes.adminProductDelete req, null).to.throw AccessDenied

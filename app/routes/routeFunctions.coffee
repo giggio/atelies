@@ -55,16 +55,17 @@ module.exports = class RouteFunctions
       res.json 400, errToReturn
     else
       res.send 400
-  _logError: (area, req, err) ->
-    Err.createServer area, req, err
-  _convertToBool: (val) ->
-    val? and (val is true or val is 'true')
-  _convertBodyToBool: (body, fields...) ->
-    body[field] = @_convertToBool body[field] for field in fields
-  _convertEmptyToUndefined: (val) ->
-    if val? and val isnt '' then val else undefined
-  _convertBodyToEmptyToUndefined: (body, fields...) ->
-    body[field] = @_convertEmptyToUndefined body[field] for field in fields
+
+  _logError: (area, req, err) -> Err.createServer area, req, err
+
+  _convertToBool: (val) -> val? and (val is true or val is 'true')
+
+  _convertBodyToBool: (body, fields...) -> body[field] = @_convertToBool body[field] for field in fields
+
+  _convertEmptyToUndefined: (val) -> if val? and val isnt '' then val else undefined
+
+  _convertBodyToEmptyToUndefined: (body, fields...) -> body[field] = @_convertEmptyToUndefined body[field] for field in fields
+
   redirectAddingDash: (req, res) ->
     reqUrl = url.parse req.originalUrl
     return res.redirect 301, "#{reqUrl.pathname}/?#{reqUrl.query}" unless _.isEmpty req.query
