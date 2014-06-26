@@ -15,7 +15,7 @@ unless process.env.NODE_ENV is 'production'
   process.env.SUPER_ADMIN_EMAIL = "admin@atelies.com.br"
   process.env.CLIENT_LIB_VERSION = "."
   process.env.UPLOAD_FILES = true unless process.env.UPLOAD_FILES?
-  process.env.DEBUG = true unless process.env.DEBUG?
+  if !process.env.DEBUG? then process.env.DEBUG = 'true'
   switch process.env.NODE_ENV
     when 'development'
       process.env.MONGOLAB_URI = "mongodb://localhost/atelies" unless process.env.MONGOLAB_URI?
@@ -36,7 +36,7 @@ values =
   port: process.env.PORT
   environment: process.env.NODE_ENV
   isProduction: process.env.NODE_ENV is 'production'
-  debug: process.env.DEBUG? and process.env.DEBUG
+  debug: process.env.DEBUG? and process.env.DEBUG is 'true'
   aws:
     accessKeyId: process.env.AWS_ACCESS_KEY_ID
     secretKey: process.env.AWS_SECRET_KEY
@@ -98,7 +98,7 @@ valuesPresent =
 unless values.environment is 'test'
   console.log "Config values present: #{JSON.stringify valuesPresent}"
   console.log "Config values: #{JSON.stringify values}"
-if values.allValuesPresent() is false and values.debug is off and values.environment isnt 'test'
+if !values.allValuesPresent() and !values.debug and values.environment isnt 'test'
   missing = []
   checkValues = (o) ->
     for k, v of o

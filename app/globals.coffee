@@ -1,7 +1,7 @@
 config              = require './helpers/config'
 
 global.CONFIG = config
-global.DEBUG = !config.isProduction
+global.DEBUG = !config.isProduction and config.debug
 global.TEST = config.environment is 'test'
 global.STATIC_PATH = config.staticPath
 global.CLIENT_LIB_PATH = config.clientLibPath
