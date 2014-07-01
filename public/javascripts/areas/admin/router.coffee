@@ -67,6 +67,10 @@ define [
         viewsManager.show storeView
     manageProduct: (storeSlug, productId) ->
       store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
+      unless store?
+        Backbone.history.navigate ''
+        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
+        return viewsManager.show homeView
       storeModel = new Store store
       @_findProduct storeSlug, productId, (product) ->
         manageProductView = new ManageProductView storeSlug: storeSlug, product: product, store: storeModel

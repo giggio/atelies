@@ -221,3 +221,18 @@ describe 'Admin Manage Product page', ->
         productOnDb.shipping.weight.should.equal product3.shipping.weight
         productOnDb.hasInventory.should.equal product3.hasInventory
         productOnDb.inventory.should.equal product3.inventory
+
+  describe "can't update a product if you don't own it", ->
+    before ->
+      cleanDB()
+      .then ->
+        store = generator.store.a()
+        store.save()
+        product = generator.product.a()
+        product.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        page.loginFor userSeller._id
+      .then -> page.visit store.slug, product._id.toString()
+    it "shows product can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
+    it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"
