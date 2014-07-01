@@ -13,10 +13,21 @@ module.exports = class HomePage extends Page
   clickDoSearchProducts: @::pressButton.partial "#doSearchProduct"
   storesWithoutFlyersLength: -> @findElements('#storesWithoutFlyer .storeWithoutFlyer').then captureAttribute 'length'
   storesLength: -> @findElements('#stores .store').then captureAttribute 'length'
+  stores: ->
+    @findElements('#stores .store')
+    .then (ss) =>
+      getStores = for s in ss
+        do (s) =>
+          @resolveObj
+            name: @getAttributeIn s, 'meta[itemprop="name"]', 'content'
+            slug: @getAttributeIn(s, 'a', 'href').then (href) -> href.substr href.lastIndexOf('/')+ 1
+      Q.all getStores
   storeLink: (_id) -> @getAttribute "#store#{_id} .link", 'href'
   searchProductsLength: -> @findElements('#productsSearchResults .product').then captureAttribute 'length'
   productLink: (_id) -> @getAttribute "#product#{_id} .link", 'href'
   productsLength: -> @findElements('#products .product').then (els) -> els.length
+  firstStoreId: -> @getAttribute '.store[data-id]', 'data-id'
+  firstProductId: -> @getAttribute '.product[data-id]', 'data-id'
   product: (_id) ->
     product = {}
     Q.all [

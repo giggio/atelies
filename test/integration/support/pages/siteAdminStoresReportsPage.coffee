@@ -8,7 +8,7 @@ module.exports = class SiteAdminAuthorizeStoresPage extends Page
   stores: ->
     @findElementsIn '#storesReport', '.store'
     .then (storeElements) =>
-      for storeEl in storeElements
+      storePromiseObjs = for storeEl in storeElements
         name: @getTextIn storeEl, '.name'
         email: @getAttributeIn(storeEl, '.name', 'data-content').then (content) ->
           $(content)[0].href.replace "mailto:",""
@@ -20,5 +20,5 @@ module.exports = class SiteAdminAuthorizeStoresPage extends Page
         numberOfOrders: @getTextIn(storeEl, '.numberOfOrders').then parseInt
         numberOfProducts: @getTextIn(storeEl, '.numberOfProducts').then parseInt
         categories: @getTextIn storeEl, '.categories'
-    .then (storePromiseObjs) => Q.all (@resolveObj storePromiseObj for storePromiseObj in storePromiseObjs)
+      Q.all (@resolveObj storePromiseObj for storePromiseObj in storePromiseObjs)
   storeIn: (pos) -> @stores().then (s) -> s[pos]

@@ -33,11 +33,17 @@ storeSchema = new mongoose.Schema
   evaluationAvgRating:    type: Number, required: true, default: 0
   isFlyerAuthorized:      Boolean
   categories:             [ String ]
+  productCount:           type: Number, required: true, default: 0
 
 storeSchema.methods._isTheOnlyProduct = (product, simple) ->
   if product.name is simple.name then return Q.fcall ->
   Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_")
   .then (existingProduct) -> if existingProduct? then throw nameExists: "Name '#{simple.name}' already exists."
+
+storeSchema.methods.calculateProductCount = ->
+  Product.totalForStore @slug
+  .then (count) => @productCount = count
+  .then => Q.ninvoke @, 'save'
 
 storeSchema.methods.createProduct = (simple) ->
   product = new Product()
@@ -172,13 +178,13 @@ Store.findWithProductsBySlug = (slug) ->
     .then (products) -> [store, products]
 Store.findRandomForHome = (howMany) ->
   random = Math.random()
-  Q Store.find({flyer: /./, isFlyerAuthorized: true, random:$gte:random}).sort('random').limit(howMany).exec()
+  Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true, random:$gte:random).sort('random').limit(howMany).exec()
   .then (stores) ->
     if stores.length >= howMany
       stores
     else
       difference = stores.length - howMany
-      Q Store.find({flyer: /./, isFlyerAuthorized: true}).sort('random').limit(difference).exec()
+      Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true).sort('random').limit(difference).exec()
       .then (newStores) ->
         stores.concat newStores
 

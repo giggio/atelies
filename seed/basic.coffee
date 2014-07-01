@@ -360,6 +360,7 @@ db.stores.insert
   evaluationAvgRating: 4
   isFlyerAuthorized: true
   categories: ['uma cat', 'outra cat']
+  productCount: 24
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
@@ -382,6 +383,7 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
+  productCount: 2
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert

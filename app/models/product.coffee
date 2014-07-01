@@ -110,6 +110,7 @@ Product.findRandom = (howMany) ->
       Q Product.find(picture: /./).sort('random').limit(difference).exec()
       .then (newProducts) -> products.concat newProducts
 
+Product.totalForStore = (storeSlug) -> Q.ninvoke Product.find(storeSlug: storeSlug), 'count'
 Product.findByStoreSlug = (storeSlug) -> Q.ninvoke Product, "find", storeSlug: storeSlug
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug
 Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()
