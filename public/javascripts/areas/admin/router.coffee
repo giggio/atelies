@@ -45,43 +45,27 @@ define [
       manageStoreView = new ManageStoreView store:store, user:user
       viewsManager.show manageStoreView
     manageStore: (storeId) ->
-      store = _.findWhere adminStoresBootstrapModel.stores, _id: storeId
-      unless store?
-        Backbone.history.navigate ''
-        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
-        return viewsManager.show homeView
+      return unless store = @_findStore storeId
       stores = new Stores [store]
       user = adminStoresBootstrapModel.user
       manageStoreView = new ManageStoreView store:stores.at(0), user:user
       viewsManager.show manageStoreView
     store: (storeSlug) ->
-      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
-      unless store?
-        Backbone.history.navigate ''
-        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
-        return viewsManager.show homeView
+      return unless store = @_findStore storeSlug
       @_findProducts storeSlug, (err, products) ->
         if err?
           return Dialog.showError viewsManager.$el, "Não foi possível carregar os produtos da loja. Tente novamente mais tarde."
         storeView = new StoreView store: store, products: products
         viewsManager.show storeView
     manageProduct: (storeSlug, productId) ->
-      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
-      unless store?
-        Backbone.history.navigate ''
-        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
-        return viewsManager.show homeView
+      return unless store = @_findStore storeSlug
       storeModel = new Store store
       @_findProduct storeSlug, productId, (product) ->
         manageProductView = new ManageProductView storeSlug: storeSlug, product: product, store: storeModel
         manageProductView.render()
         viewsManager.show manageProductView
     createProduct: (storeSlug) ->
-      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlug
-      unless store?
-        Backbone.history.navigate ''
-        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
-        return viewsManager.show homeView
+      return unless store = @_findStore storeSlug
       product = new Product()
       products = new Products [product], storeSlug: storeSlug
       storeModel = new Store store
@@ -124,3 +108,13 @@ define [
         error: (order, xhr, opt) =>
           @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível carregar o pedido. Tente novamente mais tarde."
+    _findStore: (storeSlugOrId) ->
+      store = _.findWhere adminStoresBootstrapModel.stores, slug: storeSlugOrId
+      unless store then store = _.findWhere adminStoresBootstrapModel.stores, _id: storeSlugOrId
+      if store?
+        store
+      else
+        Backbone.history.navigate ''
+        homeView = new AdminView stores: adminStoresBootstrapModel.stores, dialog: title: "Acesso negado", message: "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
+        viewsManager.show homeView
+        undefined
