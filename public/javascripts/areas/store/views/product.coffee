@@ -37,6 +37,7 @@ define [
       @delegateEvents()
       attr = _.extend {}, @product.attributes
       attr.tags = attr.tags.split ','
+      if attr.tags.length is 1 and attr.tags[0] is "" then attr.tags = []
       if attr.description?
         description = @markdown.makeHtml attr.description
         description = description.replace /<a/g, '<a data-not-push-state="true"'

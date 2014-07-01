@@ -22,11 +22,11 @@
     </div>
     <button class="btn btn-primary btn-large" id="purchaseItem" name="purchaseItem" {{#unless canPurchase}}disabled{{/unless}}><i class="icon-shopping-cart icon-white"></i> Adicionar ao carrinho</button>
     <div id="dimensions">
-      <div>Altura: <span id="height" itemprop="height">{{product.height}}</span>cms</div>
-      <div>Largura: <span id="width" itemprop="width">{{product.width}}</span>cms</div>
-      <div>Profundidade: <span id="depth" itemprop="depth">{{product.depth}}</span>cms</div>
+      {{#if product.height}}<div>Altura: <span id="height" itemprop="height">{{product.height}}</span>cms</div>{{/if}}
+      {{#if product.width}}<div>Largura: <span id="width" itemprop="width">{{product.width}}</span>cms</div>{{/if}}
+      {{#if product.depth}}<div>Profundidade: <span id="depth" itemprop="depth">{{product.depth}}</span>cms</div>{{/if}}
     </div>
-    <div>Peso: <span id="weight" itemprop="weight">{{product.weight}}</span>kgs</div>
+    {{#if product.weight}}<div>Peso: <span id="weight" itemprop="weight">{{product.weight}}</span>kgs</div>{{/if}}
     <div id="inventoryInfo">
       {{#if product.hasInventory}}
       <div>Estoque: <span id="inventory">{{product.inventory}} itens</span></div>
@@ -34,12 +34,13 @@
       <div><span id="inventory">Feito sob encomenda</span></div>
       {{/if}}
     </div>
+    {{#if product.tags}}
     <div id="tags">
-      Tags:
       {{#each product.tags}}
         <span class="label label-default tag">{{this}}</span>
       {{/each}}
     </div>
+    {{/if}}
   </div>
   <div id="askAQuestion">
     {{#if store.email}}
