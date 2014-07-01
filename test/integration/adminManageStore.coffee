@@ -6,7 +6,7 @@ AdminManageStorePage      = require './support/pages/adminManageStorePage'
 Q                         = require 'q'
 
 describe 'Admin manage store page', ->
-  page = exampleStore = otherStore = userSeller = null
+  page = exampleStore = otherStore = userSeller = undefined
   before ->
     page = new AdminManageStorePage()
     whenServerLoaded()
@@ -249,3 +249,15 @@ describe 'Admin manage store page', ->
         product = products[0]
         product.storeSlug.should.to.equal otherSlug
         product.storeName.should.to.equal otherName
+
+  describe "can't see a store on management if you don't own it", ->
+    before ->
+      cleanDB().then ->
+        exampleStore = generator.store.a()
+        exampleStore.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        page.loginFor userSeller._id
+      .then -> page.visit exampleStore._id.toString()
+    it "shows store can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
+    it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"

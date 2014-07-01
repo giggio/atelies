@@ -10,11 +10,13 @@ define [
     template: adminTemplate
     initialize: (opt) =>
       @stores = opt.stores
+      @dialog = opt.dialog
     render: ->
       @$el.empty()
       context = Handlebars.compile @template
       storeGroups = @_groupStores @stores
       @$el.html context storeGroups:storeGroups, hasStores:@stores.length isnt 0
+      if @dialog? then @showDialog @dialog.message, @dialog.title
       super
     _groupStores: (stores) ->
       _.reduce stores, (groups, store) ->
