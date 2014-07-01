@@ -8,8 +8,6 @@ define [
       @renderFacebook()
       @renderTwitter()
       @renderGooglePlus()
-    @renderGooglePlus: ->
-      gplus.go()
-    @renderFacebook: ->
-    @renderTwitter: ->
-      twitter.widgets.load()
+    @renderGooglePlus: -> gplus.go()
+    @renderFacebook: -> facebook.XFBML.parse()
+    @renderTwitter: -> twitter.widgets.load()
