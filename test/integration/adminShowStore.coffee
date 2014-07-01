@@ -33,3 +33,16 @@ describe 'Admin Show Store page', ->
       page.products().then (products) ->
         products[0].manageLink.should.equal "http://localhost:8000/admin/manageProduct/#{store.slug}/#{product1._id}"
         products[1].manageLink.should.equal "http://localhost:8000/admin/manageProduct/#{store.slug}/#{product2._id}"
+
+  describe "can't see a store if you don't own it", ->
+    before ->
+      cleanDB().then ->
+        page = new Page()
+        store = generator.store.a()
+        store.save()
+        userSeller = generator.user.c()
+        userSeller.save()
+        page.loginFor userSeller._id
+      .then -> page.visit store.slug
+    it "shows store can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
+    it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"
