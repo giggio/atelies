@@ -5,14 +5,14 @@
   <div class="row productsRow">
     {{#each products}}
     <div id="product{{_id}}" data-id="{{_id}}" class="product">
-      <a href="{{slug}}" class="link">
+      <a href="/{{url}}" class="link">
         {{#if pictureThumb}}
         <img src="{{pictureThumb}}" />
         {{else}}
         <img src="http://dummyimage.com/200x200/000/fff&text=%3F" />
         {{/if}}
       </a>
-      <a href="{{slug}}">
+      <a href="/{{url}}">
         <div class="productInfoBox">
           <span id="product{{_id}}_productName" class="name">{{name}}</span>
           <span id="product{{_id}}_price" class="price">R$ {{price}}</span>

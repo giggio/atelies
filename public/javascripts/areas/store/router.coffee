@@ -102,7 +102,9 @@ define [
       productsSearch = new ProductsSearch storeSlug: storeSlug, searchTerm:searchTerm
       productsSearch.fetch
         reset:true
-        success: => @storeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
+        success: =>
+          viewsManager.show @storeView
+          @storeView.showProductsSearchResults searchTerm, productsSearch.toJSON()
         error: (col, xhr, opt) =>
           @logXhrError xhr
           Dialog.showError viewsManager.$el, "Não foi possível realizar a busca. Tente novamente mais tarde."
