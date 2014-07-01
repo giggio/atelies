@@ -37,7 +37,10 @@ define [
       @delegateEvents()
       attr = _.extend {}, @product.attributes
       attr.tags = attr.tags.split ','
-      description = @markdown.makeHtml attr.description if attr.description?
+      if attr.description?
+        description = @markdown.makeHtml attr.description
+        description = description.replace /<a/g, '<a data-not-push-state="true"'
+        description = description.replace /script/g, ''
       if attr.comments?
         for c in attr.comments
           c.niceDate = @createNiceDate c.date
