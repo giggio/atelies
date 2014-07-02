@@ -10,6 +10,9 @@ describe 'Home page', ->
   before ->
     page = new HomePage()
     whenServerLoaded()
+    Store.storeCache._interval = -1
+  after ->
+    Store.storeCache._interval = 30 * 60 * 1000
   describe "only authorized stores with 7 products or more", ->
     before ->
       cleanDB()

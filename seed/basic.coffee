@@ -364,6 +364,36 @@ db.stores.insert
 store1 = db.stores.findOne(slug:'store_1')
 storeId = store1._id
 userSeller.stores.push storeId
+
+addProducts = (store) ->
+  for i in [1..7]
+    db.products.insert
+      name: "#{store.name} name #{i}"
+      nameKeywords: ['name', '1'].concat store.nameKeywords
+      slug: "#{store.slug}_name_#{i}"
+      picture: 'https://s3.amazonaws.com/ateliesteste/store_1/products/171326565789058800912925501121208000.jpg'
+      price: 11.1 + i
+      storeName: store.name
+      storeSlug: store.slug
+      tags: ["abc#{i}", "def#{i}"]
+      description: "Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis."
+      dimensions:
+        height: 11 + i
+        width: 12 + i
+        depth: 17 + i
+      weight: 4 + i
+      shipping:
+        applies: true
+        charge: true
+        dimensions:
+          height: 12 + i
+          width: 13 + i
+          depth: 18 + i
+        weight: 5 + i
+      hasInventory: true
+      inventory: 30 + i
+      random: Math.random()
+      categories: ['uma cat', 'outra cat']
 db.stores.insert
   name: 'Store 2'
   nameKeywords: ['store', '2']
@@ -383,7 +413,8 @@ db.stores.insert
   random: Math.random()
   numberOfEvaluations: 0
   evaluationAvgRating: 0
-  productCount: 2
+  productCount: 9
+addProducts db.stores.findOne(slug:'store_2')
 storeId2 = db.stores.findOne(slug:'store_2')._id
 userSeller.stores.push storeId2
 db.stores.insert
@@ -406,6 +437,8 @@ db.stores.insert
   numberOfEvaluations: 0
   evaluationAvgRating: 0
   isFlyerAuthorized: false
+  productCount: 7
+addProducts db.stores.findOne(slug:'store_3')
 db.stores.insert
   name: 'Some Fancy Name'
   nameKeywords: ['some', 'fancy', 'name']
@@ -426,6 +459,8 @@ db.stores.insert
   numberOfEvaluations: 0
   evaluationAvgRating: 0
   isFlyerAuthorized: true
+  productCount: 7
+addProducts db.stores.findOne(slug:'some_fancy_name')
 db.stores.insert
   name: 'Some Other Fancy Name'
   nameKeywords: ['some', 'other', 'fancy', 'name']
@@ -445,6 +480,8 @@ db.stores.insert
   numberOfEvaluations: 0
   evaluationAvgRating: 0
   isFlyerAuthorized: true
+  productCount: 7
+addProducts db.stores.findOne(slug:'some_other_fancy_name')
 for i in [4..15]
   pictureId = i - Math.floor(i/10, 0) * 10
   pictureId = 10 if i is 0
@@ -468,8 +505,10 @@ for i in [4..15]
     numberOfEvaluations: 0
     evaluationAvgRating: 0
     isFlyerAuthorized: true
+    productCount: 7
   store = db.stores.findOne slug:"store_#{i}"
   userSeller.stores.push store._id
+  addProducts store
 db.stores.ensureIndex { slug: 1 }
 db.users.save userSeller
 db.orders.remove {}

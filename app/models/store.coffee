@@ -162,7 +162,25 @@ storeSchema.methods.sendMailAfterFlyerAuthorization = (userAuthorizing) ->
     Q.allSettled sendMailActions
 
 module.exports = Store = mongoose.model 'store', storeSchema
-
+Store.storeCache =
+  _interval: 30 * 60 * 1000 #30 minutes
+  shouldReload: -> new Date - @_lastUpdate > @_interval
+  _stores: []
+  update: (stores) ->
+    @_stores = stores
+    @_lastUpdate = new Date
+  _lastUpdate: new Date 0
+  nextStores: (howMany) ->
+    if @_lastRequestPosition is -1
+      @_lastRequestPosition = Math.floor(Math.random()*(@_stores.length-1+1))
+    else
+      @_lastRequestPosition++
+    if @_lastRequestPosition >= @_stores.length then @_lastRequestPosition = 0
+    next = @_stores[@_lastRequestPosition..@_lastRequestPosition+howMany-1]
+    if next.length < howMany
+      next = next.concat @_stores[0..howMany-next.length-1]
+    next
+  _lastRequestPosition: -1
 Store.nameExists = (name) ->
   aSlug = slug name.toLowerCase(), "_"
   Store.findBySlug(aSlug).then (store) -> store?
@@ -177,17 +195,11 @@ Store.findWithProductsBySlug = (slug) ->
     Product.findByStoreSlug slug
     .then (products) -> [store, products]
 Store.findRandomForHome = (howMany) ->
-  random = Math.random()
-  Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true, random:$gte:random).sort('random').limit(howMany).exec()
-  .then (stores) ->
-    if stores.length >= howMany
-      stores
-    else
-      difference = stores.length - howMany
-      Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true).sort('random').limit(difference).exec()
-      .then (newStores) ->
-        stores.concat newStores
-
+  Q.fcall ->
+    if Store.storeCache.shouldReload()
+      Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true).sort('random').exec()
+      .then (stores) -> Store.storeCache.update stores
+  .then -> Store.storeCache.nextStores howMany
 Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i).exec()
 Store.flyerDimension = '350x350'
 Store.ordersPerStore = ->
