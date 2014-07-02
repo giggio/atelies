@@ -31,7 +31,7 @@
       <td>Totals:</th>
       <td>{{numberOfProducts}}</th>
       <td>{{numberOfOrders}}</th>
-      <td>{{evaluationAvgRating}}</th>
+      <td>{{toFixed evaluationAvgRating 1}}</th>
       <td>{{numberOfEvaluations}}</th>
       <td>{{numberOfApprovedFlyers}}</th>
       <td>{{numberOfPagseguroEnabled}}</th>
@@ -47,7 +47,7 @@
       <td class="name" data-title="Contatos" data-content="<a href='mailto:{{email}}' data-not-push-state='true'>{{email}}</a><br /><a href='tel:{{phoneNumber}}' data-not-push-state='true'>{{phoneNumber}}</a>"><a href="/{{slug}}" data-not-push-state="true">{{name}}</a></td>
       <td class="numberOfProducts">{{#if numberOfProducts}}{{numberOfProducts}}{{else}}0{{/if}}</td>
       <td class="numberOfOrders">{{#if numberOfOrders}}{{numberOfOrders}}{{else}}0{{/if}}</td>
-      <td class="evaluationAvgRating"><a href="/{{slug}}/evaluations" data-not-push-state="true">{{#if hasEvaluations}}{{evaluationAvgRating}}{{/if}}</a></td>
+      <td class="evaluationAvgRating"><a href="/{{slug}}/evaluations" data-not-push-state="true">{{#if hasEvaluations}}{{toFixed evaluationAvgRating 1}}{{/if}}</a></td>
       <td class="numberOfEvaluations"><a href="/{{slug}}/evaluations" data-not-push-state="true">{{#if hasEvaluations}}{{numberOfEvaluations}}{{/if}}</a></td>
       <td class="isFlyerAuthorized">{{#if isFlyerAuthorized}}S{{else}}N{{/if}}</td>
       <td class="pagseguro">{{#if pagseguro}}S{{else}}N{{/if}}</td>
