@@ -135,13 +135,15 @@ module.exports = class AdminRoutes
       @handleError req, res, err
 
   _productUpdate: (req, res, product, store) ->
+    isNew = product.isNew
     uploader = new ProductUploader()
     uploader.upload product, req.files?.picture
     .then (fileUrl) ->
       product.picture = fileUrl if fileUrl?
       Q.ninvoke product, 'save'
     .then -> Q.ninvoke store, 'save'
-    .then -> if product.isNew then res.json 201, product.toSimpleProduct() else res.send 204
+    .then -> if isNew then store.calculateProductCount()
+    .then -> if isNew then res.json 201, product.toSimpleProduct() else res.send 204
     .catch (err) =>
       return res.json 422, err if err.smallerThan?
       @handleError req, res, err
@@ -151,7 +153,8 @@ module.exports = class AdminRoutes
     .then (product) -> [product, Store.findBySlug product.storeSlug]
     .spread (product, store) ->
       throw new AccessDenied() unless req.user.hasStore store
-      Q.ninvoke product, 'remove'
+      [store, Q.ninvoke product, 'remove']
+    .spread (store) -> store.calculateProductCount()
     .then -> res.send 204
     .catch (err) => @handleError req, res, err
 

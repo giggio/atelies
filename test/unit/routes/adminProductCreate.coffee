@@ -28,6 +28,7 @@ describe 'AdminProductCreateRoute', ->
         createProduct: createProductSpy
         addCategories: (categories, cb) -> cb()
         save: sinon.stub().yields()
+        calculateProductCount: sinon.spy()
       sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
       user =
         isSeller: true
@@ -46,18 +47,13 @@ describe 'AdminProductCreateRoute', ->
       routes.adminProductCreate req, res
     after ->
       Store.findBySlug.restore()
-    it 'created a product', ->
-      ProductStub.created.should.be.true
-    it 'saved the store', ->
-      store.save.should.have.been.called
-    it 'looked for correct store', ->
-      Store.findBySlug.should.have.been.calledWith store.slug
-    it 'access allowed and return code is correct', ->
-      res.json.should.have.been.calledWith 201, simpleProduct
-    it 'product is updated correctly', ->
-      createProductSpy.should.have.been.calledWith req.body
-    it 'product should had been saved', ->
-      saveStub.should.have.been.called
+    it 'created a product', -> ProductStub.created.should.be.true
+    it 'saved the store', -> store.save.should.have.been.called
+    it 'looked for correct store', -> Store.findBySlug.should.have.been.calledWith store.slug
+    it 'access allowed and return code is correct', -> res.json.should.have.been.calledWith 201, simpleProduct
+    it 'product is updated correctly', -> createProductSpy.should.have.been.calledWith req.body
+    it 'product should had been saved', -> saveStub.should.have.been.called
+    it 'calculated product count', -> store.calculateProductCount.should.have.been.called
 
   describe 'Access is denied', ->
     routes = null

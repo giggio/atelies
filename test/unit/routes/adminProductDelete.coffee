@@ -14,7 +14,7 @@ describe 'AdminProductDeleteRoute', ->
       product =
         remove: sinon.stub().yields null, product
         storeSlug: 'some_store'
-      store = _id: 9876
+      store = _id: 9876, calculateProductCount: sinon.spy()
       sinon.stub(Product, 'findById').yields null, product
       sinon.stub(Store, 'findBySlug').returns Q.fcall -> store
       user =
@@ -29,14 +29,11 @@ describe 'AdminProductDeleteRoute', ->
     after ->
       Product.findById.restore()
       Store.findBySlug.restore()
-    it 'looked for correct product', ->
-      Product.findById.should.have.been.calledWith req.params.productId
-    it 'looked for correct store', ->
-      Store.findBySlug.should.have.been.calledWith product.storeSlug
-    it 'access allowed and return code is correct', ->
-      res.send.should.have.been.calledWith 204
-    it 'product should had been deleted', ->
-      product.remove.should.have.been.called
+    it 'looked for correct product', -> Product.findById.should.have.been.calledWith req.params.productId
+    it 'looked for correct store', -> Store.findBySlug.should.have.been.calledWith product.storeSlug
+    it 'access allowed and return code is correct', -> res.send.should.have.been.calledWith 204
+    it 'product should had been deleted', -> product.remove.should.have.been.called
+    it 'calculated product count', -> store.calculateProductCount.should.have.been.called
 
   describe 'Access is denied', ->
     describe "a seller but does not own this product's store", ->

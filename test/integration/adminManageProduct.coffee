@@ -13,15 +13,16 @@ describe 'Admin Manage Product page', ->
     page = new AdminManageProductPage()
     cleanDB()
     .then ->
-      store = generator.store.a()
-      store.save()
       product = generator.product.a()
-      product.save()
       product2 = generator.product.d()
-      product2.save()
+      Q.all [Q.ninvoke(product, 'save'), Q.ninvoke(product2, 'save')]
+    .then ->
+      store = generator.store.a()
+      store.calculateProductCount()
+    .then ->
       userSeller = generator.user.c()
       userSeller.stores.push store
-      userSeller.save()
+      Q.ninvoke userSeller, 'save'
     .then whenServerLoaded
   describe 'viewing product', ->
     before ->
@@ -169,15 +170,20 @@ describe 'Admin Manage Product page', ->
         storeOnDb.categories.should.contain "Cat2"
 
   describe 'deleting product', ->
-    otherProduct = null
+    previousProductCount = otherProduct = null
     before ->
-      page.loginFor userSeller._id
-      .then page.visit store.slug, product2._id.toString()
+      store.calculateProductCount()
+      .then -> previousProductCount = store.productCount
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit store.slug, product2._id.toString()
       .then page.clickDeleteProduct
       .then page.clickConfirmDeleteProduct
       .then -> page.waitForUrl "http://localhost:8000/admin/store/#{product2.storeSlug}"
     it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{product2.storeSlug}"
     it 'deleted the product', -> Q.ninvoke(Product, "findById", product2._id).should.eventually.be.null
+    it 'updated store product count', ->
+      Store.findBySlug store.slug
+      .then (s) -> s.productCount.should.equal previousProductCount - 1
 
   describe 'editing a product with upload', ->
     uploadedRegexMatch = /^https:\/\/s3\.amazonaws\.com\/dryrun\/store_1\/products\/\d+\.?\d*\.png$/

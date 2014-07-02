@@ -81,12 +81,18 @@ describe 'Admin Create Product page', ->
     it 'shows error messages', -> page.getDialogMsg().should.become "Já há um produto nessa loja com esse nome. Cada produto da loja deve ter um nome direrente. Troque o nome e salve novamente."
 
   describe 'create product', ->
+    previousProductCount = null
     before ->
-      page.loginFor userSeller._id
+      store.calculateProductCount()
+      .then -> previousProductCount = store.productCount
+      .then -> page.loginFor userSeller._id
       .then -> page.visit store.slug
       .then -> page.setFieldsAs product
       .then page.clickUpdateProduct
     it 'is at the store manage page', -> page.currentUrl (url) -> url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
+    it 'updated store product count', ->
+      Store.findBySlug store.slug
+      .then (s) -> s.productCount.should.equal previousProductCount + 1
     it 'created the product', ->
       Q.ninvoke Product, "find", name: product.name
       .then (productsOnDb) ->

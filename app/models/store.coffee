@@ -44,6 +44,7 @@ storeSchema.methods.calculateProductCount = ->
   Product.totalForStore @slug
   .then (count) => @productCount = count
   .then => Q.ninvoke @, 'save'
+  .then -> @productCount
 
 storeSchema.methods.createProduct = (simple) ->
   product = new Product()
