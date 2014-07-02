@@ -36,11 +36,15 @@ define [
         Backbone.history.navigate boostrapedRedirect, trigger: true
     _redirectLinksToBackboneNavigation: ->
       $ =>
-        $("section#app-container").parent().on "click", "a:not([data-not-push-state])", (event) =>
+        el = $("section#app-container").parent()
+        el.off 'click'
+        el.on "click", "a:not([data-not-push-state])", (event) =>
           return if event.altKey or event.ctrlKey or event.metaKey or event.shiftKey
           event.preventDefault()
           url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}/#{@_rootUrl}/",""
+          if url is "" then url = "home"
           Backbone.history.navigate url, trigger: true
+          undefined
     redirect: (to) -> Backbone.history.navigate to, trigger: true
     logXhrError: (xhr, otherInfo) -> @logError xhr.responseText, otherInfo if xhr.status is 400
     logError: (message, otherInfo) -> ErrorLogger.logError @area, message, '', '', otherInfo
