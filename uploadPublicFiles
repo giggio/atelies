@@ -58,4 +58,9 @@ echo $(date) Upload images
 echo $(date) Upload fonts
 .uploadPublicFiles/s3cmd/s3cmd put -r compiledPublic/fonts s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg >> .uploadPublicFiles/log/uploadToS3.log
 
+echo $(date) Deleting temp javascript files
+find test -name "*.js" -type f -delete
+find app -name "*.js" -type f -delete
+find ./public/javascripts/ -type f -name "*.js" ! -path "./public/javascripts/lib/*" -delete
+
 echo $(date) Done!
