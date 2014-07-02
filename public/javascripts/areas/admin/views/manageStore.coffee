@@ -9,10 +9,13 @@ define [
   './manageStorePagseguro'
   './manageStorePaypal'
   'backboneValidation'
-], ($, _, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, ManageStorePaypalView, Validation) ->
+  './admin'
+], ($, _, Backbone, Handlebars, manageStoreTemplate, validationErrorsTemplate, StoreView, ManageStorePagseguroView, ManageStorePaypalView, Validation, AdminView) ->
   class ManageStoreView extends Backbone.Open.View
     events:
       'click #updateStore':'_updateStore'
+      'click #confirmDeleteStore':'_confirmDeleteStore'
+      'click #confirmConfirmDeleteStore':'_confirmConfirmDeleteStore'
       'change #pagseguro':'_pagseguroChanged'
       'change #paypal':'_paypalChanged'
     template: manageStoreTemplate
@@ -22,7 +25,7 @@ define [
       return if @_redirectIfUserNotSatisfied()
       context = Handlebars.compile @template
       isnew = @model.id? is false
-      @$el.html context new: isnew, paypal: @model.get('paypal'), pagseguro: @model.get('pagseguro'), staticPath: @staticPath
+      @$el.html context new: isnew, paypal: @model.get('paypal'), pagseguro: @model.get('pagseguro'), staticPath: @staticPath, store: @model.toJSON()
       @bindings = @initializeBindings
         '#paypal':'checked:paypal'
         '#pagseguro':'checked:pagseguro'
@@ -117,3 +120,25 @@ define [
       v.required = paypal for v in [ val.paypalClientId, val.paypalSecret ]
       Validation.bind @
       @model.validate()
+    _confirmDeleteStore: ->
+      $('#modalDeleteStore').modal 'hide'
+      $('#modalConfirmDeleteStore').modal 'show'
+    _confirmConfirmDeleteStore: ->
+      $("#confirmConfirmDeleteStore").prop "disabled", on
+      $("#cancelConfirmConfirmDeleteStore").prop "disabled", on
+      @model.destroy
+        wait: true
+        error: (model, xhr, opt) =>
+          $("#confirmConfirmDeleteStore").prop "disabled", off
+          $("#cancelConfirmConfirmDeleteStore").prop "disabled", off
+          @logXhrError 'admin', xhr
+          $('#modalConfirmDeleteStore').modal 'hide'
+          .on 'hidden.bs.modal', => @showDialogError "Não foi possível excluir a loja. Tente novamente mais tarde."
+        success: =>
+          @_removeStoreFromStores @model
+          AdminView.setDialog title: "Adminstração Ateliês", message: "Loja removida com sucesso."
+          $('#modalConfirmDeleteStore').modal('hide').on 'hidden.bs.modal', -> Backbone.history.navigate 'home', true
+    _removeStoreFromStores: (store) ->
+      existingStore = _.findWhere adminStoresBootstrapModel.stores, _id: store.get('_id')
+      index = adminStoresBootstrapModel.stores.indexOf existingStore
+      adminStoresBootstrapModel.stores.splice index, 1

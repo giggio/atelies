@@ -111,6 +111,10 @@ Product.findRandom = (howMany) ->
       .then (newProducts) -> products.concat newProducts
 
 Product.totalForStore = (storeSlug) -> Q.ninvoke Product.find(storeSlug: storeSlug), 'count'
+Product.removeByStore = (store) ->
+  Product.findByStoreSlug store.slug
+  .then (products) -> Q.all (ProductComment.removeByProduct product for product in products)
+  .then -> Q.ninvoke Product, "remove", storeSlug: store.slug
 Product.findByStoreSlug = (storeSlug) -> Q.ninvoke Product, "find", storeSlug: storeSlug
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug
 Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()

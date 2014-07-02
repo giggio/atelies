@@ -24,6 +24,7 @@ define [
       viewsManager.$el = $ "#app-container > .admin"
       @_createRoutes
         '': @admin
+        'home': @admin
         'createStore': @createStore
         'manageStore/:storeId': @manageStore
         'store/:storeSlug': @store

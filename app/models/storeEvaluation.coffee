@@ -14,6 +14,7 @@ evaluationSchema = new mongoose.Schema
 
 module.exports = Evaluation = mongoose.model 'storeevaluation', evaluationSchema
 
+Evaluation.removeByStore = (store) -> Q.ninvoke Evaluation, "remove", store: store._id
 Evaluation.create = (evaluationAttrs) ->
   evaluation = new Evaluation evaluationAttrs
   evaluation.userName = evaluationAttrs.user.name

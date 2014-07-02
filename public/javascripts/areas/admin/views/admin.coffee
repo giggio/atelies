@@ -5,12 +5,16 @@ define [
   'text!./templates/admin.html'
 ], ($, Backbone, Handlebars, adminTemplate) ->
   class AdminView extends Backbone.Open.View
+    @setDialog: (dialog) -> @_dialog = dialog
+    @_getDialog: ->
+      [dialog, @_dialog] = [@_dialog, null]
+      dialog
     events:
       'click #createStore': -> Backbone.history.navigate 'createStore', true
     template: adminTemplate
     initialize: (opt) =>
       @stores = opt.stores
-      @dialog = opt.dialog
+      @dialog = opt.dialog or AdminView._getDialog()
     render: ->
       @$el.empty()
       context = Handlebars.compile @template

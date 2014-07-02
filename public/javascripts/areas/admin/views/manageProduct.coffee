@@ -20,7 +20,8 @@ define [
       @model = opt.product
       @model.bind 'change:shippingApplies', _.bind @_showShippingOptions, @
       @store = opt.store
-      @$el.html @template
+      context = Handlebars.compile @template
+      @$el.html context product: @model.toJSON()
       @_initializeBindings()
     render: ->
       @_setValidation()

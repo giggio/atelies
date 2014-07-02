@@ -35,6 +35,12 @@ storeSchema = new mongoose.Schema
   categories:             [ String ]
   productCount:           type: Number, required: true, default: 0
 
+storeSchema.methods.delete = ->
+  Product.removeByStore @
+  .then => Evaluation.removeByStore @
+  .then => Order.removeByStore @
+  .then => Q.ninvoke @, 'remove'
+
 storeSchema.methods._isTheOnlyProduct = (product, simple) ->
   if product.name is simple.name then return Q.fcall ->
   Product.findByStoreSlugAndSlug @slug, slug(simple.name.toLowerCase(), "_")

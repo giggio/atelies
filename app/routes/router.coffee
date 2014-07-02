@@ -79,6 +79,7 @@ exports.route = (app) ->
   #admin store
   app.post    "/api/admin/store",                                           admin.adminStoreCreate
   app.put     "/api/admin/store/:storeId",                                  admin.adminStoreUpdate
+  app.delete  "/api/admin/store/:storeId",                                  admin.adminStoreDelete
   app.put     "/api/admin/store/:storeId/setPagseguroOn",                   admin.adminStoreUpdateSetPagseguroOn
   app.put     "/api/admin/store/:storeId/setPagseguroOff",                  admin.adminStoreUpdateSetPagseguroOff
   app.put     "/api/admin/store/:storeId/setPaypalOn",                      admin.adminStoreUpdateSetPaypalOn

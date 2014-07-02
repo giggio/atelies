@@ -159,15 +159,16 @@
     </div>
     <div id="validationErrors"></div>
     {{#if new}}
+    <a href="/admin/home" class="btn btn-default">Cancelar</a>
     <input id="updateStore" type="button" class="btn btn-primary" value="Criar Loja"/>
     {{else}}
+    <a href="/admin/store/{{store.slug}}" class="btn btn-default">Cancelar</a>
     <input id="updateStore" type="button" class="btn btn-primary" value="Atualizar Loja"/>
-    {{#unless new}}
-      <div id="pagseguroOptions"></div>
-      <div id="paypalOptions"></div>
-    {{/unless}}
+    <div id="pagseguroOptions"></div>
+    <div id="paypalOptions"></div>
+    <input id="deleteStore" type="button" class="btn btn-danger" value="Excluir Loja" data-toggle="modal" data-target="#modalDeleteStore"/>
+    {{/if}}
   </form>
-  {{/if}}
   <div id="nameAlreadyExists" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="nameAlreadyExistsLabel">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -196,6 +197,48 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalDeleteStore" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabelDeleteStore" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="confirmModalLabelDeleteStore">Excluir loja</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+          <strong>Tem certeza?</strong> O processo de exclusão eliminará a loja "{{store.name}}", todos os produtos, comentários, avaliações,
+            pedidos e quaisquer outras informações relacionadas a loja e <strong>é irreversível</strong>.
+            Não será possível recuperar a loja posteriormente.
+          </p>
+          <p>
+            O processo de exclusão não afeta nenhuma outra loja que você administre, pedidos que você
+            tenha feito enquanto cliente ou a sua conta de qualquer forma.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Cancelar (não excluir)</button>
+          <button id="confirmDeleteStore" class="btn btn-danger">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalConfirmDeleteStore" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmConfirmModalLabelDeleteStore" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="confirmConfirmModalLabelDeleteStore">Confirmação</h3>
+        </div>
+        <div class="modal-body">
+          <p>Confirma a exclusão da loja "{{store.name}}"?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="cancelConfirmConfirmDeleteStore" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Não (não excluir)</button>
+          <button id="confirmConfirmDeleteStore" class="btn btn-danger">Sim</button>
         </div>
       </div>
     </div>

@@ -15,6 +15,7 @@ productCommentSchema.methods.toSimple = -> title: @title, body: @body, date: @da
 
 module.exports = ProductComment = mongoose.model 'productcomment', productCommentSchema
 
+ProductComment.removeByProduct = (product) -> Q.ninvoke ProductComment, 'remove', product: product._id
 ProductComment.findByProduct = (product) ->
   productId = if product._id? then product._id else product
   Q.ninvoke ProductComment, 'find', product: productId

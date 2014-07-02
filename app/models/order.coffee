@@ -154,6 +154,7 @@ orderSchema.methods.sendMailAfterPurchase = ->
 
 module.exports = Order = mongoose.model 'order', orderSchema
 
+Order.removeByStore = (store) -> Q.ninvoke Order, "remove", store: store._id
 Order.create = (user, store, items, shippingCost, paymentType) ->
   order = new Order customer:user, store:store, shippingCost: shippingCost
   for i in items

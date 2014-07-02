@@ -2,6 +2,10 @@ require './support/_specHelper'
 Store                     = require '../../app/models/store'
 Product                   = require '../../app/models/product'
 User                      = require '../../app/models/user'
+StoreEvaluation           = require '../../app/models/storeEvaluation'
+ProductComment            = require '../../app/models/productComment'
+StoreEvaluation           = require '../../app/models/storeEvaluation'
+Order                     = require '../../app/models/order'
 AdminManageStorePage      = require './support/pages/adminManageStorePage'
 Q                         = require 'q'
 
@@ -261,3 +265,55 @@ describe 'Admin manage store page', ->
       .then -> page.visit exampleStore._id.toString()
     it "shows store can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
     it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"
+
+  describe 'delete store', ->
+    userEvaluating = store = product = order = null
+    before ->
+      cleanDB()
+      .then ->
+        store = generator.store.a()
+        Q.ninvoke store, 'save'
+      .then ->
+        savingProduct = for i in [0..2]
+          p = generator.product.a()
+          if i is 0 then product = p
+          p.storeSlug = store.slug
+          p.name+="#{store.name}_#{i}_#{p.name}"
+          Q.ninvoke p, 'save'
+        Q.all savingProduct
+      .then ->
+        userSeller = generator.user.c()
+        userSeller.stores.push store
+        Q.ninvoke userSeller, 'save'
+      .then ->
+        userEvaluating = generator.user.d()
+        Q.ninvoke userEvaluating, 'save'
+      .then ->
+        item = product: product, quantity: 1
+        Order.create userEvaluating, store, [ item ], 1, 'directSell'
+      .then (o) ->
+        order = o
+        Q.ninvoke order, 'save'
+      .then -> order.addEvaluation user: userEvaluating, body: 'some body', rating: 2
+      .then (result) -> Q.ninvoke result.evaluation, 'save'
+      .then -> Q.all [Q.ninvoke(order, 'save'), Q.ninvoke store, 'save']
+      .then ->
+        userCommenting = generator.user.b()
+        Q.ninvoke userCommenting, 'save'
+      .spread (userCommenting) -> product.addComment user: userCommenting, body: 'comment body'
+      .then (comment) -> Q.ninvoke comment, 'save'
+      .then -> page.loginFor userSeller._id
+      .then -> page.visit store._id.toString()
+      .then page.clickDeleteStore
+      .then page.clickConfirmDeleteStore
+      .then page.clickConfirmConfirmDeleteStore
+    it 'is at the admin page', -> page.currentUrl().should.become "http://localhost:8000/admin/home"
+    it "shows store deleted message", -> page.getDialogMsg().should.become "Loja removida com sucesso."
+    it 'deleted the store', -> Store.findBySlug(store.slug).should.eventually.be.null
+    it 'deleted the store products', -> Product.findByStoreSlug(store.slug).should.eventually.be.like []
+    it 'deleted the store orders', -> Q.ninvoke(Order, 'find', store:store._id).should.eventually.be.like []
+    it 'deleted the store product comments', -> Q.ninvoke(ProductComment, 'find').should.eventually.be.like []
+    it 'deleted the store evaluations', -> Q.ninvoke(StoreEvaluation, 'find', store:store._id).should.eventually.be.like []
+    it 'deleted the store from the user list of stores', ->
+      User.findByEmail(userSeller.email)
+      .then (user) -> user.stores.should.be.like []

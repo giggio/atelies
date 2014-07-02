@@ -88,3 +88,15 @@ module.exports = class AdminManageStorePage extends Page
   setPictureFiles: (bannerPath, flyerPath) =>
     @uploadFile '#banner', bannerPath
     .then => @uploadFile '#flyer', flyerPath
+  clickDeleteStore: ->
+    @waitForSelectorClickable "#deleteStore"
+    .then => @pressButton "#deleteStore"
+    .then => @waitForSelectorClickable "#confirmDeleteStore"
+  clickConfirmDeleteStore: ->
+    @waitForSelectorClickable "#confirmDeleteStore"
+    .then => @pressButton "#confirmDeleteStore"
+    .then => @waitForSelectorClickable "#confirmConfirmDeleteStore"
+  clickConfirmConfirmDeleteStore: ->
+    @waitForSelectorClickable "#confirmConfirmDeleteStore"
+    .then => @pressButtonAndWait "#confirmConfirmDeleteStore"
+    .then -> waitMilliseconds 500

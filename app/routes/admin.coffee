@@ -16,7 +16,7 @@ module.exports = class AdminRoutes
   constructor: (@env) ->
     @_auth 'admin'
     @_authVerified 'adminStoreCreate'
-    @_authSeller 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'adminStoreUpdateSetPaypalOff', 'adminStoreUpdateSetPaypalOn', 'storeProduct', 'storeProducts', 'orders', 'order', 'updateOrderStatus'
+    @_authSeller 'adminStoreDelete', 'adminStoreCreate', 'adminStoreUpdate', 'adminProductUpdate', 'adminProductDelete', 'adminProductCreate', 'adminStoreUpdateSetPagseguroOff', 'adminStoreUpdateSetPagseguroOn', 'adminStoreUpdateSetPaypalOff', 'adminStoreUpdateSetPaypalOn', 'storeProduct', 'storeProducts', 'orders', 'order', 'updateOrderStatus'
   _.extend @::, RouteFunctions::
 
   handleError: @::_handleError.partial 'admin'
@@ -27,6 +27,18 @@ module.exports = class AdminRoutes
     .then (user) -> [user.toSimpleUser(), user.stores.map (s) -> s.toSimple()]
     .spread (user, stores) -> res.render 'admin/admin', stores: stores, user: user
     .catch (err) => return @handleError req, res, err, false
+
+  adminStoreDelete: (req, res) ->
+    throw new AccessDenied() unless req.user.hasStore req.params.storeId
+    Q.ninvoke Store, 'findById', req.params.storeId
+    .then (store) -> store.delete()
+    .then ->
+      user = req.user
+      index = user.stores.indexOf req.params.storeId
+      user.stores.splice index, 1
+      Q.ninvoke user, 'save'
+    .then -> res.send 204
+    .catch (err) => @handleError req, res, err
 
   adminStoreCreate: (req, res) ->
     body = req.body
