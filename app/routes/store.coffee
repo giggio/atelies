@@ -102,7 +102,7 @@ module.exports = class StoreRoutes
     if req.params.result is 'fail'
       return res.redirect "/#{req.params.storeSlug}/finishOrder/orderNotCompleted"
     Q.all [
-      Q.ninvoke Store, 'findBySlug', req.params.storeSlug
+      Store.findBySlug req.params.storeSlug
       Q.ninvoke Order, "findById", req.params.orderId
     ]
     .spread (store, order) =>
