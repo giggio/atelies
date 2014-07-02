@@ -62,5 +62,7 @@ echo $(date) Deleting temp javascript files
 find test -name "*.js" -type f -delete
 find app -name "*.js" -type f -delete
 find ./public/javascripts/ -type f -name "*.js" ! -path "./public/javascripts/lib/*" -delete
+rm server.js
+rm compiledPublic/ -rf
 
 echo $(date) Done!
