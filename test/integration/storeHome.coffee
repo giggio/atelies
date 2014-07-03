@@ -5,6 +5,7 @@ Product         = require '../../app/models/product'
 StoreHomePage   = require './support/pages/storeHomePage'
 request         = require 'request'
 Q               = require 'q'
+config          = require '../../app/helpers/config'
 
 describe 'store home page', ->
   page = store = null
@@ -43,6 +44,7 @@ describe 'store home page', ->
     it 'should display the products', -> page.products().then (p) -> p.length.should.equal 2
 
   describe 'store at subdomain', ->
+    return if config.test.snapci
     before ->
       cleanDB().then ->
         store = generator.store.a()
