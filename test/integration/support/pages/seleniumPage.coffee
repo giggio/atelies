@@ -2,14 +2,19 @@ webdriver       = require 'selenium-webdriver'
 connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 Q               = require 'q'
+config          = require '../../../../app/helpers/config'
 
 useChrome = on
 
 before ->
   if useChrome
-    chromedriver = require 'chromedriver'
+    if config.test.snapci
+      chromedriverPath = '/usr/local/bin/chromedriver'
+    else
+      chromedriver = require 'chromedriver'
+      chromedriverPath = chromedriver.path
     chrome = require "selenium-webdriver/chrome"
-    chromeServiceBuilder = new chrome.ServiceBuilder chromedriver.path
+    chromeServiceBuilder = new chrome.ServiceBuilder chromedriverPath
     chromeServiceBuilder.args_.push "--whitelisted-ips"
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
