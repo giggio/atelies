@@ -3,6 +3,11 @@ connectUtils    = require 'express/node_modules/connect/lib/utils'
 _               = require 'underscore'
 Q               = require 'q'
 config          = require '../../../../app/helpers/config'
+fs              = require 'fs'
+path            = require 'path'
+slug            = require '../../../../app/helpers/slug'
+writeFile = Q.denodeify fs.writeFile
+mkdir = Q.denodeify fs.mkdir
 
 useChrome = on
 
@@ -32,6 +37,26 @@ before ->
   Page.driver.manage().timeouts().implicitlyWait 2000
 
 after -> Page.driver.quit()
+
+mkdirParent = (dirPath, mode) ->
+  mkdir dirPath, mode
+  .catch (error) ->
+    if error.errno is 34
+      mkdirParent path.dirname(dirPath), mode
+      mkdirParent dirPath, mode
+    else
+      throw error
+
+onTestError (title, err) ->
+  return unless Page.driver?
+  Q Page.driver.takeScreenshot()
+  .then (base64) ->
+    errMessage = if err.message? then '_' + slug(err.message) else ''
+    fileName = path.join __dirname, '../../../../', 'log', new Date().valueOf() + '_' + slug(title) + errMessage + '.png'
+    dir = path.dirname fileName
+    Q.fcall -> unless fs.existsSync dir then mkdirParent dir
+    .then -> writeFile fileName, new Buffer(base64, 'base64')
+  .catch (err) -> console.log "error saving file: ", err
 
 module.exports = class Page
   constructor: (url, page) ->

@@ -91,12 +91,12 @@ describe 'Account order detail page', ->
         page.loginFor user._id
       .then -> page.visit order1._id
       .then -> page.evaluateOrderWith body: evaluationBody, rating: rating
-    it 'should record the evaluation on the store', ->
+    it 'should record the evaluation on the store', test ->
       Q.ninvoke Store, "findById", store._id
       .then (st) ->
         st.numberOfEvaluations.should.equal 1
         st.evaluationAvgRating.should.equal 4
-    it 'should have stored the evaluation and set it on the order', ->
+    it 'should have stored the evaluation and set it on the order', test ->
       Q.ninvoke StoreEvaluation, "findOne", order: order1._id
       .then (ev) ->
         ev.body.should.equal evaluationBody
@@ -107,14 +107,14 @@ describe 'Account order detail page', ->
         ev.user.toString().should.equal user._id.toString()
         Q.ninvoke Order, "findById", order1._id
         .then (o) -> o.evaluation.toString().should.equal ev._id.toString()
-    it 'should make the evaluation field disappear', -> page.newEvaluationVisible().should.eventually.be.false
-    it 'should show existing evaluation', -> page.existingEvaluation().should.become rating
-    it 'should send an e-mail message to the store admins', ->
+    it 'should make the evaluation field disappear', test -> page.newEvaluationVisible().should.eventually.be.false
+    it 'should show existing evaluation', test -> page.existingEvaluation().should.become rating
+    it 'should send an e-mail message to the store admins', test ->
       Postman.sentMails.length.should.equal 1
       mail = Postman.sentMails[0]
       mail.to.should.equal "#{userSeller.name} <#{userSeller.email}>"
       mail.subject.should.equal "Ateliês: A loja #{store.name} recebeu uma avaliação"
-    it 'does not show pending evaluation anymore when visited again and shows existing evaluation', ->
+    it 'does not show pending evaluation anymore when visited again and shows existing evaluation', test ->
       page.reload().then ->
         Q.all [
           page.newEvaluationVisible().should.eventually.be.false

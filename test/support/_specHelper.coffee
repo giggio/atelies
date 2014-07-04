@@ -13,6 +13,7 @@ exportAll = (obj) ->
   global[key] = value for key,value of obj
 
 exportAll require './waitHelper'
+exportAll require './testFiddlers'
 exportAll matchers
 
 global.exportAll = exportAll
