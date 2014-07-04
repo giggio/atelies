@@ -10,19 +10,26 @@ describe 'Account order detail page', ->
   page = store = product1 = product2 = user = order1 = userSeller = null
   before ->
     page = new AccountOrderDetailPage()
+    whenServerLoaded()
+  setup = ->
     cleanDB()
     .then ->
       store = generator.store.a()
-      store.save()
+      Q.ninvoke store, 'save'
+    .then ->
       userSeller = generator.user.c()
       userSeller.stores.push store
-      userSeller.save()
+      Q.ninvoke userSeller, 'save'
+    .then ->
       product1 = generator.product.a()
-      product1.save()
+      Q.ninvoke product1, 'save'
+    .then ->
       product2 = generator.product.b()
-      product2.save()
+      Q.ninvoke product2, 'save'
+    .then ->
       user = generator.user.d()
-      user.save()
+      Q.ninvoke user, 'save'
+    .then ->
       items = [
         { product: product1, quantity: 1 }
         { product: product2, quantity: 2 }
@@ -32,12 +39,12 @@ describe 'Account order detail page', ->
     .then (order) ->
       order1 = order
       order.orderDate = new Date(2013,0,1)
-      order1.save()
-    .then whenServerLoaded
+      Q.ninvoke order1, 'save'
 
   describe 'show order with two products', ->
     before ->
-      page.loginFor user._id
+      setup()
+      .then -> page.loginFor user._id
       .then -> page.visit order1._id
     it 'shows order', ->
       page.order().then (order) ->
@@ -76,10 +83,12 @@ describe 'Account order detail page', ->
   describe 'evaluation order and store', ->
     evaluationBody = rating = null
     before ->
-      Postman.sentMails.length = 0
-      evaluationBody = "body1"
-      rating = 4
-      page.loginFor user._id
+      setup()
+      .then ->
+        Postman.sentMails.length = 0
+        evaluationBody = "body1"
+        rating = 4
+        page.loginFor user._id
       .then -> page.visit order1._id
       .then -> page.evaluateOrderWith body: evaluationBody, rating: rating
     it 'should record the evaluation on the store', ->
