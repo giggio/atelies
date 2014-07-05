@@ -55,7 +55,9 @@ onTestError (title, err) ->
     fileName = path.join __dirname, '../../../../', 'log', new Date().valueOf() + '_' + slug(title) + errMessage + '.png'
     dir = path.dirname fileName
     Q.fcall -> unless fs.existsSync dir then mkdirParent dir
-    .then -> writeFile fileName, new Buffer(base64, 'base64')
+    .then ->
+      console.log "Test failed, writing screenshot at '#{fileName}'."
+      writeFile fileName, new Buffer(base64, 'base64')
   .catch (err) -> console.log "error saving file: ", err
 
 module.exports = class Page
