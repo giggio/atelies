@@ -25,13 +25,14 @@ describe 'Admin orders page', ->
       order2.items[0].product = product1
       userSeller = generator.user.c()
       userSeller.stores.push store
-      Q.all [Q.ninvoke(store, 'save'), Q.ninvoke(user, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(order1, 'save'), Q.ninvoke(order2, 'save'), Q.ninvoke(userSeller, 'save') ]
+      Q.ninvoke order1, 'save'
+    .then -> Q.all [Q.ninvoke(store, 'save'), Q.ninvoke(user, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(order2, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe 'with two orders', ->
     before ->
       page.loginFor userSeller._id
       .then page.visit
-    it 'shows orders', ->
+    it 'shows orders', test ->
       page.orders().then (orders) ->
         orders.length.should.equal 2
         o1 = orders[0]

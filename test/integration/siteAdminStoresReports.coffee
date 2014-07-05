@@ -4,7 +4,7 @@ Store                           = require '../../app/models/store'
 Q                               = require 'q'
 
 describe 'Site Admin Stores Reports page', ->
-  page = adminUser = customer = store2 = store1 = userSeller = product1 = product2 = order1 = order2 = null
+  page = adminUser = customer = store1 = store2 = store3 = store4 = userSeller = product1 = product2 = order1 = order2 = null
   before -> page = new SiteAdminStoresReportsPage()
   setDb = ->
     cleanDB().then ->

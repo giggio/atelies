@@ -254,10 +254,10 @@ module.exports = class Page
       Q.ninvoke sessionStore, 'get', sessionId
       .then (session) ->
         session.auth = {} unless session.auth?
-        auth = session.auth
-        auth.userId = _id
-        auth.loggedIn = true
+        session.auth.userId = _id
+        session.auth.loggedIn = true
         Q.ninvoke sessionStore, 'set', sessionId, session
+      .done()
   eval: (script) -> Q @driver.executeScript(script)
   clearLocalStorage: ->
     @currentUrl()

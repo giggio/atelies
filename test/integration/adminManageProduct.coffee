@@ -15,10 +15,13 @@ describe 'Admin Manage Product page', ->
       product = generator.product.a()
       product2 = generator.product.d()
       store = generator.store.a()
-      store.calculateProductCount()
+      Q.all [ Q.ninvoke(product, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(store, 'save') ]
+    .then -> store.calculateProductCount()
+    .then ->
       userSeller = generator.user.c()
       userSeller.stores.push store
-      Q.all [Q.ninvoke(product, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke userSeller, 'save']
+      Q.ninvoke userSeller, 'save'
+
   describe 'viewing product', ->
     before ->
       page.loginFor userSeller._id
