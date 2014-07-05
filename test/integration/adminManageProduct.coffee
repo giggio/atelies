@@ -11,19 +11,14 @@ describe 'Admin Manage Product page', ->
   page = product = product2 = store = userSeller = null
   before ->
     page = new AdminManageProductPage()
-    cleanDB()
-    .then ->
+    cleanDB().then ->
       product = generator.product.a()
       product2 = generator.product.d()
-      Q.all [Q.ninvoke(product, 'save'), Q.ninvoke(product2, 'save')]
-    .then ->
       store = generator.store.a()
       store.calculateProductCount()
-    .then ->
       userSeller = generator.user.c()
       userSeller.stores.push store
-      Q.ninvoke userSeller, 'save'
-    .then whenServerLoaded
+      Q.all [Q.ninvoke(product, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke userSeller, 'save']
   describe 'viewing product', ->
     before ->
       page.loginFor userSeller._id
@@ -111,8 +106,8 @@ describe 'Admin Manage Product page', ->
     before ->
       existingProduct = generator.product.c()
       existingProduct.storeSlug = store.slug
-      existingProduct.save()
-      page.loginFor userSeller._id
+      Q.ninvoke existingProduct, 'save'
+      .then -> page.loginFor userSeller._id
       .then -> page.visit store.slug, product._id.toString()
       .then -> page.setFieldsAs existingProduct
       .then page.clickUpdateProduct
@@ -193,7 +188,7 @@ describe 'Admin Manage Product page', ->
       AmazonFileUploader.filesUploaded.length = 0
       product3 = generator.product.e()
       product3.picture = null
-      product3.save()
+      Q.ninvoke product3, 'save'
       page.loginFor userSeller._id
       .then -> page.visit store.slug, product3._id.toString()
       .then ->
@@ -232,12 +227,10 @@ describe 'Admin Manage Product page', ->
       cleanDB()
       .then ->
         store = generator.store.a()
-        store.save()
         product = generator.product.a()
-        product.save()
         userSeller = generator.user.c()
-        userSeller.save()
-        page.loginFor userSeller._id
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product, 'save'), Q.ninvoke(userSeller, 'save') ]
+      .then -> page.loginFor userSeller._id
       .then -> page.visit store.slug, product._id.toString()
     it "shows product can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
     it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"

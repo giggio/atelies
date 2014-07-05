@@ -6,8 +6,6 @@ Q                         = require 'q'
 
 describe 'Reset Password', ->
   user = resetKey = page = null
-  before whenServerLoaded
-
   describe 'Can reset password', ->
     before ->
       page = new AccountResetPasswordPage()
@@ -15,7 +13,7 @@ describe 'Reset Password', ->
       .then ->
         user = generator.user.a()
         resetKey = user.createResetKey()
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.visit user._id, resetKey
       .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton
@@ -37,7 +35,7 @@ describe 'Reset Password', ->
       .then ->
         user = generator.user.a()
         passwordHash = user.passwordHash
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.visit user._id, resetKey
       .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton
@@ -56,7 +54,7 @@ describe 'Reset Password', ->
         user = generator.user.a()
         passwordHash = user.passwordHash
         resetKey = user.createResetKey()
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.visit user._id, resetKey + '123'
       .then -> page.setFieldsAs newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton

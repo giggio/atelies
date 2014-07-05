@@ -5,49 +5,37 @@ Q                               = require 'q'
 
 describe 'Site Admin Stores Reports page', ->
   page = adminUser = customer = store2 = store1 = userSeller = product1 = product2 = order1 = order2 = null
-  before ->
-    page = new SiteAdminStoresReportsPage()
-    whenServerLoaded()
+  before -> page = new SiteAdminStoresReportsPage()
   setDb = ->
     cleanDB().then ->
       adminUser = generator.user.a()
       adminUser.isAdmin = true
-      adminUser.save()
       store1 = generator.store.a()
       store1.categories = [ 'abc', 'def' ]
       store1.isFlyerAuthorized = undefined
-      store1.save()
       store2 = generator.store.b()
       store2.isFlyerAuthorized = undefined
-      store2.save()
       store3 = generator.store.c()
       store3.isFlyerAuthorized = true
-      store3.save()
       store4 = generator.store.d()
       store4.isFlyerAuthorized = false
-      store4.save()
       product1 = generator.product.a()
-      product1.save()
       product2 = generator.product.b()
-      product2.save()
       customer = generator.user.d()
-      customer.save()
       order1 = generator.order.a()
       order1.customer = customer
       order1.deliveryAddress = customer.deliveryAddress
       order1.store = store1
       order1.items[0].product = product1
-      order1.save()
       order2 = generator.order.b()
       order2.customer = customer
       order2.deliveryAddress = customer.deliveryAddress
       order2.store = store1
       order2.items[0].product = product2
-      order2.save()
       userSeller = generator.user.a()
       userSeller.stores.push store1
       userSeller.stores.push store2
-      userSeller.save()
+      Q.all [ Q.ninvoke(adminUser, 'save'), Q.ninvoke(store1, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(store3, 'save'), Q.ninvoke(store4, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(customer, 'save'), Q.ninvoke(order1, 'save'), Q.ninvoke(order2, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe 'shows report with 4 stores', ->
     before ->

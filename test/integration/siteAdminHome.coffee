@@ -1,5 +1,6 @@
 require './support/_specHelper'
 SiteAdminHomePage                = require './support/pages/siteAdminHomePage'
+Q                                = require 'q'
 
 describe 'Site Admin home page', ->
   page = regularUser = adminUser = superAdmin = null
@@ -7,13 +8,10 @@ describe 'Site Admin home page', ->
     cleanDB().then ->
       page = new SiteAdminHomePage()
       regularUser = generator.user.a()
-      regularUser.save()
       superAdmin = generator.user.superAdmin()
-      superAdmin.save()
       adminUser = generator.user.a()
       adminUser.isAdmin = true
-      adminUser.save()
-      whenServerLoaded()
+      Q.all [Q.ninvoke(regularUser, 'save'), Q.ninvoke(superAdmin, 'save'), Q.ninvoke(adminUser, 'save') ]
 
   describe 'accessing with a non admin (regular) user', ->
     before ->

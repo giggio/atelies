@@ -22,11 +22,9 @@ describe 'Admin Create Product page', ->
       productNoShippingInfo2 = generator.product.b().toJSON()
       productNoShippingInfo2.shipping.applies = false
       store = generator.store.a()
-      store.save()
       userSeller = generator.user.c()
       userSeller.stores.push store
-      userSeller.save()
-    .then whenServerLoaded
+      Q.all [Q.ninvoke(store, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe "can't create invalid product", ->
     before ->
@@ -69,8 +67,8 @@ describe 'Admin Create Product page', ->
     before ->
       existingProduct = generator.product.c()
       existingProduct.storeSlug = store.slug
-      existingProduct.save()
-      page.loginFor userSeller._id
+      Q.ninvoke existingProduct, 'save'
+      .then -> page.loginFor userSeller._id
       .then -> page.visit store.slug
       .then -> page.setFieldsAs existingProduct
       .then page.clickUpdateProduct
@@ -183,14 +181,14 @@ describe 'Admin Create Product page', ->
         productOnDb.inventory.should.equal product3.inventory
 
   describe "can't create a product if you don't own it", ->
+    userSellerNotAuthorized = undefined
     before ->
       cleanDB()
       .then ->
         store = generator.store.a()
-        store.save()
         userSellerNotAuthorized = generator.user.c()
-        userSellerNotAuthorized.save()
-        page.loginFor userSellerNotAuthorized._id
+        Q.all [Q.ninvoke(store, 'save'), Q.ninvoke(userSellerNotAuthorized, 'save') ]
+      .then -> page.loginFor userSellerNotAuthorized._id
       .then -> page.visit store.slug
     it "shows product can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
     it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"

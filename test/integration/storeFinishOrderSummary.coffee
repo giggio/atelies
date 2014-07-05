@@ -16,22 +16,18 @@ describe 'Store Finish Order: Summary', ->
     storeFinishOrderShippingPage = new StoreFinishOrderShippingPage page
     storeCartPage = new StoreCartPage page
     storeProductPage = new StoreProductPage page
-    whenServerLoaded()
 
   describe 'payment info', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
-        product1.save()
         p1Inventory = product1.inventory
         product2 = generator.product.b()
-        product2.save()
         p2Inventory = product2.inventory
         user1 = generator.user.d()
-        user1.save()
-        page.clearLocalStorage()
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(user1, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
+        .then -> page.clearLocalStorage()
         .then page.loginFor user1._id
         .then -> storeProductPage.visit 'store_1', 'name_1'
         .then storeProductPage.purchaseItem
@@ -60,17 +56,14 @@ describe 'Store Finish Order: Summary', ->
     before ->
       cleanDB().then ->
         store2 = generator.store.b()
-        store2.save()
         product1 = generator.product.a()
         product1.storeSlug = store2.slug
         product1.storeName = store2.name
-        product1.save()
         p1Inventory = product1.inventory
         product3 = generator.product.c()
-        product3.save()
         user1 = generator.user.d()
-        user1.save()
-        page.clearLocalStorage()
+        Q.all [ Q.ninvoke(store2, 'save'), Q.ninvoke(user1, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product3, 'save') ]
+        .then -> page.clearLocalStorage()
         .then page.loginFor user1._id
         .then -> storeProductPage.visit 'store_2', 'name_3'
         .then storeProductPage.purchaseItem
@@ -115,14 +108,12 @@ describe 'Store Finish Order: Summary', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
         product1.shipping.applies = false
-        product1.save()
         p1Inventory = product1.inventory
         user1 = generator.user.d()
-        user1.save()
-        page.clearLocalStorage()
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(user1, 'save'), Q.ninvoke(product1, 'save') ]
+        .then -> page.clearLocalStorage()
         .then -> page.loginFor user1._id
         .then -> storeProductPage.visit 'store_1', 'name_1'
         .then storeProductPage.purchaseItem

@@ -6,30 +6,23 @@ Q                               = require 'q'
 
 describe 'Site Admin Authorize Stores page', ->
   page = adminUser = user = store2 = store1 = userSeller = null
-  before ->
-    page = new SiteAdminAuthorizeStoresPage()
-    whenServerLoaded()
+  before -> page = new SiteAdminAuthorizeStoresPage()
   setDb = ->
     cleanDB().then ->
       adminUser = generator.user.a()
       adminUser.isAdmin = true
-      adminUser.save()
       store1 = generator.store.a()
       store1.isFlyerAuthorized = undefined
-      store1.save()
       store2 = generator.store.b()
       store2.isFlyerAuthorized = undefined
-      store2.save()
       store3 = generator.store.c()
       store3.isFlyerAuthorized = true
-      store3.save()
       store4 = generator.store.d()
       store4.isFlyerAuthorized = false
-      store4.save()
       userSeller = generator.user.a()
       userSeller.stores.push store1
       userSeller.stores.push store2
-      userSeller.save()
+      Q.all [Q.ninvoke(adminUser, 'save'), Q.ninvoke(store1, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(store3, 'save'), Q.ninvoke(store4, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe 'shows stores to authorize', ->
     before ->

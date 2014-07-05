@@ -35,6 +35,7 @@ before ->
       .withCapabilities(capabilities)
       .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
+  whenServerLoaded()
 
 after -> Page.driver.quit()
 

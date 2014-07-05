@@ -11,14 +11,13 @@ describe 'Register', ->
     page = new Page()
     cleanDB().then ->
       userA = generator.user.a()
-      userA.save()
-      whenServerLoaded
+      Q.ninvoke userA, 'save'
 
   describe "Can't register as super admin", ->
     before ->
       page.clearCookies()
-      .then page.visit
-      .then page.clickManualEntry
+      .then -> page.visit()
+      .then -> page.clickManualEntry()
       .then -> page.setFieldsAs name: "Some Person", email: config.superAdminEmail, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton
     it 'shows the register failed message', test -> page.errors().should.become 'E-mail já cadastrado.'
@@ -29,9 +28,9 @@ describe 'Register', ->
   describe 'Must supply name, email and password or form is not submitted', ->
     before ->
       page.clearCookies()
-      .then page.visit
-      .then page.clickManualEntry
-      .then page.clickRegisterButton
+      .then -> page.visit()
+      .then -> page.clickManualEntry()
+      .then -> page.clickRegisterButton()
     it 'does not show the register failed message', test -> page.hasErrors (itHas) -> expect(itHas).to.be.false
     it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
     it 'Required messages are shown', test ->
@@ -44,10 +43,10 @@ describe 'Register', ->
   describe "Can't register successfully with existing email information", ->
     before ->
       page.clearCookies()
-      .then page.visit
-      .then page.clickManualEntry
+      .then -> page.visit()
+      .then -> page.clickManualEntry()
       .then -> page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
-      .then page.clickRegisterButton
+      .then -> page.clickRegisterButton()
     it 'shows the register failed message', test -> page.errors().should.become 'E-mail já cadastrado.'
     it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
     it 'does not show logout link', test -> page.logoutLinkExists().should.eventually.be.false
@@ -56,7 +55,7 @@ describe 'Register', ->
   describe "Can't register successfully with weak password", ->
     before ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true
       .then page.clickRegisterButton
@@ -68,7 +67,7 @@ describe 'Register', ->
   describe 'Can register successfully with correct information', ->
     before ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: "some@email.com", password: "P@ssw0rd12", isSeller: false, passwordVerify: 'P@ssw0rd12', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567', termsOfUse: true
       .then page.clickRegisterButton
@@ -95,7 +94,7 @@ describe 'Register', ->
   describe 'Can register as seller successfully with correct information', ->
     before ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "P@ssw0rd12", isSeller: true, passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton

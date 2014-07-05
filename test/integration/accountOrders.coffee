@@ -1,6 +1,7 @@
 require './support/_specHelper'
 Order               = require '../../app/models/order'
 AccountOrdersPage   = require './support/pages/accountOrdersPage'
+Q                   = require 'q'
 
 describe 'Account orders page', ->
   page = store = product1 = product2 = user = order1 = order2 = null
@@ -9,31 +10,27 @@ describe 'Account orders page', ->
     cleanDB()
     .then ->
       store = generator.store.a()
-      store.save()
       product1 = generator.product.a()
-      product1.save()
       product2 = generator.product.b()
-      product2.save()
       user = generator.user.d()
-      user.save()
+      Q.all [Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(user, 'save')]
+    .then ->
       order1 = generator.order.a()
       order1.customer = user
       order1.deliveryAddress = user.deliveryAddress
       order1.store = store
       order1.items[0].product = product1
-      order1.save()
       order2 = generator.order.b()
       order2.customer = user
       order2.deliveryAddress = user.deliveryAddress
       order2.store = store
       order2.items[0].product = product1
-      order2.save()
-    .then whenServerLoaded
+      Q.all [Q.ninvoke(order1, 'save'), Q.ninvoke(order2, 'save')]
 
   describe 'with two orders', ->
     before ->
       page.loginFor user._id
-      .then page.visit
+      .then -> page.visit()
     it 'shows orders', ->
       page.orders().then (orders) ->
         orders.length.should.equal 2

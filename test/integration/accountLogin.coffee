@@ -8,12 +8,9 @@ describe 'Login', ->
     page = new Page()
     cleanDB().then ->
       userA = generator.user.a()
-      userA.save()
       userB = generator.user.b()
-      userB.save()
       userSellerC = generator.user.c()
-      userSellerC.save()
-    .then whenServerLoaded
+      Q.all [ Q.ninvoke(userSellerC, 'save'), Q.ninvoke(userA, 'save'), Q.ninvoke(userB, 'save') ]
 
   describe 'Login in with unknown user fails', ->
     before ->
@@ -40,7 +37,7 @@ describe 'Login', ->
   describe 'Can login successfully with regular user', ->
     before ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs userA
       .then page.clickLoginButton
     it 'does not show the login failed message', test -> page.hasErrors().should.eventually.be.false
@@ -67,7 +64,7 @@ describe 'Login', ->
   describe 'Three errors on login does not show captcha if user does not exist', ->
     it 'does not show login link', test ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
       .then page.clickLoginButton
       .then -> page.setFieldsAs email:"someinexistentuser@a.com", password:"abcdasklfadsj"
@@ -79,7 +76,7 @@ describe 'Login', ->
   describe 'Three errors on login shows captcha if user exists', ->
     it 'shows login link', test ->
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs email:userA.email, password:"abcdasklfadsj"
       .then page.clickLoginButton
       .then -> page.setFieldsAs email:userA.email, password:"abcdasklfadsj"

@@ -11,12 +11,9 @@ describe 'Home Search Product', ->
     .then ->
       product1 = generator.product.a()
       product2 = generator.product.d()
-      product1.save()
-      product2.save()
       store1 = generator.store.a()
-      store1.save()
-    .then whenServerLoaded
-    .then page.visit
+      Q.all [Q.ninvoke(store1, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
+    .then -> page.visit()
     .then -> page.searchProductsText 'cool'
     .then page.clickDoSearchProducts
   it 'shows product', -> page.searchProductsLength().should.become 1

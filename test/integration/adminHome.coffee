@@ -1,23 +1,19 @@
 require './support/_specHelper'
 AdminHomePage                = require './support/pages/adminHomePage'
+Q                            = require 'q'
 
 describe 'Admin home page', ->
   userSeller = userNonSeller = store1 = store2 = null
   before ->
     cleanDB().then ->
       store1 = generator.store.a()
-      store1.save()
       store2 = generator.store.b()
-      store2.save()
       store3 = generator.store.c()
-      store3.save()
       userNonSeller = generator.user.a()
-      userNonSeller.save()
       userSeller = generator.user.c()
       userSeller.stores.push store1
       userSeller.stores.push store2
-      userSeller.save()
-    .then whenServerLoaded
+      Q.all [Q.ninvoke(store1, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(store3, 'save'), Q.ninvoke(userNonSeller, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe 'accessing with a logged in and seller user', ->
     page = null

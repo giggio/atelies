@@ -9,9 +9,7 @@ config          = require '../../app/helpers/config'
 
 describe 'store home page', ->
   page = store = null
-  before ->
-    page = new StoreHomePage()
-    whenServerLoaded()
+  before -> page = new StoreHomePage()
   describe 'when store doesnt exist', ->
     describe 'display', ->
       it 'shows not found', ->
@@ -27,20 +25,18 @@ describe 'store home page', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
-        page.visit "store_1"
+        Q.ninvoke store, 'save'
+      .then -> page.visit "store_1"
     it 'should display no products', -> page.products().then (p) -> p.length.should.equal 0
 
   describe 'when store exists and has products', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
         product2 = generator.product.b()
-        product1.save()
-        product2.save()
-        page.visit "store_1"
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
+      .then -> page.visit "store_1"
     it 'should display the products', -> page.products().then (p) -> p.length.should.equal 2
 
   describe 'store at subdomain', ->
@@ -48,32 +44,27 @@ describe 'store home page', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
         product2 = generator.product.b()
-        product1.save()
-        product2.save()
-        page.visit "http://store_1.localhost:8000"
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
+      .then -> page.visit "http://store_1.localhost:8000"
     it 'should display the products', -> page.products().then (p) -> p.length.should.equal 2
 
   describe 'evaluation', ->
     before ->
       cleanDB().then ->
         userEvaluating1 = generator.user.d()
-        userEvaluating1.save()
         userEvaluating2 = generator.user.d()
         userEvaluating2.name = "John Smith"
-        userEvaluating2.save()
         body1 = "body1"
         body2 = "body2"
         rating1 = 2
         rating2 = 5
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
-        product1.save()
         item1 = product: product1, quantity: 1
-        Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(userEvaluating1, 'save') , Q.ninvoke(userEvaluating2, 'save') ]
+        .then -> Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
         .then (order) -> Q.ninvoke order, "save"
         .spread (order) -> order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
         .then (result) ->

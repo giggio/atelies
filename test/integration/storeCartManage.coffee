@@ -3,6 +3,7 @@ Store               = require '../../app/models/store'
 Product             = require '../../app/models/product'
 StoreCartPage       = require './support/pages/storeCartPage'
 StoreProductPage    = require './support/pages/storeProductPage'
+Q                   = require 'q'
 
 describe 'Store shopping cart page (manage)', ->
   page = storeProductPage = store = product1 = product2 = store2 = product3 = null
@@ -11,12 +12,9 @@ describe 'Store shopping cart page (manage)', ->
     storeProductPage = new StoreProductPage page
     cleanDB().then ->
       store = generator.store.a()
-      store.save()
       product1 = generator.product.a()
-      product1.save()
       product2 = generator.product.b()
-      product2.save()
-      whenServerLoaded()
+      Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
 
   describe 'with two items, when remove one item', ->
     before ->

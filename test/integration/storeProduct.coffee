@@ -9,17 +9,14 @@ Q                     = require 'q'
 
 describe 'Store product page', ->
   page = store = product1 = null
-  before ->
-    page = new StoreProductPage()
-    whenServerLoaded()
+  before -> page = new StoreProductPage()
   describe 'regular product', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
-        product1.save()
-        page.visit "store_1", "name_1"
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save') ]
+      .then -> page.visit "store_1", "name_1"
     it 'should show the product info', ->
       page.product().then (product) ->
         product.name.should.equal product1.name
@@ -44,10 +41,9 @@ describe 'Store product page', ->
     before ->
       cleanDB().then ->
         store = generator.store.b()
-        store.save()
         product1 = generator.product.c()
-        product1.save()
-        page.visit "store_2", "name_3"
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save') ]
+      .then -> page.visit "store_2", "name_3"
     it 'does not show the store banner', -> page.storeBannerExists().should.eventually.be.false
     it 'shows store name header', -> page.storeNameHeader().should.become store.name
 
@@ -55,11 +51,10 @@ describe 'Store product page', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
         product1.inventory = 0
-        product1.save()
-        page.visit "store_1", "name_1"
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save') ]
+      .then -> page.visit "store_1", "name_1"
     it 'has add cart button disabled', -> page.purchaseItemButtonEnabled().should.eventually.be.false
 
   describe 'comments', ->
@@ -70,10 +65,7 @@ describe 'Store product page', ->
         .then ->
           store = generator.store.a()
           product1 = generator.product.a()
-          Q.all [
-            Q.ninvoke store, 'save'
-            Q.ninvoke product1, 'save'
-          ]
+          Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke product1, 'save' ]
         .then ->
           userCommenting1 = generator.user.a()
           userCommenting2 = generator.user.b()
@@ -99,16 +91,13 @@ describe 'Store product page', ->
         cleanDB().then ->
           Postman.sentMails.length = 0
           store = generator.store.a()
-          store.save()
           userSeller = generator.user.c()
           userSeller.stores.push store
-          userSeller.save()
           product1 = generator.product.a()
           userCommenting = generator.user.a()
-          userCommenting.save()
-          product1.save()
           body = "body1"
-          page.loginFor userCommenting._id
+          Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(userSeller, 'save') , Q.ninvoke(userCommenting, 'save') ]
+          .then -> page.loginFor userCommenting._id
           .then -> page.visit "store_1", "name_1"
           .then -> page.writeComment body
       it 'created the comment on the database', ->
@@ -136,15 +125,14 @@ describe 'Store product page', ->
 
     describe "can't create if not logged in", ->
       before ->
-        cleanDB().then ->
-          page.clearCookies()
+        cleanDB()
+        .then -> page.clearCookies()
         .then ->
           Postman.sentMails.length = 0
           store = generator.store.a()
-          store.save()
           product1 = generator.product.a()
-          product1.save()
-          page.visit "store_1", "name_1"
+          Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save') ]
+        .then -> page.visit "store_1", "name_1"
       it "comment text is invisible", -> page.commentBodyIsVisible().should.eventually.be.false
       it 'comment button is invisible', -> page.commentButtonIsVisible().should.eventually.be.false
       it 'has a message stating user must login to comment', -> page.mustLoginToCommentMessageIsVisible().should.eventually.be.true

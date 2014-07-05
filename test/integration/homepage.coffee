@@ -9,7 +9,6 @@ describe 'Home page', ->
   page = null
   before ->
     page = new HomePage()
-    whenServerLoaded()
     Store.storeCache._interval = -1
   after ->
     Store.storeCache._interval = 30 * 60 * 1000

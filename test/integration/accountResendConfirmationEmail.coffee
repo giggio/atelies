@@ -1,13 +1,12 @@
 require './support/_specHelper'
-User     = require '../../app/models/user'
-bcrypt   = require 'bcrypt'
-AccountPage = require './support/pages/accountPage'
-Postman = require '../../app/models/postman'
+User          = require '../../app/models/user'
+bcrypt        = require 'bcrypt'
+AccountPage   = require './support/pages/accountPage'
+Postman       = require '../../app/models/postman'
+Q             = require 'q'
 
 describe 'Resend Confirmation Email', ->
   user = page = null
-  before whenServerLoaded
-
   describe 'Can resend confirmation email', ->
     before ->
       Postman.sentMails.length = 0
@@ -15,8 +14,8 @@ describe 'Resend Confirmation Email', ->
       cleanDB()
       .then ->
         user = generator.user.e()
-        user.save()
-        page.loginFor user._id
+        Q.ninvoke user, 'save'
+      .then -> page.loginFor user._id
       .then page.visit
       .then page.clickResendConfirmationEmail
     it 'shows email sent message', -> page.confirmationEmailSentMessage().should.become "E-mail enviado"

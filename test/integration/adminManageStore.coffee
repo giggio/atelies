@@ -11,20 +11,17 @@ Q                         = require 'q'
 
 describe 'Admin manage store page', ->
   page = exampleStore = otherStore = userSeller = undefined
-  before ->
-    page = new AdminManageStorePage()
-    whenServerLoaded()
+  before -> page = new AdminManageStorePage()
 
   describe 'updates a store', ->
     before ->
       cleanDB().then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
         otherStore = generator.store.d().toJSON()
-        page.loginFor userSeller._id
+        Q.all [Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
+      .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then -> page.setFieldsAs otherStore
       .then page.clickUpdateStoreButton
@@ -53,10 +50,9 @@ describe 'Admin manage store page', ->
       cleanDB()
       .then ->
         exampleStore = generator.store.c()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickSetPagseguroButton
@@ -75,10 +71,9 @@ describe 'Admin manage store page', ->
       cleanDB()
       .then ->
         exampleStore = generator.store.c()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickSetPaypalButton
@@ -96,10 +91,9 @@ describe 'Admin manage store page', ->
     before ->
       cleanDB().then ->
         exampleStore = generator.store.c()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickSetPagseguroButton
@@ -121,10 +115,9 @@ describe 'Admin manage store page', ->
     before ->
       cleanDB().then ->
         exampleStore = generator.store.c()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickSetPaypalButton
@@ -147,10 +140,9 @@ describe 'Admin manage store page', ->
       cleanDB()
       .then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickUnsetPagseguroButton
@@ -167,10 +159,9 @@ describe 'Admin manage store page', ->
       cleanDB()
       .then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
         userSeller.stores.push exampleStore
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
       .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then page.clickUnsetPaypalButton
@@ -186,11 +177,10 @@ describe 'Admin manage store page', ->
     before ->
       cleanDB().then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         userSeller = generator.user.c()
         userSeller.stores.push exampleStore
-        userSeller.save()
-        page.loginFor userSeller._id
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
+      .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then ->
         emptyStore = generator.store.empty()
@@ -229,14 +219,12 @@ describe 'Admin manage store page', ->
       otherSlug = "my_super_cool_store"
       cleanDB().then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         product = generator.product.a()
-        product.save()
         userSeller = generator.user.c()
         userSeller.stores.push exampleStore
-        userSeller.save()
         otherStore = generator.store.d().toJSON()
-        page.loginFor userSeller._id
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save'), Q.ninvoke(product, 'save') ]
+      .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
       .then -> page.setName otherName
       .then page.clickUpdateStoreButton
@@ -258,10 +246,9 @@ describe 'Admin manage store page', ->
     before ->
       cleanDB().then ->
         exampleStore = generator.store.a()
-        exampleStore.save()
         userSeller = generator.user.c()
-        userSeller.save()
-        page.loginFor userSeller._id
+        Q.all [ Q.ninvoke(exampleStore, 'save'), Q.ninvoke(userSeller, 'save') ]
+      .then -> page.loginFor userSeller._id
       .then -> page.visit exampleStore._id.toString()
     it "shows store can't be shown message", -> page.getDialogMsg().should.become "Você não tem permissão para alterar essa loja. Entre em contato diretamente com o administrador."
     it 'redirects user to admin page', -> page.currentUrl().should.become "http://localhost:8000/admin"

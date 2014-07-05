@@ -13,16 +13,11 @@ describe 'Store shopping cart page', ->
     cleanDB()
     .then ->
       store = generator.store.a()
-      store.save()
       product1 = generator.product.a()
-      product1.save()
       product2 = generator.product.b()
-      product2.save()
       store2 = generator.store.b()
-      store2.save()
       product3 = generator.product.c()
-      product3.save()
-    .then whenServerLoaded
+      Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(product3, 'save') ]
 
   describe 'show empty cart', ->
     before ->

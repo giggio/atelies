@@ -6,6 +6,7 @@ StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 AccountUpdateProfilePage        = require  './support/pages/accountUpdateProfilePage'
 LoginPage                       = require  './support/pages/accountLoginPage'
+Q                               = require 'q'
 
 describe 'Store Finish Order: Shipping', ->
   page = productNoShipping = loginPage = accountUpdateProfilePage = storeCartPage = storeProductPage = store = product1 = product2 = store2 = user1 = userIncompleteAddress = null
@@ -17,20 +18,13 @@ describe 'Store Finish Order: Shipping', ->
     loginPage = new LoginPage page
     cleanDB().then ->
       store = generator.store.a()
-      store.save()
       product1 = generator.product.a()
-      product1.save()
       product2 = generator.product.b()
-      product2.save()
       user1 = generator.user.d()
-      user1.save()
       userIncompleteAddress = generator.user.a()
-      userIncompleteAddress.save()
       store2 = generator.store.b()
-      store2.save()
       productNoShipping = generator.product.c()
-      productNoShipping.save()
-      whenServerLoaded()
+      Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(user1, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(userIncompleteAddress, 'save'), Q.ninvoke(productNoShipping, 'save') ]
 
   describe 'logged in user with full address', ->
     before ->

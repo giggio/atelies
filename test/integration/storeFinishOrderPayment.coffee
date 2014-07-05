@@ -6,6 +6,7 @@ StoreFinishOrderShippingPage    = require './support/pages/storeFinishOrderShipp
 StoreCartPage                   = require './support/pages/storeCartPage'
 StoreProductPage                = require './support/pages/storeProductPage'
 _                               = require 'underscore'
+Q                               = require 'q'
 
 describe 'Store Finish Order: Payment', ->
   page = storeFinishOrderShippingPage = storeCartPage = storeProductPage = store = product1 = product2 = product3 = store2 = user1 = p1Inventory = p2Inventory = null
@@ -14,22 +15,18 @@ describe 'Store Finish Order: Payment', ->
     storeFinishOrderShippingPage = new StoreFinishOrderShippingPage page
     storeCartPage = new StoreCartPage page
     storeProductPage = new StoreProductPage page
-    whenServerLoaded()
 
   describe 'payment info', ->
     before ->
       cleanDB().then ->
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
-        product1.save()
         p1Inventory = product1.inventory
         product2 = generator.product.b()
-        product2.save()
         p2Inventory = product2.inventory
         user1 = generator.user.d()
-        user1.save()
         page.clearLocalStorage()
+      .then -> Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(user1, 'save') ]
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit 'store_1', 'name_1'
       .then storeProductPage.purchaseItem
@@ -47,14 +44,12 @@ describe 'Store Finish Order: Payment', ->
     before ->
       cleanDB().then ->
         store = generator.store.c()
-        store.save()
         product1 = generator.product.a()
         product1.storeSlug = store.slug
         product1.storeName = store.name
-        product1.save()
         user1 = generator.user.d()
-        user1.save()
         page.clearLocalStorage()
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(user1, 'save') ]
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit 'store_3', 'name_1'
       .then storeProductPage.purchaseItem

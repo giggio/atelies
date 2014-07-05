@@ -6,17 +6,15 @@ Q        = require 'q'
 
 describe 'Change Password', ->
   user = page = null
-  before ->
-    page = new Page()
-    whenServerLoaded()
+  before -> page = new Page()
 
   describe 'Can change password', ->
     before ->
       cleanDB().then ->
         user = generator.user.a()
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.loginFor user._id
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton
     it 'does not show the change password failed message', -> page.hasErrors().should.eventually.be.false
@@ -29,9 +27,9 @@ describe 'Change Password', ->
     before ->
       cleanDB().then ->
         user = generator.user.a()
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.loginFor user._id
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs password: "#{user.password}other", newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton
     it 'shows the invalid password message', -> page.errors().should.become 'Senha inválida.'
@@ -46,9 +44,9 @@ describe 'Change Password', ->
     before ->
       cleanDB().then ->
         user = generator.user.a()
-        user.save()
+        Q.ninvoke user, 'save'
       .then -> page.loginFor user._id
-      .then page.visit
+      .then -> page.visit()
       .then -> page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'otherPassword'
       .then page.clickChangePasswordButton
     it 'does not show the login failed message', -> page.passwordVerifyMessage().should.become 'A senha não confere.'

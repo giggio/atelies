@@ -10,47 +10,44 @@ Q                      = require 'q'
 
 describe 'Store evaluations page', ->
   page = store = null
-  before ->
-    page = new StoreEvaluationsPage()
-    whenServerLoaded()
+  before -> page = new StoreEvaluationsPage()
 
   describe 'showing', ->
-    userEvaluating1 = userEvaluating2 = body1 = body2 = rating1 = rating2 = null
+    product1 = store = order = userEvaluating1 = userEvaluating2 = body1 = body2 = rating1 = rating2 = null
     before ->
       cleanDB().then ->
         userEvaluating1 = generator.user.d()
-        userEvaluating1.save()
         userEvaluating2 = generator.user.d()
         userEvaluating2.name = "John Smith"
-        userEvaluating2.save()
         body1 = "body1"
         body2 = "body2"
         rating1 = 2
         rating2 = 5
         store = generator.store.a()
-        store.save()
         product1 = generator.product.a()
-        product1.save()
+        Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(userEvaluating1, 'save'), Q.ninvoke(userEvaluating2, 'save') ]
+      .then ->
         item1 = product: product1, quantity: 1
         Order.create userEvaluating1, store, [ item1 ], 1, 'directSell'
-        .then (order) ->
-          order.save()
-          order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
-          .then (result) ->
-            store = result.store
-            order.save()
-            result.evaluation.save()
-            result.store.save()
+        .then (o) ->
+          order = o
+          Q.ninvoke order, 'save'
+        .then -> order.addEvaluation user: userEvaluating1, body: body1, rating: rating1
+        .then (result) ->
+          Q.ninvoke order, 'save'
+          .then -> Q.ninvoke result.evaluation, 'save'
+          .then -> Q.ninvoke result.store, 'save'
+          .then ->
             Order.create userEvaluating2, store, [ item1 ], 2, 'directSell'
-            .then ->
-              order.save()
-              order.addEvaluation user: userEvaluating2, body: body2, rating: rating2
-              .then (result) ->
-                store = result.store
-                order.save()
-                result.evaluation.save()
-                store.save()
-                page.visit "store_1"
+            .then (o) ->
+              order = o
+              Q.ninvoke order, 'save'
+            .then -> order.addEvaluation user: userEvaluating2, body: body2, rating: rating2
+            .then (result) ->
+              Q.ninvoke order, 'save'
+              .then -> Q.ninvoke result.evaluation, 'save'
+              .then -> Q.ninvoke result.store, 'save'
+              .then -> page.visit "store_1"
     it 'shows evaluations', ->
       page.evaluations().then (evaluations) ->
         evaluations.length.should.equal 2

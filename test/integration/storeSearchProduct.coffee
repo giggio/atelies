@@ -1,6 +1,7 @@
 require './support/_specHelper'
 Product        = require '../../app/models/product'
 StoreHomePage  = require './support/pages/storeHomePage'
+Q              = require 'q'
 
 describe 'Store Search Product', ->
   page = store1 = product1 = product2 = product3 = null
@@ -10,12 +11,8 @@ describe 'Store Search Product', ->
       product1 = generator.product.a()
       product2 = generator.product.d()
       product3 = generator.product.c()
-      product1.save()
-      product2.save()
-      product3.save()
       store1 = generator.store.a()
-      store1.save()
-    .then -> whenServerLoaded
+      Q.all [ Q.ninvoke(store1, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(product3, 'save') ]
     .then -> page.visit store1.slug
     .then -> page.waitForViewToLoad()
     .then -> page.searchProductsText 'name'

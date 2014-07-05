@@ -8,27 +8,17 @@ Q                       = require 'q'
 
 describe 'Account order detail page', ->
   page = store = product1 = product2 = user = order1 = userSeller = null
-  before ->
-    page = new AccountOrderDetailPage()
-    whenServerLoaded()
+  before -> page = new AccountOrderDetailPage()
   setup = ->
     cleanDB()
     .then ->
       store = generator.store.a()
-      Q.ninvoke store, 'save'
-    .then ->
       userSeller = generator.user.c()
       userSeller.stores.push store
-      Q.ninvoke userSeller, 'save'
-    .then ->
       product1 = generator.product.a()
-      Q.ninvoke product1, 'save'
-    .then ->
       product2 = generator.product.b()
-      Q.ninvoke product2, 'save'
-    .then ->
       user = generator.user.d()
-      Q.ninvoke user, 'save'
+      Q.all [ Q.ninvoke(userSeller, 'save'), Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(user, 'save') ]
     .then ->
       items = [
         { product: product1, quantity: 1 }

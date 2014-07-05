@@ -8,16 +8,14 @@ Q                         = require 'q'
 
 describe 'Admin create store page', ->
   page = exampleStore = userSeller = null
-  before ->
-    page = new AdminManageStorePage()
-    whenServerLoaded()
+  before -> page = new AdminManageStorePage()
   describe 'creates a store', ->
     before ->
       cleanDB().then ->
         userSeller = generator.user.c()
-        userSeller.save()
         exampleStore = generator.store.a()
-        page.loginFor userSeller._id
+        Q.ninvoke userSeller, 'save'
+      .then -> page.loginFor userSeller._id
       .then page.visit
       .then -> page.setFieldsAs exampleStore
       .then page.clickUpdateStoreButton
@@ -47,9 +45,9 @@ describe 'Admin create store page', ->
     before ->
       cleanDB().then ->
         userSeller = generator.user.c()
-        userSeller.save()
         exampleStore = generator.store.empty()
-        page.loginFor userSeller._id
+        Q.ninvoke userSeller, 'save'
+      .then -> page.loginFor userSeller._id
       .then page.visit
       .then ->
         exampleStore.email = "bla"
@@ -71,10 +69,9 @@ describe 'Admin create store page', ->
     before ->
       cleanDB().then ->
         userSeller = generator.user.c()
-        userSeller.save()
         exampleStore = generator.store.a()
-        exampleStore.save()
-        page.loginFor userSeller._id
+        Q.all [Q.ninvoke(userSeller, 'save'), Q.ninvoke exampleStore, 'save']
+      .then -> page.loginFor userSeller._id
       .then page.visit
       .then -> page.setFieldsAs exampleStore
       .then page.clickUpdateStoreButton
@@ -88,8 +85,8 @@ describe 'Admin create store page', ->
       AmazonFileUploader.filesUploaded.length = 0
       cleanDB().then ->
         userSeller = generator.user.c()
-        userSeller.save()
         exampleStore = generator.store.a()
+        Q.ninvoke userSeller, 'save'
       .then -> page.loginFor userSeller._id
       .then page.visit
       .then -> page.setFieldsAs exampleStore
