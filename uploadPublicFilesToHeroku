@@ -1,11 +1,11 @@
 #!/bin/bash
 
 echo $(date) Getting current public script version from Heroku
-currVersion=`heroku config:get CLIENT_LIB_VERSION`
+currVersion=`heroku config:get CLIENT_LIB_VERSION --app ateliesteste`
 echo $(date) Current version is $currVersion
 newVersion=`echo "0.01 + $currVersion" | bc`
 echo $(date) Uploading public scripts to directory $newVersion
 CLIENT_LIB_VERSION=$newVersion ./uploadPublicFiles
 echo $(date) Upgrading public scripts to $newVersion on Heroku
-heroku config:set CLIENT_LIB_VERSION=$newVersion
+heroku config:set CLIENT_LIB_VERSION=$newVersion --app ateliesteste
 echo $(date) Done upgrading!
