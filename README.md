@@ -1,7 +1,7 @@
 ﻿# Ateliês
 =======
 
-[![Build Status](https://travis-ci.org/giggio/atelies.png)](https://travis-ci.org/giggio/atelies)
+[![Build Status](https://snap-ci.com/giggio/atelies/branch/master/build_image)](https://snap-ci.com/giggio/atelies/branch/master)
 [![Coverage Status](https://coveralls.io/repos/giggio/atelies/badge.png)](https://coveralls.io/r/giggio/atelies)
 [![Dependencies](https://gemnasium.com/giggio/atelies.png)](https://gemnasium.com/giggio/atelies)
 
