@@ -21,10 +21,10 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: config.superAdminEmail, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton
-    it 'shows the register failed message', -> page.errors().should.become 'E-mail já cadastrado.'
-    it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
-    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
+    it 'shows the register failed message', test -> page.errors().should.become 'E-mail já cadastrado.'
+    it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
+    it 'does not show logout link', test -> page.logoutLinkExists().should.eventually.be.false
+    it 'does not show admin link', test -> page.adminLinkExists().should.eventually.be.false
 
   describe 'Must supply name, email and password or form is not submitted', ->
     before ->
@@ -32,9 +32,9 @@ describe 'Register', ->
       .then page.visit
       .then page.clickManualEntry
       .then page.clickRegisterButton
-    it 'does not show the register failed message', -> page.hasErrors (itHas) -> expect(itHas).to.be.false
-    it 'is at the register page', -> page.currentUrl (url) -> url.should.equal "http://localhost:8000/account/register"
-    it 'Required messages are shown', ->
+    it 'does not show the register failed message', test -> page.hasErrors (itHas) -> expect(itHas).to.be.false
+    it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
+    it 'Required messages are shown', test ->
       Q.all [
         page.emailRequired().should.become "Informe seu e-mail."
         page.passwordRequired().should.become "Informe uma senha correta."
@@ -48,10 +48,10 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: userA.email, password: "P@ssw0rd12", passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton
-    it 'shows the register failed message', -> page.errors().should.become 'E-mail já cadastrado.'
-    it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
-    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
+    it 'shows the register failed message', test -> page.errors().should.become 'E-mail já cadastrado.'
+    it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
+    it 'does not show logout link', test -> page.logoutLinkExists().should.eventually.be.false
+    it 'does not show admin link', test -> page.adminLinkExists().should.eventually.be.false
 
   describe "Can't register successfully with weak password", ->
     before ->
@@ -60,10 +60,10 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: 'anothermailadd@email.com', password: "pass", passwordVerify: 'pass', termsOfUse: true
       .then page.clickRegisterButton
-    it 'is at the register page', -> page.currentUrl().should.become "http://localhost:8000/account/register"
-    it 'does not show logout link', -> page.logoutLinkExists().should.eventually.be.false
-    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
-    it 'Shows invalid password message', -> page.passwordRequired().should.become "Informe uma senha correta."
+    it 'is at the register page', test -> page.currentUrl().should.become "http://localhost:8000/account/register"
+    it 'does not show logout link', test -> page.logoutLinkExists().should.eventually.be.false
+    it 'does not show admin link', test -> page.adminLinkExists().should.eventually.be.false
+    it 'Shows invalid password message', test -> page.passwordRequired().should.become "Informe uma senha correta."
 
   describe 'Can register successfully with correct information', ->
     before ->
@@ -72,13 +72,13 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: "some@email.com", password: "P@ssw0rd12", isSeller: false, passwordVerify: 'P@ssw0rd12', deliveryStreet: 'Rua A, 23', deliveryStreet2: 'ap 21', deliveryCity: 'Sao Paulo', deliveryState: 'SP', phoneNumber: '4567-9877', deliveryZIP: '01234-567', termsOfUse: true
       .then page.clickRegisterButton
-    it 'does not show the register failed message', -> page.hasErrors().should.eventually.be.false
-    it 'is at the registered welcome page', -> page.currentUrl().should.become "http://localhost:8000/account/registered"
-    it 'does not show login link', -> page.loginLinkExists().should.eventually.be.false
-    it 'shows logout link', -> page.logoutLinkExists().should.eventually.be.true
-    it 'does not show admin link', -> page.adminLinkExists().should.eventually.be.false
-    it 'shows user name', -> page.userGreeting().should.become "Some Person"
-    it 'is saved on database', ->
+    it 'does not show the register failed message', test -> page.hasErrors().should.eventually.be.false
+    it 'is at the registered welcome page', test -> page.currentUrl().should.become "http://localhost:8000/account/registered"
+    it 'does not show login link', test -> page.loginLinkExists().should.eventually.be.false
+    it 'shows logout link', test -> page.logoutLinkExists().should.eventually.be.true
+    it 'does not show admin link', test -> page.adminLinkExists().should.eventually.be.false
+    it 'shows user name', test -> page.userGreeting().should.become "Some Person"
+    it 'is saved on database', test ->
       User.findByEmail "some@email.com", (error, user) ->
         expect(user).not.to.be.null
         expect(user.name).to.equal "Some Person"
@@ -99,5 +99,5 @@ describe 'Register', ->
       .then page.clickManualEntry
       .then -> page.setFieldsAs name: "Some Person", email: "someother@email.com", password: "P@ssw0rd12", isSeller: true, passwordVerify: 'P@ssw0rd12', deliveryZIP: '', termsOfUse: true
       .then page.clickRegisterButton
-    it 'is a seller', -> User.findByEmail("someother@email.com").then (user) -> user.isSeller.should.be.true
-    it 'shows the admin link', -> page.adminLinkExists().should.eventually.be.true
+    it 'is a seller', test -> User.findByEmail("someother@email.com").then (user) -> user.isSeller.should.be.true
+    it 'shows the admin link', test -> page.adminLinkExists().should.eventually.be.true

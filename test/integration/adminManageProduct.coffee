@@ -28,7 +28,7 @@ describe 'Admin Manage Product page', ->
     before ->
       page.loginFor userSeller._id
       .then -> page.visit store.slug, product._id.toString()
-    it 'shows product', ->
+    it 'shows product', test ->
       page.product().then (aproduct) ->
         aproduct._id.should.equal product._id.toString()
         aproduct.name.should.equal product.name
