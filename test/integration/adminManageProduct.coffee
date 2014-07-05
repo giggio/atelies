@@ -201,8 +201,7 @@ describe 'Admin Manage Product page', ->
         page.setPictureFile filePath
       .then page.clickUpdateProduct
     it 'is at the store manage page', ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/admin/store/#{product3.storeSlug}"
+      page.currentUrl().should.become "http://localhost:8000/admin/store/#{product3.storeSlug}"
     it 'updated the product to include the file', ->
       Q.ninvoke(Product, "findById", product3._id).then (productOnDb) -> productOnDb.picture.should.match uploadedRegexMatch
     it 'tried to upload the file', ->

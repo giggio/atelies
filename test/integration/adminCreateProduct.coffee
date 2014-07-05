@@ -59,7 +59,7 @@ describe 'Admin Create Product page', ->
       .then -> page.visit store.slug
       .then -> page.setFieldsAs productNoInventory
       .then page.clickUpdateProduct
-    it 'is at the product create page', -> page.currentUrl (url) -> url.should.equal "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
+    it 'is at the product create page', -> page.currentUrl().should.become "http://localhost:8000/admin/createProduct/#{product.storeSlug}"
     it 'did not create the product', -> Product.find (err, products) -> products.should.be.empty
     it 'shows error messages', ->
       page.errorMessagesIn '#editProduct'
@@ -89,7 +89,7 @@ describe 'Admin Create Product page', ->
       .then -> page.visit store.slug
       .then -> page.setFieldsAs product
       .then page.clickUpdateProduct
-    it 'is at the store manage page', -> page.currentUrl (url) -> url.should.equal "http://localhost:8000/admin/store/#{product.storeSlug}"
+    it 'is at the store manage page', -> page.currentUrl().should.become "http://localhost:8000/admin/store/#{product.storeSlug}"
     it 'updated store product count', ->
       Store.findBySlug store.slug
       .then (s) -> s.productCount.should.equal previousProductCount + 1

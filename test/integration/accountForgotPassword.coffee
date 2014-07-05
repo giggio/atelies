@@ -19,8 +19,7 @@ describe 'Account Forgot password', ->
       .then -> page.setEmail user.email.toUpperCase()
       .then page.clickRequestPasswordReset
     it 'is at the password request sent page', ->
-      page.currentUrl (url) ->
-        url.should.equal "http://localhost:8000/account/passwordResetSent"
+      page.currentUrl().should.become "http://localhost:8000/account/passwordResetSent"
     it 'set reset key', ->
       User.findByEmail user.email
       .then (foundUser) ->
