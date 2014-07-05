@@ -35,15 +35,16 @@ describe 'Site Admin Stores Reports page', ->
       userSeller = generator.user.a()
       userSeller.stores.push store1
       userSeller.stores.push store2
-      Q.all [ Q.ninvoke(adminUser, 'save'), Q.ninvoke(store1, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(store3, 'save'), Q.ninvoke(store4, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(customer, 'save'), Q.ninvoke(order1, 'save'), Q.ninvoke(order2, 'save'), Q.ninvoke(userSeller, 'save') ]
+      Q.ninvoke store1, 'save'
+    .then -> Q.all [ Q.ninvoke(adminUser, 'save'), Q.ninvoke(store2, 'save'), Q.ninvoke(store3, 'save'), Q.ninvoke(store4, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save'), Q.ninvoke(customer, 'save'), Q.ninvoke(order1, 'save'), Q.ninvoke(order2, 'save'), Q.ninvoke(userSeller, 'save') ]
 
   describe 'shows report with 4 stores', ->
     before ->
       setDb()
       .then -> page.loginFor adminUser._id
-      .then page.visit
+      .then -> page.visit()
     it 'shows 4 stores', -> page.storesQuantity().should.eventually.equal 4
-    it 'shows correct info for first store', ->
+    it 'shows correct info for first store', test ->
       page.storeIn(0)
       .then (store) ->
         store.name.should.equal store1.name

@@ -106,7 +106,7 @@ describe 'Store Finish Order: Shipping', ->
   describe 'a not logged in user logs in and comes back to the store and cart', ->
     before ->
       page.clearCookies()
-      .then page.clearLocalStorage
+      .then -> page.clearLocalStorage()
       .then -> storeProductPage.visit 'store_1', 'name_1'
       .then storeProductPage.purchaseItem
       .then storeCartPage.clickFinishOrder

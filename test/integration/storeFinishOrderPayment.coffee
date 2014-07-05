@@ -48,8 +48,8 @@ describe 'Store Finish Order: Payment', ->
         product1.storeSlug = store.slug
         product1.storeName = store.name
         user1 = generator.user.d()
-        page.clearLocalStorage()
         Q.all [ Q.ninvoke(store, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(user1, 'save') ]
+      .then -> page.clearLocalStorage()
       .then -> page.loginFor user1._id
       .then -> storeProductPage.visit 'store_3', 'name_1'
       .then storeProductPage.purchaseItem

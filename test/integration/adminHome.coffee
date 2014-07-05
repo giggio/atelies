@@ -41,5 +41,5 @@ describe 'Admin home page', ->
     before ->
       page = new AdminHomePage()
       page.clearCookies()
-      .then page.visit
+      .then -> page.visit()
     it 'redirects user to login', -> page.currentUrl().should.become "http://localhost:8000/account/login?redirectTo=/admin/"
