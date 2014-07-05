@@ -25,11 +25,15 @@ exports.cleanDB = ->
   .then (conn) ->
     Q.ninvoke conn.db, "collections"
     .then (cols) ->
-      for col in cols
-        unless col.collectionName.substring(0,6) is 'system'
-          #console.info "dropping #{col.collectionName}" if process.env.DEBUG
-          col.drop()
-      conn.close()
+      dropAll = for col in cols
+        do (col) ->
+          Q.fcall ->
+            unless col.collectionName.substring(0,6) is 'system'
+              #console.info "dropping #{col.collectionName}" if process.env.DEBUG
+              Q.ninvoke col, 'drop'
+              .catch (err) -> throw err if err.message isnt 'ns not found'
+      Q.allSettled dropAll
+    .then -> Q.ninvoke conn, 'close'
 
 before ->
   exports.cleanDB()

@@ -37,7 +37,7 @@ before ->
   Page.driver.manage().timeouts().implicitlyWait 2000
   whenServerLoaded()
 
-after -> Page.driver.quit()
+after -> Page.driver?.quit()
 
 mkdirParent = (dirPath, mode) ->
   mkdir dirPath, mode
