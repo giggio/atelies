@@ -33,9 +33,6 @@ else
   s3cmd=s3cmd
 fi
 
-echo $(date) Grunt install
-grunt install > .uploadPublicFiles/log/gruntInstall.log
-
 echo $(date) Copy config key
 if [[ -e .uploadPublicFiles/.s3cfg ]]; then
   rm .uploadPublicFiles/.s3cfg
@@ -46,11 +43,16 @@ sed -i "s/AWS_SECRET_KEY/$AWS_SECRET_KEY/" .uploadPublicFiles/.s3cfg
 #writeConfigSecret:
 sed -i "s/AWS_ACCESS_KEY_ID/$AWS_ACCESS_KEY_ID/" .uploadPublicFiles/.s3cfg
 
-echo $(date) Gzip
-gzip -r --best compiledPublic > .uploadPublicFiles/log/gzipCompiledPublic.log
+if [ -z "$REUSE_EXISTING_COMPILATION_PUBLIC_FILES" ] || [ ! -d compiledPublic ]; then
+  echo $(date) Grunt install
+  grunt install > .uploadPublicFiles/log/gruntInstall.log
 
-echo $(date) Rename
-find compiledPublic -type f -name '*.gz' | while read filename; do mv -v "${filename}" "`echo "${filename}" | sed -e 's/\.gz$//'`"; done > .uploadPublicFiles/log/rename.log
+  echo $(date) Gzip
+  gzip -r --best compiledPublic > .uploadPublicFiles/log/gzipCompiledPublic.log
+
+  echo $(date) Rename
+  find compiledPublic -type f -name '*.gz' | while read filename; do mv -v "${filename}" "`echo "${filename}" | sed -e 's/\.gz$//'`"; done > .uploadPublicFiles/log/rename.log
+fi
 
 echo $(date) Upload stylesheets
 $s3cmd put -r compiledPublic/stylesheets s3://$AWS_STATIC_BUCKET/ --add-header="Content-Encoding:gzip" --config .uploadPublicFiles/.s3cfg > .uploadPublicFiles/log/uploadToS3.log

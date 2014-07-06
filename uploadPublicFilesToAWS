@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo $(date) Getting current environment name from AWS...
+currEnv=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$(aws elasticbeanstalk describe-environments --application-name atelies)').Environments[0].EnvironmentName"`
+echo $(date) Current environment name is $currEnv
+echo $(date) Getting current public script version from AWS...
+currVersion=`./node_modules/.bin/coffee --eval "console.log (o for o in JSON.parse('$(aws elasticbeanstalk describe-configuration-settings --application-name atelies --environment-name prod-blue)').ConfigurationSettings[0].OptionSettings when o.OptionName is 'CLIENT_LIB_VERSION')[0].Value"`
+echo $(date) Current public script version is $currVersion
+newVersion=`echo "0.01 + $currVersion" | bc`
+echo $(date) Uploading public scripts to directory $newVersion
+CLIENT_LIB_VERSION=$newVersion ./uploadPublicFiles
+echo $(date) Done uploading version $newVersion!
