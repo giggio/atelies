@@ -23,11 +23,11 @@ describe 'Admin Manage Product page', ->
       Q.ninvoke userSeller, 'save'
 
   describe 'viewing product', ->
-    before ->
+    it 'shows product', test ->
       page.loginFor userSeller._id
       .then -> page.visit store.slug, product._id.toString()
-    it 'shows product', test ->
-      page.product().then (aproduct) ->
+      .then -> page.product()
+      .then (aproduct) ->
         aproduct._id.should.equal product._id.toString()
         aproduct.name.should.equal product.name
         aproduct.price.should.equal product.price.toString()

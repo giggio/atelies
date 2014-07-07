@@ -257,7 +257,7 @@ module.exports = class Page
         session.auth.userId = _id
         session.auth.loggedIn = true
         Q.ninvoke sessionStore, 'set', sessionId, session
-      .done()
+    .then -> waitMilliseconds 200
   eval: (script) -> Q @driver.executeScript(script)
   clearLocalStorage: ->
     @currentUrl()
