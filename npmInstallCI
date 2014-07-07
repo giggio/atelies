@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#this should run on Snap CI only
+if [ ! "$SNAP_CI" = 'true' ]; then
+  echo Cannot run outside build server
+  exit 11
+fi
+echo $(date) Npm cleaning cache...
+npm cache clean
+if [[ ! -d ${SNAP_CACHE_DIR}/node_modules ]]; then
+  echo $(date) Npm installing...
+  for i in {1..3}; do npm install && break; done
+  echo $(date) Copying packages to cache...
+  cp -R node_modules/ ${SNAP_CACHE_DIR}/node_modules/
+else
+  echo $(date) Found packages cache, copying...
+  cp -R ${SNAP_CACHE_DIR}/node_modules/ node_modules/
+  echo $(date) Npm installing \(we might have some update\)...
+  for i in {1..3}; do npminstallres=`npm install` && break; done
+  if [[ "$npminstallres" != *'npm install done' ]]; then
+    echo $(date) Npm installed updated packages, deleting cache...
+    rm ${SNAP_CACHE_DIR}/node_modules/ -rf
+    echo $(date) Copying new packages to cache...
+    cp -R node_modules/ ${SNAP_CACHE_DIR}/node_modules/
+  fi
+fi
+echo $(date) Finished npm install

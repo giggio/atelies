@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "postinstall": "if [ \"$HOME\" = '/app' ]; then node node_modules/grunt-cli/bin/grunt heroku; fi",
+    "postinstall": "if [ \"$HOME\" = '/app' ]; then node node_modules/grunt-cli/bin/grunt heroku; fi\necho npm install done",
     "test": "grunt test:smoke"
   },
   "repository": {
