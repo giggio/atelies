@@ -1,11 +1,13 @@
 #!/bin/bash
 
 
-echo $(date) Getting current environment name from AWS...
-currEnv=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$(aws elasticbeanstalk describe-environments --application-name atelies)').Environments[0].EnvironmentName"`
-echo $(date) Current environment name is $currEnv
+echo $(date) Getting current environment name from AWS \(oldest is always considered current\)...
+envsFound=`aws elasticbeanstalk describe-environments --application-name atelies`
+currEnv=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$envsFound').Environments.reduce(((last, v) -> if Date.parse(last.DateCreated) > Date.parse(v.DateCreated) then v else last), DateCreated:new Date()).EnvironmentName"`
+echo $(date) Found these environments: `./node_modules/.bin/coffee --eval "console.log JSON.parse('$envsFound').Environments.map((v) -> v.EnvironmentName).join(', ')"`
+echo $(date) Current environment name considered is $currEnv
 echo $(date) Getting current public script version from AWS...
-currVersion=`./node_modules/.bin/coffee --eval "console.log (o for o in JSON.parse('$(aws elasticbeanstalk describe-configuration-settings --application-name atelies --environment-name prod-blue)').ConfigurationSettings[0].OptionSettings when o.OptionName is 'CLIENT_LIB_VERSION')[0].Value"`
+currVersion=`./node_modules/.bin/coffee --eval "console.log (o for o in JSON.parse('$(aws elasticbeanstalk describe-configuration-settings --application-name atelies --environment-name $currEnv)').ConfigurationSettings[0].OptionSettings when o.OptionName is 'CLIENT_LIB_VERSION')[0].Value"`
 echo $(date) Current public script version is $currVersion
 newVersion=`echo "0.01 + $currVersion" | bc`
 echo $(date) Will use version $newVersion for this public scripts environment
@@ -18,11 +20,22 @@ echo $(date) Preparing rev with name $revName and zip name $zipName
 echo $(date) Checking out files...
 #git checkout .
 echo $(date) Zipping...
-zip -r $zipName . -x "node_modules/*" "seed/*" "test/*" "compilePublic/*" "public/*" "log/*" ".uploadPublicFiles/*" "misc/*" ".git/*" "TAGS" ".s3cfg" "Session.vim" ".vimrc.local" "Procfile" ".travis.yml" ".ebextensions/030_compileServer.config"
+zip -r $zipName . -x "node_modules/*" "seed/*" "test/*" "compiledPublic/*" "public/*" "log/*" ".uploadPublicFiles/*" "misc/*" ".git/*" "TAGS" ".s3cfg" "Session.vim" ".vimrc.local" "Procfile" ".travis.yml" ".ebextensions/030_compileServer.config"
+zip -g $zipName "public/images/favicon.ico"
 echo $(date) Uploading to S3...
 aws s3 cp $zipName s3://elasticbeanstalk-us-east-1-467348781193/$zipName
 echo $(date) Creating app version...
 aws elasticbeanstalk create-application-version --application-name atelies --version-label $revName --source-bundle S3Bucket=elasticbeanstalk-us-east-1-467348781193,S3Key=$zipName
 echo $(date) Creating environment...
 aws elasticbeanstalk create-environment --application-name atelies --environment-name $revNameShort --template works20140706 --tier "Name=WebServer,Type=Standard,Version=1.0" --version-label $revName --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=CLIENT_LIB_VERSION,Value=$newVersion
+echo $(date) Finding load balancer...
+hasLb=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$(aws elasticbeanstalk describe-environment-resources --environment-name $revNameShort)').EnvironmentResources.LoadBalancers.length is 1"`
+until [ "$hasLb" = 'true' ]; do
+  echo $(date) Load balancer not yet found, will wait 2 seconds than keep looking...
+  sleep 2
+  hasLb=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$(aws elasticbeanstalk describe-environment-resources --environment-name $revNameShort)').EnvironmentResources.LoadBalancers.length is 1"`
+done
+lbName=`./node_modules/.bin/coffee --eval "console.log JSON.parse('$(aws elasticbeanstalk describe-environment-resources --environment-name $revNameShort)').EnvironmentResources.LoadBalancers[0].Name"`
+echo $(date) Adding certificate to load balancer...
+aws elb create-load-balancer-listeners --load-balancer-name $lbName --listeners Protocol=HTTPS,LoadBalancerPort=443,InstanceProtocol=HTTP,InstancePort=80,SSLCertificateId=arn:aws:iam::467348781193:server-certificate/www.atelies.com.br-chain
 echo $(date) Done publishing to AWS server
