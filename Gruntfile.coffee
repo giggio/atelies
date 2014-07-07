@@ -353,7 +353,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-coveralls'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-notify'
-  isHeroku = -> process.env.HOME is "/app"
   grunt.task.run 'notify_hooks' if grunt.task.exists 'notify_hooks'
 
   #TASKS:
@@ -373,12 +372,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile:client', [ 'coffee:client' ]
   grunt.registerTask 'travis:compileLintAndTest', [ 'compile', 'coffeelint', 'test:smoke' ]
   grunt.registerTask 'travis:reportCoverage', [ 'mochaTest:server_unit_coverage_lcov', 'mochaTest:client_unit_coverage_lcov', 'coveralls:server_unit_coverage', 'coveralls:client_unit_coverage' ]
-  grunt.registerTask 'heroku', ->
-    if isHeroku() #trying to identify heroku
-      grunt.log.writeln "#{'IS'.blue} running in heroku, home is #{process.env.HOME.blue}."
-      grunt.task.run [ 'compile:server' ]
-    else
-      grunt.log.writeln "#{'NOT'.red} running in heroku, home is #{process.env.HOME.blue}."
+  grunt.registerTask 'heroku', [ 'compile:server' ]
   grunt.registerTask 'install', [ 'bower', 'compile', 'copy:fonts', 'requirejsBuild', 'less:production' ]
   grunt.registerTask 'requirejsBuild', ->
     grunt.loadNpmTasks 'grunt-contrib-requirejs'
