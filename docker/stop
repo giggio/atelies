@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ "$(docker ps -a | grep 'mongo-atelies')" = '' ] ; then
+  echo mongo already stopped
+else
+  if [ ! "$(docker ps | grep 'mongo-atelies')" = '' ] ; then
+    echo mongo is running, stop...
+    docker stop mongo-atelies
+  fi
+  echo removing mongo...
+  docker rm mongo-atelies
+fi
+if [ "$(docker ps -a | grep ' ateliesfs ')" = '' ] ; then
+  echo fs already stopped
+else
+  echo fs exists, removing...
+  docker rm ateliesfs
+fi
+if [ "$(docker ps -a | grep ' ateliesdev ')" = '' ] ; then
+  echo dev already stopped
+else
+  if [ ! "$(docker ps | grep ' ateliesdev ')" = '' ] ; then
+    echo dev is running, stop...
+    docker stop ateliesdev 
+  fi
+  echo dev exists, removing...
+  docker rm ateliesdev 
+fi

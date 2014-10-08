@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$(docker ps -a | grep ' mongo-atelies ')" = '' ] ; then
+  echo starting mongo...
+  docker run -d -p 27017:27017 --name mongo-atelies giggio/mongo-atelies
+else
+  if [ "$(docker ps | grep ' mongo-atelies ')" = '' ] ; then
+    echo mongo exists but is stopped, starting...
+    docker start mongo-atelies
+  else
+    echo mongo already running
+  fi
+fi
+if [ "$(docker ps -a | grep ' ateliesfs ')" = '' ] ; then
+  echo starting fs...
+  docker run --name ateliesfs -v /home/giovanni/proj/atelies:/var/atelies ubuntu:14.04
+else
+  echo fs already running
+fi
+if [ "$(docker ps -a | grep ' ateliesdev ')" = '' ] ; then
+  echo starting dev...
+  docker run --rm -ti -p 3000:3000 -p 5858:5858 --volumes-from ateliesfs --name ateliesdev --link mongo-atelies:mongo giggio/atelies-dev
+else
+  if [ "$(docker ps | grep ' ateliesdev ')" = '' ] ; then
+    echo dev exists but is stopped, starting...
+    docker start -ai ateliesdev
+  else
+    echo dev already running, attaching...
+    docker attach ateliesdev
+  fi
+fi
