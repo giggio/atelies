@@ -7,9 +7,9 @@ describe 'Store', ->
   it 'requires name, city and state to be present', (done) ->
     store = new Store()
     store.validate (val) ->
-      expect(val.errors.name.type).to.equal 'required'
-      expect(val.errors.city.type).to.equal 'required'
-      expect(val.errors.state.type).to.equal 'required'
+      expect(val.errors.name.kind).to.equal 'required'
+      expect(val.errors.city.kind).to.equal 'required'
+      expect(val.errors.state.kind).to.equal 'required'
       done()
   it 'sets the correct slug when store is created', ->
     store = new Store name:"Minha loja"
@@ -103,26 +103,26 @@ describe 'Store', ->
         evaluation2 = result.evaluation
     after -> Store.findById.restore()
     it 'has evaluations', ->
-      evaluation1.user.should.equal userEvaluating1._id
+      evaluation1.user._id.should.equal userEvaluating1._id
       evaluation1.userName.should.equal userEvaluating1.name
       evaluation1.userEmail.should.equal userEvaluating1.email
       evaluation1.body.should.equal body1
       evaluation1.date.should.equalDate new Date()
       evaluation1.rating.should.equal rating1
-      evaluation1.store.toString().should.equal store._id.toString()
-      evaluation1.order.toString().should.equal order1._id.toString()
-      evaluation2.user.should.equal userEvaluating1._id
+      evaluation1.store._id.toString().should.equal store._id.toString()
+      evaluation1.order._id.toString().should.equal order1._id.toString()
+      evaluation2.user._id.should.equal userEvaluating1._id
       evaluation2.userName.should.equal userEvaluating1.name
       evaluation2.userEmail.should.equal userEvaluating1.email
       evaluation2.body.should.equal body2
       evaluation2.date.should.equalDate new Date()
       evaluation2.rating.should.equal rating2
-      evaluation2.store.toString().should.equal store._id.toString()
-      evaluation2.order.toString().should.equal order2._id.toString()
+      evaluation2.store._id.toString().should.equal store._id.toString()
+      evaluation2.order._id.toString().should.equal order2._id.toString()
     it 'has average evaluation', ->
       store.evaluationAvgRating.should.equal 3.5
     it 'knows the number of evaluations', ->
       store.numberOfEvaluations.should.equal 2
     it 'has orders with evaluation', ->
-      order1.evaluation.toString().should.equal evaluation1._id.toString()
-      order2.evaluation.toString().should.equal evaluation2._id.toString()
+      order1.evaluation._id.toString().should.equal evaluation1._id.toString()
+      order2.evaluation._id.toString().should.equal evaluation2._id.toString()

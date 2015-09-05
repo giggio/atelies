@@ -1,5 +1,5 @@
 webdriver       = require 'selenium-webdriver'
-connectUtils    = require 'express/node_modules/connect/lib/utils'
+connectUtils    = require 'connect/lib/utils'
 _               = require 'underscore'
 Q               = require 'q'
 config          = require '../../../../app/helpers/config'
@@ -20,13 +20,16 @@ before ->
       chromedriverPath = chromedriver.path
     chrome = require "selenium-webdriver/chrome"
     chromeServiceBuilder = new chrome.ServiceBuilder chromedriverPath
+    chromeServiceBuilder
+      .loggingTo('/tmp/chromedriver.log')
+      .enableVerboseLogging()
     chromeServiceBuilder.args_.push "--whitelisted-ips"
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
       'prefs': {"profile.default_content_settings": {'images': 2}}
       'args': ["--host-rules=MAP * 127.0.0.1", '--test-type']
     service = chromeServiceBuilder.build()
-    Page.driver = chrome.createDriver capabilities, service
+    Page.driver = new chrome.Driver capabilities, service
   else
     phantomjs = require 'phantomjs'
     capabilities = webdriver.Capabilities.phantomjs()
@@ -210,7 +213,12 @@ module.exports = class Page
   pressButton: (selector) -> @findElement(selector).then (el) -> el.sendKeys(webdriver.Key.ENTER)
   pressButtonAndWait: (selector) -> @pressButton(selector).then @waitForAjax
   clickLink: @::pressButton
-  currentUrl: -> Q @driver.getCurrentUrl()
+  currentUrl: ->
+    curr = @driver.getCurrentUrl()
+    #print 3232, curr
+    print 3233, curr.then
+    Q curr.then(-> print 555)
+  #currentUrl: -> Q @driver.getCurrentUrl()
   hasElement: (selector) -> Q @driver.isElementPresent webdriver.By.css(selector)
   hasElementAndIsVisible: (selector) ->
     @hasElement selector
@@ -240,8 +248,11 @@ module.exports = class Page
   wait: (fn, timeout) -> Q(@driver.wait fn, timeout).then ->
   visitBlank: -> Q Page::visit.call @, 'blank', false
   loginFor: (_id) ->
+    print 999, _id
     @currentUrl()
     .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
+    .then -> print 111
+   # @visitBlank()
     .then => @driver.manage().getCookie('connect.sid')
     .then (cookie) =>
       return cookie if cookie?

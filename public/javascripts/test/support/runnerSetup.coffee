@@ -7,7 +7,7 @@ process.addListener 'uncaughtException', (error) -> console.log "Error happened:
 
 initDOM = ->
   jsdom = require("jsdom")
-  global.window = window = jsdom.jsdom().createWindow("<html><body></body></html>")
+  global.window = window = jsdom.jsdom("<html><body></body></html>").defaultView
   window.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
   window.XMLHttpRequest.prototype.withCredentials = false
   global.location = window.location

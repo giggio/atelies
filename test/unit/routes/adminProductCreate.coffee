@@ -43,6 +43,7 @@ describe 'AdminProductCreateRoute', ->
         requires:
           '../models/product': ProductStub
           '../models/store': Store
+        singleOnly: true
       routes = new Routes()
       routes.adminProductCreate req, res
     after ->

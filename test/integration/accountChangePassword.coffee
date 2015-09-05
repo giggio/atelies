@@ -8,13 +8,20 @@ describe 'Change Password', ->
   user = page = null
   before -> page = new Page()
 
+  describe.only 'quick and dirty', ->
+    it 'works', ->
+      page.driver.get('http://localhost:8000')
+
   describe 'Can change password', ->
     before ->
       cleanDB().then ->
         user = generator.user.a()
         Q.ninvoke user, 'save'
+      .then -> print 456
       .then -> page.loginFor user._id
+      .then -> print 789
       .then -> page.visit()
+      .then -> print 22
       .then -> page.setFieldsAs password: user.password, newPassword: 'newPassword1@', passwordVerify: 'newPassword1@'
       .then page.clickChangePasswordButton
     it 'does not show the change password failed message', -> page.hasErrors().should.eventually.be.false

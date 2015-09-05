@@ -79,9 +79,7 @@ orderSchema.methods.sendMailAfterStateChange = ->
       <h2>Seu pedido foi alterado</h2>
       <div>
         O seu pedido foi marcado pelo vendedor como #{OrderStatus[order.state]}.<br />
-        #{if order.state is 'delivered' then "Não deixe de avaliar sua compra e o vendedor. Você pode fazer isso
-        clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>." else ""
-         }
+        #{if order.state is 'delivered' then "Não deixe de avaliar sua compra e o vendedor. Você pode fazer isso clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>." else "" }
       </div>
       <div>
         Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.

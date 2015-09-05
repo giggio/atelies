@@ -108,6 +108,7 @@ module.exports = (grunt) ->
           require: [ 'coffee-script/register', 'test/support/_specHelper.coffee' ]
           reporter: 'nyan'
           ui: 'bdd'
+          timeout: 8000
       server_unit_spec:
         src: 'test/unit/**/*.coffee'
         options:

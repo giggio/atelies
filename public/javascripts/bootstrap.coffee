@@ -1,7 +1,7 @@
 requirejs.config
   paths:
-    jquery: 'lib/jquery/jquery'
-    jqval: 'lib/jquery.validation/jquery.validate'
+    jquery: 'lib/jquery/dist/jquery'
+    jqval: 'lib/jquery.validation/dist/jquery.validate'
     underscore: 'lib/underscore/underscore'
     backbone: 'lib/backbone/backbone'
     handlebars: 'lib/handlebars/handlebars'
