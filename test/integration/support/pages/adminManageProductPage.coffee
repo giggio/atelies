@@ -37,7 +37,7 @@ module.exports = class AdminManageProductPage extends Page
   setFieldsAs: (product) =>
     @type "#name", product.name
     .then => @type "#price", product.price
-    .then => @type "#tags", product.tags?.join ","
+    .then => @typeWithJS "#tags", product.tags?.join ","
     .then => @type "#description", product.description
     .then => @type "#height", product.dimensions?.height
     .then => @type "#width", product.dimensions?.width
@@ -58,5 +58,5 @@ module.exports = class AdminManageProductPage extends Page
   clickUpdateProduct: @::pressButtonAndWait.partial "#editProduct #updateProduct"
   clickDeleteProduct: @::pressButtonAndWait.partial "#deleteProduct"
   clickConfirmDeleteProduct: @::eval.partial "$('#confirmDeleteProduct').click()"
-  setCategories: @::type.partial "#categories"
+  setCategories: @::typeWithJS.partial "#categories"
   setPictureFile: @::uploadFile.partial '#picture'

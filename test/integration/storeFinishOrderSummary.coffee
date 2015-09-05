@@ -39,10 +39,10 @@ describe 'Store Finish Order: Summary', ->
         .then storeFinishOrderPaymentPage.clickSelectPaymentType
     it 'should show summary of sale', ->
       page.summaryOfSale().then (s) ->
-        s.shippingCost.should.equal 'R$ 21,20'
+        s.shippingCost.should.equal 'R$ 22,60'
         s.productsInfo.should.equal '2 produtos'
         s.totalProductsPrice.should.equal 'R$ 33,30'
-        s.totalSaleAmount.should.equal 'R$ 54,50'
+        s.totalSaleAmount.should.equal 'R$ 55,90'
         a = s.address
         userAddress = user1.deliveryAddress
         a.street.should.equal userAddress.street
@@ -82,7 +82,7 @@ describe 'Store Finish Order: Summary', ->
         order.customer.toString().should.equal user1._id.toString()
         order.store.toString().should.equal store2._id.toString()
         order.items.length.should.equal 2
-        order.shippingCost.should.equal 21.2
+        order.shippingCost.should.equal 22.6
         order.totalProductsPrice.should.equal product3.price + product1.price
         order.totalSaleAmount.should.equal order.totalProductsPrice + order.shippingCost
         order.deliveryAddress.toJSON().should.be.like user1.deliveryAddress.toJSON()

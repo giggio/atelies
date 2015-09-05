@@ -39,7 +39,7 @@ describe 'store home page', ->
       .then -> page.visit "store_1"
     it 'should display the products', -> page.products().then (p) -> p.length.should.equal 2
 
-  describe 'store at subdomain', ->
+  describe.skip 'store at subdomain', ->
     return if config.test.snapci
     before ->
       cleanDB().then ->

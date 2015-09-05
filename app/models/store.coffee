@@ -49,7 +49,7 @@ storeSchema.methods._isTheOnlyProduct = (product, simple) ->
 storeSchema.methods.calculateProductCount = ->
   Product.totalForStore @slug
   .then (count) => @productCount = count
-  .then => Q.ninvoke @, 'save'
+  .then => Q @.save()
   .then -> @productCount
 
 storeSchema.methods.createProduct = (simple) ->

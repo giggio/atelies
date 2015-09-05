@@ -128,6 +128,12 @@ module.exports = class Page
     .then (el) ->
       Q el.clear()
       .then -> el.sendKeys text
+  typeWithJS: (selector, text) ->
+    text = "" unless text?
+    @waitForSelector selector #wait until found
+    .then => @eval "document.querySelector('#{selector}').value = '#{text}';"
+    .then => @eval "document.querySelector('#{selector}').blur();"
+    .then => @eval "document.querySelector('#{selector}').dispatchEvent(new Event('change'));"
   selectWithValue: (selector, val) ->
     if val is ''
       return Q.fcall ->
@@ -269,6 +275,8 @@ module.exports = class Page
   reload: @::refresh
   getHtml: (selector) -> @findElement(selector).then (el) -> el.getOuterHtml()
   getPageHtml: -> @findElement('html').then (el) -> el.getOuterHtml()
+  printPageHtml: -> @getPageHtml().then (html) -> print html
+  printPageHtmlWithJS: -> @eval("return document.querySelector('html').outerHTML;").then (html) -> print html
   getInnerHtml: (selector) -> @findElement(selector).then (el) -> el.getInnerHtml()
   getDialogMsg: -> @waitForSelectorClickable('.dialogMsg').then => @getText '.dialogMsg'
   getDialogTitle: -> @waitForSelectorClickable('#dialogTitle').then => @getText '#dialogTitle'
