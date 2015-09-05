@@ -25,6 +25,11 @@ requirejs.config
     select2: 'lib/select2/select2_locale_pt-BR'
     'boostrap-sortable': 'lib/bootstrap-sortable/Scripts/bootstrap-sortable'
     moment: 'lib/moment/moment'
+  map:
+    '*':
+      'jqval': 'jqval-private'
+    'jqval-private':
+      'jqval':'jqval'
   shim:
     'boostrap-sortable':
       deps: [ 'jquery', 'moment' ]
@@ -46,9 +51,6 @@ requirejs.config
     'imagesloaded':
       deps: ['jquery']
       exports: '$.fn.imagesLoaded'
-    'jqval':
-      deps: ['jquery']
-      exports: '$.validator'
     'jqform':
       deps: ['jquery']
       exports: '$.fn.ajaxSubmit'

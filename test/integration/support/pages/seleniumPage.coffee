@@ -38,7 +38,6 @@ before ->
       .withCapabilities(capabilities)
       .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
-  whenServerLoaded()
 
 after -> Page.driver?.quit()
 
@@ -110,7 +109,7 @@ module.exports = class Page
       Q.all actions
     .then -> errorMsgs
   findElement: (selector) ->
-    return selector unless typeof selector is 'string'
+    return Q(selector) unless typeof selector is 'string'
     d = Q.defer()
     @driver.findElement(webdriver.By.css(selector))
     .then ((el) -> d.fulfill el), (err) -> d.reject err
@@ -213,12 +212,7 @@ module.exports = class Page
   pressButton: (selector) -> @findElement(selector).then (el) -> el.sendKeys(webdriver.Key.ENTER)
   pressButtonAndWait: (selector) -> @pressButton(selector).then @waitForAjax
   clickLink: @::pressButton
-  currentUrl: ->
-    curr = @driver.getCurrentUrl()
-    #print 3232, curr
-    print 3233, curr.then
-    Q curr.then(-> print 555)
-  #currentUrl: -> Q @driver.getCurrentUrl()
+  currentUrl: -> Q @driver.getCurrentUrl()
   hasElement: (selector) -> Q @driver.isElementPresent webdriver.By.css(selector)
   hasElementAndIsVisible: (selector) ->
     @hasElement selector
@@ -248,11 +242,8 @@ module.exports = class Page
   wait: (fn, timeout) -> Q(@driver.wait fn, timeout).then ->
   visitBlank: -> Q Page::visit.call @, 'blank', false
   loginFor: (_id) ->
-    print 999, _id
     @currentUrl()
     .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
-    .then -> print 111
-   # @visitBlank()
     .then => @driver.manage().getCookie('connect.sid')
     .then (cookie) =>
       return cookie if cookie?

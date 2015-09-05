@@ -54,7 +54,7 @@
     "chai-as-promised": "~5.1.0",
     "chai-datetime": "^1.4.0",
     "chai-fuzzy": "~1.6.0",
-    "chromedriver": "^2.18.0",
+    "chromedriver": "^2.19.0",
     "coffee-middleware": "^0.3.0",
     "coffeelint": "^1.11.1",
     "grunt-bower-task": "^0.4.0",
