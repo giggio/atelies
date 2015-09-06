@@ -41,7 +41,7 @@ define [
         el.on "click", "a:not([data-not-push-state])", (event) =>
           return if event.altKey or event.ctrlKey or event.metaKey or event.shiftKey
           event.preventDefault()
-          url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}/#{@_rootUrl}/",""
+          url = $(event.currentTarget).prop("href").replace "#{location.protocol}//#{location.host}#{@_rootUrl}",""
           if url is "" then url = "home"
           Backbone.history.navigate url, trigger: true
           undefined

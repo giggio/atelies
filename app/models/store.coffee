@@ -204,10 +204,10 @@ Store.findWithProductsBySlug = (slug) ->
 Store.findRandomForHome = (howMany) ->
   Q.fcall ->
     if Store.storeCache.shouldReload()
-      Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true).sort('random').exec()
+      Q Store.find(productCount:{$gte: 7}, flyer: /./, isFlyerAuthorized: true).sort('random')
       .then (stores) -> Store.storeCache.update stores
   .then -> Store.storeCache.nextStores howMany
-Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i).exec()
+Store.searchByName = (searchTerm) -> Q Store.find(nameKeywords: ///^#{searchTerm}///i)
 Store.flyerDimension = '350x350'
 Store.ordersPerStore = ->
   Q.ninvoke Order, "mapReduce",

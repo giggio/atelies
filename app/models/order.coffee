@@ -165,7 +165,7 @@ Order.create = (user, store, items, shippingCost, paymentType) ->
   Q.ninvoke order, 'validate'
   .then -> order
 Order.getSimpleByUser = (user) ->
-  Q.ninvoke Order.find(customer: user).populate('store', 'name slug'), "exec"
+  Q Order.find(customer: user).populate('store', 'name slug')
   .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
@@ -177,7 +177,7 @@ Order.getSimpleByUser = (user) ->
       state: o.state
     simpleOrders
 Order.getSimpleByStores = (stores) ->
-  Q.ninvoke Order.find(store: $in: stores).populate('store', 'name slug'), "exec"
+  Q Order.find(store: $in: stores).populate('store', 'name slug')
   .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
@@ -194,7 +194,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id) ->
   .populate('items.product', '_id name slug picture')
   .populate('customer', 'name email phoneNumber')
   .populate('store', 'name slug')
-  Q.ninvoke(find, 'exec').then (order) ->
+  Q(find).then (order) ->
     return null unless user.hasStore order.store
     simpleOrder =
       _id: order._id.toString()
@@ -221,7 +221,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id) ->
       totalPrice: i.totalPrice
     simpleOrder
 Order.getSimpleWithItemsByUserAndId = (user, _id) ->
-  Q.ninvoke Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation'), 'exec'
+  Q Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation')
   .then (order) ->
     return null if order.customer.toString() isnt user._id.toString()
     simpleOrder =
