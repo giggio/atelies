@@ -79,25 +79,38 @@ module.exports = (grunt) ->
       dev:
         script: 'server.coffee'
         options:
-          ext: 'coffee'
-          ignore: ['node_modules/**', 'public/**']
-          watch: ['app']
           nodeArgs: [ '--debug', './node_modules/.bin/coffee' ]
-          exec: 'node'
-          delay: 2000
-          env:
-            NODE_ENV: 'development'
-            PORT: 3000
-            UPLOAD_FILES: true
-          cwd: __dirname
+      devWindows:
+        script: 'server.coffee'
+        options:
+          nodeArgs: [ '--debug', './node_modules/.bin/coffee.cmd' ]
+      options:
+        ext: 'coffee'
+        ignore: ['node_modules/**', 'public/**']
+        watch: ['app']
+        exec: 'node'
+        delay: 2000
+        env:
+          NODE_ENV: 'development'
+          PORT: 3000
+          UPLOAD_FILES: true
+        cwd: __dirname
 
     concurrent:
       watchAndDevServer:
         tasks: [ 'watch', 'nodemon:dev' ]
         options:
           logConcurrentOutput: true
+      watchAndDevServerWindows:
+        tasks: [ 'watch', 'nodemon:devWindows' ]
+        options:
+          logConcurrentOutput: true
       completeDefaultStart:
         tasks: [ 'watch', 'nodemon:dev', 'completeDefaultStart' ]
+        options:
+          logConcurrentOutput: true
+      completeDefaultStartWindows:
+        tasks: [ 'watch', 'nodemon:devWindows', 'completeDefaultStart' ]
         options:
           logConcurrentOutput: true
 
@@ -380,5 +393,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-contrib-requirejs'
     grunt.task.run [ 'requirejs:multipackage' ]
   grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'coffeelint:client', 'coffeelint:test', 'test:unit' ]
-  grunt.registerTask 'default', [ 'concurrent:completeDefaultStart' ]
-  grunt.registerTask 'quickstart', [ 'concurrent:watchAndDevServer']
+  grunt.registerTask 'default', () -> if process.platform == 'win32' then grunt.task.run('concurrent:completeDefaultStartWindows') else grunt.task.run('concurrent:completeDefaultStart')
+  grunt.registerTask 'quickstart', () -> if process.platform == 'win32' then grunt.task.run('concurrent:watchAndDevServerWindows') else grunt.task.run('concurrent:watchAndDevServer')
