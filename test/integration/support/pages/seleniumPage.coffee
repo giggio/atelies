@@ -78,11 +78,11 @@ module.exports = class Page
     url = @url unless url?
     url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
     Q(@driver.get('data:,')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
-    .then => write "visit: got 'data:,".cyan
+    .then -> write "visit: got 'data:,".cyan
     .then => @driver.get(url)
-    .then => write "visit: got '#{url}'".cyan
+    .then -> write "visit: got '#{url}'".cyan
     .then => @refresh() if refresh
-    .then => if refresh then write "visit: refreshed".cyan
+    .then -> if refresh then write "visit: refreshed".cyan
   waitForViewToLoad: -> @wait (=> @eval "return window.renderDone === true;"), 5000
   waitForValidatorToLoad: -> @wait (=> @eval "return window.jQuery != null && window.jQuery.validator != null;"), 5000
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
