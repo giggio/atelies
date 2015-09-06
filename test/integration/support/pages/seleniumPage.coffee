@@ -20,9 +20,9 @@ before ->
       chromedriverPath = chromedriver.path
     chrome = require "selenium-webdriver/chrome"
     chromeServiceBuilder = new chrome.ServiceBuilder chromedriverPath
-    chromeServiceBuilder
-      .loggingTo('/tmp/chromedriver.log')
-      .enableVerboseLogging()
+    #chromeServiceBuilder
+    #  .loggingTo('/tmp/chromedriver.log')
+    #  .enableVerboseLogging()
     chromeServiceBuilder.args_.push "--whitelisted-ips"
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
