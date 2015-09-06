@@ -8,16 +8,19 @@ path            = require 'path'
 slug            = require '../../../../app/helpers/slug'
 writeFile = Q.denodeify fs.writeFile
 mkdir = Q.denodeify fs.mkdir
+verbose = config.test.verbose
 
 useChrome = on
 
 before ->
   if useChrome
+    write "seleniumPage.before: starting webdriver with chrome".cyan
     if config.test.snapci
       chromedriverPath = '/usr/local/bin/chromedriver'
     else
       chromedriver = require 'chromedriver'
       chromedriverPath = chromedriver.path
+    write "seleniumPage.before: got chromedriver path: '#{chromedriverPath}'".cyan
     chrome = require "selenium-webdriver/chrome"
     chromeServiceBuilder = new chrome.ServiceBuilder chromedriverPath
     #chromeServiceBuilder
@@ -31,12 +34,14 @@ before ->
     service = chromeServiceBuilder.build()
     Page.driver = new chrome.Driver capabilities, service
   else
+    write "seleniumPage.before: starting webdriver with phantom".cyan
     phantomjs = require 'phantomjs'
     capabilities = webdriver.Capabilities.phantomjs()
     capabilities.set 'phantomjs.binary.path', phantomjs.path
     Page.driver = new webdriver.Builder()
       .withCapabilities(capabilities)
       .build()
+  write "seleniumPage.before: webdriver started".cyan
   Page.driver.manage().timeouts().implicitlyWait 2000
 
 after -> Page.driver?.quit()
@@ -73,8 +78,11 @@ module.exports = class Page
     url = @url unless url?
     url = "http://localhost:8000/#{url}" unless url.substr(0,4).toLowerCase() is 'http'
     Q(@driver.get('data:,')) #chrome version is the fastest page to load. Ideally we'd use about:blank, but that fails sometimes, as selenium does not recognize it finished loading and never calls back
+    .then => write "visit: got 'data:,".cyan
     .then => @driver.get(url)
+    .then => write "visit: got '#{url}'".cyan
     .then => @refresh() if refresh
+    .then => if refresh then write "visit: refreshed".cyan
   waitForViewToLoad: -> @wait (=> @eval "return window.renderDone === true;"), 5000
   waitForValidatorToLoad: -> @wait (=> @eval "return window.jQuery != null && window.jQuery.validator != null;"), 5000
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
@@ -127,8 +135,11 @@ module.exports = class Page
     text = "" unless text?
     @findElement selector
     .then (el) ->
+      write "type: clearing text".cyan
       Q el.clear()
-      .then -> el.sendKeys text
+      .then ->
+        write "type: typing on '#{selector}' text '#{text}'".cyan
+        el.sendKeys text
   typeWithJS: (selector, text) ->
     text = "" unless text?
     @waitForSelector selector #wait until found
@@ -216,7 +227,11 @@ module.exports = class Page
   pressButtonJS: (id) -> @eval "document.getElementById('#{id}').click()"
   click: (selector) -> @findElement(selector).then (el) -> el.click()
   clickAndWait: (selector) -> @click(selector).then @waitForAjax
-  pressButton: (selector) -> @findElement(selector).then (el) -> el.sendKeys(webdriver.Key.ENTER)
+  pressButton: (selector) ->
+    write "pressButton: pressing '#{selector}'".cyan
+    @findElement(selector)
+    .then (el) -> el.sendKeys(webdriver.Key.ENTER)
+    .then -> write "pressButton: button pressed".cyan
   pressButtonAndWait: (selector) -> @pressButton(selector).then @waitForAjax
   clickLink: @::pressButton
   currentUrl: -> Q @driver.getCurrentUrl()
@@ -233,7 +248,10 @@ module.exports = class Page
         do (action) -> f.execute action
       undefined
     Q flow
-  waitForAjax: -> @wait (=> @eval 'return typeof($) !== \'undefined\' && $.active === 0;'), 5000
+  waitForAjax: ->
+    write "waitForAjax: waiting for ajax".cyan
+    @wait (=> @eval 'return typeof($) !== \'undefined\' && $.active === 0;'), 5000
+    .then -> write "waitForAjax: wait done".cyan
   waitForSelector: (selector) -> @wait (=> @hasElement(selector).then (itHas) -> itHas), 3000
   waitForSelectorClickable: (selector, i) ->
     tryWait = => @wait (=> @getIsClickable(selector).then (itIs) -> itIs), 3000
@@ -253,20 +271,26 @@ module.exports = class Page
     .then (url) => @visitBlank() if url.substr(0,4) isnt 'http' #need the browser loaded to access cookies and have a session cookie id
     .then => @driver.manage().getCookie('connect.sid')
     .then (cookie) =>
+      write "loginFor: got existing cookie".cyan if cookie?
       return cookie if cookie?
+      write "loginFor: refreshing for cookie".cyan
       @refresh().then => @driver.manage().getCookie('connect.sid')
     .then (cookie) ->
+      write "loginFor: got cookie".cyan
       server = getExpressServer()
       sessionStore = server.sessionStore
       cookieSecret = server.cookieSecret
       sessionId = connectUtils.parseSignedCookie decodeURIComponent(cookie.value), cookieSecret
       Q.ninvoke sessionStore, 'get', sessionId
       .then (session) ->
+        write "loginFor: got session".cyan
         session.auth = {} unless session.auth?
         session.auth.userId = _id
         session.auth.loggedIn = true
         Q.ninvoke sessionStore, 'set', sessionId, session
+    .then -> write "loginFor: saved on session store, now waiting".cyan
     .then -> waitMilliseconds 200
+    .then -> write "loginFor: wait done".cyan
   eval: (script) -> Q @driver.executeScript(script)
   clearLocalStorage: ->
     @currentUrl()

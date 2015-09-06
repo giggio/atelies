@@ -1,5 +1,6 @@
 mongoose            = require 'mongoose'
 exports.start = ->
+  require 'colors'
   require './globals'
   require './helpers/expressExtensions'
   require './helpers/languageExtensions'

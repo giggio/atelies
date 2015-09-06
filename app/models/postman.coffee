@@ -1,5 +1,7 @@
 nodemailer  = require 'nodemailer'
 Q           = require 'q'
+config      = require '../helpers/config'
+verboseTest = config.test.verbose
 module.exports = class Postman
   @configure = (id, secret) ->
     unless @dryrun
@@ -29,7 +31,8 @@ module.exports = class Postman
     if from.email isnt 'contato@atelies.com.br'
       mail.replyTo = "#{from.name} <#{from.email}>"
     if Postman.dryrun
-      unless TEST then console.log "NOT sending mail to #{mail.to} with subject #{mail.subject}, dry run"
+      if !TEST or verboseTest
+        console.log new Date().toLocaleTimeString(), "Postman.send: NOT sending mail to #{mail.to} with subject #{mail.subject}, dry run".cyan
       Postman.sentMails.push mail
       Q.fcall ->
     else

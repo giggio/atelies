@@ -49,6 +49,7 @@ values =
     sendMail: process.env.SEND_MAIL?
     uploadFiles: process.env.UPLOAD_FILES?
     snapci: process.env.SNAP_CI is 'true'
+    verbose: process.env.VERBOSE_TEST is 'true'
   baseDomain: process.env.BASE_DOMAIN
   serverEnvironment: process.env.SERVER_ENVIRONMENT
   app:

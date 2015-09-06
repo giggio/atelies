@@ -12,9 +12,11 @@ describe 'Resend Confirmation Email', ->
       Postman.sentMails.length = 0
       page = new AccountPage()
       cleanDB()
+      .then -> write "before: saving user...".cyan
       .then ->
         user = generator.user.e()
-        Q.ninvoke user, 'save'
+        Q user.save()
+      .then -> write "before: user saved".cyan
       .then -> page.loginFor user._id
       .then page.visit
       .then page.clickResendConfirmationEmail

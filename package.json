@@ -15,6 +15,7 @@
     "aws-sdk": "~1.9.0",
     "bcrypt": "~0.8.5",
     "coffee-script": "^1.10.0",
+    "colors": "^1.1.2",
     "connect-mongo": "~0.8.2",
     "correios": "0.0.4",
     "everyauth": "^0.4.5",
