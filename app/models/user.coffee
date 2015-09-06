@@ -49,7 +49,7 @@ userSchema.methods.verifyPassword = (passwordToVerify) ->
       @loginError = 0
     else
       @loginError++
-    Q.ninvoke(@, 'save').then -> succeeded
+    Q(@save()).then -> succeeded
 userSchema.methods.setPassword = (password) ->
   bcrypt = require 'bcrypt'
   salt = bcrypt.genSaltSync 10

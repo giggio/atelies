@@ -1,5 +1,5 @@
 webdriver       = require 'selenium-webdriver'
-connectUtils    = require 'express/node_modules/connect/lib/utils'
+connectUtils    = require 'connect/lib/utils'
 _               = require 'underscore'
 Q               = require 'q'
 config          = require '../../../../app/helpers/config'
@@ -20,13 +20,16 @@ before ->
       chromedriverPath = chromedriver.path
     chrome = require "selenium-webdriver/chrome"
     chromeServiceBuilder = new chrome.ServiceBuilder chromedriverPath
+    chromeServiceBuilder
+      .loggingTo('/tmp/chromedriver.log')
+      .enableVerboseLogging()
     chromeServiceBuilder.args_.push "--whitelisted-ips"
     capabilities = webdriver.Capabilities.chrome()
     capabilities.set 'chromeOptions',
       'prefs': {"profile.default_content_settings": {'images': 2}}
       'args': ["--host-rules=MAP * 127.0.0.1", '--test-type']
     service = chromeServiceBuilder.build()
-    Page.driver = chrome.createDriver capabilities, service
+    Page.driver = new chrome.Driver capabilities, service
   else
     phantomjs = require 'phantomjs'
     capabilities = webdriver.Capabilities.phantomjs()
@@ -35,7 +38,6 @@ before ->
       .withCapabilities(capabilities)
       .build()
   Page.driver.manage().timeouts().implicitlyWait 2000
-  whenServerLoaded()
 
 after -> Page.driver?.quit()
 
@@ -74,6 +76,7 @@ module.exports = class Page
     .then => @driver.get(url)
     .then => @refresh() if refresh
   waitForViewToLoad: -> @wait (=> @eval "return window.renderDone === true;"), 5000
+  waitForValidatorToLoad: -> @wait (=> @eval "return window.jQuery != null && window.jQuery.validator != null;"), 5000
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
   errorMessageForSelector: (selector) ->
     @findElements "#{selector} ~ .tooltip .tooltip-inner"
@@ -107,7 +110,7 @@ module.exports = class Page
       Q.all actions
     .then -> errorMsgs
   findElement: (selector) ->
-    return selector unless typeof selector is 'string'
+    return Q(selector) unless typeof selector is 'string'
     d = Q.defer()
     @driver.findElement(webdriver.By.css(selector))
     .then ((el) -> d.fulfill el), (err) -> d.reject err
@@ -126,6 +129,12 @@ module.exports = class Page
     .then (el) ->
       Q el.clear()
       .then -> el.sendKeys text
+  typeWithJS: (selector, text) ->
+    text = "" unless text?
+    @waitForSelector selector #wait until found
+    .then => @eval "document.querySelector('#{selector}').value = '#{text}';"
+    .then => @eval "document.querySelector('#{selector}').blur();"
+    .then => @eval "document.querySelector('#{selector}').dispatchEvent(new Event('change'));"
   selectWithValue: (selector, val) ->
     if val is ''
       return Q.fcall ->
@@ -267,6 +276,8 @@ module.exports = class Page
   reload: @::refresh
   getHtml: (selector) -> @findElement(selector).then (el) -> el.getOuterHtml()
   getPageHtml: -> @findElement('html').then (el) -> el.getOuterHtml()
+  printPageHtml: -> @getPageHtml().then (html) -> print html
+  printPageHtmlWithJS: -> @eval("return document.querySelector('html').outerHTML;").then (html) -> print html
   getInnerHtml: (selector) -> @findElement(selector).then (el) -> el.getInnerHtml()
   getDialogMsg: -> @waitForSelectorClickable('.dialogMsg').then => @getText '.dialogMsg'
   getDialogTitle: -> @waitForSelectorClickable('#dialogTitle').then => @getText '#dialogTitle'
@@ -292,6 +303,5 @@ module.exports = class Page
     .then (results) ->
       retObj = {}
       for key, promise of obj
-        debugger
         retObj[key] = promise.valueOf()
       retObj

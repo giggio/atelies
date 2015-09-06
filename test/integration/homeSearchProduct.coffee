@@ -15,6 +15,7 @@ describe 'Home Search Product', ->
       Q.all [Q.ninvoke(store1, 'save'), Q.ninvoke(product1, 'save'), Q.ninvoke(product2, 'save') ]
     .then -> page.visit()
     .then -> page.searchProductsText 'cool'
+    .then page.waitForViewToLoad
     .then page.clickDoSearchProducts
   it 'shows product', -> page.searchProductsLength().should.become 1
   it 'links picture to product 2', -> page.productLink(product2._id).then (href) -> href.endsWith(product2.slug).should.be.true

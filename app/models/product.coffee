@@ -101,26 +101,26 @@ module.exports = Product = mongoose.model 'product', productSchema
 
 Product.findRandom = (howMany) ->
   random = Math.random()
-  Q Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany).exec()
+  Q Product.find({picture: /./, random:$gte:random}).sort('random').limit(howMany)
   .then (products) ->
     if products.length >= howMany
       products
     else
       difference = products.length - howMany
-      Q Product.find(picture: /./).sort('random').limit(difference).exec()
+      Q Product.find(picture: /./).sort('random').limit(difference)
       .then (newProducts) -> products.concat newProducts
 
-Product.totalForStore = (storeSlug) -> Q.ninvoke Product.find(storeSlug: storeSlug), 'count'
+Product.totalForStore = (storeSlug) -> Q(Product.find(storeSlug: storeSlug)).then((ps) -> ps.length)
 Product.removeByStore = (store) ->
   Product.findByStoreSlug store.slug
   .then (products) -> Q.all (ProductComment.removeByProduct product for product in products)
   .then -> Q.ninvoke Product, "remove", storeSlug: store.slug
 Product.findByStoreSlug = (storeSlug) -> Q.ninvoke Product, "find", storeSlug: storeSlug
 Product.findByStoreSlugAndSlug = (storeSlug, productSlug) -> Q.ninvoke Product, 'findOne', storeSlug: storeSlug, slug: productSlug
-Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i).exec()
-Product.searchByTag = (searchTerm) -> Q Product.find(tags: ///^#{searchTerm}///i).exec()
-Product.searchByCategory = (searchTerm) -> Q Product.find(categories: ///^#{searchTerm}///i).exec()
-Product.searchByStoreSlugAndByName = (storeSlug, searchTerm) -> Q Product.find(storeSlug: storeSlug, nameKeywords: ///^#{searchTerm}///i).exec()
+Product.searchByName = (searchTerm) -> Q Product.find(nameKeywords: ///^#{searchTerm}///i)
+Product.searchByTag = (searchTerm) -> Q Product.find(tags: ///^#{searchTerm}///i)
+Product.searchByCategory = (searchTerm) -> Q Product.find(categories: ///^#{searchTerm}///i)
+Product.searchByStoreSlugAndByName = (storeSlug, searchTerm) -> Q Product.find(storeSlug: storeSlug, nameKeywords: ///^#{searchTerm}///i)
 Product.getShippingWeightAndDimensions = (ids) -> Q.ninvoke Product, 'find', '_id': '$in': ids, '_id shipping'
 Product.pictureDimension = '600x600'
 Product.pictureThumbDimension = '150x150'

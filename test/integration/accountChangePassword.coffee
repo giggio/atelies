@@ -4,6 +4,7 @@ bcrypt   = require 'bcrypt'
 Page     = require './support/pages/accountChangePasswordPage'
 Q        = require 'q'
 
+
 describe 'Change Password', ->
   user = page = null
   before -> page = new Page()

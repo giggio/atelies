@@ -8,7 +8,7 @@ describe 'Product', ->
   it 'requires name to be present', (done) ->
     product = new Product()
     product.validate (val) ->
-      val.errors.name.type.should.equal 'required'
+      val.errors.name.kind.should.equal 'required'
       done()
   it 'sets the correct slug when store is created', ->
     product = new Product name:"Meu produto"
@@ -136,7 +136,7 @@ describe 'Product', ->
       Store.findBySlug.restore()
       User.findAdminsFor.restore()
     it 'added the comment to the product', ->
-      comment.user.should.equal userCommenting._id
+      comment.user._id.should.equal userCommenting._id
       comment.userName.should.equal userCommenting.name
       comment.userEmail.should.equal userCommenting.email
       comment.body.should.equal body

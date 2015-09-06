@@ -34,9 +34,9 @@ describe 'Order', ->
 
   describe 'creating', ->
     it 'assigned customer', ->
-      order.customer.should.equal user._id
+      order.customer._id.should.equal user._id
     it 'assigned store', ->
-      order.store.should.equal store._id
+      order.store._id.should.equal store._id
     it 'assigned prices', ->
       order.shippingCost.should.equal shippingCost
       order.totalProductsPrice.should.equal 50

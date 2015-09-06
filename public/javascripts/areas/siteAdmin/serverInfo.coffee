@@ -1,2 +1,2 @@
 define ->
-  rootUrl: 'siteAdmin'
+  rootUrl: '/siteAdmin/'

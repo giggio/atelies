@@ -36,6 +36,7 @@ describe 'Account order detail page', ->
       setup()
       .then -> page.loginFor user._id
       .then -> page.visit order1._id
+      .then page.waitForViewToLoad
     it 'shows order', ->
       page.order().then (order) ->
         order._id.should.equal order._id.toString()
@@ -87,15 +88,15 @@ describe 'Account order detail page', ->
         st.numberOfEvaluations.should.equal 1
         st.evaluationAvgRating.should.equal 4
     it 'should have stored the evaluation and set it on the order', test ->
-      Q.ninvoke StoreEvaluation, "findOne", order: order1._id
+      Q StoreEvaluation.findOne order: order1._id
       .then (ev) ->
         ev.body.should.equal evaluationBody
         ev.rating.should.equal rating
         ev.date.should.equalDate new Date()
-        ev.store.toString().should.equal order1.store.toString()
+        ev.store.toString().should.equal order1.store._id.toString()
         ev.order.toString().should.equal order1._id.toString()
         ev.user.toString().should.equal user._id.toString()
-        Q.ninvoke Order, "findById", order1._id
+        Q Order.findById order1._id
         .then (o) -> o.evaluation.toString().should.equal ev._id.toString()
     it 'should make the evaluation field disappear', test -> page.newEvaluationVisible().should.eventually.be.false
     it 'should show existing evaluation', test -> page.existingEvaluation().should.become rating

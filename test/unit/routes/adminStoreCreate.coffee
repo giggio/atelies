@@ -15,6 +15,7 @@ describe 'AdminStoreCreateRoute', ->
       Routes = SandboxedModule.require '../../../app/routes/admin',
         requires:
           '../models/store': StoreStub
+        singleOnly: true
       routes = new Routes()
       store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy(), setPagseguro: sinon.spy()
       user = isSeller: true, verified: true
@@ -73,6 +74,7 @@ describe 'AdminStoreCreateRoute', ->
       Routes = SandboxedModule.require '../../../app/routes/admin',
         requires:
           '../models/store': StoreStub
+        singleOnly: true
       routes = new Routes()
       store = pmtGateways: [], save: sinon.stub().yields(), updateFromSimple: sinon.spy()
       user = isSeller: true, verified: true

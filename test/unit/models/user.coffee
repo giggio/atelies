@@ -1,5 +1,6 @@
 User    = require '../../../app/models/user'
 Store   = require '../../../app/models/store'
+Q       = require 'q'
 
 describe 'User', ->
   it 'creates stores', ->
@@ -12,14 +13,14 @@ describe 'User', ->
     user.createStore.throws
   it 'after wrong login user increases login error', ->
     user = generator.user.a()
-    user.save = sinon.stub().yields()
+    user.save = sinon.stub().returns Q(->)
     user.verifyPassword 'a'
     .then ->
       user.loginError.should.equal 1
       user.save.should.have.beenCalled
   it 'after wrong login and successful login login errors goes back to zero', ->
     user = generator.user.a()
-    user.save = sinon.stub().yields()
+    user.save = sinon.stub().returns Q(->)
     user.verifyPassword 'a'
     .then -> user.verifyPassword user.password
     .then ->

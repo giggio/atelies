@@ -79,9 +79,7 @@ orderSchema.methods.sendMailAfterStateChange = ->
       <h2>Seu pedido foi alterado</h2>
       <div>
         O seu pedido foi marcado pelo vendedor como #{OrderStatus[order.state]}.<br />
-        #{if order.state is 'delivered' then "Não deixe de avaliar sua compra e o vendedor. Você pode fazer isso
-        clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='#{CONFIG.secureUrl}/account'>página da sua conta</a>." else ""
-         }
+        #{if order.state is 'delivered' then "Não deixe de avaliar sua compra e o vendedor. Você pode fazer isso clicando em 'Pedidos realizados' no menu, ou 'Ver pedidos' na <a href='" + CONFIG.secureUrl + "/account'>página da sua conta</a>." else "" }
       </div>
       <div>
         Você pode ver o seu pedido e também avaliá-lo clicando <a href='#{CONFIG.secureUrl}/account/orders/#{order._id.toString()}'>aqui</a>.
@@ -167,7 +165,7 @@ Order.create = (user, store, items, shippingCost, paymentType) ->
   Q.ninvoke order, 'validate'
   .then -> order
 Order.getSimpleByUser = (user) ->
-  Q.ninvoke Order.find(customer: user).populate('store', 'name slug'), "exec"
+  Q Order.find(customer: user).populate('store', 'name slug')
   .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
@@ -179,7 +177,7 @@ Order.getSimpleByUser = (user) ->
       state: o.state
     simpleOrders
 Order.getSimpleByStores = (stores) ->
-  Q.ninvoke Order.find(store: $in: stores).populate('store', 'name slug'), "exec"
+  Q Order.find(store: $in: stores).populate('store', 'name slug')
   .then (orders) ->
     simpleOrders = _.map orders, (o)->
       _id: o._id.toString()
@@ -196,7 +194,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id) ->
   .populate('items.product', '_id name slug picture')
   .populate('customer', 'name email phoneNumber')
   .populate('store', 'name slug')
-  Q.ninvoke(find, 'exec').then (order) ->
+  Q(find).then (order) ->
     return null unless user.hasStore order.store
     simpleOrder =
       _id: order._id.toString()
@@ -223,7 +221,7 @@ Order.findSimpleWithItemsBySellerAndId = (user, _id) ->
       totalPrice: i.totalPrice
     simpleOrder
 Order.getSimpleWithItemsByUserAndId = (user, _id) ->
-  Q.ninvoke Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation'), 'exec'
+  Q Order.findById(_id).populate('items.product', '_id name slug picture').populate('evaluation')
   .then (order) ->
     return null if order.customer.toString() isnt user._id.toString()
     simpleOrder =
