@@ -36,6 +36,7 @@ describe 'Account order detail page', ->
       setup()
       .then -> page.loginFor user._id
       .then -> page.visit order1._id
+      .then page.waitForViewToLoad
     it 'shows order', ->
       page.order().then (order) ->
         order._id.should.equal order._id.toString()
