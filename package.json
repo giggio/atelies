@@ -11,6 +11,10 @@
     "type": "git",
     "url": "https://github.com/giggio/atelies.git"
   },
+  "engines": {
+    "node": "0.12.x",
+    "npm": "3.x"
+  },
   "dependencies": {
     "aws-sdk": "~1.9.0",
     "bcrypt": "~0.8.5",
