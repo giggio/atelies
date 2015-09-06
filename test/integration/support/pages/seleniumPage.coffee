@@ -76,6 +76,7 @@ module.exports = class Page
     .then => @driver.get(url)
     .then => @refresh() if refresh
   waitForViewToLoad: -> @wait (=> @eval "return window.renderDone === true;"), 5000
+  waitForValidatorToLoad: -> @wait (=> @eval "return window.jQuery != null && window.jQuery.validator != null;"), 5000
   errorMessageFor: (field) -> @errorMessageForSelector "##{field}"
   errorMessageForSelector: (selector) ->
     @findElements "#{selector} ~ .tooltip .tooltip-inner"

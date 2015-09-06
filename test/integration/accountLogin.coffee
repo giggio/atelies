@@ -25,6 +25,7 @@ describe 'Login', ->
   describe 'Must supply name and password or form is not submitted', ->
     before ->
       page.visit()
+      .then page.waitForValidatorToLoad
       .then page.clickLoginButton
     it 'does not show the login failed message', test -> page.hasErrors().should.eventually.be.false
     it 'is at the login page', test -> page.currentUrl().should.become "http://localhost:8000/account/login"
