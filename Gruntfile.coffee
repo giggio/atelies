@@ -78,13 +78,7 @@ module.exports = (grunt) ->
     nodemon:
       dev:
         script: 'server.coffee'
-        options:
-          nodeArgs: [ '--debug', './node_modules/.bin/coffee' ]
-      devWindows:
-        script: 'server.coffee'
-        options:
-          nodeArgs: [ '--debug', './node_modules/.bin/coffee.cmd' ]
-      options:
+        nodeArgs: [ '--debug', './node_modules/coffee-script/bin/coffee' ]
         ext: 'coffee'
         ignore: ['node_modules/**', 'public/**']
         watch: ['app']
@@ -101,16 +95,8 @@ module.exports = (grunt) ->
         tasks: [ 'watch', 'nodemon:dev' ]
         options:
           logConcurrentOutput: true
-      watchAndDevServerWindows:
-        tasks: [ 'watch', 'nodemon:devWindows' ]
-        options:
-          logConcurrentOutput: true
       completeDefaultStart:
         tasks: [ 'watch', 'nodemon:dev', 'completeDefaultStart' ]
-        options:
-          logConcurrentOutput: true
-      completeDefaultStartWindows:
-        tasks: [ 'watch', 'nodemon:devWindows', 'completeDefaultStart' ]
         options:
           logConcurrentOutput: true
 
@@ -393,5 +379,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-contrib-requirejs'
     grunt.task.run [ 'requirejs:multipackage' ]
   grunt.registerTask 'completeDefaultStart', [ 'less:dev', 'coffeelint:server', 'coffeelint:client', 'coffeelint:test', 'test:unit' ]
-  grunt.registerTask 'default', () -> if process.platform == 'win32' then grunt.task.run('concurrent:completeDefaultStartWindows') else grunt.task.run('concurrent:completeDefaultStart')
-  grunt.registerTask 'quickstart', () -> if process.platform == 'win32' then grunt.task.run('concurrent:watchAndDevServerWindows') else grunt.task.run('concurrent:watchAndDevServer')
+  grunt.registerTask 'default', ['concurrent:completeDefaultStart']
+  grunt.registerTask 'quickstart', ['concurrent:watchAndDevServer']
